@@ -26,7 +26,6 @@ export async function addUserToTeam(
       { $push: { members: userId } }
     );
   } catch (error) {
-    // Handle newProject.save error
     throw new Error("Error adding user to team:" + error);
   }
 }

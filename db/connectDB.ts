@@ -5,7 +5,7 @@ const connectDB = async () => {
   if (process.env.ENVIRONMENT == "production") {
     try {
       //@ts-expect-error
-      await mongoose.connect(process.env.MONGODB_URI, {
+      await mongoose.connect(process.env.MONGODB_PROD_URI, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
       });
@@ -17,7 +17,7 @@ const connectDB = async () => {
     try {
       //@ts-expect-error
 
-      await mongoose.connect(process.env.MONGODB_URI);
+      await mongoose.connect(process.env.MONGODB_DEV_URI);
       mongoose.Promise = global.Promise;
       console.log("Connected to MongoDB in Development");
     } catch (error: any) {
