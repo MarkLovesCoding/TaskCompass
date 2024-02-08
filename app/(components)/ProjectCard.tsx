@@ -43,7 +43,7 @@ const ProjectCard = ({ project }: { project: VerboseProjectType }) => {
               ) : (
                 project.tasks?.map((task, task_idx) => (
                   <p key={task_idx} className="whitespace-pre-wrap">
-                    <Link href={`/TaskPage/${task._id}`}>{task.title}</Link>
+                    <Link href={`/TaskPage/${task._id}`}>{task.name}</Link>
                   </p>
                 ))
               )}

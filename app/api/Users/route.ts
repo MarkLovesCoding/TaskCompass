@@ -42,7 +42,7 @@ export async function POST(req: Request, res: Response): Promise<any> {
     const newUserId: string = newUser._id;
 
     // CHECKS IF MANUALLY ADDED USER IS FIRST TIME LOGGING IN>
-    if (newUser && userData.firstLogIn) {
+    if (newUser) {
       const newProjectData = {
         name: userData.name + "'s Tickets",
         // users: [

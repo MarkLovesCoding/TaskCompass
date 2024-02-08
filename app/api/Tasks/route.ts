@@ -13,7 +13,7 @@ export async function POST(req: Request, res: Response) {
     const body = await req.json();
     const taskData: TaskType = body;
     const { project }: { project: string } = taskData;
-    const { assignedTo } = taskData;
+    // const { assignedTo } = taskData;
     console.log("taskData", taskData);
     const createdTask: TaskType = await Task.create(taskData);
     if (!createdTask) {
@@ -40,21 +40,21 @@ export async function POST(req: Request, res: Response) {
         { status: 500 }
       );
     }
-    try {
-      await User.findByIdAndUpdate(
-        { _id: assignedTo },
-        { $push: { tasks: newTaskId } },
-        { new: true }
-      );
-    } catch (addNewTaskToUserError) {
-      return NextResponse.json(
-        {
-          message: "Error adding new task to user",
-          error: addNewTaskToUserError,
-        },
-        { status: 500 }
-      );
-    }
+    // try {
+    //   await User.findByIdAndUpdate(
+    //     { _id: assignedTo },
+    //     { $push: { tasks: newTaskId } },
+    //     { new: true }
+    //   );
+    // } catch (addNewTaskToUserError) {
+    //   return NextResponse.json(
+    //     {
+    //       message: "Error adding new task to user",
+    //       error: addNewTaskToUserError,
+    //     },
+    //     { status: 500 }
+    //   );
+    // }
 
     return NextResponse.json({ message: "task Created" }, { status: 201 });
   } catch (err) {

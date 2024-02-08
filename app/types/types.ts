@@ -1,22 +1,22 @@
 export type TaskType = {
-  title: string;
+  name: string;
   description: string;
   priority: number;
-  progress: number;
-  status: string;
+
   category: string;
-  createdAt: Date;
-  assignedTo: string;
+
+  assignees: string[];
+  dueDate?: number;
+  startDate: number;
   project: string;
+  label: string;
   _id?: number | Object | string;
 };
 export type ProjectType = {
   name: string;
-  users: string[];
+  description: string;
+  members: string[];
   tasks: string[];
-  createdAt: Date;
-  password?: string;
-  isDefault: boolean;
   _id?: number | Object | string;
 };
 export type ParamsType = {
@@ -27,14 +27,13 @@ export type UserType = {
   // id: Number,
   name: string;
   email: string;
-  password: string;
-  role: string;
+  password?: string;
+  avatar: string;
   projects: string[];
   tasks: string[];
-  connections: string[];
+  teams: string[];
   createdAt: Date;
-  id: string;
-  firstLogIn?: boolean;
+  id?: string;
 };
 export type ConnectionType = {
   userId: string;
@@ -53,4 +52,10 @@ export type Session = {
     image: undefined;
     role: string;
   };
+};
+export type TeamType = {
+  name: string;
+  members: string[];
+  projects: string[];
+  _id?: number | Object | string;
 };

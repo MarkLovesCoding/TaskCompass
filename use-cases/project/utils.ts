@@ -19,5 +19,7 @@ export function projectToCreateProjectDto(
   return {
     name: project.getName(),
     description: project.getDescription(),
+    members: project.getMembers(),
+    tasks: project.getTasks(),
   };
 }

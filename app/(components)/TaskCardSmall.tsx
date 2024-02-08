@@ -19,36 +19,36 @@ const dateOptions = { month: "2-digit", day: "2-digit", year: "2-digit" };
 
 const TaskCard = ({ task }: { task: TaskType }) => {
   // const taskProjectId = task.project;
-  const taskUserId = task.assignedTo;
+  // const taskUserId = task.assignedTo;
   const [userName, setUserName] = useState<string | null>(null);
   // const [projectName, setProjectName] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const res = await fetch(`/api/Users/${taskUserId}`);
-        const { user } = await res.json();
+  // useEffect(() => {
+  //   const fetchUserData = async () => {
+  //     try {
+  //       const res = await fetch(`/api/Users/${taskUserId}`);
+  //       const { user } = await res.json();
 
-        setUserName(user.name);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
+  //       setUserName(user.name);
+  //     } catch (error) {
+  //       console.error("Error fetching user data:", error);
+  //     }
+  //   };
 
-    // const fetchProjectData = async () => {
-    //   try {
-    //     const res = await fetch(`/api/Projects/${taskProjectId}`);
-    //     const { project } = await res.json();
+  //   // const fetchProjectData = async () => {
+  //   //   try {
+  //   //     const res = await fetch(`/api/Projects/${taskProjectId}`);
+  //   //     const { project } = await res.json();
 
-    //     setProjectName(project.name);
-    //   } catch (error) {
-    //     console.error("Error fetching project data:", error);
-    //   }
-    // };
+  //   //     setProjectName(project.name);
+  //   //   } catch (error) {
+  //   //     console.error("Error fetching project data:", error);
+  //   //   }
+  //   // };
 
-    fetchUserData();
-    // fetchProjectData();
-  }, [taskUserId]);
+  //   fetchUserData();
+  //   // fetchProjectData();
+  // }, [taskUserId]);
   const formatTimeStamp = (timestamp: Date) => {
     const options: Intl.DateTimeFormatOptions = {
       month: "2-digit",
@@ -76,11 +76,11 @@ const TaskCard = ({ task }: { task: TaskType }) => {
           <div className="flex mb-3">
             <PriorityDisplay priority={task.priority} />
             <div className="ml-auto">
-              <DeleteBlock id={task._id} userId={task.assignedTo} />
+              {/* <DeleteBlock id={task._id} userId={task.assignedTo} /> */}
             </div>
           </div>
           <div>
-            <CardTitle>{task.title}</CardTitle>
+            <CardTitle>{task.name}</CardTitle>
             <CardDescription>{task.description}</CardDescription>
           </div>
         </CardHeader>
@@ -93,14 +93,14 @@ const TaskCard = ({ task }: { task: TaskType }) => {
           <div className="flex mt-2 w-full ">
             <div className="flex flex-col w-full  ">
               <div className="mb-6">
-                <ProgressDisplay progress={task.progress} />
+                {/* <ProgressDisplay progress={task.progress} /> */}
               </div>
               <div className="flex flex-row">
                 <div className="text-xs my-1 mr-auto flex items-end">
-                  {formatTimeStamp(task.createdAt)}
+                  {/* {formatTimeStamp(task.createdAt)} */}
                 </div>
                 <div className="ml-auto flex items-end">
-                  <StatusDisplay status={task.status} />
+                  {/* <StatusDisplay status={task.status} /> */}
                 </div>
               </div>
             </div>

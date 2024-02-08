@@ -30,7 +30,7 @@ export async function PUT(
     const body = await request.json();
     const taskData: TaskType = body;
     const { project }: { project: string } = taskData;
-    const { assignedTo }: { assignedTo: string } = taskData;
+    // const { assignedTo }: { assignedTo: string } = taskData;
     const updateTaskData: TaskType | null = await Task.findByIdAndUpdate(
       { _id: id },
       {
@@ -81,38 +81,38 @@ export async function PUT(
     const existingUserWithTask = await User.findOne({
       tasks: { $in: [id] },
     });
-    if (assignedTo != existingUserWithTask._id) {
-      try {
-        await User.findOneAndUpdate(
-          { _id: existingUserWithTask._id },
-          { $pull: { tasks: id } },
-          { new: true }
-        );
-      } catch (updateUserError) {
-        return NextResponse.json(
-          {
-            message: "Error updating existing user and removing task",
-            error: updateUserError,
-          },
-          { status: 500 }
-        );
-      }
-      try {
-        await User.findOneAndUpdate(
-          { _id: assignedTo },
-          { $push: { tasks: id } },
-          { new: true }
-        );
-      } catch (updateUserError) {
-        return NextResponse.json(
-          {
-            message: "Error updating new user and adding task",
-            error: updateUserError,
-          },
-          { status: 500 }
-        );
-      }
-    }
+    // if (assignedTo != existingUserWithTask._id) {
+    //   try {
+    //     await User.findOneAndUpdate(
+    //       { _id: existingUserWithTask._id },
+    //       { $pull: { tasks: id } },
+    //       { new: true }
+    //     );
+    //   } catch (updateUserError) {
+    //     return NextResponse.json(
+    //       {
+    //         message: "Error updating existing user and removing task",
+    //         error: updateUserError,
+    //       },
+    //       { status: 500 }
+    //     );
+    //   }
+    //   try {
+    //     await User.findOneAndUpdate(
+    //       { _id: assignedTo },
+    //       { $push: { tasks: id } },
+    //       { new: true }
+    //     );
+    //   } catch (updateUserError) {
+    //     return NextResponse.json(
+    //       {
+    //         message: "Error updating new user and adding task",
+    //         error: updateUserError,
+    //       },
+    //       { status: 500 }
+    //     );
+    //   }
+    // }
 
     return NextResponse.json({ message: "task Updated" }, { status: 200 });
   } catch (err) {

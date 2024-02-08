@@ -52,7 +52,7 @@ const UserCardLarge = async ({ user }: { user: VerboseUserType }) => {
                         >
                           <div className="space-y-1">
                             <p className="text-sm font-medium leading-none">
-                              {task.title}
+                              {task.name}
                             </p>
                             <p className="text-sm text-muted-foreground">
                               {task.description}
