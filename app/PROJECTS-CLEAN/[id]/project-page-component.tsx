@@ -12,10 +12,12 @@ import {
   Card,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ProjectHeader } from "./project-header";
-import { TaskCardComponent } from "./task-card-component";
+import { ProjectHeader } from "../../../components/component/project-header";
+import { TaskCardComponent } from "../../../components/component/task-card-component";
 import { ProjectDto } from "@/use-cases/project/types";
-export function ProjectPage({ project }: { project: ProjectDto }) {
+import getProjectTasks from "@/data-access/tasks/get-project-tasks";
+export async function ProjectPage({ project }: { project: ProjectDto }) {
+  const tasks = await getProjectTasks(project);
   return (
     <div className="flex flex-col w-full min-h-screen">
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10">
@@ -28,8 +30,25 @@ export function ProjectPage({ project }: { project: ProjectDto }) {
         </div>
         <div className="grid gap-4 md:grid-cols-3">
           <div>
-            <h2 className="text-sm font-semibold p-4">Low</h2>
-            <Card className="border rounded-lg flex items-center p-4 border-green-500">
+            {tasks &&
+              tasks.map((task, task_idx) => (
+                <Card
+                  key={task_idx}
+                  className="border rounded-lg flex items-center p-4 border-green-500"
+                >
+                  <ArrowRightIcon className="w-4 h-4 text-green-500" />
+                  <div className="grid gap-1 ml-4">
+                    <CardHeader>
+                      <CardTitle>{task.name}</CardTitle>
+                      <CardDescription>{task.description}</CardDescription>
+                    </CardHeader>
+                  </div>
+                </Card>
+              ))}
+
+            {/* <h2 className="text-sm font-semibold p-4">Low</h2> */}
+
+            {/* <Card className="border rounded-lg flex items-center p-4 border-green-500">
               <ArrowRightIcon className="w-4 h-4 text-green-500" />
               <div className="grid gap-1 ml-4">
                 <CardHeader>
@@ -68,7 +87,7 @@ export function ProjectPage({ project }: { project: ProjectDto }) {
                   </CardDescription>
                 </CardHeader>
               </div>
-            </Card>
+            </Card> */}
           </div>
         </div>
       </main>

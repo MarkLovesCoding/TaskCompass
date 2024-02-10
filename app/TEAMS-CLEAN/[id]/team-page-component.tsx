@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/card";
 import type { TeamDto } from "@/use-cases/team/types";
 import { getTeamProjects } from "@/data-access/projects/get-team-projects";
+import { unstable_noStore } from "next/cache";
 
 export async function TeamPageComponent({ team }: { team: TeamDto }) {
   const projects = await getTeamProjects(team);
@@ -40,31 +41,6 @@ export async function TeamPageComponent({ team }: { team: TeamDto }) {
                 </Link>
               </Card>
             ))}
-
-          {/* <Card>
-            <CardHeader>
-              <CardTitle>Project 1</CardTitle>
-              <CardDescription>
-                A project focused on frontend development
-              </CardDescription>
-            </CardHeader>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle>Project 2</CardTitle>
-              <CardDescription>
-                A project specializing in backend services
-              </CardDescription>
-            </CardHeader>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle>Project 3</CardTitle>
-              <CardDescription>
-                A project dedicated to quality assurance
-              </CardDescription>
-            </CardHeader>
-          </Card> */}
         </div>
       </main>
     </div>

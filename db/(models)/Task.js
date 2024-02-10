@@ -15,7 +15,7 @@ const TaskSchema = new Schema(
     status: String,
     category: String,
     createdBy: { type: Schema.Types.ObjectId, ref: "User" },
-    // active: Boolean,
+    label: String,
   },
   {
     timestamps: true,

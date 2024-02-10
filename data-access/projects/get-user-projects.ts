@@ -8,7 +8,7 @@ import type { ProjectDto } from "@/use-cases/project/types";
 import type { UserDto } from "@/use-cases/user/types";
 import { projectToProjectDto } from "./get-project";
 // May require refactpr to get by ID
-async function getUsersProjects(user: UserDto): Promise<ProjectDto[]> {
+async function getUserProjects(user: UserDto): Promise<ProjectDto[]> {
   try {
     await connectDB();
   } catch (error) {
@@ -31,4 +31,4 @@ async function getUsersProjects(user: UserDto): Promise<ProjectDto[]> {
   return projects;
 }
 
-export default getUsersProjects;
+export default getUserProjects;

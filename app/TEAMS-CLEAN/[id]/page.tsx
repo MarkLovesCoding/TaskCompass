@@ -4,9 +4,10 @@ import { getServerSession } from "next-auth";
 import { options } from "@/app/api/auth/[...nextauth]/options";
 import { redirect } from "next/navigation";
 
-import { TeamPageComponent } from "@/components/component/team-page-component";
+import { TeamPageComponent } from "./team-page-component";
 import getTeam from "@/data-access/teams/get-team";
 import type { TeamDto } from "@/use-cases/team/types";
+import { unstable_noStore } from "next/cache";
 
 type Session = {
   user: {
@@ -22,6 +23,7 @@ type ParamsType = {
 };
 
 const Projects = async ({ params }: { params: ParamsType }) => {
+  unstable_noStore();
   const session: Session | null = await getServerSession(options);
   if (!session) {
     redirect("/api/auth/signin?callbackUrl=/Projects");

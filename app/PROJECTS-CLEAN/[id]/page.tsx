@@ -3,23 +3,9 @@ import { getServerSession } from "next-auth";
 import { options } from "@/app/api/auth/[...nextauth]/options";
 import { redirect } from "next/navigation";
 import getProject from "@/data-access/projects/get-project";
-import { ProjectPage } from "@/components/component/project-page";
-const tempData = {
-  availableAssignees: [
-    {
-      _id: "6595dfb779f96caa40686372",
-      name: "Mark Halstead",
-      email: "markdavidjameshalstead@gmail.com",
-      role: "Google User",
-      projects: ["6595dfb779f96caa40686370", "6595fc9679f96caa406864aa"],
-      tasks: ["6595f8dc79f96caa406863fc"],
-      connections: [],
-      createdAt: "2024-01-03T22:29:11.488Z",
-      updatedAt: "2024-01-04T00:32:22.698Z",
-      __v: 0,
-    },
-  ],
-};
+import getProjectTasks from "@/data-access/tasks/get-project-tasks";
+import { ProjectPage } from "@/app/PROJECTS-CLEAN/[id]/project-page-component";
+import { unstable_noStore } from "next/cache";
 
 type Session = {
   user: {
@@ -35,6 +21,7 @@ type ParamsType = {
 };
 
 const Projects = async ({ params }: { params: ParamsType }) => {
+  unstable_noStore();
   console.log("Params: ", params);
 
   const session: Session | null = await getServerSession(options);

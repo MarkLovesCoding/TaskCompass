@@ -5,7 +5,7 @@ export function taskToDto(task: TaskEntity): TaskDto {
   const taskId = task.getId();
   if (!taskId) throw new Error("Project id is required");
   return {
-    id: task.getId(),
+    id: taskId,
     name: task.getName(),
     description: task.getDescription(),
     project: task.getProject(),

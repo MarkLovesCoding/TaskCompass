@@ -18,14 +18,14 @@ import {
   Card,
 } from "@/components/ui/card";
 import type { UserDto } from "@/use-cases/user/types";
-import getUsersTeams from "@/data-access/teams/get-users-teams";
-import getUsersProjects from "@/data-access/projects/get-users-projects";
+import getUserTeams from "@/data-access/teams/get-user-teams";
+import getUserProjects from "@/data-access/projects/get-user-projects";
 // get teams
 
 // get projects
 export async function UserPageComponent({ user }: { user: UserDto }) {
-  const usersTeams = await getUsersTeams(user);
-  const usersProjects = await getUsersProjects(user);
+  const usersTeams = await getUserTeams(user);
+  const usersProjects = await getUserProjects(user);
 
   return (
     <div className="flex flex-col w-full min-h-screen">

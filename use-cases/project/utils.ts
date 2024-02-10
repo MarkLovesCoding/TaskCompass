@@ -5,7 +5,7 @@ export function projectToDto(project: ProjectEntity): ProjectDto {
   const projectId = project.getId();
   if (!projectId) throw new Error("Project id is required");
   return {
-    id: project.getId(),
+    id: projectId,
     name: project.getName(),
     description: project.getDescription(),
     members: project.getMembers(),
