@@ -1,34 +1,19 @@
 import React from "react";
 
-import { getServerSession } from "next-auth";
-import { options } from "@/app/api/auth/[...nextauth]/options";
-import { redirect } from "next/navigation";
-
 import { TeamPageComponent } from "./team-page-component";
 import getTeam from "@/data-access/teams/get-team";
 import type { TeamDto } from "@/use-cases/team/types";
 import { unstable_noStore } from "next/cache";
+import { sessionAuth } from "@/lib/sessionAuth";
 
-type Session = {
-  user: {
-    id: string;
-    name: string;
-    email: string;
-    image: undefined;
-    role: string;
-  };
-};
 type ParamsType = {
   id: string;
 };
 
 const Projects = async ({ params }: { params: ParamsType }) => {
   unstable_noStore();
-  const session: Session | null = await getServerSession(options);
-  if (!session) {
-    redirect("/api/auth/signin?callbackUrl=/Projects");
-  }
-  console.log("Sessiondata: " + JSON.stringify(session?.user));
+  const session = await sessionAuth(`TEAMS-CLEAN/${params.id}`);
+
   const teamId = params.id;
   const team: TeamDto = await getTeam(teamId);
 

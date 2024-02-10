@@ -20,6 +20,7 @@ import {
 import type { UserDto } from "@/use-cases/user/types";
 import getUserTeams from "@/data-access/teams/get-user-teams";
 import getUserProjects from "@/data-access/projects/get-user-projects";
+import AddTeamCard from "./AddTeamCard";
 // get teams
 
 // get projects
@@ -54,6 +55,7 @@ export async function UserPageComponent({ user }: { user: UserDto }) {
                   </Card>
                 );
               })}
+            <AddTeamCard />
           </div>
         </div>
         <div>

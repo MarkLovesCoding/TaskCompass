@@ -1,16 +1,6 @@
 import Link from "next/link";
-import { getServerSession } from "next-auth";
-import { options } from "../api/auth/[...nextauth]/options.js";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Logout from "./Logout";
-import {
-  faFolder,
-  faPlus,
-  faPerson,
-  faPersonCirclePlus,
-  faTicket,
-  faUsers,
-} from "@fortawesome/free-solid-svg-icons";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,12 +11,25 @@ import {
   DropdownMenuGroup,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { faUserAlt } from "@fortawesome/free-solid-svg-icons/faUserAlt";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
+import getUserProjects from "@/data-access/projects/get-user-projects";
+import getUser from "@/data-access/users/get-user";
+import getUserTeams from "@/data-access/teams/get-user-teams";
+import { sessionAuth } from "@/lib/sessionAuth";
+
 const Navigation: React.FC = async () => {
-  const session = await getServerSession(options);
+  const session = await sessionAuth();
+  // const session = await getServerSession(options);
   const sessionUserId = session?.user.id;
+  console.log("session", session);
+  //move into usecase?
+  let userObject, userProjects, userTeams;
+  if (session) {
+    userObject = await getUser(sessionUserId as string);
+    userProjects = await getUserProjects(userObject);
+    userTeams = await getUserTeams(userObject);
+  }
 
   return (
     <>
@@ -50,9 +53,16 @@ const Navigation: React.FC = async () => {
                 </Link>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start">
-                <DropdownMenuItem>Project 1</DropdownMenuItem>
+                {userProjects?.map((project, project_idx) => (
+                  <DropdownMenuItem key={project_idx}>
+                    <Link href={`/PROJECTS-CLEAN/${project.id}`}>
+                      {project.name}
+                    </Link>
+                  </DropdownMenuItem>
+                ))}
+                {/* <DropdownMenuItem>Project 1</DropdownMenuItem>
                 <DropdownMenuItem>Project 2</DropdownMenuItem>
-                <DropdownMenuItem>Project 3</DropdownMenuItem>
+                <DropdownMenuItem>Project 3</DropdownMenuItem> */}
               </DropdownMenuContent>
             </DropdownMenu>
             <DropdownMenu>
@@ -65,9 +75,11 @@ const Navigation: React.FC = async () => {
                 </Link>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start">
-                <DropdownMenuItem>Team 1</DropdownMenuItem>
-                <DropdownMenuItem>Team 2</DropdownMenuItem>
-                <DropdownMenuItem>Team 3</DropdownMenuItem>
+                {userTeams?.map((team, team_idx) => (
+                  <DropdownMenuItem key={team_idx}>
+                    <Link href={`/TEAMS-CLEAN/${team.id}`}>{team.name}</Link>
+                  </DropdownMenuItem>
+                ))}
               </DropdownMenuContent>
             </DropdownMenu>
             <DropdownMenu>

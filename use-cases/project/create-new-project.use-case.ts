@@ -1,5 +1,6 @@
 import { ProjectEntity } from "@/entities/Project";
-import { CreateProject, GetProject, GetUser } from "@/use-cases/project/types";
+import { CreateProject, GetProject } from "@/use-cases/project/types";
+import { GetUser } from "@/use-cases/user/types";
 import { projectToCreateProjectDto } from "@/use-cases/project/utils";
 
 export async function createNewProject(

@@ -1,11 +1,9 @@
 import React from "react";
-import { getServerSession } from "next-auth";
-import { options } from "@/app/api/auth/[...nextauth]/options";
-import { redirect } from "next/navigation";
 import getProject from "@/data-access/projects/get-project";
 import getProjectTasks from "@/data-access/tasks/get-project-tasks";
 import { ProjectPage } from "@/app/PROJECTS-CLEAN/[id]/project-page-component";
 import { unstable_noStore } from "next/cache";
+import { sessionAuth } from "@/lib/sessionAuth";
 
 type Session = {
   user: {
@@ -23,11 +21,10 @@ type ParamsType = {
 const Projects = async ({ params }: { params: ParamsType }) => {
   unstable_noStore();
   console.log("Params: ", params);
+  const session = await sessionAuth(`PROJECTS-CLEAN/${params.id}`);
 
-  const session: Session | null = await getServerSession(options);
-  if (!session) {
-    redirect(`/api/auth/signin?callbackUrl=/Projects/${params.id}`);
-  }
+  // const session: Session | null = await getServerSession(options);
+
   // console.log("Sessiondata: " + JSON.stringify(session?.user));
   const projectIdForProjectFiltering = params.id;
   console.log(projectIdForProjectFiltering);

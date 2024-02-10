@@ -8,7 +8,7 @@ import type { TeamDto } from "@/use-cases/team/types";
 import type { UserDto } from "@/use-cases/user/types";
 import { teamToTeamDto } from "./get-team";
 // May require refactpr to get by ID
-async function getUsersTeams(user: UserDto): Promise<TeamDto[]> {
+export async function getUserTeams(user: UserDto): Promise<TeamDto[]> {
   try {
     await connectDB();
   } catch (error) {
@@ -31,4 +31,4 @@ async function getUsersTeams(user: UserDto): Promise<TeamDto[]> {
   return teams;
 }
 
-export default getUsersTeams;
+export default getUserTeams;
