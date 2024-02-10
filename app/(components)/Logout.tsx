@@ -6,8 +6,8 @@ const handleSignOut = async () => {
 };
 const Logout = () => {
   return (
-    <div className="cursor-pointer" onClick={handleSignOut}>
-      <p>Logout</p>
+    <div className="cursor-pointer w-full" onClick={handleSignOut}>
+      <p>Sign Out</p>
     </div>
   );
 };
