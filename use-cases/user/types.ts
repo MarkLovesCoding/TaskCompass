@@ -1,7 +1,7 @@
 export type UserDto = {
-  id?: string;
+  id: string;
   name: string;
-  email: string;
+  email?: string;
   projects: string[];
   teams: string[];
   tasks: string[];

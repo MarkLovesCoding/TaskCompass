@@ -33,5 +33,7 @@ export async function createNewTaskUseCase(
     status: data.status,
     label: data.label,
   });
+
   await context.createNewTask(taskToCreateTaskDto(newTask));
+  //update project
 }

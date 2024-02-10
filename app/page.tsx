@@ -14,7 +14,7 @@ const Home = () => {
     // Redirect to home if the user is already signed in
     if (session) {
       //@ts-expect-error
-      router.push(`/UserPage/${session!.user.id}`);
+      router.push(`/USERPAGE-CLEAN/${session!.user.id}`);
     }
   }, [session, router]);
   const [toRegister, setToRegister] = useState(false);

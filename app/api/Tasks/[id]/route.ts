@@ -1,7 +1,7 @@
-import connectDB from "@/app/utils/connectDB";
-import Task from "@/app/(models)/Task";
-import Project from "@/app/(models)/Project";
-import User from "@/app/(models)/User";
+import connectDB from "@/db/connectDB";
+import Task from "@/db/(models)/Task";
+import Project from "@/db/(models)/Project";
+import User from "@/db/(models)/User";
 import { TaskType, ProjectType, ParamsType } from "@/app/types/types";
 import { NextResponse, NextRequest } from "next/server";
 

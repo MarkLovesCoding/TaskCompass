@@ -1,5 +1,5 @@
 export type ProjectDto = {
-  id?: string;
+  id: string;
   name: string;
   description: string;
   members: string[];

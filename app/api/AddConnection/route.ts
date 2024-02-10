@@ -1,6 +1,6 @@
 import { NextResponse, NextRequest } from "next/server";
-import connectDB from "@/app/utils/connectDB";
-import User from "@/app/(models)/User";
+import connectDB from "@/db/connectDB";
+import User from "@/db/(models)/User";
 
 type ConnectionsBody = {
   userId: string;

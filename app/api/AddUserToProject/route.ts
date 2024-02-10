@@ -1,9 +1,8 @@
 import connectDB from "@/app/utils/connectDB";
 // import Project from "@/app/(models)/Project";
-import Project from "../../(models)/Project";
-import User from "../../(models)/User";
+import Project from "@/db/(models)/Project";
+import User from "@/db/(models)/User";
 import { NextResponse, NextRequest } from "next/server";
-import bcrypt from "bcrypt";
 import { ProjectType, UserType } from "@/app/types/types";
 export async function POST(req: Request, res: Response) {
   try {

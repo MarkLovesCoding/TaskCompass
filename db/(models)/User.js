@@ -11,6 +11,7 @@ const UserSchema = new Schema(
     tasks: [{ type: Schema.Types.ObjectId, ref: "Task" }],
     teams: [{ type: Schema.Types.ObjectId, ref: "Team" }],
     avatar: String,
+    role: String,
   },
   {
     timestamps: true,

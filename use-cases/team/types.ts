@@ -1,5 +1,5 @@
 export type TeamDto = {
-  id?: string;
+  id: string;
   name: string;
   members: string[];
   projects: string[];

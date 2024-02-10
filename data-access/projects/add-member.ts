@@ -1,4 +1,4 @@
-import "server-only";
+// import "server-only";
 
 import connectDB from "@/db/connectDB";
 import Project from "@/db/(models)/Project";

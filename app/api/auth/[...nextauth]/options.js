@@ -3,11 +3,12 @@
 import GitHubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
-import connectDB from "@/app/utils/connectDB";
+import connectDB from "@/db/connectDB";
 
-import User from "@/app/(models)/User";
-import Project from "@/app/(models)/Project";
-import Task from "@/app/(models)/Task";
+import User from "@/db/(models)/User";
+import Project from "@/db/(models)/Project";
+import Team from "@/db/(models)/Team";
+import Task from "@/db/(models)/Task";
 
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
@@ -75,6 +76,7 @@ export const options = {
             ...profile,
             id: existingUser._id,
             role: userRole,
+            avatar: profile.picture,
           };
         }
 
@@ -82,6 +84,7 @@ export const options = {
           ...profile,
           id: profile.sub,
           role: userRole,
+          avatar: profile.picture,
         };
       },
       clientId: process.env.GOOGLE_ID,
@@ -146,10 +149,8 @@ export const options = {
       await connectDB();
 
       // Check if the user already exists in the database
-      // console.log("User", user, "ACCOUNT", account, "PROFILE", profile);
       const existingUser = await User.findOne({
         email: user.user.email,
-        // role: user.user.role,
       }).lean();
 
       if (existingUser && existingUser.role == user.user.role) {
@@ -160,66 +161,94 @@ export const options = {
         user.user.id = existingUser._id;
         return true; // Continue the sign-in process
       } else if (existingUser) {
-        console.log(
-          "user with same email ------------------------------------------"
-        );
         return { error: "User with same email exists as " + existingUser.role };
       }
 
-      // Save the new user data to MongoDB
-      const { id, email, name, role } = user.user;
+      // ELSE CREATE NEW USER WITH DEFAULT PROJECTS AND TEAMS
+      const { email, name, role } = user.user;
       const newProjectData = {
-        name: "My Personal Tasks",
-        isDefault: true,
+        name: "My Personal Project",
+        description: "This is your default project",
+      };
+      const newTeamData = {
+        name: "My First Team",
       };
 
-      let initialProjectAssigned, newProjectId;
       try {
-        initialProjectAssigned = await Project.create({
+        //CREATE NEW PROJECT WITH FILLER NAMES
+        let initialProjectAssigned = await Project.create({
           name: newProjectData.name,
-          isDefault: newProjectData.isDefault,
+          description: newProjectData.description,
         });
-        newProjectId = initialProjectAssigned._id;
-      } catch (error) {
-        console.error("Error creating initial Project:", error);
-        return false;
 
-        // Handle the error or return from the function as needed
-      }
-      let newUser;
-      try {
-        newUser = await User.create({
+        //CREATE NEW USER
+        let newUser = await User.create({
           name,
           email,
           role,
-          projects: [newProjectId],
+          // projects: [newProjectId],
+          projects: [],
           tasks: [],
+          teams: [],
+          avatar: "default_avatar.png",
         });
+
+        //CREATE NEW TEAM WITH FILLER NAME
+        let initialTeamAssigned = await Team.create({
+          name: newTeamData.name,
+          projects: [],
+          members: [],
+        });
+
+        newUser.projects.push(initialProjectAssigned._id);
+        newUser.teams.push(initialTeamAssigned._id);
+        await newUser.save();
+
+        initialProjectAssigned.members.push(newUser._id);
+        await initialProjectAssigned.save();
+        initialTeamAssigned.projects.push(initialProjectAssigned._id);
+        initialTeamAssigned.members.push(newUser._id);
+        await initialTeamAssigned.save();
+
+        // await Project.findByIdAndUpdate(
+        //   initialProjectAssigned._id,
+        //   {
+        //     $addToSet: {
+        //       members: newUser._id,
+        //     },
+        //   },
+        //   { new: true }
+        // );
+
+        // await User.findByIdAndUpdate(
+        //   newUser._id,
+        //   {
+        //     $addToSet: {
+        //       teams: new mongoose.Types.ObjectId(initialTeamAssigned._id),
+        //       projects: new mongoose.Types.ObjectId(initialProjectAssigned._id),
+        //     },
+        //   },
+        //   { new: true }
+        // );
+        // await Team.findByIdAndUpdate(
+        //   initialTeamAssigned._id,
+        //   {
+        //     $addToSet: {
+        //       members: new mongoose.Types.ObjectId(newUser._id),
+        //       projects: new mongoose.Types.ObjectId(initialProjectAssigned._id),
+        //     },
+        //   },
+        //   { new: true }
+        // );
+
+        //update user with object id for token
         user.user.id = newUser._id;
       } catch (error) {
-        console.error("Error creating user:", error);
-        return false;
-        // Handle the error or return from the function as needed
-      }
-
-      const userIDNEW = new mongoose.Types.ObjectId(newUser._id);
-      try {
-        const updatedProject = await Project.findByIdAndUpdate(
-          initialProjectAssigned._id,
-          {
-            $addToSet: {
-              users: userIDNEW,
-            },
-          },
-          { new: true }
-        );
-      } catch (error) {
-        console.error("Error updating Project:", error);
+        console.error("Error creating User and Defaults:", error);
         return false;
 
         // Handle the error or return from the function as needed
       }
-
       return true; // Continue the sign-in process
     },
 

@@ -1,5 +1,5 @@
 import { UserEntity } from "@/entities/User";
-import { UserDto } from "@/use-cases/user/types";
+import type { UserDto } from "@/use-cases/user/types";
 
 export function userToDto(user: UserEntity): UserDto {
   const userId = user.getId();

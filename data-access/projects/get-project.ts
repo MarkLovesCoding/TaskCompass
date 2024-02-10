@@ -6,6 +6,24 @@ import Project from "@/db/(models)/Project";
 
 import { ProjectDto } from "@/use-cases/project/types";
 
+type ProjectModelType = {
+  _id: string;
+  name: string;
+  description: string;
+  members: string[];
+  tasks: string[];
+};
+
+export function projectToProjectDto(project: ProjectModelType): ProjectDto {
+  return {
+    id: project._id,
+    name: project.name,
+    description: project.description,
+    members: project.members,
+    tasks: project.tasks,
+  };
+}
+
 // May require refactpr to get by ID
 async function getProject(projectId: string): Promise<ProjectDto> {
   try {
