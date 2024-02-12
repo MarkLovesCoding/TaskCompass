@@ -4,11 +4,16 @@ import Logout from "./Logout";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuPortal,
   DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-  DropdownMenuGroup,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -42,46 +47,138 @@ const Navigation: React.FC = async () => {
             <span className="font-bold">TaskCompass</span>
             <span className="sr-only">Task Compass Project Management App</span>
           </Link>
-          <nav className="font-medium sm:flex flex-row items-center gap-5 text-sm lg:gap-6 ml-auto">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Link
-                  className="font-bold bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 py-2 px-4 rounded-lg"
-                  href="#"
-                >
-                  Projects
-                </Link>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start">
-                {userProjects?.map((project, project_idx) => (
-                  <DropdownMenuItem key={project_idx}>
-                    <Link href={`/PROJECTS-CLEAN/${project.id}`}>
-                      {project.name}
-                    </Link>
-                  </DropdownMenuItem>
-                ))}
-                {/* <DropdownMenuItem>Project 1</DropdownMenuItem>
+          <nav className="font-medium flex flex-row items-center gap-5 text-sm lg:gap-6 ml-auto">
+            {
+              <div className=" sm:hidden">
+                <DropdownMenu>
+                  {/* <DropdownMenuTrigger asChild> */}
+                  {/* <Link
+                      className="m-4 font-bold bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 py-2 px-4 rounded-lg"
+                      href="#"
+                    >
+                      ...
+                    </Link> */}
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost">...</Button>
+                  </DropdownMenuTrigger>
+                  {/* </DropdownMenuTrigger> */}
+                  <DropdownMenuContent>
+                    <DropdownMenuSub>
+                      <DropdownMenuSubTrigger>Teams</DropdownMenuSubTrigger>
+                      <DropdownMenuPortal>
+                        <DropdownMenuSubContent>
+                          {/* <DropdownMenuContent align="start"> */}
+                          {userTeams?.map((team, team_idx) => (
+                            <DropdownMenuItem key={team_idx}>
+                              <Link href={`/TEAMS-CLEAN/${team.id}`}>
+                                {team.name}
+                              </Link>
+                            </DropdownMenuItem>
+                          ))}
+                          {/* </DropdownMenuContent> */}
+                        </DropdownMenuSubContent>
+                      </DropdownMenuPortal>
+                    </DropdownMenuSub>
+                    <DropdownMenuSeparator />
+
+                    <DropdownMenuSub>
+                      <DropdownMenuSubTrigger>Projects</DropdownMenuSubTrigger>
+                      <DropdownMenuPortal>
+                        <DropdownMenuSubContent>
+                          {/* <DropdownMenuContent align="start"> */}
+                          {userProjects?.map((project, project_idx) => (
+                            <DropdownMenuItem key={project_idx}>
+                              <Link href={`/PROJECTS-CLEAN/${project.id}`}>
+                                {project.name}
+                              </Link>
+                            </DropdownMenuItem>
+                          ))}
+                          {/* <DropdownMenuItem>Project 1</DropdownMenuItem>
                 <DropdownMenuItem>Project 2</DropdownMenuItem>
                 <DropdownMenuItem>Project 3</DropdownMenuItem> */}
-              </DropdownMenuContent>
-            </DropdownMenu>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Link
-                  className="text-gray-500 dark:text-gray-400 bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 py-2 px-4 rounded-lg"
-                  href="#"
-                >
-                  Teams
-                </Link>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start">
-                {userTeams?.map((team, team_idx) => (
-                  <DropdownMenuItem key={team_idx}>
-                    <Link href={`/TEAMS-CLEAN/${team.id}`}>{team.name}</Link>
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+                          {/* </DropdownMenuContent> */}
+                        </DropdownMenuSubContent>
+                      </DropdownMenuPortal>
+                    </DropdownMenuSub>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+                {/* <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Link
+                      className="m-4 font-bold bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 py-2 px-4 rounded-lg"
+                      href="#"
+                    >
+                      Projects
+                    </Link>
+                  </DropdownMenuTrigger>
+                </DropdownMenu> */}
+                {/* <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Link
+                      className="text-gray-500 dark:text-gray-400 bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 py-2 px-4 rounded-lg"
+                      href="#"
+                    >
+                      Teams
+                    </Link>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="start">
+                    {userTeams?.map((team, team_idx) => (
+                      <DropdownMenuItem key={team_idx}>
+                        <Link href={`/TEAMS-CLEAN/${team.id}`}>
+                          {team.name}
+                        </Link>
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu> */}
+              </div>
+            }
+            {
+              <div className="hidden sm:block">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Link
+                      className="m-4 font-bold bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 py-2 px-4 rounded-lg"
+                      href="#"
+                    >
+                      Projects
+                    </Link>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="start">
+                    {userProjects?.map((project, project_idx) => (
+                      <DropdownMenuItem key={project_idx}>
+                        <Link href={`/PROJECTS-CLEAN/${project.id}`}>
+                          {project.name}
+                        </Link>
+                      </DropdownMenuItem>
+                    ))}
+                    {/* <DropdownMenuItem>Project 1</DropdownMenuItem>
+                <DropdownMenuItem>Project 2</DropdownMenuItem>
+                <DropdownMenuItem>Project 3</DropdownMenuItem> */}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Link
+                      className="text-gray-500 dark:text-gray-400 bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 py-2 px-4 rounded-lg"
+                      href="#"
+                    >
+                      Teams
+                    </Link>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="start">
+                    {userTeams?.map((team, team_idx) => (
+                      <DropdownMenuItem key={team_idx}>
+                        <Link href={`/TEAMS-CLEAN/${team.id}`}>
+                          {team.name}
+                        </Link>
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            }
+
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button

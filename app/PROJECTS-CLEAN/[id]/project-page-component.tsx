@@ -36,7 +36,7 @@ export async function ProjectPage({ project }: { project: ProjectDto }) {
                   key={task_idx}
                   className="border rounded-lg flex items-center p-4 border-green-500"
                 >
-                  <ArrowRightIcon className="w-4 h-4 text-green-500" />
+                  <ArrowRightIcon classNam="w-4 h-4 text-green-500" />
                   <div className="grid gap-1 ml-4">
                     <CardHeader>
                       <CardTitle>{task.name}</CardTitle>
