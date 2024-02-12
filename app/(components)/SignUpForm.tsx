@@ -127,7 +127,8 @@ const SignUpForm = () => {
                 </FormItem>
               );
             }}
-          />{" "}ormField
+          />
+          <FormField
             control={form.control}
             name="email"
             render={({ field }) => {

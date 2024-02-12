@@ -12,6 +12,7 @@ type ProjectModelType = {
   description: string;
   members: string[];
   tasks: string[];
+  team: string;
 };
 
 export function projectToProjectDto(project: ProjectModelType): ProjectDto {
@@ -21,6 +22,7 @@ export function projectToProjectDto(project: ProjectModelType): ProjectDto {
     description: project.description,
     members: project.members,
     tasks: project.tasks,
+    team: project.team,
   };
 }
 

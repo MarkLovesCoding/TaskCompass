@@ -8,6 +8,7 @@ const ProjectSchema = new Schema(
     description: String,
     members: [{ type: Schema.Types.ObjectId, ref: "User" }],
     tasks: [{ type: Schema.Types.ObjectId, ref: "Task" }],
+    team: { type: Schema.Types.ObjectId, ref: "Team" },
   },
   {
     timestamps: true,

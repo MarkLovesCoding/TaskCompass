@@ -13,9 +13,25 @@ import {
   CardHeader,
   Card,
 } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogClose,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 import type { TeamDto } from "@/use-cases/team/types";
 import { getTeamProjects } from "@/data-access/projects/get-team-projects";
 import { unstable_noStore } from "next/cache";
+import AddProjectCard from "./AddProjectCard";
 
 export async function TeamPageComponent({ team }: { team: TeamDto }) {
   const projects = await getTeamProjects(team);
@@ -23,12 +39,34 @@ export async function TeamPageComponent({ team }: { team: TeamDto }) {
   return (
     <div className="flex flex-col w-full min-h-screen">
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10">
-        <TeamHeader team={team} />
-        <Button className="rounded-full ml-auto" size="icon">
-          <PlusIcon className="w-4 h-4" />
-          <span className="sr-only">New Task</span>
-        </Button>
-
+        <div className="flex flex-row p-10 justify-center align-middle">
+          <div className="text-2xl font-bold mr-10">
+            <TeamHeader team={team} />
+          </div>
+          <Dialog>
+            <DialogTrigger>
+              <HoverCard>
+                <HoverCardTrigger>
+                  <Button className="rounded-full ml-auto" size="icon">
+                    <PlusIcon className="w-4 h-4" />
+                    <span className="sr-only">New Project Button</span>
+                  </Button>
+                </HoverCardTrigger>
+                <HoverCardContent
+                  side="right"
+                  //@ts-expect-error //bug in radix code
+                  sideOffset="2"
+                  className="max-w-fit"
+                >
+                  Add New Project
+                </HoverCardContent>
+              </HoverCard>
+            </DialogTrigger>
+            <DialogContent className="max-w-[300px]">
+              <AddProjectCard teamId={team.id} />
+            </DialogContent>
+          </Dialog>
+        </div>
         <div className="grid gap-4 md:grid-cols-3">
           {projects &&
             projects.map((project, project_idx) => (

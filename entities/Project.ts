@@ -6,6 +6,7 @@ export class ProjectEntity {
   private description: string;
   private members: string[];
   private tasks: string[];
+  private team: string;
 
   constructor({
     id,
@@ -13,18 +14,21 @@ export class ProjectEntity {
     description,
     members,
     tasks,
+    team,
   }: {
     id?: string;
     name: string;
     description: string;
     members: string[];
     tasks: string[];
+    team: string;
   }) {
     this.id = id;
     this.name = name;
     this.description = description;
     this.members = members;
     this.tasks = tasks;
+    this.team = team;
     this.validate();
   }
 
@@ -39,6 +43,9 @@ export class ProjectEntity {
   }
   getTasks() {
     return this.tasks;
+  }
+  getTeam() {
+    return this.team;
   }
   getId() {
     return this.id;

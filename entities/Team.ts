@@ -21,6 +21,7 @@ export class TeamEntity {
     this.name = name;
     this.members = members;
     this.projects = projects;
+
     this.validate();
   }
 
@@ -33,6 +34,7 @@ export class TeamEntity {
   getProjects() {
     return this.projects;
   }
+
   getId() {
     return this.id;
   }

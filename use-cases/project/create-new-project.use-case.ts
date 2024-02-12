@@ -1,17 +1,20 @@
 import { ProjectEntity } from "@/entities/Project";
-import { CreateProject, GetProject } from "@/use-cases/project/types";
-import { GetUser } from "@/use-cases/user/types";
+import { CreateNewProject } from "@/use-cases/project/types";
+import { GetTeam, UpdateTeam } from "@/use-cases/team/types";
+import { GetUser, UpdateUser } from "@/use-cases/user/types";
 import { projectToCreateProjectDto } from "@/use-cases/project/utils";
+import { TeamEntity } from "@/entities/Team";
 
-export async function createNewProject(
+// to be sorted out with how to update team and user and impliment
+export async function createNewProjectUseCase(
   context: {
-    createNewProject: CreateProject;
-    getProject: GetProject;
+    createNewProject: CreateNewProject;
     getUser: GetUser;
   },
   data: {
     name: string;
     description: string;
+    teamId: string;
   }
 ) {
   const user = context.getUser();
@@ -22,6 +25,7 @@ export async function createNewProject(
     description: data.description,
     members: [user.userId],
     tasks: [],
+    team: data.teamId,
   });
   await context.createNewProject(projectToCreateProjectDto(newProject));
 }

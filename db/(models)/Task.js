@@ -7,6 +7,7 @@ const TaskSchema = new Schema(
     name: String,
     description: String,
     project: { type: Schema.Types.ObjectId, ref: "Project" },
+    Team: { type: Schema.Types.ObjectId, ref: "Team" },
     assignees: [{ type: Schema.Types.ObjectId, ref: "User" }],
     dueDate: Number,
     startDate: Number,

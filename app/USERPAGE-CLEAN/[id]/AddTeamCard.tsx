@@ -20,6 +20,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { DialogFooter, DialogClose } from "@/components/ui/dialog";
 import * as z from "zod";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -50,7 +51,7 @@ const AddTeamCard = () => {
   return (
     <Form {...form}>
       <form
-        className="mt-4 mr-2 w-[50%]"
+        className="mt-4 mr-2"
         onSubmit={form.handleSubmit(onNewTeamFormSubmit)}
       >
         <FormField
@@ -59,7 +60,7 @@ const AddTeamCard = () => {
           render={({ field }) => {
             return (
               <FormItem className="mt-2">
-                <FormLabel>New Team Name</FormLabel>
+                <FormLabel>Name</FormLabel>
                 <FormControl>
                   <Input placeholder="New team name" type="text" {...field} />
                 </FormControl>
@@ -69,13 +70,21 @@ const AddTeamCard = () => {
           }}
         />
 
-        <Button
-          type="submit"
-          value="Create New Team"
-          className="w-full   py-2 rounded-md"
-        >
-          <FontAwesomeIcon icon={faPlus} />
-        </Button>
+        <DialogFooter className="sm:justify-start mt-10">
+          <DialogClose asChild>
+            <Button
+              type="submit"
+              value="Create New Team"
+              className=" py-2 rounded-md "
+            >
+              Save
+            </Button>
+            {/*           
+            <Button type="button" variant="secondary">
+              Close
+            </Button> */}
+          </DialogClose>
+        </DialogFooter>
       </form>
     </Form>
   );

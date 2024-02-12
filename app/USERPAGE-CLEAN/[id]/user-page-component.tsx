@@ -17,10 +17,17 @@ import {
   CardHeader,
   Card,
 } from "@/components/ui/card";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 import type { UserDto } from "@/use-cases/user/types";
 import getUserTeams from "@/data-access/teams/get-user-teams";
 import getUserProjects from "@/data-access/projects/get-user-projects";
 import AddTeamCard from "./AddTeamCard";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Separator } from "@/components/ui/separator";
 // get teams
 
 // get projects
@@ -39,8 +46,39 @@ export async function UserPageComponent({ user }: { user: UserDto }) {
         </div>
 
         <div>
-          {/* <TeamHeader user={user} /> */}
-          <h1 className="text-lg font-bold">Teams</h1>
+          <div className="flex flex-row p-10 justify-center align-middle">
+            <h1 className="text-2xl font-bold mr-10">Your Teams</h1>
+            <Dialog>
+              <DialogTrigger>
+                <HoverCard>
+                  <HoverCardTrigger>
+                    <Button className="rounded-full ml-auto" size="icon">
+                      <PlusIcon className="w-4 h-4" />
+                      <span className="sr-only">New Team Button</span>
+                    </Button>
+                  </HoverCardTrigger>
+                  <HoverCardContent
+                    side="right"
+                    //@ts-expect-error //bug in radix code
+                    sideOffset="2"
+                    className="max-w-fit"
+                  >
+                    Add New Team
+                  </HoverCardContent>
+                </HoverCard>
+              </DialogTrigger>
+              <DialogContent className="max-w-[300px]">
+                <AddTeamCard />
+                {/* <DialogFooter className="sm:justify-end">
+                  <DialogClose asChild>
+                    <Button type="button" variant="secondary">
+                      Close
+                    </Button>
+                  </DialogClose>
+                </DialogFooter> */}
+              </DialogContent>
+            </Dialog>
+          </div>
           <div className="grid gap-4 md:grid-cols-3">
             {usersTeams &&
               usersTeams.map((team, team_idx) => {
@@ -55,13 +93,14 @@ export async function UserPageComponent({ user }: { user: UserDto }) {
                   </Card>
                 );
               })}
-            <AddTeamCard />
           </div>
         </div>
-        <div>
-          {/* <TeamHeader user={user} /> */}
-          <h1 className="text-lg font-bold">Projects</h1>
 
+        <div>
+          <Separator className="my-10" />
+          <div className="flex flex-row p-10 justify-center align-middle">
+            <h1 className="text-2xl font-bold mr-10">Your Projects</h1>
+          </div>
           <div className="grid gap-4 md:grid-cols-3">
             {usersProjects &&
               usersProjects.map((project, project_idx) => (

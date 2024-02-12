@@ -10,6 +10,7 @@ export function projectToDto(project: ProjectEntity): ProjectDto {
     description: project.getDescription(),
     members: project.getMembers(),
     tasks: project.getTasks(),
+    team: project.getTeam(),
   };
 }
 
@@ -21,5 +22,6 @@ export function projectToCreateProjectDto(
     description: project.getDescription(),
     members: project.getMembers(),
     tasks: project.getTasks(),
+    team: project.getTeam(),
   };
 }
