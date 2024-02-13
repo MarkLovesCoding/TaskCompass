@@ -41,7 +41,7 @@ const Projects = async ({ params }: { params: ParamsType }) => {
     <div className="p-5 flex justify-center flex-col items-center">
       {/* <h1 className="pt-4 pb-10">Your projects</h1> */}
 
-      <ProjectPage project={project} />
+      <ProjectPage project={project} userId={session?.user.id!} />
     </div>
   );
 };

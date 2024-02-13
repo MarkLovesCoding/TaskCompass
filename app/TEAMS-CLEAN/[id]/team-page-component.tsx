@@ -45,14 +45,14 @@ export async function TeamPageComponent({ team }: { team: TeamDto }) {
           </div>
           <Dialog>
             <DialogTrigger>
-              <HoverCard>
-                <HoverCardTrigger>
-                  <Button className="rounded-full ml-auto" size="icon">
-                    <PlusIcon className="w-4 h-4" />
-                    <span className="sr-only">New Project Button</span>
-                  </Button>
-                </HoverCardTrigger>
-                <HoverCardContent
+              {/* <HoverCard> */}
+              {/* <HoverCardTrigger> */}
+              <Button className="rounded-full ml-auto" size="icon">
+                <PlusIcon className="w-4 h-4" />
+                <span className="sr-only">New Project Button</span>
+              </Button>
+              {/* </HoverCardTrigger> */}
+              {/* <HoverCardContent
                   side="right"
                   //@ts-expect-error //bug in radix code
                   sideOffset="2"
@@ -60,7 +60,7 @@ export async function TeamPageComponent({ team }: { team: TeamDto }) {
                 >
                   Add New Project
                 </HoverCardContent>
-              </HoverCard>
+              </HoverCard> */}
             </DialogTrigger>
             <DialogContent className="max-w-[300px]">
               <AddProjectCard teamId={team.id} />

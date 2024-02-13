@@ -20,7 +20,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { createNewProjectAction } from "../_actions/create-new-project.action";
 const formSchema = z.object({
   name: z.string().min(4),
-  description: z.string().min(4).max(50),
+  description: z.string().min(4).max(100),
 });
 
 const AddProjectCard = ({ teamId }: { teamId: string }) => {

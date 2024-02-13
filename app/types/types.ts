@@ -1,10 +1,9 @@
 export type TaskType = {
   name: string;
   description: string;
-  priority: number;
-
+  priority: string;
   category: string;
-
+  status: string;
   assignees: string[];
   dueDate?: number;
   startDate: number;

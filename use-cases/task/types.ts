@@ -7,6 +7,7 @@ export type TaskDto = {
   dueDate?: number;
   startDate: number;
   complete: boolean;
+  category: string;
   priority: string;
   status: string;
   label: string;
