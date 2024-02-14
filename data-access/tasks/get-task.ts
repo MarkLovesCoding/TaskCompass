@@ -12,31 +12,33 @@ type TaskModelType = {
   description: string;
   project: string;
   assignees: string[];
-  dueDate: number;
-  startDate: number;
-  complete: boolean;
+  dueDate: Date;
+  startDate: Date;
+  category: string;
   priority: string;
   status: string;
-  category: string;
+  complete: boolean;
+  label: string;
   createdBy: string;
 };
 export function taskToTaskDto(task: TaskModelType) {
   return {
-    id: task._id,
+    id: task._id.toString(),
     name: task.name,
     description: task.description,
-    project: task.project,
+    project: task.project.toString(),
     assignees: task.assignees,
     dueDate: task.dueDate,
     startDate: task.startDate,
-    complete: task.complete,
+    category: task.category,
     priority: task.priority,
     status: task.status,
+    complete: task.complete,
     label: task.category,
   };
 }
 // May require refactpr to get by ID
-async function getTask(task: TaskDto): Promise<TaskDto> {
+async function getTask(taskId: string): Promise<TaskDto> {
   try {
     await connectDB();
   } catch (error) {
@@ -44,7 +46,6 @@ async function getTask(task: TaskDto): Promise<TaskDto> {
     throw new Error("Error connecting to the database:" + error);
   }
 
-  const taskId = task.id;
   try {
     // Find the user by ID
     const retrievedTask = await Task.findById(taskId);

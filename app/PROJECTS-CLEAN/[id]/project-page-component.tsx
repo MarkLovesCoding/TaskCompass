@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 import {
   DropdownMenuTrigger,
@@ -28,20 +29,23 @@ import {
   CardHeader,
   Card,
 } from "@/components/ui/card";
-import { TaskCard } from "../TaskCard";
+import { TaskCard } from "./TaskCard";
 import { Button } from "@/components/ui/button";
 import { ProjectHeader } from "../../../components/component/project-header";
 
 import { ProjectDto } from "@/use-cases/project/types";
 import getProjectTasks from "@/data-access/tasks/get-project-tasks";
+import { TaskDto } from "@/use-cases/task/types";
+import { useState } from "react";
 export async function ProjectPage({
   project,
   userId,
+  tasks,
 }: {
   project: ProjectDto;
   userId: string;
+  tasks: TaskDto[];
 }) {
-  const tasks = await getProjectTasks(project);
   return (
     <div className="flex flex-col w-full min-h-screen">
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10">
@@ -49,10 +53,9 @@ export async function ProjectPage({
           <ProjectHeader project={project} />
           <Dialog>
             <DialogTrigger>
-              <Button className="rounded-full ml-auto" size="icon">
-                <PlusIcon className="w-4 h-4" />
-                <span className="sr-only">New Task Button</span>
-              </Button>
+              {/* <Button className="rounded-full ml-auto" size="icon"> */}
+              <PlusIcon className="w-4 h-4" />
+              <span className="sr-only">New Task Button</span>
             </DialogTrigger>
             <DialogContent className="">
               <TaskCard task={"new"} project={project} userId={userId} />
@@ -64,18 +67,27 @@ export async function ProjectPage({
             {tasks.length === 0
               ? "No current tasks"
               : tasks.map((task, task_idx) => (
-                  <Card
-                    key={task_idx}
-                    className="border rounded-lg flex items-center p-4 border-green-500"
-                  >
-                    <ArrowRightIcon classNam="w-4 h-4 text-green-500" />
-                    <div className="grid gap-1 ml-4">
-                      <CardHeader>
-                        <CardTitle>{task.name}</CardTitle>
-                        <CardDescription>{task.description}</CardDescription>
-                      </CardHeader>
-                    </div>
-                  </Card>
+                  <Dialog key={task_idx}>
+                    <DialogTrigger>
+                      <Card
+                        key={task_idx}
+                        className="border rounded-lg flex items-center p-4 border-green-500"
+                      >
+                        <ArrowRightIcon classNam="w-4 h-4 text-green-500" />
+                        <div className="grid gap-1 ml-4">
+                          <CardHeader>
+                            <CardTitle>{task.name}</CardTitle>
+                            <CardDescription>
+                              {task.description}
+                            </CardDescription>
+                          </CardHeader>
+                        </div>
+                      </Card>
+                    </DialogTrigger>
+                    <DialogContent className="">
+                      <TaskCard task={task} project={project} userId={userId} />
+                    </DialogContent>
+                  </Dialog>
                 ))}
           </div>
         </div>

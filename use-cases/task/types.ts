@@ -4,8 +4,8 @@ export type TaskDto = {
   description: string;
   project: string;
   assignees: string[];
-  dueDate?: number;
-  startDate: number;
+  dueDate?: Date | undefined;
+  startDate: Date;
   complete: boolean;
   category: string;
   priority: string;
@@ -17,8 +17,9 @@ export type CreateTaskDto = {
   description: string;
   project: string;
   assignees: string[];
-  dueDate?: number;
-  startDate: number;
+  dueDate?: Date | undefined;
+  startDate: Date;
+  category: string;
   complete: boolean;
   priority: string;
   status: string;

@@ -6,43 +6,47 @@ export class TaskEntity {
   private description: string;
   private project: string;
   private assignees: string[];
-  private dueDate?: number;
-  private startDate: number;
+  private dueDate?: Date | undefined;
+  private startDate: Date;
   private complete: boolean;
   private priority: string;
+  private category: string;
   private status: string;
-  private label: string;
+  private label?: string;
 
   constructor({
     id,
     name,
     description = "",
     project,
-    assignees,
+    assignees = [],
     dueDate,
-    startDate = Date.now(),
-    complete,
-    priority = "medium",
-    status = "just started",
-    label = "none",
+    startDate = new Date(),
+    complete = false,
+    category,
+    priority = "Medium",
+    status = "To Do",
+    label,
   }: {
     id?: string;
     name: string;
     description: string;
     project: string;
     assignees: string[];
-    dueDate?: number;
-    startDate: number;
+    dueDate?: Date | undefined;
+    startDate: Date;
+    category: string;
     complete: boolean;
     priority: string;
     status: string;
-    label: string;
+    label?: string | undefined;
   }) {
     this.id = id;
     this.name = name;
     this.description = description;
     this.project = project;
     this.assignees = assignees;
+    this.category = category;
     this.dueDate = dueDate;
     this.startDate = startDate;
     this.complete = complete;
@@ -75,6 +79,9 @@ export class TaskEntity {
   getComplete() {
     return this.complete;
   }
+  getCategory() {
+    return this.category;
+  }
   getPriority() {
     return this.priority;
   }
@@ -100,10 +107,10 @@ export class TaskEntity {
     this.assignees.push(assignee);
   }
 
-  setDueDate(dueDate: number) {
+  setDueDate(dueDate: Date | undefined) {
     this.dueDate = dueDate;
   }
-  setStartDate(startDate: number) {
+  setStartDate(startDate: Date) {
     this.startDate = startDate;
   }
   setComplete(complete: boolean) {
@@ -118,6 +125,10 @@ export class TaskEntity {
   setLabel(label: string) {
     this.label = label;
   }
+  setCategory(category: string) {
+    this.category = category;
+  }
+
   removeAssignee(assignee: string) {
     this.assignees = this.assignees.filter((a) => a !== assignee);
   }

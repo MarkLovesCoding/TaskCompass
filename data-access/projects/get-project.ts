@@ -15,14 +15,25 @@ type ProjectModelType = {
   team: string;
 };
 
+//explicitly convert bson objects to strings for prop injection
 export function projectToProjectDto(project: ProjectModelType): ProjectDto {
+  const convertedTasks =
+    project.tasks.length > 0
+      ? project.tasks.map((task) => task.toString())
+      : [];
+  const convertedMembers =
+    project.members.length > 0
+      ? project.members.map((member) => member.toString())
+      : [];
+  const convertedId = project._id.toString();
+  const convertedTeam = project.team ? project.team.toString() : "";
   return {
-    id: project._id,
+    id: convertedId,
     name: project.name,
     description: project.description,
-    members: project.members,
-    tasks: project.tasks,
-    team: project.team,
+    members: convertedMembers,
+    tasks: convertedTasks,
+    team: convertedTeam,
   };
 }
 
@@ -38,7 +49,7 @@ async function getProject(projectId: string): Promise<ProjectDto> {
   try {
     // Find the user by ID
     const project = await Project.findById(projectId);
-    return project;
+    return projectToProjectDto(project);
   } catch (error) {
     throw new Error("Error retrieving project:" + error);
   }

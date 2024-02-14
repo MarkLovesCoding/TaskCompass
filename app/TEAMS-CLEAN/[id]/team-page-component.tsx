@@ -1,10 +1,8 @@
 import Link from "next/link";
-import {
-  DropdownMenuTrigger,
-  DropdownMenuItem,
-  DropdownMenuContent,
-  DropdownMenu,
-} from "@/components/ui/dropdown-menu";
+
+import { getTeamProjects } from "@/data-access/projects/get-team-projects";
+import AddProjectCard from "./AddProjectCard";
+
 import { Button } from "@/components/ui/button";
 import { TeamHeader } from "@/components/component/team-header";
 import {
@@ -13,29 +11,14 @@ import {
   CardHeader,
   Card,
 } from "@/components/ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogClose,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+
 import type { TeamDto } from "@/use-cases/team/types";
-import { getTeamProjects } from "@/data-access/projects/get-team-projects";
-import { unstable_noStore } from "next/cache";
-import AddProjectCard from "./AddProjectCard";
 
 export async function TeamPageComponent({ team }: { team: TeamDto }) {
   const projects = await getTeamProjects(team);
-
+  console.log("team", team);
+  const teamId = team.id;
   return (
     <div className="flex flex-col w-full min-h-screen">
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10">
@@ -63,7 +46,7 @@ export async function TeamPageComponent({ team }: { team: TeamDto }) {
               </HoverCard> */}
             </DialogTrigger>
             <DialogContent className="max-w-[300px]">
-              <AddProjectCard teamId={team.id} />
+              <AddProjectCard teamId={teamId} />
             </DialogContent>
           </Dialog>
         </div>

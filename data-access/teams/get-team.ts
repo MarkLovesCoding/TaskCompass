@@ -13,11 +13,17 @@ type TeamModelType = {
   members: string[];
 };
 export function teamToTeamDto(team: TeamModelType) {
+  const convertedProjects =
+    team.projects.length > 0
+      ? team.projects.map((team) => team.toString())
+      : [];
+  const convertedMembers =
+    team.members.length > 0 ? team.members.map((team) => team.toString()) : [];
   return {
-    id: team._id,
+    id: team._id.toString(),
     name: team.name,
-    projects: team.projects,
-    members: team.members,
+    projects: convertedProjects,
+    members: convertedMembers,
   };
 }
 // May require refactpr to get by ID

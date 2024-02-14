@@ -1,82 +1,62 @@
 "use server";
 import { createNewTask } from "@/data-access/tasks/create-new-task.persistence";
-import { updateProject } from "@/data-access/projects/update-project.persistence";
-import { getServerSession } from "next-auth";
-import { options } from "@/app/api/auth/[...nextauth]/options";
 import { createNewTaskUseCase } from "@/use-cases/task/create-new-task.use-case";
+import { getUserFromSession } from "@/lib/sessionAuth";
+import { revalidatePath } from "next/cache";
 
-type Session = {
-  user: {
-    id: string;
-    name: string;
-    email: string;
-    image: undefined;
-    role: string;
-  };
-};
 type FormData = {
   name: string;
   description: string;
   project: string;
   assignees: string[];
-  dueDate?: number;
-  startDate: number;
+  dueDate?: Date | undefined;
+  startDate: Date;
   complete: boolean;
+  category: string;
   priority: string;
   status: string;
-  label: string;
+  label?: string | undefined;
 };
 
-export async function createNewTaskAction(
-  formData: FormData
-): Promise<FormData> {
-  //   const newTask = await createNewTask(formData);
-  //   const project = await updateProject(newTask.project);
-  const session: Session | null = await getServerSession(options);
-  const user = session?.user.id;
-  if (!user) throw new Error("User not found");
+export async function createNewTaskAction(formData: FormData) {
+  console.log("formData", formData);
+  const { getUser } = await getUserFromSession();
 
-  const submittedForm = {
-    name: formData.name,
-    description: formData.description,
-    project: formData.project,
-    assignees: formData.assignees,
-    dueDate: formData.dueDate,
-    startDate: formData.startDate,
-    complete: formData.complete,
-    priority: formData.priority,
-    status: formData.status,
-    label: formData.label,
-  };
-  await createNewTaskUseCase(
-    {
-      createNewTask: createNewTask,
-      updateProject: updateProject,
-    },
-    {
-      name: submittedForm.name,
-      description: submittedForm.description,
-      project: submittedForm.project,
-      assignees: submittedForm.assignees,
-      dueDate: submittedForm.dueDate,
-      startDate: submittedForm.startDate,
-      complete: submittedForm.complete,
-      priority: submittedForm.priority,
-      status: submittedForm.status,
-      label: submittedForm.label,
-    }
-  );
-  return {
-    name: "",
-    description: "",
-    project: formData.project,
-    assignees: [],
-    startDate: Date.now(),
-    complete: false,
-    priority: "",
-    status: "",
-    label: "",
-  };
-
-  //   return project;
+  try {
+    await createNewTaskUseCase(
+      {
+        createNewTask,
+        getUser,
+      },
+      {
+        name: formData.name,
+        description: formData.description,
+        project: formData.project,
+        assignees: formData.assignees,
+        dueDate: formData.dueDate,
+        startDate: formData.startDate,
+        complete: formData.complete,
+        category: formData.category,
+        priority: formData.priority,
+        status: formData.status,
+        label: formData.label,
+      }
+    );
+    revalidatePath("/PROJECTS-CLEAN/[slug]");
+    return {
+      name: "",
+      description: "",
+      project: formData.project,
+      assignees: [],
+      startDate: new Date(),
+      dueDate: undefined,
+      complete: false,
+      category: "",
+      priority: "",
+      status: "",
+      label: "",
+    };
+  } catch (error: any) {
+    console.error(error);
+  }
 }
