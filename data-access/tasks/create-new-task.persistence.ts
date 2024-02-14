@@ -3,6 +3,9 @@ import "server-only";
 import connectDB from "@/db/connectDB";
 
 import Task from "@/db/(models)/Task";
+import Project from "@/db/(models)/Project";
+import User from "@/db/(models)/User";
+
 import { CreateTaskDto } from "@/use-cases/task/types";
 
 export async function createNewTask(task: CreateTaskDto): Promise<void> {
@@ -14,7 +17,17 @@ export async function createNewTask(task: CreateTaskDto): Promise<void> {
   }
   try {
     const newTask = await Task.create(task);
-    console.log("New Project Created", newTask);
+    const updateProject = await Project.findByIdAndUpdate(newTask.project, {
+      $push: { tasks: newTask._id },
+    });
+    console.log("updateProject", updateProject);
+    const users = task.assignees;
+    users.length > 0 &&
+      users.forEach(async (userId) => {
+        await User.findByIdAndUpdate(userId, { $push: { tasks: newTask._id } });
+      });
+
+    console.log("New Task Created", newTask);
   } catch (error) {
     throw new Error("Error creating project:" + error);
   }

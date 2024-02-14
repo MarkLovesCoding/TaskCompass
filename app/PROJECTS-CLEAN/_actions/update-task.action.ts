@@ -1,10 +1,11 @@
 "use server";
-import { createNewTask } from "@/data-access/tasks/create-new-task.persistence";
-import { createNewTaskUseCase } from "@/use-cases/task/create-new-task.use-case";
+import { updateTask } from "@/data-access/tasks/update-task.persistence";
+import { updateTaskUseCase } from "@/use-cases/task/update-task.use-case";
 import { getUserFromSession } from "@/lib/sessionAuth";
 import { revalidatePath } from "next/cache";
 
 type FormData = {
+  id: string;
   name: string;
   description: string;
   project: string;
@@ -18,17 +19,18 @@ type FormData = {
   label?: string | undefined;
 };
 
-export async function createNewTaskAction(formData: FormData) {
-  console.log("formData", formData);
+export async function updateTaskAction(formData: FormData) {
+  console.log("updatingformData", formData);
   const { getUser } = await getUserFromSession();
 
   try {
-    await createNewTaskUseCase(
+    await updateTaskUseCase(
       {
-        createNewTask,
+        updateTask,
         getUser,
       },
       {
+        id: formData.id,
         name: formData.name,
         description: formData.description,
         project: formData.project,
@@ -44,17 +46,18 @@ export async function createNewTaskAction(formData: FormData) {
     );
     revalidatePath("/PROJECTS-CLEAN/[slug]");
     return {
-      name: "New Task",
-      description: "Task Description",
+      id: formData.id,
+      name: formData.name,
+      description: formData.description,
       project: formData.project,
-      assignees: [],
-      startDate: new Date(),
-      dueDate: new Date(new Date().setDate(new Date().getDate() + 7)),
-      complete: false,
-      category: "Personal",
-      priority: "Medium",
-      status: "To Do",
-      label: "",
+      assignees: formData.assignees,
+      dueDate: formData.dueDate,
+      startDate: formData.startDate,
+      complete: formData.complete,
+      category: formData.category,
+      priority: formData.priority,
+      status: formData.status,
+      label: formData.label,
     };
   } catch (error: any) {
     console.error(error);

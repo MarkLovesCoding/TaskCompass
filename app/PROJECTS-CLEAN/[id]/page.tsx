@@ -33,6 +33,7 @@ const Projects = async ({ params }: { params: ParamsType }) => {
   // const userConnections = tempData.availableAssignees;
   const project = await getProject(projectIdForProjectFiltering);
   const tasks = await getProjectTasks(project);
+  console.log("tasks", tasks);
   // console.log("getuserConnections", userConnections);
   if (!project) {
     return <p>No project found.</p>;

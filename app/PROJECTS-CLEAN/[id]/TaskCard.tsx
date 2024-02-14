@@ -52,7 +52,11 @@ import { ProjectDto } from "@/use-cases/project/types";
 import { TaskDto } from "@/use-cases/task/types";
 import { format } from "date-fns";
 import { createNewTaskAction } from "../_actions/create-new-task.action";
+import { updateTaskAction } from "../_actions/update-task.action";
 import { Checkbox } from "@/components/ui/checkbox";
+
+import { findAssigneesDifferences } from "@/lib/utils";
+import { updateTaskUsersAction } from "../_actions/update-task-users.action";
 
 type TaskFormProps = {
   task: TaskDto | "new";
@@ -63,6 +67,7 @@ type TaskFormProps = {
 type Checked = DropdownMenuCheckboxItemProps["checked"];
 
 const formSchema = z.object({
+  id: z.string(),
   name: z.string().min(1),
   description: z.string().min(5),
   priority: z.string().min(1),
@@ -73,7 +78,7 @@ const formSchema = z.object({
   project: z.string().min(1),
   complete: z.boolean(),
   assignees: z.array(z.string()).min(0),
-  label: z.string().min(1).optional(),
+  label: z.string().min(0).optional(),
 });
 let renderCount = 0;
 export const TaskCard: React.FC<TaskFormProps> = ({
@@ -83,20 +88,23 @@ export const TaskCard: React.FC<TaskFormProps> = ({
 }) => {
   const projectUsers = project.members;
 
+  console.log("project", project.id);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showUserBar, setShowUserBar] = React.useState<Checked>(true);
 
   const isNewTask = task === "new";
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: isNewTask ? "" : task.name,
-      description: isNewTask ? "" : task.description,
+      id: isNewTask ? "" : task.id,
+      name: isNewTask ? "New Task Name" : task.name,
+      description: isNewTask ? "Describe your task here" : task.description,
       priority: isNewTask ? "Medium" : task.priority,
       status: isNewTask ? "Not Started" : task.status,
-      category: isNewTask ? "" : task.category,
-      dueDate: isNewTask ? new Date() : task.dueDate,
+      category: isNewTask ? "Other" : task.category,
+      dueDate: isNewTask
+        ? new Date(new Date().setDate(new Date().getDate() + 7))
+        : task.dueDate,
       startDate: isNewTask ? new Date() : task.startDate,
       assignees: isNewTask ? [] : task.assignees,
       complete: isNewTask ? false : task.complete,
@@ -111,13 +119,35 @@ export const TaskCard: React.FC<TaskFormProps> = ({
   });
   const selectedDueDate = useWatch({ control: form.control, name: "dueDate" });
   console.log("selectedStartDate", selectedStartDate);
-  const assigneeTrack = useWatch({ control: form.control, name: "assignees" });
-  console.log(assigneeTrack);
+  const currentAssignees = useWatch({
+    control: form.control,
+    name: "assignees",
+  });
+  const [existingAssignees, setExistingAssignees] = useState<string[]>([]);
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  useEffect(() => {
+    if (!isNewTask) {
+      setExistingAssignees(task.assignees);
+    }
+  }, []);
+  console.log(currentAssignees);
+
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     console.log("form submitted: ", values);
     setIsSubmitting(true);
-    // await createNewTaskAction(values);
+    if (isNewTask) {
+      await createNewTaskAction(values);
+    } else {
+      await updateTaskAction(values);
+      console.log("existingAssignees", existingAssignees);
+      console.log("currentAssignees", currentAssignees);
+      const { addedAssignees, removedAssignees } = findAssigneesDifferences(
+        existingAssignees,
+        currentAssignees
+      );
+
+      await updateTaskUsersAction(values.id, addedAssignees, removedAssignees);
+    }
     toast({
       title: "You submitted the following values:",
       description: (
@@ -130,13 +160,7 @@ export const TaskCard: React.FC<TaskFormProps> = ({
 
   const categories = ["Household", "Personal", "Work", "School", "Other"];
   const priorityOptions = ["High", "Medium", "Low"];
-  const statusOptions = [
-    "Not Started",
-    "Up Next",
-    "To Do",
-    "In Progress",
-    "Completed",
-  ];
+  const statusOptions = ["Not Started", "Up Next", "In Progress", "Completed"];
   renderCount++;
   return (
     <>
@@ -192,11 +216,11 @@ export const TaskCard: React.FC<TaskFormProps> = ({
                       name="priority"
                       id="priority"
                       onValueChange={field.onChange}
-                      defaultValue={field.value as unknown as string}
+                      defaultValue={field.value}
                       className="flex flex-row space-x-1"
                     >
-                      {priorityOptions.map((priority) => (
-                        <Fragment key={priority}>
+                      {priorityOptions.map((priority, _index) => (
+                        <Fragment key={_index}>
                           <FormItem className="flex flex-col items-center space-y-2">
                             <FormLabel className="font-normal">
                               {priority}
@@ -204,7 +228,7 @@ export const TaskCard: React.FC<TaskFormProps> = ({
                             <FormControl>
                               <RadioGroupItem
                                 id={`priority-${priority}`}
-                                value={priority as unknown as string}
+                                value={priority}
                               />
                             </FormControl>
                           </FormItem>
@@ -299,7 +323,6 @@ export const TaskCard: React.FC<TaskFormProps> = ({
                           ) : (
                             <span>Pick a Start Date</span>
                           )}
-                          {/* <CalendarIcon className="ml-auto h-4 w-4 opacity-50" /> */}
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
@@ -321,7 +344,7 @@ export const TaskCard: React.FC<TaskFormProps> = ({
                 </FormItem>
               )}
             />
-          </div>{" "}
+          </div>
           <div className="grid gap-2">
             <FormField
               control={form.control}
@@ -344,7 +367,6 @@ export const TaskCard: React.FC<TaskFormProps> = ({
                           ) : (
                             <span>Pick a Due Date</span>
                           )}
-                          {/* <CalendarIcon className="ml-auto h-4 w-4 opacity-50" /> */}
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
@@ -378,7 +400,6 @@ export const TaskCard: React.FC<TaskFormProps> = ({
                   </FormLabel>
                   <FormControl>
                     <Checkbox
-                      //  {...field}
                       checked={field.value}
                       onCheckedChange={field.onChange}
                     />
@@ -388,35 +409,6 @@ export const TaskCard: React.FC<TaskFormProps> = ({
               )}
             />
           </div>
-          {/* <div className="grid gap-2">
-                <FormField
-                  control={form.control}
-                  name="assignees"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Users Assigned</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        // defaultValue={[field.value]}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select assignees" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {projectUsers?.map((user, _index) => (
-                            <SelectItem key={_index} value={user}>
-                              {user}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div> */}
           <div className=" items-center gap-2 w-full  flex ">
             <FormField
               control={form.control}
@@ -425,8 +417,8 @@ export const TaskCard: React.FC<TaskFormProps> = ({
                 <FormItem className="flex flex-col gap-3">
                   <FormLabel>Users Assigned</FormLabel>
                   <div className="flex flex-row w-full justify-around">
-                    {assigneeTrack.map((user, _index) => (
-                      <div>{user}</div>
+                    {currentAssignees.map((user, _index) => (
+                      <div key={_index}>{user}</div>
                     ))}
                     <FormControl>
                       <DropdownMenu>
@@ -461,37 +453,6 @@ export const TaskCard: React.FC<TaskFormProps> = ({
                 </FormItem>
               )}
             />
-            {/* <FormField
-                  control={form.control}
-                  name="assignees"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Users Assigned</FormLabel>
-
-                      <FormControl>
-                        <DropdownMenu {...field}>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="outline">Assign User</Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent className="w-56">
-                            <DropdownMenuLabel>Project Users</DropdownMenuLabel>
-                            <DropdownMenuSeparator />
-                            {projectUsers?.map((user, _index) => (
-                              <DropdownMenuCheckboxItem
-                                key={_index}
-                                checked={showUserBar}
-                                onCheckedChange={setShowUserBar}
-                              >
-                                {user}
-                              </DropdownMenuCheckboxItem>
-                            ))}
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                /> */}{" "}
           </div>
           {/* </CardContent> */}
           {/* </Card> */}
