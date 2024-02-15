@@ -23,27 +23,15 @@ const Projects = async ({ params }: { params: ParamsType }) => {
   unstable_noStore();
   console.log("Params: ", params);
   const session = await sessionAuth(`PROJECTS-CLEAN/${params.id}`);
-  const userId = session?.user.id!;
-  // const session: Session | null = await getServerSession(options);
-
-  // console.log("Sessiondata: " + JSON.stringify(session?.user));
-  const projectIdForProjectFiltering = params.id;
-  console.log(projectIdForProjectFiltering);
-  // const userConnections = await getConnectionsUsers(session.user.id);
-  // const userConnections = tempData.availableAssignees;
-  const project = await getProject(projectIdForProjectFiltering);
+  const project = await getProject(params.id);
   const tasks = await getProjectTasks(project);
-  console.log("tasks", tasks);
-  // console.log("getuserConnections", userConnections);
   if (!project) {
     return <p>No project found.</p>;
   }
 
   return (
     <div className="p-5 flex justify-center flex-col items-center">
-      {/* <h1 className="pt-4 pb-10">Your projects</h1> */}
-
-      <ProjectPage project={project} userId={userId} tasks={tasks} />
+      <ProjectPage project={project} tasks={tasks} />
     </div>
   );
 };

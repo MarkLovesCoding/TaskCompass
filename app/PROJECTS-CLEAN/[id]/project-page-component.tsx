@@ -1,5 +1,6 @@
 "use client";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
 
 import {
   CardTitle,
@@ -12,45 +13,26 @@ import { ProjectHeader } from "../../../components/component/project-header";
 
 import { ProjectDto } from "@/use-cases/project/types";
 import { TaskDto } from "@/use-cases/task/types";
-import { useState } from "react";
 export async function ProjectPage({
   project,
-  userId,
   tasks,
 }: {
   project: ProjectDto;
-  userId: string;
   tasks: TaskDto[];
 }) {
-  const [newTaskOpen, setNewTaskOpen] = useState(false);
-  const [updateTaskOpen, setUpdateTaskOpen] = useState(false);
-  const handleNewTaskClose = (bool: boolean) => {
-    setNewTaskOpen(bool);
-  };
-  const handleUpdateTaskClose = (bool: boolean) => {
-    setUpdateTaskOpen(bool);
-  };
-
   return (
     <div className="flex flex-col w-full min-h-screen">
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10">
         <div className="flex items-center gap-4">
           <ProjectHeader project={project} />
-          <Dialog
-          // open={newTaskOpen} onOpenChange={setNewTaskOpen}
-          >
+          <Dialog>
             <DialogTrigger>
               {/* <Button className="rounded-full ml-auto" size="icon"> */}
               <PlusIcon className="w-4 h-4" />
               <span className="sr-only">New Task Button</span>
             </DialogTrigger>
             <DialogContent className="">
-              <TaskCard
-                task={"new"}
-                project={project}
-                userId={userId}
-                handleClose={handleNewTaskClose}
-              />
+              <TaskCard task={"new"} project={project} />
             </DialogContent>
           </Dialog>
         </div>
@@ -77,12 +59,7 @@ export async function ProjectPage({
                       </Card>
                     </DialogTrigger>
                     <DialogContent className="">
-                      <TaskCard
-                        task={task}
-                        project={project}
-                        userId={userId}
-                        handleClose={handleUpdateTaskClose}
-                      />
+                      <TaskCard task={task} project={project} />
                     </DialogContent>
                   </Dialog>
                 ))}

@@ -1,11 +1,7 @@
 "use client";
-import { useRouter } from "next/navigation";
 import React, { Fragment, useEffect, useState } from "react";
-import type { ChangeEvent, Dispatch, FormEvent, SetStateAction } from "react";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Slider } from "@/components/ui/slider";
 import { DevTool } from "@hookform/devtools";
 import { RadioGroupItem, RadioGroup } from "@/components/ui/radio-group";
 import { DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu";
@@ -20,7 +16,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -40,7 +35,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
+import { CardHeader, CardContent, Card } from "@/components/ui/card";
 import { Calendar } from "@/components/ui/calendar";
 import * as z from "zod";
 import { useWatch } from "react-hook-form";
@@ -59,8 +56,6 @@ import { updateTaskUsersAction } from "../_actions/update-task-users.action";
 type TaskFormProps = {
   task: TaskDto | "new";
   project: ProjectDto;
-  userId: string;
-  handleClose: (bool: boolean) => void;
   // onSubmit: (data: TaskType) => void;
 };
 type Checked = DropdownMenuCheckboxItemProps["checked"];
@@ -80,19 +75,17 @@ const formSchema = z.object({
   label: z.string().min(0).optional(),
 });
 let renderCount = 0;
-export const TaskCard: React.FC<TaskFormProps> = ({
-  task,
-  project,
-  userId,
-  handleClose,
-}) => {
+export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
+  const isNewTask = task === "new";
+  useEffect(() => {
+    if (!isNewTask) {
+      setExistingAssignees(task.assignees);
+    }
+  }, []);
   const projectUsers = project.members;
 
-  console.log("project", project.id);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showUserBar, setShowUserBar] = React.useState<Checked>(true);
 
-  const isNewTask = task === "new";
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -112,46 +105,33 @@ export const TaskCard: React.FC<TaskFormProps> = ({
       label: isNewTask ? "" : task.label,
     },
   });
+
   const { register, control } = form;
   const selectedStartDate = useWatch({
     control: form.control,
     name: "startDate",
   });
   const selectedDueDate = useWatch({ control: form.control, name: "dueDate" });
-  console.log("selectedStartDate", selectedStartDate);
   const currentAssignees = useWatch({
     control: form.control,
     name: "assignees",
   });
-  const { isSubmitted } = form.formState;
-  // useEffect(() => {
-  //   handleClose();
-  // }, [isSubmitted]);
+
   const [existingAssignees, setExistingAssignees] = useState<string[]>([]);
 
-  useEffect(() => {
-    if (!isNewTask) {
-      setExistingAssignees(task.assignees);
-    }
-  }, []);
-  console.log(currentAssignees);
-
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = (values: z.infer<typeof formSchema>) => {
+    console.log("form submitted: ", values);
     setIsSubmitting(true);
-    handleClose(false);
-
     if (isNewTask) {
-      await createNewTaskAction(values);
+      createNewTaskAction(values);
     } else {
-      await updateTaskAction(values);
-      console.log("existingAssignees", existingAssignees);
-      console.log("currentAssignees", currentAssignees);
+      updateTaskAction(values);
       const { addedAssignees, removedAssignees } = findAssigneesDifferences(
         existingAssignees,
         currentAssignees
       );
 
-      await updateTaskUsersAction(values.id, addedAssignees, removedAssignees);
+      updateTaskUsersAction(values.id, addedAssignees, removedAssignees);
     }
     toast({
       title: "You submitted the following values:",
@@ -171,9 +151,7 @@ export const TaskCard: React.FC<TaskFormProps> = ({
     <>
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit(onSubmit, (e) => {
-            console.log("EEEEEEEEEEE", e);
-          })}
+          onSubmit={form.handleSubmit(onSubmit)}
           method="post"
           className="grid gap-6 w-full max-w-md mx-auto p-6 bg-white rounded-lg shadow-md dark:bg-gray-800"
         >
@@ -195,7 +173,7 @@ export const TaskCard: React.FC<TaskFormProps> = ({
                 <FormMessage />
               </FormItem>
             )}
-          />
+          />{" "}
           <FormField
             control={form.control}
             name="description"
@@ -476,3 +454,53 @@ export const TaskCard: React.FC<TaskFormProps> = ({
     </>
   );
 };
+
+//@ts-expect-error
+function CalendarDaysIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
+      <line x1="16" x2="16" y1="2" y2="6" />
+      <line x1="8" x2="8" y1="2" y2="6" />
+      <line x1="3" x2="21" y1="10" y2="10" />
+      <path d="M8 14h.01" />
+      <path d="M12 14h.01" />
+      <path d="M16 14h.01" />
+      <path d="M8 18h.01" />
+      <path d="M12 18h.01" />
+      <path d="M16 18h.01" />
+    </svg>
+  );
+}
+//@ts-expect-error
+
+function PlusIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M5 12h14" />
+      <path d="M12 5v14" />
+    </svg>
+  );
+}
