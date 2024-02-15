@@ -6,7 +6,7 @@ import Project from "@/db/(models)/Project";
 
 import type { ProjectDto } from "@/use-cases/project/types";
 import type { UserDto } from "@/use-cases/user/types";
-import { projectToProjectDto } from "./get-project";
+import { projectModelToProjectDto } from "./utils";
 // May require refactpr to get by ID
 async function getUserProjects(user: UserDto): Promise<ProjectDto[]> {
   try {
@@ -23,7 +23,7 @@ async function getUserProjects(user: UserDto): Promise<ProjectDto[]> {
     // Find the user by ID
     for (let projectId of projectIds) {
       const project = await Project.findById(projectId);
-      projects.push(projectToProjectDto(project));
+      projects.push(projectModelToProjectDto(project));
     }
   } catch (error) {
     throw new Error("Error retrieving team:" + error);

@@ -7,8 +7,7 @@ import User from "@/db/(models)/User";
 import { UserDto } from "@/use-cases/user/types";
 import { userModelToUserDto } from "./utils";
 
-// May require refactpr to get by ID
-async function getUser(userId: string): Promise<UserDto> {
+async function getAllUsers(): Promise<UserDto[]> {
   try {
     await connectDB();
   } catch (error) {
@@ -19,12 +18,14 @@ async function getUser(userId: string): Promise<UserDto> {
   // const userId = user.id;
   try {
     // Find the user by ID
-    const user = await User.findById(userId);
-    console.log("USER RETRIEVED: ", userModelToUserDto(user));
-    return userModelToUserDto(user);
+    const users = await User.find();
+    const cleanedUsers = users.map((user) => {
+      return userModelToUserDto(user);
+    });
+    return cleanedUsers;
   } catch (error) {
-    throw new Error("Error retrieving user:" + error);
+    throw new Error("Error retrieving users:" + error);
   }
 }
 
-export default getUser;
+export default getAllUsers;

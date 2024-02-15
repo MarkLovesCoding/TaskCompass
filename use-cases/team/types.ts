@@ -11,5 +11,13 @@ export type CreateTeamDto = {
 };
 export type GetTeam = (teamId: string) => Promise<TeamDto>;
 
-export type UpdateTeam = (team: TeamDto) => Promise<void>;
+export type UpdateTeamMembers = (
+  team: TeamDto,
+  addedMembers: string[],
+  removedMembers: string[]
+) => Promise<void>;
+// export type RemoveTeamMember = (
+//   team: TeamDto,
+//   memberId: string
+// ) => Promise<void>;
 export type CreateNewTeam = (team: CreateTeamDto) => Promise<void>;

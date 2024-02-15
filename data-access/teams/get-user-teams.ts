@@ -6,7 +6,7 @@ import Team from "@/db/(models)/Team";
 
 import type { TeamDto } from "@/use-cases/team/types";
 import type { UserDto } from "@/use-cases/user/types";
-import { teamToTeamDto } from "./get-team";
+import { teamModelToTeamDto } from "./utils";
 // May require refactpr to get by ID
 export async function getUserTeams(user: UserDto): Promise<TeamDto[]> {
   try {
@@ -23,7 +23,7 @@ export async function getUserTeams(user: UserDto): Promise<TeamDto[]> {
     // Find the user by ID
     for (let teamId of teamIds) {
       const team = await Team.findById(teamId);
-      teams.push(teamToTeamDto(team));
+      teams.push(teamModelToTeamDto(team));
     }
   } catch (error) {
     throw new Error("Error retrieving team:" + error);

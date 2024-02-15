@@ -1,7 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import React, { Fragment, useEffect, useState } from "react";
-import type { ChangeEvent, FormEvent } from "react";
+import type { ChangeEvent, Dispatch, FormEvent, SetStateAction } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -40,9 +40,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
-import { CardHeader, CardContent, Card } from "@/components/ui/card";
 import { Calendar } from "@/components/ui/calendar";
 import * as z from "zod";
 import { useWatch } from "react-hook-form";
@@ -62,6 +60,7 @@ type TaskFormProps = {
   task: TaskDto | "new";
   project: ProjectDto;
   userId: string;
+  handleClose: (bool: boolean) => void;
   // onSubmit: (data: TaskType) => void;
 };
 type Checked = DropdownMenuCheckboxItemProps["checked"];
@@ -85,6 +84,7 @@ export const TaskCard: React.FC<TaskFormProps> = ({
   task,
   project,
   userId,
+  handleClose,
 }) => {
   const projectUsers = project.members;
 
@@ -123,6 +123,10 @@ export const TaskCard: React.FC<TaskFormProps> = ({
     control: form.control,
     name: "assignees",
   });
+  const { isSubmitted } = form.formState;
+  // useEffect(() => {
+  //   handleClose();
+  // }, [isSubmitted]);
   const [existingAssignees, setExistingAssignees] = useState<string[]>([]);
 
   useEffect(() => {
@@ -133,8 +137,9 @@ export const TaskCard: React.FC<TaskFormProps> = ({
   console.log(currentAssignees);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log("form submitted: ", values);
     setIsSubmitting(true);
+    handleClose(false);
+
     if (isNewTask) {
       await createNewTaskAction(values);
     } else {
@@ -166,7 +171,9 @@ export const TaskCard: React.FC<TaskFormProps> = ({
     <>
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit(onSubmit)}
+          onSubmit={form.handleSubmit(onSubmit, (e) => {
+            console.log("EEEEEEEEEEE", e);
+          })}
           method="post"
           className="grid gap-6 w-full max-w-md mx-auto p-6 bg-white rounded-lg shadow-md dark:bg-gray-800"
         >
@@ -188,7 +195,7 @@ export const TaskCard: React.FC<TaskFormProps> = ({
                 <FormMessage />
               </FormItem>
             )}
-          />{" "}
+          />
           <FormField
             control={form.control}
             name="description"
@@ -469,53 +476,3 @@ export const TaskCard: React.FC<TaskFormProps> = ({
     </>
   );
 };
-
-//@ts-expect-error
-function CalendarDaysIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
-      <line x1="16" x2="16" y1="2" y2="6" />
-      <line x1="8" x2="8" y1="2" y2="6" />
-      <line x1="3" x2="21" y1="10" y2="10" />
-      <path d="M8 14h.01" />
-      <path d="M12 14h.01" />
-      <path d="M16 14h.01" />
-      <path d="M8 18h.01" />
-      <path d="M12 18h.01" />
-      <path d="M16 18h.01" />
-    </svg>
-  );
-}
-//@ts-expect-error
-
-function PlusIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M5 12h14" />
-      <path d="M12 5v14" />
-    </svg>
-  );
-}

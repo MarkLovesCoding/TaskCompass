@@ -1,9 +1,8 @@
 import { ProjectEntity } from "@/entities/Project";
 import { CreateNewProject } from "@/use-cases/project/types";
-import { GetTeam, UpdateTeam } from "@/use-cases/team/types";
-import { GetUser, UpdateUser } from "@/use-cases/user/types";
+
+import { GetUser } from "@/use-cases/user/types";
 import { projectToCreateProjectDto } from "@/use-cases/project/utils";
-import { TeamEntity } from "@/entities/Team";
 
 // to be sorted out with how to update team and user and impliment
 export async function createNewProjectUseCase(

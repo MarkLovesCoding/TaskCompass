@@ -6,7 +6,7 @@ import Task from "@/db/(models)/Task";
 
 import type { ProjectDto } from "@/use-cases/project/types";
 import type { TaskDto } from "@/use-cases/task/types";
-import { taskToTaskDto } from "./get-task";
+import { taskModelToTaskDto } from "./utils";
 // May require refactpr to get by ID
 async function getProjectTasks(project: ProjectDto): Promise<TaskDto[]> {
   try {
@@ -27,7 +27,7 @@ async function getProjectTasks(project: ProjectDto): Promise<TaskDto[]> {
       const task = await Task.findById(taskId);
       console.log("task", task);
 
-      tasks.push(taskToTaskDto(task));
+      tasks.push(taskModelToTaskDto(task));
     }
   } catch (error) {
     throw new Error("Error retrieving team:" + error);

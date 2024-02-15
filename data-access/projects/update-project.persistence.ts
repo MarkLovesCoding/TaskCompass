@@ -18,7 +18,7 @@ export async function updateProject(project: ProjectDto): Promise<void> {
   const projectId = project.id;
 
   try {
-    const newTask = await Project.findByIdAndUpdate(
+    const updatedProject = await Project.findByIdAndUpdate(
       {
         _id: projectId,
       },
@@ -28,7 +28,7 @@ export async function updateProject(project: ProjectDto): Promise<void> {
         tasks: project.tasks,
       }
     );
-    console.log("Project Updated", project);
+    console.log("Project Updated", updatedProject);
   } catch (error) {
     throw new Error("Errorudpating project :" + error);
   }

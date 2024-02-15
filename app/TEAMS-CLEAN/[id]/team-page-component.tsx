@@ -14,9 +14,17 @@ import {
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 import type { TeamDto } from "@/use-cases/team/types";
-
+import { CircleEllipsisIcon } from "lucide-react";
+import UpdateTeamMembersCard from "./UpdateTeamMembersCard";
+import getAllUsers from "@/data-access/users/get-all-users.persistence";
+import getTeamMembers from "@/data-access/users/get-team-members.persistence";
 export async function TeamPageComponent({ team }: { team: TeamDto }) {
   const projects = await getTeamProjects(team);
+  const usersList = await getAllUsers();
+  const filteredUsers = usersList.filter(
+    (user) => !team.members.includes(user.id)
+  );
+  const teamMembers = await getTeamMembers(team.members);
   console.log("team", team);
   const teamId = team.id;
   return (
@@ -25,6 +33,7 @@ export async function TeamPageComponent({ team }: { team: TeamDto }) {
         <div className="flex flex-row p-10 justify-center align-middle">
           <div className="text-2xl font-bold mr-10">
             <TeamHeader team={team} />
+            {team.members}
           </div>
           <Dialog>
             <DialogTrigger>
@@ -47,6 +56,33 @@ export async function TeamPageComponent({ team }: { team: TeamDto }) {
             </DialogTrigger>
             <DialogContent className="max-w-[300px]">
               <AddProjectCard teamId={teamId} />
+            </DialogContent>
+          </Dialog>
+          <Dialog>
+            <DialogTrigger>
+              {/* <HoverCard> */}
+              {/* <HoverCardTrigger> */}
+              <Button className="rounded-full ml-auto" size="icon">
+                <CircleEllipsisIcon className="w-4 h-4" />
+                <span className="sr-only">Team Settings</span>
+              </Button>
+              {/* </HoverCardTrigger> */}
+              {/* <HoverCardContent
+                  side="right"
+                  //@ts-expect-error //bug in radix code
+                  sideOffset="2"
+                  className="max-w-fit"
+                >
+                  Add New Project
+                </HoverCardContent>
+              </HoverCard> */}
+            </DialogTrigger>
+            <DialogContent className="max-w-[300px]">
+              <UpdateTeamMembersCard
+                team={team}
+                filteredUsers={filteredUsers}
+                teamMembers={teamMembers}
+              />
             </DialogContent>
           </Dialog>
         </div>

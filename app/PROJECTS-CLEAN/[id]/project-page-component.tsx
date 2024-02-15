@@ -1,27 +1,5 @@
 "use client";
-import Link from "next/link";
-import {
-  DropdownMenuTrigger,
-  DropdownMenuItem,
-  DropdownMenuContent,
-  DropdownMenu,
-} from "@/components/ui/dropdown-menu";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogClose,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
-import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 import {
   CardTitle,
@@ -30,11 +8,9 @@ import {
   Card,
 } from "@/components/ui/card";
 import { TaskCard } from "./TaskCard";
-import { Button } from "@/components/ui/button";
 import { ProjectHeader } from "../../../components/component/project-header";
 
 import { ProjectDto } from "@/use-cases/project/types";
-import getProjectTasks from "@/data-access/tasks/get-project-tasks";
 import { TaskDto } from "@/use-cases/task/types";
 import { useState } from "react";
 export async function ProjectPage({
@@ -46,19 +22,35 @@ export async function ProjectPage({
   userId: string;
   tasks: TaskDto[];
 }) {
+  const [newTaskOpen, setNewTaskOpen] = useState(false);
+  const [updateTaskOpen, setUpdateTaskOpen] = useState(false);
+  const handleNewTaskClose = (bool: boolean) => {
+    setNewTaskOpen(bool);
+  };
+  const handleUpdateTaskClose = (bool: boolean) => {
+    setUpdateTaskOpen(bool);
+  };
+
   return (
     <div className="flex flex-col w-full min-h-screen">
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10">
         <div className="flex items-center gap-4">
           <ProjectHeader project={project} />
-          <Dialog>
+          <Dialog
+          // open={newTaskOpen} onOpenChange={setNewTaskOpen}
+          >
             <DialogTrigger>
               {/* <Button className="rounded-full ml-auto" size="icon"> */}
               <PlusIcon className="w-4 h-4" />
               <span className="sr-only">New Task Button</span>
             </DialogTrigger>
             <DialogContent className="">
-              <TaskCard task={"new"} project={project} userId={userId} />
+              <TaskCard
+                task={"new"}
+                project={project}
+                userId={userId}
+                handleClose={handleNewTaskClose}
+              />
             </DialogContent>
           </Dialog>
         </div>
@@ -85,7 +77,12 @@ export async function ProjectPage({
                       </Card>
                     </DialogTrigger>
                     <DialogContent className="">
-                      <TaskCard task={task} project={project} userId={userId} />
+                      <TaskCard
+                        task={task}
+                        project={project}
+                        userId={userId}
+                        handleClose={handleUpdateTaskClose}
+                      />
                     </DialogContent>
                   </Dialog>
                 ))}
