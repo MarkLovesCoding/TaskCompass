@@ -103,10 +103,16 @@ export class TaskEntity {
   setProject(project: string) {
     this.project = project;
   }
-  setAssignees(assignee: string) {
-    this.assignees.push(assignee);
+  addAssignees(assignees: string[]) {
+    assignees.forEach((assignee) => {
+      this.assignees.push(assignee);
+    });
   }
-
+  removeAssignees(assignees: string[]) {
+    assignees.forEach((assignee) => {
+      this.assignees = this.assignees.filter((a) => a !== assignee);
+    });
+  }
   setDueDate(dueDate: Date | undefined) {
     this.dueDate = dueDate;
   }

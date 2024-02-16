@@ -18,7 +18,15 @@ import { CircleEllipsisIcon } from "lucide-react";
 import UpdateTeamMembersCard from "./UpdateTeamMembersCard";
 import getAllUsers from "@/data-access/users/get-all-users.persistence";
 import getTeamMembers from "@/data-access/users/get-team-members.persistence";
-export async function TeamPageComponent({ team }: { team: TeamDto }) {
+import { unstable_noStore } from "next/cache";
+export async function TeamPageComponent({
+  team,
+  userId,
+}: {
+  team: TeamDto;
+  userId: string;
+}) {
+  unstable_noStore();
   const projects = await getTeamProjects(team);
   const usersList = await getAllUsers();
   const filteredUsers = usersList.filter(
@@ -33,7 +41,9 @@ export async function TeamPageComponent({ team }: { team: TeamDto }) {
         <div className="flex flex-row p-10 justify-center align-middle">
           <div className="text-2xl font-bold mr-10">
             <TeamHeader team={team} />
-            {team.members}
+            {teamMembers.map((member, index) => (
+              <div key={index}>{member.name}</div>
+            ))}
           </div>
           <Dialog>
             <DialogTrigger>
@@ -79,6 +89,7 @@ export async function TeamPageComponent({ team }: { team: TeamDto }) {
             </DialogTrigger>
             <DialogContent className="max-w-[300px]">
               <UpdateTeamMembersCard
+                userId={userId}
                 team={team}
                 filteredUsers={filteredUsers}
                 teamMembers={teamMembers}

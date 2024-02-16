@@ -1,31 +1,28 @@
 import { TeamEntity } from "@/entities/Team";
-import { TeamDto, UpdateTeamMembers } from "@/use-cases/team/types";
+import { GetTeam, UpdateTeam } from "@/use-cases/team/types";
 import { GetUser } from "@/use-cases/user/types";
 import { teamToDto } from "@/use-cases/team/utils";
 
 export async function updateTeamMembersUseCase(
   context: {
-    updateTeamMembers: UpdateTeamMembers;
+    updateTeam: UpdateTeam;
+    getTeam: GetTeam;
     getUser: GetUser;
   },
   data: {
+    teamId: string;
     addedMembers: string[];
     removedMembers: string[];
-    team: TeamDto;
   }
 ) {
   const { userId } = context.getUser()!;
   if (!userId) throw new Error("User not found");
 
-  const validatedTeam = new TeamEntity({
-    name: data.team.name,
-    members: [...data.team.members],
-    projects: [...data.team.projects],
-  });
+  const team = await context.getTeam(data.teamId);
+  const validatedTeam = new TeamEntity(team);
+  validatedTeam.addMembers(data.addedMembers);
+  validatedTeam.removeMembers(data.removedMembers);
+
   console.log("updatedTeam", validatedTeam);
-  await context.updateTeamMembers(
-    teamToDto(validatedTeam),
-    data.addedMembers,
-    data.removedMembers
-  );
+  await context.updateTeam(teamToDto(validatedTeam));
 }

@@ -23,7 +23,7 @@ export async function updateProject(project: ProjectDto): Promise<void> {
         _id: projectId,
       },
       {
-        title: project.name,
+        name: project.name,
         description: project.description,
         tasks: project.tasks,
       }

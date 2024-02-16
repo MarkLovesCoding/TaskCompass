@@ -25,46 +25,59 @@ import * as z from "zod";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TeamDto } from "@/use-cases/team/types";
-import { updateTeamMembersAction } from "../_actions/update-team-members.action";
+import { updateTeamMembersAction } from "../../TEAMS-CLEAN/_actions/update-team-members.action";
 import getAllUsers from "@/data-access/users/get-all-users.persistence";
 import { UserDto } from "@/use-cases/user/types";
 import getTeamMembers from "@/data-access/users/get-team-members.persistence";
 import { findAssigneesDifferences } from "@/lib/utils";
+import { set } from "mongoose";
 const formSchema = z.object({
   members: z.array(z.string()).min(1),
   memberId: z.string(),
 });
 
 const UpdateTeamMembersCard = ({
+  userId,
   team,
   filteredUsers,
   teamMembers,
 }: {
+  userId: string;
   team: TeamDto;
   filteredUsers: UserDto[];
   teamMembers: UserDto[];
 }) => {
   const router = useRouter();
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       members: [...team.members],
     },
   });
+  const [selectedUser, setSelectedUser] = useState<string>("");
   const [usersList, setUsersList] = useState<UserDto[]>(filteredUsers);
   const [membersList, setMembersList] = useState<UserDto[]>(teamMembers);
+  console.log("membersList", membersList);
+  console.log("filteredUsers", filteredUsers);
 
+  const [isSubmittingForm, setIsSubmittingForm] = useState(false);
   const onAddMemberFormSubmit = async (values: z.infer<typeof formSchema>) => {
     console.log("existing members", team.members);
     console.log("current members", membersList);
+    setIsSubmittingForm(true);
+
+    if (selectedUser) {
+      const updatedMembers = [...form.getValues("members"), selectedUser];
+      form.setValue("members", updatedMembers);
+    }
     const existingMembers = team.members;
     const currentMembers = membersList.map((member) => member.id);
     const { addedAssignees, removedAssignees } = findAssigneesDifferences(
       existingMembers,
       currentMembers
     );
-    await updateTeamMembersAction(team, addedAssignees, removedAssignees);
+
+    await updateTeamMembersAction(team.id, addedAssignees, removedAssignees);
     router.refresh();
   };
   return (
@@ -78,8 +91,8 @@ const UpdateTeamMembersCard = ({
           control={form.control}
           name="members"
           render={({ field }) => (
-            <FormItem className="flex flex-col gap-3">
-              <FormLabel>Users Assigned</FormLabel>
+            <FormItem className="flex flex-col gap-3 mb-2">
+              <FormLabel className="mt-2">Users Assigned</FormLabel>
               <div className="flex flex-row w-full justify-around">
                 {membersList.map((user, _index) => (
                   <div key={_index}>{user.name}</div>
@@ -90,24 +103,46 @@ const UpdateTeamMembersCard = ({
                       <Button variant="outline"> + </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-56">
-                      <DropdownMenuLabel>Project Users</DropdownMenuLabel>
+                      <DropdownMenuLabel>Team Users</DropdownMenuLabel>
                       <DropdownMenuSeparator />
-                      {usersList?.map((user, index) => (
-                        <DropdownMenuCheckboxItem
-                          key={index}
-                          checked={field.value.includes(user.id)} // Check if user is already in assignees
-                          onCheckedChange={(checked) => {
-                            const updatedMembers = checked
-                              ? [...field.value, user.id] // Add user to assignees array
-                              : field.value.filter(
-                                  (member) => member !== user.id
-                                ); // Remove user from assignees array
-                            field.onChange(updatedMembers); // Update assignees field value
-                          }}
-                        >
-                          {user.id}
-                        </DropdownMenuCheckboxItem>
-                      ))}
+                      {teamMembers.length === 0
+                        ? "No other users"
+                        : teamMembers?.map((user, index) => (
+                            <DropdownMenuCheckboxItem
+                              key={index}
+                              checked={field.value.includes(user.id)} // Check if user is already in assignees
+                              onCheckedChange={(checked) => {
+                                const updatedMembers = checked
+                                  ? [...field.value, user.id] // Add user to assignees array
+                                  : field.value.filter(
+                                      (member) => member !== user.id
+                                    ); // Remove user from assignees array
+                                field.onChange(updatedMembers); // Update assignees field value
+                              }}
+                            >
+                              {user.name}
+                            </DropdownMenuCheckboxItem>
+                          ))}
+                      <DropdownMenuLabel>Global Users</DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      {usersList.length === 0
+                        ? "No other users"
+                        : usersList?.map((user, index) => (
+                            <DropdownMenuCheckboxItem
+                              key={index}
+                              checked={field.value.includes(user.id)} // Check if user is already in assignees
+                              onCheckedChange={(checked) => {
+                                const updatedMembers = checked
+                                  ? [...field.value, user.id] // Add user to assignees array
+                                  : field.value.filter(
+                                      (member) => member !== user.id
+                                    ); // Remove user from assignees array
+                                field.onChange(updatedMembers); // Update assignees field value
+                              }}
+                            >
+                              {user.name}
+                            </DropdownMenuCheckboxItem>
+                          ))}
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </FormControl>
@@ -118,16 +153,17 @@ const UpdateTeamMembersCard = ({
           )}
         />
         <DialogFooter className="sm:justify-start mt-10">
-          <DialogClose asChild>
-            <Button
-              type="submit"
-              value="Create New Project"
-              className="  py-2 rounded-md "
-            >
-              Add
-              {/* <FontAwesomeIcon icon={faPlus} /> */}
-            </Button>
-          </DialogClose>
+          {/* <DialogClose asChild> */}
+          <Button
+            type="submit"
+            value="Create New Project"
+            className="  py-2 rounded-md "
+            disabled={isSubmittingForm}
+          >
+            Update
+            {/* <FontAwesomeIcon icon={faPlus} /> */}
+          </Button>
+          {/* </DialogClose> */}
         </DialogFooter>
       </form>
     </Form>

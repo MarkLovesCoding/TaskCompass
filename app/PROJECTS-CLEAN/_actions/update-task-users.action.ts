@@ -1,6 +1,7 @@
 "use server";
-import { updateTaskUsers } from "@/data-access/tasks/update-task-users.persistence";
+import { updateTask } from "@/data-access/tasks/update-task.persistence";
 // import { removeTaskUsers } from "@/data-access/tasks/remove-task-users.persistence";
+import getTask from "@/data-access/tasks/get-task.persistence";
 import { updateTaskUsersUseCase } from "@/use-cases/task/update-task-users.use-case";
 import { getUserFromSession } from "@/lib/sessionAuth";
 import { revalidatePath } from "next/cache";
@@ -15,7 +16,8 @@ export async function updateTaskUsersAction(
   try {
     await updateTaskUsersUseCase(
       {
-        updateTaskUsers,
+        updateTask,
+        getTask,
         getUser,
       },
       {

@@ -25,7 +25,7 @@ const Projects = async ({ params }: { params: ParamsType }) => {
 
   return (
     <div className="p-5 flex justify-center flex-col items-center">
-      <TeamPageComponent team={team} />
+      <TeamPageComponent team={team} userId={session?.user.id!} />
     </div>
   );
 };

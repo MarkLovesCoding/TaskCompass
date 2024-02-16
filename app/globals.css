@@ -154,3 +154,20 @@
     @apply break-words;
   }
 }
+@layer utilities {
+  .header-input {
+    @apply border-2 border-transparent text-xl font-bold outline-none cursor-pointer p-2;
+  }
+
+  .description-input {
+    @apply border-2 border-transparent text-base font-normal outline-none cursor-pointer p-2;
+  }
+
+  .header-input.editing {
+    @apply border-2 border-black rounded-lg bg-slate-900 text-white;
+  }
+
+  .description-input.editing {
+    @apply border-2 border-black rounded-lg  bg-slate-900 text-white;
+  }
+}

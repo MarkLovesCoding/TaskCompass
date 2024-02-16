@@ -1,13 +1,13 @@
 import { TaskEntity } from "@/entities/Task";
 // import { UserEntity } from "@/entities/User";
-import { UpdateTaskUsers } from "@/use-cases/task/types";
+import { UpdateTask, GetTask } from "@/use-cases/task/types";
 import { GetUser } from "@/use-cases/user/types";
 import { taskToDto } from "@/use-cases/task/utils";
 
 export async function updateTaskUsersUseCase(
   context: {
-    updateTaskUsers: UpdateTaskUsers;
-
+    updateTask: UpdateTask;
+    getTask: GetTask;
     getUser: GetUser;
   },
   data: {
@@ -17,10 +17,13 @@ export async function updateTaskUsersUseCase(
   }
 ) {
   const user = context.getUser();
+
   if (!user) throw new Error("User not found");
-  await context.updateTaskUsers(
-    data.taskId,
-    data.addedAssignees,
-    data.removedAssignees
-  );
+
+  const dataTask = await context.getTask(data.taskId);
+  const task = new TaskEntity(dataTask);
+  task.addAssignees(data.addedAssignees);
+  task.removeAssignees(data.removedAssignees);
+
+  await context.updateTask(taskToDto(task));
 }

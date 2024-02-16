@@ -44,6 +44,16 @@ export class TeamEntity {
   removeMember(member: string) {
     this.members = this.members.filter((m) => m !== member);
   }
+  addMembers(members: string[]) {
+    members.forEach((member) => {
+      this.members.push(member);
+    });
+  }
+  removeMembers(members: string[]) {
+    members.forEach((member) => {
+      this.members = this.members.filter((a) => a !== member);
+    });
+  }
   addProject(project: string) {
     this.projects.push(project);
   }

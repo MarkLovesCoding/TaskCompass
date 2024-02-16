@@ -1,5 +1,5 @@
 "use client";
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, use, useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { DevTool } from "@hookform/devtools";
@@ -49,9 +49,11 @@ import { format } from "date-fns";
 import { createNewTaskAction } from "../_actions/create-new-task.action";
 import { updateTaskAction } from "../_actions/update-task.action";
 import { Checkbox } from "@/components/ui/checkbox";
-
+import { useProjectContext } from "./ProjectContext";
+import { useRouter } from "next/navigation";
 import { findAssigneesDifferences } from "@/lib/utils";
 import { updateTaskUsersAction } from "../_actions/update-task-users.action";
+import { DialogClose } from "@radix-ui/react-dialog";
 
 type TaskFormProps = {
   task: TaskDto | "new";
@@ -77,6 +79,8 @@ const formSchema = z.object({
 let renderCount = 0;
 export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
   const isNewTask = task === "new";
+  const { handleNewTaskSubmitClose, handleUpdateTaskSubmitClose } =
+    useProjectContext();
   useEffect(() => {
     if (!isNewTask) {
       setExistingAssignees(task.assignees);
@@ -86,6 +90,7 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -123,9 +128,11 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
     console.log("form submitted: ", values);
     setIsSubmitting(true);
     if (isNewTask) {
+      // handleNewTaskSubmitClose(false);
       createNewTaskAction(values);
     } else {
       updateTaskAction(values);
+      // handleUpdateTaskSubmitClose(false);
       const { addedAssignees, removedAssignees } = findAssigneesDifferences(
         existingAssignees,
         currentAssignees
@@ -133,14 +140,15 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
 
       updateTaskUsersAction(values.id, addedAssignees, removedAssignees);
     }
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(values, null, 2)}</code>
-        </pre>
-      ),
-    });
+    // toast({
+    //   title: "You submitted the following values:",
+    //   description: (
+    //     <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+    //       <code className="text-white">{JSON.stringify(values, null, 2)}</code>
+    //     </pre>
+    //   ),
+    // });
+    router.refresh();
   };
 
   const categories = ["Household", "Personal", "Work", "School", "Other"];
@@ -448,6 +456,14 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
           >
             {isNewTask ? "Create Task" : "Save Task"}
           </Button>
+          {/* <DialogClose asChild>
+            <Button
+              type="button"
+              className="m-auto flex justify-center align-middle w-fit"
+            >
+              Close
+            </Button>
+          </DialogClose> */}
         </form>{" "}
       </Form>
       <DevTool control={control} placement="top-left" />
