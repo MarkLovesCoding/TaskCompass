@@ -57,6 +57,9 @@ export class TeamEntity {
   addProject(project: string) {
     this.projects.push(project);
   }
+  updateName(name: string) {
+    this.name = name;
+  }
 
   private validate() {
     const teamSchema = z.object({

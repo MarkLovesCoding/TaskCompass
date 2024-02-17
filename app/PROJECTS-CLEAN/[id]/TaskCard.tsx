@@ -53,7 +53,6 @@ import { useProjectContext } from "./ProjectContext";
 import { useRouter } from "next/navigation";
 import { findAssigneesDifferences } from "@/lib/utils";
 import { updateTaskUsersAction } from "../_actions/update-task-users.action";
-import { DialogClose } from "@radix-ui/react-dialog";
 
 type TaskFormProps = {
   task: TaskDto | "new";

@@ -4,7 +4,7 @@ import { getTeamProjects } from "@/data-access/projects/get-team-projects";
 import AddProjectCard from "./AddProjectCard";
 
 import { Button } from "@/components/ui/button";
-import { TeamHeader } from "@/components/component/team-header";
+import { TeamHeader } from "@/app/TEAMS-CLEAN/[id]/team-header";
 import {
   CardTitle,
   CardDescription,
@@ -49,10 +49,10 @@ export async function TeamPageComponent({
             <DialogTrigger>
               {/* <HoverCard> */}
               {/* <HoverCardTrigger> */}
-              <Button className="rounded-full ml-auto" size="icon">
-                <PlusIcon className="w-4 h-4" />
-                <span className="sr-only">New Project Button</span>
-              </Button>
+              {/* <Button className="rounded-full ml-auto" size="icon"> */}
+              <PlusIcon className="w-4 h-4" />
+              <span className="sr-only">New Project Button</span>
+              {/* </Button> */}
               {/* </HoverCardTrigger> */}
               {/* <HoverCardContent
                   side="right"
@@ -72,10 +72,10 @@ export async function TeamPageComponent({
             <DialogTrigger>
               {/* <HoverCard> */}
               {/* <HoverCardTrigger> */}
-              <Button className="rounded-full ml-auto" size="icon">
-                <CircleEllipsisIcon className="w-4 h-4" />
-                <span className="sr-only">Team Settings</span>
-              </Button>
+              {/* <Button className="rounded-full ml-auto" size="icon"> */}
+              <CircleEllipsisIcon className="w-4 h-4" />
+              <span className="sr-only">Team Settings</span>
+              {/* </Button> */}
               {/* </HoverCardTrigger> */}
               {/* <HoverCardContent
                   side="right"

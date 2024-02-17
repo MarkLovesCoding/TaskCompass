@@ -20,7 +20,7 @@ async function getUser(userId: string): Promise<UserDto> {
   try {
     // Find the user by ID
     const user = await User.findById(userId);
-    console.log("USER RETRIEVED: ", userModelToUserDto(user));
+    // console.log("USER RETRIEVED: ", userModelToUserDto(user));
     return userModelToUserDto(user);
   } catch (error) {
     throw new Error("Error retrieving user:" + error);

@@ -22,11 +22,7 @@ export async function updateProject(project: ProjectDto): Promise<void> {
       {
         _id: projectId,
       },
-      {
-        name: project.name,
-        description: project.description,
-        tasks: project.tasks,
-      }
+      { ...project }
     );
     console.log("Project Updated", updatedProject);
   } catch (error) {

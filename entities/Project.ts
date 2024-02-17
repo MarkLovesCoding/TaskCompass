@@ -1,7 +1,7 @@
 import { ZodError, z } from "zod";
 
 export class ProjectEntity {
-  private id?: string;
+  private id: string;
   private name: string;
   private description: string;
   private members: string[];
@@ -16,7 +16,7 @@ export class ProjectEntity {
     tasks,
     team,
   }: {
-    id?: string;
+    id: string;
     name: string;
     description: string;
     members: string[];

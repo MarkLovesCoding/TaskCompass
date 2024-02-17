@@ -25,7 +25,7 @@ import * as z from "zod";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TeamDto } from "@/use-cases/team/types";
-import { updateTeamMembersAction } from "../../TEAMS-CLEAN/_actions/update-team-members.action";
+import { updateTeamMembersAction } from "../_actions/update-team-members.action";
 import getAllUsers from "@/data-access/users/get-all-users.persistence";
 import { UserDto } from "@/use-cases/user/types";
 import getTeamMembers from "@/data-access/users/get-team-members.persistence";

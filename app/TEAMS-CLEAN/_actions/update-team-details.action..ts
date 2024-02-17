@@ -1,33 +1,32 @@
 "use server";
+import { updateTeamDetailsUseCase } from "@/use-cases/team/update-team-details.use-case";
+
 import { updateTeam } from "@/data-access/teams/update-team.persistence";
 import getTeam from "@/data-access/teams/get-team.persistence";
-import { updateTeamMembersUseCase } from "@/use-cases/team/update-team-members.use-case";
+
 import { revalidatePath } from "next/cache";
 import { getUserFromSession } from "@/lib/sessionAuth";
-export async function updateTeamMembersAction(
-  teamId: string,
-  addedMembers: string[],
-  removedMembers: string[]
-) {
+type Form = {
+  name: string;
+};
+
+export async function updateTeamDetailsAction(form: Form, teamId: string) {
+  console.log("_____________________________________form", form);
   const { getUser } = await getUserFromSession();
 
   try {
-    await updateTeamMembersUseCase(
+    await updateTeamDetailsUseCase(
       {
-        updateTeam,
         getTeam,
+        updateTeam,
         getUser,
       },
       {
+        name: form.name,
         teamId: teamId,
-        addedMembers: addedMembers,
-        removedMembers: removedMembers,
       }
     );
-    revalidatePath("/TEAMS-CLEAN/[slug]");
-
-    //for toasts, not yet implemented
-    return { success: true };
+    revalidatePath(`/TEAMS-CLEAN/${teamId}`);
   } catch (error: any) {
     console.error(error);
   }

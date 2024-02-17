@@ -14,7 +14,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 
 import * as z from "zod";
-import { useForm } from "react-hook-form";
+import { useForm, useController } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { updateProjectDetailsAction } from "@/app/PROJECTS-CLEAN/_actions/update-project-details.action.";
 import { useState } from "react";
@@ -25,34 +25,61 @@ const formSchema = z.object({
 
 export function ProjectHeader({ project }: { project: ProjectDto }) {
   const [buttonShow, setButtonShow] = useState(false);
-  const [headerText, setHeaderText] = useState(project.name);
-  const [descriptionText, setDescriptionText] = useState(project.description);
+  // const [headerText, setHeaderText] = useState(project.name);
+  // const [descriptionText, setDescriptionText] = useState(project.description);
   const [isHeaderEditing, setIsHeaderEditing] = useState(false);
   const [isDescriptionEditing, setIsDescriptionEditing] = useState(false);
-
-  const handleHeaderClick = () => {
-    setIsHeaderEditing(true);
+  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    nameField.onChange(event); // Trigger the onChange event for the field
+    setButtonShow(true);
   };
+
+  const handleNameBlur = () => {
+    nameField.onBlur(); // Trigger the onBlur event for the field
+    setIsHeaderEditing(false);
+  };
+
+  const handleNameClick = () => {
+    setIsHeaderEditing(true); // Trigger the onClick event for the field
+  };
+  const handleDescriptionChange = (
+    event: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    descriptionfield.onChange(event); // Trigger the onChange event for the field
+    setButtonShow(true);
+  };
+  const handleDescriptionBlur = () => {
+    descriptionfield.onBlur(); // Trigger the onBlur event for the field
+    setIsDescriptionEditing(false);
+  };
+
+  // const handleDescriptionClick = () => {
+  //   setIsDescriptionEditing(true); // Trigger the onClick event for the field
+  // };
+
+  // const handleHeaderClick = () => {
+  //   setIsHeaderEditing(true);
+  // };
   const handleDescriptionClick = () => {
     setIsDescriptionEditing(true);
   };
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setButtonShow(true);
-    setHeaderText(event.target.value);
-  };
+  // const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   setButtonShow(true);
+  //   setHeaderText(event.target.value);
+  // };
 
-  const handleDescriptionInputChange = (
-    event: React.ChangeEvent<HTMLTextAreaElement>
-  ) => {
-    setButtonShow(true);
-    setDescriptionText(event.target.value);
-  };
-  const handleHeaderInputBlur = () => {
-    setIsHeaderEditing(false);
-  };
-  const handleDescriptionInputBlur = () => {
-    setIsDescriptionEditing(false);
-  };
+  // const handleDescriptionInputChange = (
+  //   event: React.ChangeEvent<HTMLTextAreaElement>
+  // ) => {
+  //   setButtonShow(true);
+  //   setDescriptionText(event.target.value);
+  // };
+  // const handleHeaderInputBlur = () => {
+  //   setIsHeaderEditing(false);
+  // };
+  // const handleDescriptionInputBlur = () => {
+  //   setIsDescriptionEditing(false);
+  // };
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -60,6 +87,26 @@ export function ProjectHeader({ project }: { project: ProjectDto }) {
     defaultValues: {
       name: project.name,
       description: project.description,
+    },
+  });
+  const { field: nameField } = useController({
+    name: "name", // Name of the field you want to control
+    control: form.control, // Pass the form control from useForm
+    defaultValue: project.name, // Default value for the field
+    rules: {
+      // Optional rules for validation
+      minLength: 4,
+      maxLength: 25,
+    },
+  });
+  const { field: descriptionfield } = useController({
+    name: "description", // Name of the field you want to control
+    control: form.control, // Pass the form control from useForm
+    defaultValue: project.description, // Default value for the field
+    rules: {
+      // Optional rules for validation
+      minLength: 4,
+      maxLength: 50,
     },
   });
   const onNewProjectFormSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -98,12 +145,18 @@ export function ProjectHeader({ project }: { project: ProjectDto }) {
                         className={`header-input ${
                           isHeaderEditing ? "editing" : ""
                         }`}
-                        value={headerText}
+                        // value={headerText}
+
                         placeholder="Task"
-                        onClick={handleHeaderClick}
-                        onChange={handleInputChange}
-                        onBlur={handleHeaderInputBlur}
-                        readOnly={!isHeaderEditing}
+                        {...field}
+                        // value={headerText}
+                        onClick={handleNameClick}
+                        onChange={handleNameChange}
+                        onBlur={handleNameBlur}
+                        // onClick={handleHeaderClick}
+                        // onChange={handleInputChange}
+                        // onBlur={handleHeaderInputBlur}
+                        // readOnly={!isHeaderEditing}
                       />
                     </FormControl>
                     <FormMessage />
@@ -130,12 +183,17 @@ export function ProjectHeader({ project }: { project: ProjectDto }) {
                       className={`description-input resize-none ${
                         isDescriptionEditing ? "editing" : ""
                       }`}
-                      value={descriptionText}
+                      // value={descriptionText}
                       placeholder="Description"
+                      {...field}
+                      // value={headerText}
                       onClick={handleDescriptionClick}
-                      onChange={handleDescriptionInputChange}
-                      onBlur={handleDescriptionInputBlur}
-                      readOnly={!isDescriptionEditing}
+                      onChange={handleDescriptionChange}
+                      onBlur={handleDescriptionBlur}
+                      // onClick={handleDescriptionClick}
+                      // onChange={handleDescriptionInputChange}
+                      // onBlur={handleDescriptionInputBlur}
+                      // readOnly={!isDescriptionEditing}
                     />
                   </FormControl>
                   <FormMessage />

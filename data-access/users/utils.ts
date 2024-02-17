@@ -1,9 +1,6 @@
 import type { UserModelType } from "./types";
 import type { UserDto } from "@/use-cases/user/types";
 export function userModelToUserDto(user: UserModelType): UserDto {
-  console.log("USER__________________: ", user);
-  console.log("USER TEAMS: ", user.teams);
-  console.log("USER Project: ", user.projects);
   const convertedProjects =
     user.projects.length > 0
       ? user.projects.map((user) => user.toString())

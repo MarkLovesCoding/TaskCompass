@@ -1,7 +1,7 @@
 import React from "react";
 
 import { TeamPageComponent } from "./team-page-component";
-import getTeam from "@/data-access/teams/get-team";
+import getTeam from "@/data-access/teams/get-team.persistence";
 import type { TeamDto } from "@/use-cases/team/types";
 import { unstable_noStore } from "next/cache";
 import { sessionAuth } from "@/lib/sessionAuth";

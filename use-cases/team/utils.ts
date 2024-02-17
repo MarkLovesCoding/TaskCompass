@@ -4,6 +4,7 @@ import { TeamDto, CreateTeamDto } from "@/use-cases/team/types";
 export function teamToDto(team: TeamEntity): TeamDto {
   const teamId = team.getId();
   if (!teamId) throw new Error("Project id is required");
+  console.log("team.name from entitr", team.getName());
   return {
     id: teamId,
     name: team.getName(),
