@@ -40,7 +40,7 @@ import { cn } from "@/lib/utils";
 import { CardHeader, CardContent, Card } from "@/components/ui/card";
 import { Calendar } from "@/components/ui/calendar";
 import * as z from "zod";
-import { useWatch } from "react-hook-form";
+import { useController, useWatch } from "react-hook-form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ProjectDto } from "@/use-cases/project/types";
@@ -75,6 +75,15 @@ const formSchema = z.object({
   assignees: z.array(z.string()).min(0),
   label: z.string().min(0).optional(),
 });
+const descriptionFormSchema = z.object({
+  id: z.string(),
+  description: z.string().min(5),
+});
+const nameFormSchema = z.object({
+  id: z.string(),
+  name: z.string().min(1),
+});
+
 let renderCount = 0;
 export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
   const isNewTask = task === "new";
@@ -86,16 +95,18 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
     }
   }, []);
   const projectUsers = project.members;
+  const [descriptionButtonShow, setDescriptionButtonShow] = useState(false);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const [isHeaderEditing, setIsHeaderEditing] = useState(false);
+  const [isDescriptionEditing, setIsDescriptionEditing] = useState(false);
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       id: isNewTask ? "" : task.id,
-      name: isNewTask ? "New Task Name" : task.name,
-      description: isNewTask ? "Describe your task here" : task.description,
+      // name: isNewTask ? "New Task Name" : task.name,
+      // description: isNewTask ? "Describe your task here" : task.description,
       priority: isNewTask ? "Medium" : task.priority,
       status: isNewTask ? "Not Started" : task.status,
       category: isNewTask ? "Other" : task.category,
@@ -109,7 +120,40 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
       label: isNewTask ? "" : task.label,
     },
   });
-
+  const nameForm = useForm<z.infer<typeof nameFormSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      id: isNewTask ? "" : task.id,
+      name: isNewTask ? "New Task Name" : task.name,
+    },
+  });
+  const descriptionForm = useForm<z.infer<typeof descriptionFormSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      id: isNewTask ? "" : task.id,
+      description: isNewTask ? "Describe your task here" : task.description,
+    },
+  });
+  const { field: nameField } = useController({
+    name: "name", // Name of the field you want to control
+    control: nameForm.control, // Pass the form control from useForm
+    defaultValue: project.name, // Default value for the field
+    rules: {
+      // Optional rules for validation
+      minLength: 4,
+      maxLength: 25,
+    },
+  });
+  const { field: descriptionfield } = useController({
+    name: "description", // Name of the field you want to control
+    control: descriptionForm.control, // Pass the form control from useForm
+    defaultValue: project.description, // Default value for the field
+    rules: {
+      // Optional rules for validation
+      minLength: 4,
+      maxLength: 50,
+    },
+  });
   const { register, control } = form;
   const selectedStartDate = useWatch({
     control: form.control,
@@ -122,7 +166,37 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
   });
 
   const [existingAssignees, setExistingAssignees] = useState<string[]>([]);
+  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    nameField.onChange(event); // Trigger the onChange event for the field
+    // setButtonShow(true);
+  };
+  const handleNameBlur = () => {
+    nameField.onBlur(); // Trigger the onBlur event for the field
+    setIsHeaderEditing(false);
+    //TO DO
+    //trigger submit if changed
+  };
 
+  const handleNameClick = () => {
+    setIsHeaderEditing(true); // Trigger the onClick event for the field
+  };
+  const handleDescriptionChange = (
+    event: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    descriptionfield.onChange(event); // Trigger the onChange event for the field
+    setDescriptionButtonShow(true);
+  };
+  const handleDescriptionBlur = () => {
+    descriptionfield.onBlur(); // Trigger the onBlur event for the field
+    setIsDescriptionEditing(false);
+  };
+  const handleDescriptionClick = () => {
+    setIsDescriptionEditing(true);
+  };
+  const onDescriptionSubmit = (
+    values: z.infer<typeof descriptionFormSchema>
+  ) => {};
+  const onNameSubmit = (values: z.infer<typeof nameFormSchema>) => {};
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     console.log("form submitted: ", values);
     setIsSubmitting(true);
@@ -156,6 +230,70 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
   renderCount++;
   return (
     <>
+      <Form {...nameForm}>
+        <form
+          onSubmit={nameForm.handleSubmit(onNameSubmit)}
+          method="post"
+          className="grid gap-6 w-full max-w-md mx-auto p-6 bg-white rounded-lg shadow-md dark:bg-gray-800"
+        >
+          {/* <Card className="w-full max-w-md p-4 md:p-8 grid gap-4">
+            <CardHeader> */}
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem className="grid gap-2">
+                <FormControl>
+                  <Input
+                    className={`header-input ${
+                      isHeaderEditing ? "editing" : ""
+                    }`}
+                    placeholder="Task Name"
+                    type="text"
+                    {...field}
+                    onClick={handleNameClick}
+                    onChange={handleNameChange}
+                    onBlur={handleNameBlur}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </form>
+      </Form>
+      <Form {...descriptionForm}>
+        <form
+          onSubmit={descriptionForm.handleSubmit(onDescriptionSubmit)}
+          method="post"
+          className="grid gap-6 w-full max-w-md mx-auto p-6 bg-white rounded-lg shadow-md dark:bg-gray-800"
+        >
+          {/* <Card className="w-full max-w-md p-4 md:p-8 grid gap-4">
+            <CardHeader> */}
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem className="grid gap-2">
+                <FormControl>
+                  <Textarea
+                    className={`description-input resize-none ${
+                      isDescriptionEditing ? "editing" : ""
+                    }`}
+                    placeholder="Description"
+                    {...field}
+                    onClick={handleDescriptionClick}
+                    onChange={handleDescriptionChange}
+                    onBlur={handleDescriptionBlur}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </form>
+      </Form>
+
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -168,14 +306,23 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
           </h2>
           {/* <Card className="w-full max-w-md p-4 md:p-8 grid gap-4">
             <CardHeader> */}
-          <FormField
+          {/* <FormField
             control={form.control}
             name="name"
             render={({ field }) => (
               <FormItem className="grid gap-2">
-                <FormLabel>Title</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter task name" type="text" {...field} />
+                  <Input
+                    className={`header-input ${
+                      isHeaderEditing ? "editing" : ""
+                    }`}
+                    placeholder="Task Name"
+                    type="text"
+                    {...field}
+                    onClick={handleNameClick}
+                    onChange={handleNameChange}
+                    onBlur={handleNameBlur}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -186,14 +333,22 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
             name="description"
             render={({ field }) => (
               <FormItem className="grid gap-2">
-                <FormLabel>Description</FormLabel>
                 <FormControl>
-                  <Textarea placeholder="Enter task description" {...field} />
+                  <Textarea
+                    className={`description-input resize-none ${
+                      isDescriptionEditing ? "editing" : ""
+                    }`}
+                    placeholder="Description"
+                    {...field}
+                    onClick={handleDescriptionClick}
+                    onChange={handleDescriptionChange}
+                    onBlur={handleDescriptionBlur}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
-          />
+          /> */}
           {/* </CardHeader> */}
           {/* <CardContent className="grid gap-4"> */}
           <div className="grid gap-2">

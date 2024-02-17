@@ -10,6 +10,7 @@ import {
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
 import { TaskCard } from "./TaskCard";
+import { NewTaskCard } from "./NewTaskCard";
 import { ProjectHeader } from "./ProjectHeader";
 import { CircleEllipsisIcon } from "lucide-react";
 import { PersonStanding } from "lucide-react";
@@ -102,16 +103,16 @@ export async function ProjectPage({
                 </Dialog>
               ))}
           <div className="">
-            <Dialog>
-              <DialogTrigger>
-                {/* <Button className="rounded-full ml-auto" size="icon"> */}
+            <Popover>
+              <PopoverTrigger>
+                {" "}
                 <PlusIcon className=" w-8 h-8" />
                 <span className="sr-only">New Task Button</span>
-              </DialogTrigger>
-              <DialogContent className="">
-                <TaskCard task={"new"} project={project} />
-              </DialogContent>
-            </Dialog>
+              </PopoverTrigger>
+              <PopoverContent>
+                <NewTaskCard project={project} />
+              </PopoverContent>
+            </Popover>
           </div>
         </div>
       </main>

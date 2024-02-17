@@ -6,16 +6,7 @@ import { revalidatePath } from "next/cache";
 
 type FormData = {
   name: string;
-  description: string;
   project: string;
-  assignees: string[];
-  dueDate?: Date | undefined;
-  startDate: Date;
-  complete: boolean;
-  category: string;
-  priority: string;
-  status: string;
-  label?: string | undefined;
 };
 
 export async function createNewTaskAction(formData: FormData) {
@@ -30,31 +21,13 @@ export async function createNewTaskAction(formData: FormData) {
       },
       {
         name: formData.name,
-        description: formData.description,
         project: formData.project,
-        assignees: formData.assignees,
-        dueDate: formData.dueDate,
-        startDate: formData.startDate,
-        complete: formData.complete,
-        category: formData.category,
-        priority: formData.priority,
-        status: formData.status,
-        label: formData.label,
       }
     );
     revalidatePath("/PROJECTS-CLEAN/[slug]");
     return {
       name: "New Task",
-      description: "Task Description",
       project: formData.project,
-      assignees: [],
-      startDate: new Date(),
-      dueDate: new Date(new Date().setDate(new Date().getDate() + 7)),
-      complete: false,
-      category: "Personal",
-      priority: "Medium",
-      status: "To Do",
-      label: "",
     };
   } catch (error: any) {
     console.error(error);

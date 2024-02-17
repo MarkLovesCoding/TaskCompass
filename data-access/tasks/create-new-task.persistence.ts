@@ -21,11 +21,11 @@ export async function createNewTask(task: CreateTaskDto): Promise<void> {
       $push: { tasks: newTask._id },
     });
     console.log("updateProject", updateProject);
-    const users = task.assignees;
-    users.length > 0 &&
-      users.forEach(async (userId) => {
-        await User.findByIdAndUpdate(userId, { $push: { tasks: newTask._id } });
-      });
+    // const users = task.assignees;
+    // users.length > 0 &&
+    //   users.forEach(async (userId) => {
+    //     await User.findByIdAndUpdate(userId, { $push: { tasks: newTask._id } });
+    //   });
 
     console.log("New Task Created", newTask);
   } catch (error) {

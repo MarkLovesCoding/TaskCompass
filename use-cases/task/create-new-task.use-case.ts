@@ -10,16 +10,7 @@ export async function createNewTaskUseCase(
   },
   data: {
     name: string;
-    description: string;
     project: string;
-    assignees: string[];
-    dueDate?: Date | undefined;
-    startDate: Date;
-    category: string;
-    complete: boolean;
-    priority: string;
-    status: string;
-    label?: string | undefined;
   }
 ) {
   const user = context.getUser();
@@ -27,16 +18,16 @@ export async function createNewTaskUseCase(
 
   const newTask = new TaskEntity({
     name: data.name,
-    description: data.description,
+    description: "Task Description",
     project: data.project,
-    assignees: data.assignees,
-    dueDate: data.dueDate,
-    startDate: data.startDate,
-    complete: data.complete,
-    category: data.category,
-    priority: data.priority,
-    status: data.status,
-    label: data.label,
+    assignees: [],
+    startDate: new Date(),
+    dueDate: new Date(new Date().setDate(new Date().getDate() + 7)),
+    complete: false,
+    category: "Other",
+    priority: "Medium",
+    status: "Not Started",
+    label: "",
   });
 
   await context.createNewTask(taskToCreateTaskDto(newTask));
