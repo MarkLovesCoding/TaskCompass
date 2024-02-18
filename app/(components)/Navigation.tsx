@@ -19,7 +19,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import getUserProjects from "@/data-access/projects/get-user-projects";
-import getUser from "@/data-access/users/get-user-----";
+import getUser from "@/data-access/users/get-user.persistence";
 import getUserTeams from "@/data-access/teams/get-user-teams";
 import { sessionAuth } from "@/lib/sessionAuth";
 

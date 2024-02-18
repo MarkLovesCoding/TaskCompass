@@ -1,13 +1,13 @@
 "use server";
 import { updateTask } from "@/data-access/tasks/update-task.persistence";
+import getTask from "@/data-access/tasks/get-task.persistence";
 import { updateTaskUseCase } from "@/use-cases/task/update-task.use-case";
 import { getUserFromSession } from "@/lib/sessionAuth";
 import { revalidatePath } from "next/cache";
 
 type FormData = {
   id: string;
-  name: string;
-  description: string;
+
   project: string;
   assignees: string[];
   dueDate?: Date | undefined;
@@ -27,12 +27,12 @@ export async function updateTaskAction(formData: FormData) {
     await updateTaskUseCase(
       {
         updateTask,
+        getTask,
         getUser,
       },
       {
         id: formData.id,
-        name: formData.name,
-        description: formData.description,
+
         project: formData.project,
         assignees: formData.assignees,
         dueDate: formData.dueDate,
@@ -44,11 +44,11 @@ export async function updateTaskAction(formData: FormData) {
         label: formData.label,
       }
     );
-    revalidatePath("/PROJECTS-CLEAN/[slug]");
+    revalidatePath(`/PROJECTS-CLEAN/${formData.project}`);
+    // revalidatePath("/PROJECTS-CLEAN/[slug]");
     return {
       id: formData.id,
-      name: formData.name,
-      description: formData.description,
+
       project: formData.project,
       assignees: formData.assignees,
       dueDate: formData.dueDate,

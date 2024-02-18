@@ -53,9 +53,10 @@ import { useProjectContext } from "./ProjectContext";
 import { useRouter } from "next/navigation";
 import { findAssigneesDifferences } from "@/lib/utils";
 import { updateTaskUsersAction } from "../_actions/update-task-users.action";
-
+import { updateTaskNameAction } from "../_actions/update-task-name.action";
+import { updateTaskDescriptionAction } from "../_actions/update-task-description.action";
 type TaskFormProps = {
-  task: TaskDto | "new";
+  task: TaskDto;
   project: ProjectDto;
   // onSubmit: (data: TaskType) => void;
 };
@@ -63,98 +64,92 @@ type Checked = DropdownMenuCheckboxItemProps["checked"];
 
 const formSchema = z.object({
   id: z.string(),
-  name: z.string().min(1),
-  description: z.string().min(5),
   priority: z.string().min(1),
   category: z.string().min(1),
   status: z.string().min(1),
   dueDate: z.date().optional(),
   startDate: z.date(),
-  project: z.string().min(1),
+  project: z.string().length(24),
   complete: z.boolean(),
   assignees: z.array(z.string()).min(0),
   label: z.string().min(0).optional(),
 });
 const descriptionFormSchema = z.object({
   id: z.string(),
-  description: z.string().min(5),
+  description: z.string().min(4),
+  projectId: z.string().length(24),
 });
 const nameFormSchema = z.object({
   id: z.string(),
-  name: z.string().min(1),
+  name: z.string().min(4),
+  projectId: z.string().length(24),
 });
 
 let renderCount = 0;
 export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
-  const isNewTask = task === "new";
-  const { handleNewTaskSubmitClose, handleUpdateTaskSubmitClose } =
-    useProjectContext();
-  useEffect(() => {
-    if (!isNewTask) {
-      setExistingAssignees(task.assignees);
-    }
-  }, []);
   const projectUsers = project.members;
   const [descriptionButtonShow, setDescriptionButtonShow] = useState(false);
+  const [nameButtonShow, setNameButtonShow] = useState(false);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isHeaderEditing, setIsHeaderEditing] = useState(false);
+  const [isNameEditing, setIsNameEditing] = useState(false);
   const [isDescriptionEditing, setIsDescriptionEditing] = useState(false);
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      id: isNewTask ? "" : task.id,
+      id: task.id,
       // name: isNewTask ? "New Task Name" : task.name,
       // description: isNewTask ? "Describe your task here" : task.description,
-      priority: isNewTask ? "Medium" : task.priority,
-      status: isNewTask ? "Not Started" : task.status,
-      category: isNewTask ? "Other" : task.category,
-      dueDate: isNewTask
-        ? new Date(new Date().setDate(new Date().getDate() + 7))
-        : task.dueDate,
-      startDate: isNewTask ? new Date() : task.startDate,
-      assignees: isNewTask ? [] : task.assignees,
-      complete: isNewTask ? false : task.complete,
+      priority: task.priority,
+      status: task.status,
+      category: task.category,
+      dueDate: task.dueDate,
+      startDate: task.startDate,
+      assignees: task.assignees,
+      complete: task.complete,
       project: project.id,
-      label: isNewTask ? "" : task.label,
+      label: task.label,
     },
   });
   const nameForm = useForm<z.infer<typeof nameFormSchema>>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(nameFormSchema),
     defaultValues: {
-      id: isNewTask ? "" : task.id,
-      name: isNewTask ? "New Task Name" : task.name,
+      id: task.id,
+      name: task.name,
+      projectId: project.id,
     },
   });
   const descriptionForm = useForm<z.infer<typeof descriptionFormSchema>>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(descriptionFormSchema),
     defaultValues: {
-      id: isNewTask ? "" : task.id,
-      description: isNewTask ? "Describe your task here" : task.description,
+      id: task.id,
+      description: task.description,
+      projectId: project.id,
     },
   });
-  const { field: nameField } = useController({
+  const { field: nameField, fieldState: nameFieldState } = useController({
     name: "name", // Name of the field you want to control
     control: nameForm.control, // Pass the form control from useForm
     defaultValue: project.name, // Default value for the field
     rules: {
       // Optional rules for validation
       minLength: 4,
-      maxLength: 25,
+      maxLength: 20,
     },
   });
-  const { field: descriptionfield } = useController({
-    name: "description", // Name of the field you want to control
-    control: descriptionForm.control, // Pass the form control from useForm
-    defaultValue: project.description, // Default value for the field
-    rules: {
-      // Optional rules for validation
-      minLength: 4,
-      maxLength: 50,
-    },
-  });
-  const { register, control } = form;
+  const { field: descriptionfield, fieldState: descriptionFieldState } =
+    useController({
+      name: "description", // Name of the field you want to control
+      control: descriptionForm.control, // Pass the form control from useForm
+      defaultValue: project.description, // Default value for the field
+      rules: {
+        // Optional rules for validation
+        minLength: 4,
+        maxLength: 50,
+      },
+    });
+
   const selectedStartDate = useWatch({
     control: form.control,
     name: "startDate",
@@ -168,17 +163,18 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
   const [existingAssignees, setExistingAssignees] = useState<string[]>([]);
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     nameField.onChange(event); // Trigger the onChange event for the field
-    // setButtonShow(true);
+    setNameButtonShow(true);
   };
   const handleNameBlur = () => {
     nameField.onBlur(); // Trigger the onBlur event for the field
-    setIsHeaderEditing(false);
+    setIsNameEditing(false);
+    // setNameButtonShow(false);
     //TO DO
     //trigger submit if changed
   };
 
   const handleNameClick = () => {
-    setIsHeaderEditing(true); // Trigger the onClick event for the field
+    setIsNameEditing(true); // Trigger the onClick event for the field
   };
   const handleDescriptionChange = (
     event: React.ChangeEvent<HTMLTextAreaElement>
@@ -189,38 +185,39 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
   const handleDescriptionBlur = () => {
     descriptionfield.onBlur(); // Trigger the onBlur event for the field
     setIsDescriptionEditing(false);
+    // setDescriptionButtonShow(false);
   };
   const handleDescriptionClick = () => {
     setIsDescriptionEditing(true);
   };
-  const onDescriptionSubmit = (
+  const onDescriptionSubmit = async (
     values: z.infer<typeof descriptionFormSchema>
-  ) => {};
-  const onNameSubmit = (values: z.infer<typeof nameFormSchema>) => {};
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log("form submitted: ", values);
-    setIsSubmitting(true);
-    if (isNewTask) {
-      // handleNewTaskSubmitClose(false);
-      createNewTaskAction(values);
-    } else {
-      updateTaskAction(values);
-      // handleUpdateTaskSubmitClose(false);
-      const { addedAssignees, removedAssignees } = findAssigneesDifferences(
-        existingAssignees,
-        currentAssignees
-      );
+  ) => {
+    console.log("description values", values);
+    await updateTaskDescriptionAction(values);
+    setDescriptionButtonShow(false);
 
-      updateTaskUsersAction(values.id, addedAssignees, removedAssignees);
-    }
-    // toast({
-    //   title: "You submitted the following values:",
-    //   description: (
-    //     <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-    //       <code className="text-white">{JSON.stringify(values, null, 2)}</code>
-    //     </pre>
-    //   ),
-    // });
+    router.refresh();
+  };
+  const onNameSubmit = async (values: z.infer<typeof nameFormSchema>) => {
+    await updateTaskNameAction(values);
+    console.log("name values", values);
+    setNameButtonShow(false);
+    router.refresh();
+  };
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    console.log("form submitted: ", values);
+    await updateTaskAction(values);
+    setIsSubmitting(true);
+
+    // handleUpdateTaskSubmitClose(false);
+    const { addedAssignees, removedAssignees } = findAssigneesDifferences(
+      existingAssignees,
+      currentAssignees
+    );
+
+    updateTaskUsersAction(values.id, addedAssignees, removedAssignees);
+
     router.refresh();
   };
 
@@ -239,15 +236,13 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
           {/* <Card className="w-full max-w-md p-4 md:p-8 grid gap-4">
             <CardHeader> */}
           <FormField
-            control={form.control}
+            control={nameForm.control}
             name="name"
             render={({ field }) => (
               <FormItem className="grid gap-2">
                 <FormControl>
                   <Input
-                    className={`header-input ${
-                      isHeaderEditing ? "editing" : ""
-                    }`}
+                    className={`header-input ${isNameEditing ? "editing" : ""}`}
                     placeholder="Task Name"
                     type="text"
                     {...field}
@@ -260,6 +255,7 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
               </FormItem>
             )}
           />
+          {nameButtonShow && <Button type="submit">Save</Button>}
         </form>
       </Form>
       <Form {...descriptionForm}>
@@ -271,7 +267,7 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
           {/* <Card className="w-full max-w-md p-4 md:p-8 grid gap-4">
             <CardHeader> */}
           <FormField
-            control={form.control}
+            control={descriptionForm.control}
             name="description"
             render={({ field }) => (
               <FormItem className="grid gap-2">
@@ -291,6 +287,14 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
               </FormItem>
             )}
           />
+          {descriptionButtonShow && <Button type="submit">Save</Button>}
+          {/* <Button
+            type="submit"
+            className="m-auto flex justify-center align-middle w-fit"
+            disabled={isSubmitting}
+          >
+            {"Save"}
+          </Button> */}
         </form>
       </Form>
 
@@ -608,7 +612,7 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
             className="m-auto flex justify-center align-middle w-fit"
             disabled={isSubmitting}
           >
-            {isNewTask ? "Create Task" : "Save Task"}
+            {"Save Task"}
           </Button>
           {/* <DialogClose asChild>
             <Button
@@ -620,57 +624,7 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
           </DialogClose> */}
         </form>{" "}
       </Form>
-      <DevTool control={control} placement="top-left" />
+      {/* <DevTool control={control} placement="top-left" /> */}
     </>
   );
 };
-
-//@ts-expect-error
-function CalendarDaysIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
-      <line x1="16" x2="16" y1="2" y2="6" />
-      <line x1="8" x2="8" y1="2" y2="6" />
-      <line x1="3" x2="21" y1="10" y2="10" />
-      <path d="M8 14h.01" />
-      <path d="M12 14h.01" />
-      <path d="M16 14h.01" />
-      <path d="M8 18h.01" />
-      <path d="M12 18h.01" />
-      <path d="M16 18h.01" />
-    </svg>
-  );
-}
-//@ts-expect-error
-
-function PlusIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M5 12h14" />
-      <path d="M12 5v14" />
-    </svg>
-  );
-}

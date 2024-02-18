@@ -94,18 +94,20 @@ export class TaskEntity {
   getId() {
     return this.id;
   }
-  setName(name: string) {
+  updateName(name: string) {
     this.name = name;
   }
-  setDescription(description: string) {
+  updateDescription(description: string) {
     this.description = description;
   }
-  setProject(project: string) {
+  updateProject(project: string) {
     this.project = project;
   }
   addAssignees(assignees: string[]) {
     assignees.forEach((assignee) => {
-      this.assignees.push(assignee);
+      if (this.assignees.indexOf(assignee) === -1) {
+        this.assignees.push(assignee);
+      }
     });
   }
   removeAssignees(assignees: string[]) {
@@ -113,25 +115,25 @@ export class TaskEntity {
       this.assignees = this.assignees.filter((a) => a !== assignee);
     });
   }
-  setDueDate(dueDate: Date | undefined) {
+  updateDueDate(dueDate: Date | undefined) {
     this.dueDate = dueDate;
   }
-  setStartDate(startDate: Date) {
+  updateStartDate(startDate: Date) {
     this.startDate = startDate;
   }
-  setComplete(complete: boolean) {
+  updateComplete(complete: boolean) {
     this.complete = complete;
   }
-  setPriority(priority: string) {
+  updatePriority(priority: string) {
     this.priority = priority;
   }
-  setStatus(status: string) {
+  updateStatus(status: string) {
     this.status = status;
   }
-  setLabel(label: string) {
+  updateLabel(label: string) {
     this.label = label;
   }
-  setCategory(category: string) {
+  updateCategory(category: string) {
     this.category = category;
   }
 

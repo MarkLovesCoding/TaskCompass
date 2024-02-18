@@ -24,8 +24,9 @@ export async function updateProjectDetailsUseCase(
   const validatedProject = new ProjectEntity({
     ...project,
   });
+
   validatedProject.updateName(data.name);
   validatedProject.updateDescription(data.description);
-
+  console.log("validatedProject", validatedProject);
   await context.updateProject(projectToDto(validatedProject));
 }

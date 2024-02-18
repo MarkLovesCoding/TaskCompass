@@ -18,14 +18,12 @@ async function getProjectTasks(project: ProjectDto): Promise<TaskDto[]> {
 
   // const teamId = team.id;
   const taskIds = project.tasks;
-  console.log("taskIds", taskIds);
+
   const tasks: TaskDto[] = [];
   try {
     // Find the user by ID
     for (let taskId of taskIds) {
-      console.log("taskId", taskId);
       const task = await Task.findById(taskId);
-      console.log("task", task);
 
       tasks.push(taskModelToTaskDto(task));
     }

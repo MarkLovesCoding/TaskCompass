@@ -205,6 +205,7 @@ export const options = {
         await newUser.save();
 
         initialProjectAssigned.members.push(newUser._id);
+        initialProjectAssigned.team = initialTeamAssigned._id;
         await initialProjectAssigned.save();
         initialTeamAssigned.projects.push(initialProjectAssigned._id);
         initialTeamAssigned.members.push(newUser._id);
