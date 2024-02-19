@@ -10,12 +10,12 @@ type FormData = {
 
   project: string;
   assignees: string[];
-  dueDate?: Date | undefined;
-  startDate: Date;
+  // dueDate?: Date | undefined;
+  // startDate: Date;
   complete: boolean;
-  category: string;
-  priority: string;
-  status: string;
+  // category: string;
+  // priority: string;
+  // status: string;
   label?: string | undefined;
 };
 
@@ -32,15 +32,9 @@ export async function updateTaskAction(formData: FormData) {
       },
       {
         id: formData.id,
-
         project: formData.project,
         assignees: formData.assignees,
-        dueDate: formData.dueDate,
-        startDate: formData.startDate,
         complete: formData.complete,
-        category: formData.category,
-        priority: formData.priority,
-        status: formData.status,
         label: formData.label,
       }
     );
@@ -51,12 +45,12 @@ export async function updateTaskAction(formData: FormData) {
 
       project: formData.project,
       assignees: formData.assignees,
-      dueDate: formData.dueDate,
-      startDate: formData.startDate,
+      // dueDate: formData.dueDate,
+      // startDate: formData.startDate,
       complete: formData.complete,
-      category: formData.category,
-      priority: formData.priority,
-      status: formData.status,
+      // category: formData.category,
+      // priority: formData.priority,
+      // status: formData.status,
       label: formData.label,
     };
   } catch (error: any) {

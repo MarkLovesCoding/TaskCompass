@@ -88,7 +88,6 @@ export async function ProjectPage({
                       key={task_idx}
                       className="border rounded-lg flex items-center p-4 border-green-500"
                     >
-                      <ArrowRightIcon classNam="w-4 h-4 text-green-500" />
                       <div className="grid gap-1 ml-4">
                         <CardHeader>
                           <CardTitle>{task.name}</CardTitle>
@@ -106,8 +105,7 @@ export async function ProjectPage({
             <Popover>
               <PopoverTrigger>
                 {" "}
-                <PlusIcon className=" w-8 h-8" />
-                <span className="sr-only">New Task Button</span>
+                +<span className="sr-only">New Task Button</span>
               </PopoverTrigger>
               <PopoverContent>
                 <NewTaskCard project={project} />
@@ -117,46 +115,5 @@ export async function ProjectPage({
         </div>
       </main>
     </div>
-  );
-}
-
-//@ts-expect-error
-function PlusIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M5 12h14" />
-      <path d="M12 5v14" />
-    </svg>
-  );
-}
-//@ts-expect-error
-function ArrowRightIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M5 12h14" />
-      <path d="m12 5 7 7-7 7" />
-    </svg>
   );
 }

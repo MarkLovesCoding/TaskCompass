@@ -13,12 +13,12 @@ export async function updateTaskUseCase(
     id: string;
     project: string;
     assignees: string[];
-    dueDate?: Date | undefined;
-    startDate: Date;
-    category: string;
-    complete: boolean;
-    priority: string;
-    status: string;
+    // dueDate?: Date | undefined;
+    // startDate: Date;
+    // category: string;
+    // complete: boolean;
+    // priority: string;
+    // status: string;
     label?: string | undefined;
   }
 ) {
@@ -30,12 +30,12 @@ export async function updateTaskUseCase(
     ...task,
     project: data.project,
     assignees: data.assignees,
-    dueDate: data.dueDate,
-    startDate: data.startDate,
-    complete: data.complete,
-    category: data.category,
-    priority: data.priority,
-    status: data.status,
+    // dueDate: data.dueDate,
+    // startDate: data.startDate,
+    // complete: data.complete,
+    // category: data.category,
+    // priority: data.priority,
+    // status: data.status,
     label: data.label,
   });
   console.log("updatedTaskEntity", taskAsEntity);
