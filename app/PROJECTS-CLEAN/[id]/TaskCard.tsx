@@ -62,7 +62,7 @@ type TaskFormProps = {
 
 const descriptionFormSchema = z.object({
   id: z.string(),
-  description: z.string().min(4),
+  description: z.string().min(5),
   projectId: z.string().length(24),
 });
 const nameFormSchema = z.object({
