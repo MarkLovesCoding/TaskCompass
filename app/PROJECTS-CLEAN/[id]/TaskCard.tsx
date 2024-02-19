@@ -36,9 +36,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
-import type { SelectSingleEventHandler } from "react-day-picker";
 import { cn } from "@/lib/utils";
-import { CardHeader, CardContent, Card } from "@/components/ui/card";
 import { Calendar } from "@/components/ui/calendar";
 import * as z from "zod";
 import { useController, useWatch } from "react-hook-form";
@@ -47,10 +45,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ProjectDto } from "@/use-cases/project/types";
 import { TaskDto } from "@/use-cases/task/types";
 import { format } from "date-fns";
-import { createNewTaskAction } from "../_actions/create-new-task.action";
 import { updateTaskAction } from "../_actions/update-task.action";
-import { Checkbox } from "@/components/ui/checkbox";
-import { useProjectContext } from "./ProjectContext";
 import { useRouter } from "next/navigation";
 import { findAssigneesDifferences } from "@/lib/utils";
 import { updateTaskUsersAction } from "../_actions/update-task-users.action";
@@ -66,20 +61,14 @@ type TaskFormProps = {
   project: ProjectDto;
   // onSubmit: (data: TaskType) => void;
 };
-type Checked = DropdownMenuCheckboxItemProps["checked"];
+// type Checked = DropdownMenuCheckboxItemProps["checked"];
 
-const formSchema = z.object({
-  id: z.string(),
-  // priority: z.string().min(1),
-  // category: z.string().min(1),
-  // status: z.string().min(1),
-  // dueDate: z.date().optional(),
-  // startDate: z.date(),
-  project: z.string().length(24),
-  complete: z.boolean(),
-  assignees: z.array(z.string()).min(0),
-  label: z.string().min(0).optional(),
-});
+// const formSchema = z.object({
+//   id: z.string(),
+//   project: z.string().length(24),
+//   // assignees: z.array(z.string()).min(0),
+//   label: z.string().min(0).optional(),
+// });
 const descriptionFormSchema = z.object({
   id: z.string(),
   description: z.string().min(4),
@@ -115,32 +104,24 @@ const dueDateFormSchema = z.object({
   dueDate: z.date(),
   projectId: z.string().length(24),
 });
+const assigneesFormSchema = z.object({
+  id: z.string(),
+  assignees: z.array(z.string()).min(0),
+  projectId: z.string().length(24),
+});
 let renderCount = 0;
 export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
   const projectUsers = project.members;
   const [descriptionButtonShow, setDescriptionButtonShow] = useState(false);
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isNameEditing, setIsNameEditing] = useState(false);
+  const [nameContent, setNameContent] = useState(task.name);
+  const [descriptionContent, setDescriptionContent] = useState(
+    task.description
+  );
   const [isDescriptionEditing, setIsDescriptionEditing] = useState(false);
   const router = useRouter();
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      id: task.id,
-      // name: isNewTask ? "New Task Name" : task.name,
-      // description: isNewTask ? "Describe your task here" : task.description,
-      // priority: task.priority,
-      // status: task.status,
-      // category: task.category,
-      // dueDate: task.dueDate,
-      // startDate: task.startDate,
-      assignees: task.assignees,
-      // complete: task.complete,
-      project: project.id,
-      label: task.label,
-    },
-  });
+
   const nameForm = useForm<z.infer<typeof nameFormSchema>>({
     resolver: zodResolver(nameFormSchema),
     defaultValues: {
@@ -199,6 +180,14 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
       projectId: project.id,
     },
   });
+  const assigneesForm = useForm<z.infer<typeof assigneesFormSchema>>({
+    resolver: zodResolver(assigneesFormSchema),
+    defaultValues: {
+      id: task.id,
+      assignees: task.assignees,
+      projectId: project.id,
+    },
+  });
   const { field: nameField, fieldState: nameFieldState } = useController({
     name: "name", // Name of the field you want to control
     control: nameForm.control, // Pass the form control from useForm
@@ -252,27 +241,13 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
         maxLength: 20,
       },
     });
-  // const { field: startDateField, fieldState: startDateFieldState } =
-  //   useController({
-  //     name: "startDate", // Name of the field you want to control
-  //     control: startDateForm.control, // Pass the form control from useForm
-  //     defaultValue: task.startDate, // Default value for the field
-  //     // rules: {
-  //     //   // Optional rules for validation
-  //     //   minLength: 3,
-  //     //   maxLength: 20,
-  //     // },
-  //   });
-  // const { field: dueDateField, fieldState: dueDateFieldState } = useController({
-  //   name: "dueDate", // Name of the field you want to control
-  //   control: dueDateForm.control, // Pass the form control from useForm
-  //   defaultValue: task.dueDate, // Default value for the field
-  //   // rules: {
-  //   //   // Optional rules for validation
-  //   //   minLength: 3,
-  //   //   maxLength: 20,
-  //   // },
-  // });
+  const { field: assigneesField, fieldState: assigneesFieldState } =
+    useController({
+      name: "assignees", // Name of the field you want to control
+      control: assigneesForm.control, // Pass the form control from useForm
+      defaultValue: task.assignees, // Default value for the field
+    });
+
   const selectedStartDate = useWatch({
     control: startDateForm.control,
     name: "startDate",
@@ -282,13 +257,14 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
     name: "dueDate",
   });
   const currentAssignees = useWatch({
-    control: form.control,
+    control: assigneesForm.control,
     name: "assignees",
   });
-  console.log("selectedStartDate", selectedStartDate);
-  console.log("selectedDueDate", selectedDueDate);
 
-  const [existingAssignees, setExistingAssignees] = useState<string[]>([]);
+  const [existingAssignees, setExistingAssignees] = useState<string[]>([
+    ...task.assignees,
+  ]);
+
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     nameField.onChange(event); // Trigger the onChange event for the field
     console.log("____>>>handleNAME changed");
@@ -392,7 +368,7 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
 
   const handleStartDateChange = (open: boolean) => {
     // startDateField.onChange();
-    startDateFormRef.current!.requestSubmit();
+    if (open === false) startDateFormRef.current!.requestSubmit();
     // Trigger the onChange event for the field
     // await updateTaskPriorityAction(values);
     // (event: React.ChangeEvent<HTMLElement>)
@@ -409,7 +385,7 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
 
   const handleDueDateChange = (open: boolean) => {
     // dueDateField.onChange(day);
-    dueDateFormRef.current!.requestSubmit();
+    if (open === false) dueDateFormRef.current!.requestSubmit();
     // Trigger the onChange event for the field
     // await updateTaskPriorityAction(values);
     // (event: React.ChangeEvent<HTMLElement>)
@@ -420,22 +396,47 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
     // setNameButtonShow(false);
     router.refresh();
   };
-
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log("form submitted: ", values);
-    await updateTaskAction(values);
-    setIsSubmitting(true);
-
-    // handleUpdateTaskSubmitClose(false);
+  const assigneesFormRef = React.useRef<HTMLFormElement>(null);
+  const handleAssigneesChange = (open: boolean) => {
+    // dueDateField.onChange(day);
+    console.log(
+      "existingAssignees",
+      existingAssignees,
+      "currentAssignees",
+      currentAssignees
+    );
+    if (open === false) assigneesFormRef.current!.requestSubmit();
+    // Trigger the onChange event for the field
+    // await updateTaskPriorityAction(values);
+    // (event: React.ChangeEvent<HTMLElement>)
+  };
+  const onAssigneesSubmit = async (
+    values: z.infer<typeof assigneesFormSchema>
+  ) => {
     const { addedAssignees, removedAssignees } = findAssigneesDifferences(
       existingAssignees,
       currentAssignees
     );
+    await updateTaskUsersAction(values.id, addedAssignees, removedAssignees);
 
-    updateTaskUsersAction(values.id, addedAssignees, removedAssignees);
-
+    // setNameButtonShow(false);
     router.refresh();
   };
+  // const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  //   console.log("form submitted: ", values);
+  //   await updateTaskAction(values);
+  //   setIsSubmitting(true);
+
+  //   // handleUpdateTaskSubmitClose(false);
+  //   // const { addedAssignees, removedAssignees } = findAssigneesDifferences(
+  //   //   existingAssignees,
+  //   //   currentAssignees
+  //   // );
+
+  //   // updateTaskUsersAction(values.id, addedAssignees, removedAssignees);
+
+  //   router.refresh();
+  // };
 
   const categories = ["Household", "Personal", "Work", "School", "Other"];
   const priorityOptions = ["High", "Medium", "Low"];
@@ -744,332 +745,73 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
           {/* {nameButtonShow && <Button type="submit">Save</Button>} */}
         </form>
       </Form>
-      <Form {...form}>
+
+      <Form {...assigneesForm}>
+        <form
+          ref={assigneesFormRef}
+          onSubmit={assigneesForm.handleSubmit(onAssigneesSubmit)}
+          method="post"
+          className="grid gap-6 w-full max-w-md mx-auto p-6 bg-white rounded-lg shadow-md dark:bg-gray-800"
+        >
+          <FormField
+            control={assigneesForm.control}
+            name="assignees"
+            render={({ field }) => (
+              <FormItem className="flex flex-col gap-3">
+                <FormLabel>Users Assigned</FormLabel>
+                <div className="flex flex-row w-full justify-around">
+                  {currentAssignees.map((user, _index) => (
+                    <div key={_index}>{user}</div>
+                  ))}
+                  <FormControl>
+                    <DropdownMenu onOpenChange={handleAssigneesChange}>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="outline"> + </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className="w-56">
+                        <DropdownMenuLabel>Project Users</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        {projectUsers?.map((user, index) => (
+                          <DropdownMenuCheckboxItem
+                            key={index}
+                            checked={field.value.includes(user)} // Check if user is already in assignees
+                            onCheckedChange={(checked) => {
+                              const updatedAssignees = checked
+                                ? [...field.value, user] // Add user to assignees array
+                                : field.value.filter(
+                                    (assignee) => assignee !== user
+                                  ); // Remove user from assignees array
+                              field.onChange(updatedAssignees); // Update assignees field value
+                            }}
+                          >
+                            {user}
+                          </DropdownMenuCheckboxItem>
+                        ))}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </FormControl>
+                </div>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          {/* {nameButtonShow && <Button type="submit">Save</Button>} */}
+        </form>
+      </Form>
+
+      {/* <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           method="post"
           className="grid gap-6 w-full max-w-md mx-auto p-6 bg-white rounded-lg shadow-md dark:bg-gray-800"
         >
           <h2 className="text-lg font-semibold text-gray-700 dark:text-white">
-            {/* {EDITMODE === true ? "Update Task" : "Create New Task"} */}
             {renderCount}
           </h2>
-          {/* <Card className="w-full max-w-md p-4 md:p-8 grid gap-4">
-            <CardHeader> */}
-          {/* <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem className="grid gap-2">
-                <FormControl>
-                  <Input
-                    className={`header-input ${
-                      isHeaderEditing ? "editing" : ""
-                    }`}
-                    placeholder="Task Name"
-                    type="text"
-                    {...field}
-                    onClick={handleNameClick}
-                    onChange={handleNameChange}
-                    onBlur={handleNameBlur}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />{" "}
-          <FormField
-            control={form.control}
-            name="description"
-            render={({ field }) => (
-              <FormItem className="grid gap-2">
-                <FormControl>
-                  <Textarea
-                    className={`description-input resize-none ${
-                      isDescriptionEditing ? "editing" : ""
-                    }`}
-                    placeholder="Description"
-                    {...field}
-                    onClick={handleDescriptionClick}
-                    onChange={handleDescriptionChange}
-                    onBlur={handleDescriptionBlur}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          /> */}
-          {/* </CardHeader> */}
-          {/* <CardContent className="grid gap-4"> */}
-          {/* <div className="grid gap-2">
-            <FormField
-              control={form.control}
-              name="priority"
-              render={({ field }) => (
-                <FormItem className="space-y-3">
-                  <FormLabel>Priority</FormLabel>
-                  <FormControl>
-                    <RadioGroup
-                      name="priority"
-                      id="priority"
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                      className="flex flex-row space-x-1"
-                    >
-                      {priorityOptions.map((priority, _index) => (
-                        <Fragment key={_index}>
-                          <FormItem className="flex flex-col items-center space-y-2">
-                            <FormLabel className="font-normal">
-                              {priority}
-                            </FormLabel>
-                            <FormControl>
-                              <RadioGroupItem
-                                id={`priority-${priority}`}
-                                value={priority}
-                              />
-                            </FormControl>
-                          </FormItem>
-                        </Fragment>
-                      ))}
-                    </RadioGroup>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div> */}
-          {/* <div className="grid gap-2">
-            <FormField
-              control={form.control}
-              name="category"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Category</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a category" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {categories?.map((category, _index) => (
-                        <SelectItem key={_index} value={category}>
-                          {category}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div> */}
-          {/* <div className="grid gap-2">
-            <FormField
-              control={form.control}
-              name="status"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Status</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a status" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {statusOptions?.map((status, _index) => (
-                        <SelectItem key={_index} value={status}>
-                          {status}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div> */}
-          {/* <div className="grid gap-2">
-            <FormField
-              control={form.control}
-              name="startDate"
-              render={({ field }) => (
-                <FormItem className=" ">
-                  <FormLabel className="flex align-middle">
-                    Start Date
-                  </FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button
-                          variant={"outline"}
-                          className={cn(
-                            "w-full pl-3 text-left font-normal",
-                            !field.value && "text-muted-foreground"
-                          )}
-                        >
-                          {field.value ? (
-                            format(field.value, "PPP")
-                          ) : (
-                            <span>Pick a Start Date</span>
-                          )}
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={field.value}
-                        onSelect={field.onChange}
-                        disabled={(date) =>
-                          (selectedDueDate && date > selectedDueDate) ||
-                          date < new Date("1900-01-01")
-                        }
-                        initialFocus
-                      />
-                    </PopoverContent>
-                  </Popover>
-
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className="grid gap-2">
-            <FormField
-              control={form.control}
-              name="dueDate"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="flex align-middle">Due Date</FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button
-                          variant={"outline"}
-                          className={cn(
-                            "w-full pl-3 text-left font-normal",
-                            !field.value && "text-muted-foreground"
-                          )}
-                        >
-                          {field.value ? (
-                            format(field.value, "PPP")
-                          ) : (
-                            <span>Pick a Due Date</span>
-                          )}
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={field.value}
-                        onSelect={field.onChange}
-                        disabled={(date) =>
-                          date < selectedStartDate ||
-                          date < new Date("1900-01-01")
-                        }
-                        initialFocus
-                      />
-                    </PopoverContent>
-                  </Popover>
-
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div> */}
-          {/* <div className=" items-center gap-2">
-            <FormField
-              control={form.control}
-              name="complete"
-              render={({ field }) => (
-                <FormItem className="h-[50px]">
-                  <FormLabel className="  flex  align-middle">
-                    Archive
-                  </FormLabel>
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div> */}
-          <div className=" items-center gap-2 w-full  flex ">
-            <FormField
-              control={form.control}
-              name="assignees"
-              render={({ field }) => (
-                <FormItem className="flex flex-col gap-3">
-                  <FormLabel>Users Assigned</FormLabel>
-                  <div className="flex flex-row w-full justify-around">
-                    {currentAssignees.map((user, _index) => (
-                      <div key={_index}>{user}</div>
-                    ))}
-                    <FormControl>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="outline"> + </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent className="w-56">
-                          <DropdownMenuLabel>Project Users</DropdownMenuLabel>
-                          <DropdownMenuSeparator />
-                          {projectUsers?.map((user, index) => (
-                            <DropdownMenuCheckboxItem
-                              key={index}
-                              checked={field.value.includes(user)} // Check if user is already in assignees
-                              onCheckedChange={(checked) => {
-                                const updatedAssignees = checked
-                                  ? [...field.value, user] // Add user to assignees array
-                                  : field.value.filter(
-                                      (assignee) => assignee !== user
-                                    ); // Remove user from assignees array
-                                field.onChange(updatedAssignees); // Update assignees field value
-                              }}
-                            >
-                              {user}
-                            </DropdownMenuCheckboxItem>
-                          ))}
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </FormControl>
-                  </div>
-
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          {/* </CardContent> */}
-          {/* </Card> */}
-          <Button
-            type="submit"
-            className="m-auto flex justify-center align-middle w-fit"
-            disabled={isSubmitting}
-          >
-            {"Save Task"}
-          </Button>
-          {/* <DialogClose asChild>
-            <Button
-              type="button"
-              className="m-auto flex justify-center align-middle w-fit"
-            >
-              Close
-            </Button>
-          </DialogClose> */}
-        </form>{" "}
-      </Form>
+       
+        </form>
+      </Form> */}
       {/* <DevTool control={control} placement="top-left" /> */}
     </>
   );

@@ -12,7 +12,7 @@ export async function updateTaskUseCase(
   data: {
     id: string;
     project: string;
-    assignees: string[];
+    // assignees: string[];
     // dueDate?: Date | undefined;
     // startDate: Date;
     // category: string;
@@ -29,7 +29,7 @@ export async function updateTaskUseCase(
   const taskAsEntity = new TaskEntity({
     ...task,
     project: data.project,
-    assignees: data.assignees,
+    // assignees: data.assignees,
     // dueDate: data.dueDate,
     // startDate: data.startDate,
     // complete: data.complete,

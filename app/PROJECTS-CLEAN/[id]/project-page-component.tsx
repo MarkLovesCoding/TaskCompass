@@ -96,7 +96,11 @@ export async function ProjectPage({
                       </div>
                     </Card>
                   </DialogTrigger>
-                  <DialogContent className="">
+                  <DialogContent
+                    onOpenAutoFocus={(event: Event) => event.preventDefault()}
+                    // onCloseAutoFocus={(event: Event) => event.preventDefault()}
+                    className=""
+                  >
                     <TaskCard task={task} project={project} />
                   </DialogContent>
                 </Dialog>
