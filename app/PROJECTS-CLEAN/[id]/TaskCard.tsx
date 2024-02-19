@@ -1,8 +1,8 @@
 "use client";
 import React, { Fragment, use, useEffect, useState } from "react";
+import { unstable_noStore } from "next/cache";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { DevTool } from "@hookform/devtools";
 import { RadioGroupItem, RadioGroup } from "@/components/ui/radio-group";
 import { DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu";
 import {
@@ -45,7 +45,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ProjectDto } from "@/use-cases/project/types";
 import { TaskDto } from "@/use-cases/task/types";
 import { format } from "date-fns";
-import { updateTaskAction } from "../_actions/update-task.action";
 import { useRouter } from "next/navigation";
 import { findAssigneesDifferences } from "@/lib/utils";
 import { updateTaskUsersAction } from "../_actions/update-task-users.action";
@@ -111,6 +110,7 @@ const assigneesFormSchema = z.object({
 });
 let renderCount = 0;
 export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
+  unstable_noStore();
   const projectUsers = project.members;
   const [descriptionButtonShow, setDescriptionButtonShow] = useState(false);
 
@@ -198,7 +198,7 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
       maxLength: 20,
     },
   });
-  const { field: descriptionfield, fieldState: descriptionFieldState } =
+  const { field: descriptionField, fieldState: descriptionFieldState } =
     useController({
       name: "description", // Name of the field you want to control
       control: descriptionForm.control, // Pass the form control from useForm
@@ -260,36 +260,53 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
     control: assigneesForm.control,
     name: "assignees",
   });
-
+  const currentDescription = useWatch({
+    control: descriptionForm.control,
+    name: "description",
+  });
   const [existingAssignees, setExistingAssignees] = useState<string[]>([
     ...task.assignees,
   ]);
 
+  const nameFormRef = React.useRef<HTMLFormElement>(null);
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     nameField.onChange(event); // Trigger the onChange event for the field
     console.log("____>>>handleNAME changed");
   };
-  // const handleNameBlur = () => {
-  //   nameField.onBlur(); // Trigger the onBlur event for the field
-  //   setIsNameEditing(false);
-  //   console.log("____>>>handleNAME BLURRRRED");
-  //   // setNameButtonShow(false);
-  //   //TO DO
-  //   //trigger submit if changed
-  // };
+  const handleNameBlur = () => {
+    nameField.onBlur();
+    setIsNameEditing(false);
+    nameFormRef.current!.requestSubmit();
+    // setNameButtonShow(false);
+    //TO DO
+    //trigger submit if changed
+  };
 
   const handleNameClick = () => {
     setIsNameEditing(true); // Trigger the onClick event for the field
   };
+
+  const onNameSubmit = async (values: z.infer<typeof nameFormSchema>) => {
+    if (task.name !== values.name) {
+      await updateTaskNameAction(values);
+      console.log("name values changed", values);
+      // setNameButtonShow(false);
+      router.refresh();
+    }
+  };
   const handleDescriptionChange = (
     event: React.ChangeEvent<HTMLTextAreaElement>
   ) => {
-    descriptionfield.onChange(event); // Trigger the onChange event for the field
+    descriptionField.onChange(event); // Trigger the onChange event for the field
     setDescriptionButtonShow(true);
   };
   const handleDescriptionBlur = () => {
-    descriptionfield.onBlur(); // Trigger the onBlur event for the field
+    descriptionField.onBlur(); // Trigger the onBlur event for the field
     setIsDescriptionEditing(false);
+    if (task.description == currentDescription) {
+      setDescriptionButtonShow(false);
+    }
+
     // setDescriptionButtonShow(false);
   };
   const handleDescriptionClick = () => {
@@ -298,18 +315,15 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
   const onDescriptionSubmit = async (
     values: z.infer<typeof descriptionFormSchema>
   ) => {
-    console.log("description values", values);
-    await updateTaskDescriptionAction(values);
-    setDescriptionButtonShow(false);
+    if (task.description !== values.description) {
+      console.log("description values", values);
+      await updateTaskDescriptionAction(values);
+      setDescriptionButtonShow(false);
 
-    router.refresh();
+      router.refresh();
+    }
   };
-  const onNameSubmit = async (values: z.infer<typeof nameFormSchema>) => {
-    await updateTaskNameAction(values);
-    console.log("name values", values);
-    // setNameButtonShow(false);
-    router.refresh();
-  };
+
   const priorityFormRef = React.useRef<HTMLFormElement>(null);
   const handlePriorityChange = (value: string) => {
     console.log("priority", value);
@@ -323,7 +337,7 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
     values: z.infer<typeof priorityFormSchema>
   ) => {
     await updateTaskPriorityAction(values);
-    console.log("priority values", values);
+    console.log("priority valueschanged ", values);
     // setNameButtonShow(false);
     router.refresh();
   };
@@ -348,18 +362,14 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
   const categoryFormRef = React.useRef<HTMLFormElement>(null);
 
   const handleCategoryChange = (value: string) => {
-    console.log("category", value);
     categoryField.onChange(value);
     categoryFormRef.current!.requestSubmit();
     // Trigger the onChange event for the field
-    // await updateTaskPriorityAction(values);
-    // (event: React.ChangeEvent<HTMLElement>)
   };
   const onCategorySubmit = async (
     values: z.infer<typeof categoryFormSchema>
   ) => {
     await updateTaskCategoryAction(values);
-    console.log("category values", values);
     // setNameButtonShow(false);
     router.refresh();
   };
@@ -367,18 +377,13 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
   const startDateFormRef = React.useRef<HTMLFormElement>(null);
 
   const handleStartDateChange = (open: boolean) => {
-    // startDateField.onChange();
     if (open === false) startDateFormRef.current!.requestSubmit();
     // Trigger the onChange event for the field
-    // await updateTaskPriorityAction(values);
-    // (event: React.ChangeEvent<HTMLElement>)
   };
   const onStartDateSubmit = async (
     values: z.infer<typeof startDateFormSchema>
   ) => {
     await updateTaskStartDateAction(values);
-    console.log("category startDate", values);
-    // setNameButtonShow(false);
     router.refresh();
   };
   const dueDateFormRef = React.useRef<HTMLFormElement>(null);
@@ -387,28 +392,15 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
     // dueDateField.onChange(day);
     if (open === false) dueDateFormRef.current!.requestSubmit();
     // Trigger the onChange event for the field
-    // await updateTaskPriorityAction(values);
-    // (event: React.ChangeEvent<HTMLElement>)
   };
   const onDueDateSubmit = async (values: z.infer<typeof dueDateFormSchema>) => {
     await updateTaskDueDateAction(values);
-    console.log("category dueDate", values);
-    // setNameButtonShow(false);
     router.refresh();
   };
   const assigneesFormRef = React.useRef<HTMLFormElement>(null);
   const handleAssigneesChange = (open: boolean) => {
-    // dueDateField.onChange(day);
-    console.log(
-      "existingAssignees",
-      existingAssignees,
-      "currentAssignees",
-      currentAssignees
-    );
     if (open === false) assigneesFormRef.current!.requestSubmit();
     // Trigger the onChange event for the field
-    // await updateTaskPriorityAction(values);
-    // (event: React.ChangeEvent<HTMLElement>)
   };
   const onAssigneesSubmit = async (
     values: z.infer<typeof assigneesFormSchema>
@@ -446,6 +438,7 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
     <>
       <Form {...nameForm}>
         <form
+          ref={nameFormRef}
           onSubmit={nameForm.handleSubmit(onNameSubmit)}
           method="post"
           className="grid gap-6 w-full max-w-md mx-auto p-6 bg-white rounded-lg shadow-md dark:bg-gray-800"
@@ -465,11 +458,7 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
                     {...field}
                     onClick={handleNameClick}
                     onChange={handleNameChange}
-                    onBlur={(e) => {
-                      nameField.onBlur();
-                      setIsNameEditing(false);
-                      e.target.form!.requestSubmit();
-                    }}
+                    onBlur={handleNameBlur}
                   />
                 </FormControl>
                 <FormMessage />
@@ -796,23 +785,8 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
               </FormItem>
             )}
           />
-          {/* {nameButtonShow && <Button type="submit">Save</Button>} */}
         </form>
       </Form>
-
-      {/* <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          method="post"
-          className="grid gap-6 w-full max-w-md mx-auto p-6 bg-white rounded-lg shadow-md dark:bg-gray-800"
-        >
-          <h2 className="text-lg font-semibold text-gray-700 dark:text-white">
-            {renderCount}
-          </h2>
-       
-        </form>
-      </Form> */}
-      {/* <DevTool control={control} placement="top-left" /> */}
     </>
   );
 };

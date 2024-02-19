@@ -9,10 +9,10 @@ type FormData = {
   id: string;
 
   project: string;
-  assignees: string[];
+  // assignees: string[];
   // dueDate?: Date | undefined;
   // startDate: Date;
-  complete: boolean;
+  // complete: boolean;
   // category: string;
   // priority: string;
   // status: string;
@@ -33,8 +33,8 @@ export async function updateTaskAction(formData: FormData) {
       {
         id: formData.id,
         project: formData.project,
-        assignees: formData.assignees,
-        complete: formData.complete,
+        // assignees: formData.assignees,
+        // complete: formData.complete,
         label: formData.label,
       }
     );
@@ -44,10 +44,10 @@ export async function updateTaskAction(formData: FormData) {
       id: formData.id,
 
       project: formData.project,
-      assignees: formData.assignees,
+      // assignees: formData.assignees,
       // dueDate: formData.dueDate,
       // startDate: formData.startDate,
-      complete: formData.complete,
+      // complete: formData.complete,
       // category: formData.category,
       // priority: formData.priority,
       // status: formData.status,
