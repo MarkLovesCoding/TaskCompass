@@ -29,6 +29,9 @@ export function ProjectHeader({ project }: { project: ProjectDto }) {
   // const [descriptionText, setDescriptionText] = useState(project.description);
   const [isHeaderEditing, setIsHeaderEditing] = useState(false);
   const [isDescriptionEditing, setIsDescriptionEditing] = useState(false);
+  const originalName = project.name;
+  const originalDescription = project.description;
+
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     nameField.onChange(event); // Trigger the onChange event for the field
     setButtonShow(true);
@@ -62,6 +65,18 @@ export function ProjectHeader({ project }: { project: ProjectDto }) {
   // };
   const handleDescriptionClick = () => {
     setIsDescriptionEditing(true);
+  };
+
+  const handleCancel = () => {
+    const currentName = form.getValues("name");
+    const currentDescription = form.getValues("description");
+    if (currentName !== originalName) {
+      form.setValue("name", originalName);
+    }
+    if (currentDescription !== originalDescription) {
+      form.setValue("description", originalDescription);
+    }
+    setButtonShow(false);
   };
   // const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
   //   setButtonShow(true);
@@ -201,7 +216,14 @@ export function ProjectHeader({ project }: { project: ProjectDto }) {
               );
             }}
           />
-          {buttonShow && <Button type="submit">Submit</Button>}
+          {buttonShow && (
+            <div>
+              <Button type="submit">Save Changes</Button>{" "}
+              <Button type="button" onClick={handleCancel}>
+                Cancel
+              </Button>
+            </div>
+          )}
         </form>
       </Form>
     </div>

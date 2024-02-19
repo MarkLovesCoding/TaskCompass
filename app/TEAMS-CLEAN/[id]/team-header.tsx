@@ -9,17 +9,14 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Textarea } from "@/components/ui/textarea";
 
 import * as z from "zod";
 import { useForm, useController } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { updateTeamDetailsAction } from "../_actions/update-team-details.action.";
-import { useEffect, useState } from "react";
-import { teamToDto } from "@/use-cases/team/utils";
+import { useState } from "react";
 
 const formSchema = z.object({
   name: z.string().min(4).max(25),
@@ -51,6 +48,7 @@ export function TeamHeader({ team }: { team: TeamDto }) {
   const [buttonShow, setButtonShow] = useState(false);
   // const [headerText, setHeaderText] = useState(team.name);
   const [isHeaderEditing, setIsHeaderEditing] = useState(false);
+  const originalName = team.name;
   // useEffect(() => {
   //   setButtonShow(true);
   // }, [inputWatch]);
@@ -80,12 +78,19 @@ export function TeamHeader({ team }: { team: TeamDto }) {
   const handleInputClick = () => {
     setIsHeaderEditing(true); // Trigger the onClick event for the field
   };
-
+  const handleCancel = () => {
+    const currentName = form.getValues("name");
+    if (currentName !== originalName) {
+      form.setValue("name", originalName);
+    }
+    setButtonShow(false);
+  };
   const router = useRouter();
 
   const onTeamHeaderFormSubmit = async (values: z.infer<typeof formSchema>) => {
     await updateTeamDetailsAction(values, team.id);
     setButtonShow(false);
+
     console.log("values", values, team.id);
     router.refresh();
   };
@@ -128,7 +133,14 @@ export function TeamHeader({ team }: { team: TeamDto }) {
             />{" "}
           </div>
 
-          {buttonShow && <Button type="submit">Update Name</Button>}
+          {buttonShow && (
+            <>
+              <Button type="submit">Update Name</Button>
+              <Button type="button" onClick={handleCancel}>
+                Cancel
+              </Button>
+            </>
+          )}
         </form>
         {/* <DevTool control={form.control} placement="top-left" /> */}
       </Form>

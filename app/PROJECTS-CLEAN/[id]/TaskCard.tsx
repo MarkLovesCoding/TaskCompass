@@ -58,16 +58,8 @@ import { updateTaskDueDateAction } from "../_actions/update-task-due-date.action
 type TaskFormProps = {
   task: TaskDto;
   project: ProjectDto;
-  // onSubmit: (data: TaskType) => void;
 };
-// type Checked = DropdownMenuCheckboxItemProps["checked"];
 
-// const formSchema = z.object({
-//   id: z.string(),
-//   project: z.string().length(24),
-//   // assignees: z.array(z.string()).min(0),
-//   label: z.string().min(0).optional(),
-// });
 const descriptionFormSchema = z.object({
   id: z.string(),
   description: z.string().min(4),
@@ -115,10 +107,10 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
   const [descriptionButtonShow, setDescriptionButtonShow] = useState(false);
 
   const [isNameEditing, setIsNameEditing] = useState(false);
-  const [nameContent, setNameContent] = useState(task.name);
-  const [descriptionContent, setDescriptionContent] = useState(
-    task.description
-  );
+  // const [nameContent, setNameContent] = useState(task.name);
+  // const [descriptionContent, setDescriptionContent] = useState(
+  //   task.description
+  // );
   const [isDescriptionEditing, setIsDescriptionEditing] = useState(false);
   const router = useRouter();
 
@@ -277,9 +269,6 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
     nameField.onBlur();
     setIsNameEditing(false);
     nameFormRef.current!.requestSubmit();
-    // setNameButtonShow(false);
-    //TO DO
-    //trigger submit if changed
   };
 
   const handleNameClick = () => {
@@ -290,7 +279,6 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
     if (task.name !== values.name) {
       await updateTaskNameAction(values);
       console.log("name values changed", values);
-      // setNameButtonShow(false);
       router.refresh();
     }
   };
@@ -306,8 +294,6 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
     if (task.description == currentDescription) {
       setDescriptionButtonShow(false);
     }
-
-    // setDescriptionButtonShow(false);
   };
   const handleDescriptionClick = () => {
     setIsDescriptionEditing(true);
@@ -319,7 +305,6 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
       console.log("description values", values);
       await updateTaskDescriptionAction(values);
       setDescriptionButtonShow(false);
-
       router.refresh();
     }
   };
@@ -330,15 +315,12 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
     priorityField.onChange(value);
     priorityFormRef.current!.requestSubmit();
     // Trigger the onChange event for the field
-    // await updateTaskPriorityAction(values);
-    // (event: React.ChangeEvent<HTMLElement>)
   };
   const onPrioritySubmit = async (
     values: z.infer<typeof priorityFormSchema>
   ) => {
     await updateTaskPriorityAction(values);
     console.log("priority valueschanged ", values);
-    // setNameButtonShow(false);
     router.refresh();
   };
 
@@ -349,13 +331,10 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
     statusField.onChange(value);
     statusFormRef.current!.requestSubmit();
     // Trigger the onChange event for the field
-    // await updateTaskPriorityAction(values);
-    // (event: React.ChangeEvent<HTMLElement>)
   };
   const onStatusSubmit = async (values: z.infer<typeof statusFormSchema>) => {
     await updateTaskStatusAction(values);
     console.log("status values", values);
-    // setNameButtonShow(false);
     router.refresh();
   };
 
@@ -370,7 +349,6 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
     values: z.infer<typeof categoryFormSchema>
   ) => {
     await updateTaskCategoryAction(values);
-    // setNameButtonShow(false);
     router.refresh();
   };
 
@@ -389,7 +367,6 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
   const dueDateFormRef = React.useRef<HTMLFormElement>(null);
 
   const handleDueDateChange = (open: boolean) => {
-    // dueDateField.onChange(day);
     if (open === false) dueDateFormRef.current!.requestSubmit();
     // Trigger the onChange event for the field
   };
@@ -411,25 +388,8 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
     );
     await updateTaskUsersAction(values.id, addedAssignees, removedAssignees);
 
-    // setNameButtonShow(false);
     router.refresh();
   };
-  // const onSubmit = async (values: z.infer<typeof formSchema>) => {
-  //   console.log("form submitted: ", values);
-  //   await updateTaskAction(values);
-  //   setIsSubmitting(true);
-
-  //   // handleUpdateTaskSubmitClose(false);
-  //   // const { addedAssignees, removedAssignees } = findAssigneesDifferences(
-  //   //   existingAssignees,
-  //   //   currentAssignees
-  //   // );
-
-  //   // updateTaskUsersAction(values.id, addedAssignees, removedAssignees);
-
-  //   router.refresh();
-  // };
-
   const categories = ["Household", "Personal", "Work", "School", "Other"];
   const priorityOptions = ["High", "Medium", "Low"];
   const statusOptions = ["Not Started", "Up Next", "In Progress", "Completed"];
@@ -443,8 +403,6 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
           method="post"
           className="grid gap-6 w-full max-w-md mx-auto p-6 bg-white rounded-lg shadow-md dark:bg-gray-800"
         >
-          {/* <Card className="w-full max-w-md p-4 md:p-8 grid gap-4">
-            <CardHeader> */}
           <FormField
             control={nameForm.control}
             name="name"
@@ -465,7 +423,6 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
               </FormItem>
             )}
           />
-          {/* {nameButtonShow && <Button type="submit">Save</Button>} */}
         </form>
       </Form>
       <Form {...descriptionForm}>
@@ -474,8 +431,6 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
           method="post"
           className="grid gap-6 w-full max-w-md mx-auto p-6 bg-white rounded-lg shadow-md dark:bg-gray-800"
         >
-          {/* <Card className="w-full max-w-md p-4 md:p-8 grid gap-4">
-            <CardHeader> */}
           <FormField
             control={descriptionForm.control}
             name="description"
@@ -498,13 +453,6 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
             )}
           />
           {descriptionButtonShow && <Button type="submit">Save</Button>}
-          {/* <Button
-            type="submit"
-            className="m-auto flex justify-center align-middle w-fit"
-            disabled={isSubmitting}
-          >
-            {"Save"}
-          </Button> */}
         </form>
       </Form>
       <Form {...priorityForm}>
@@ -514,8 +462,6 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
           method="post"
           className="grid gap-6 w-full max-w-md mx-auto p-6 bg-white rounded-lg shadow-md dark:bg-gray-800"
         >
-          {/* <Card className="w-full max-w-md p-4 md:p-8 grid gap-4">
-            <CardHeader> */}
           <FormField
             control={priorityForm.control}
             name="priority"
@@ -526,7 +472,6 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
                   <RadioGroup
                     name="priority"
                     id="priority"
-                    // onValueChange={field.onChange}
                     onValueChange={handlePriorityChange}
                     defaultValue={field.value}
                     className="flex flex-row space-x-1"
@@ -548,7 +493,6 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
                     ))}
                   </RadioGroup>
                 </FormControl>
-
                 <FormMessage />
               </FormItem>
             )}
@@ -589,7 +533,6 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
               </FormItem>
             )}
           />
-          {/* {nameButtonShow && <Button type="submit">Save</Button>} */}
         </form>
       </Form>
       <Form {...categoryForm}>
@@ -626,7 +569,6 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
               </FormItem>
             )}
           />
-          {/* {nameButtonShow && <Button type="submit">Save</Button>} */}
         </form>
       </Form>
       <Form {...startDateForm}>
@@ -673,12 +615,10 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
                     />
                   </PopoverContent>
                 </Popover>
-
                 <FormMessage />
               </FormItem>
             )}
           />
-          {/* {nameButtonShow && <Button type="submit">Save</Button>} */}
         </form>
       </Form>
       <Form {...dueDateForm}>
@@ -716,7 +656,6 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
                     <Calendar
                       mode="single"
                       selected={field.value}
-                      // onSelect={handleDueDateChange}
                       onSelect={field.onChange}
                       disabled={(date) =>
                         date < selectedStartDate ||
@@ -731,7 +670,6 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
               </FormItem>
             )}
           />
-          {/* {nameButtonShow && <Button type="submit">Save</Button>} */}
         </form>
       </Form>
 
