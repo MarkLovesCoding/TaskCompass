@@ -169,6 +169,7 @@ export const options = {
       const newProjectData = {
         name: "My Personal Project",
         description: "This is your default project",
+        archived: false,
       };
       const newTeamData = {
         name: "My First Team",

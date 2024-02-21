@@ -5,6 +5,7 @@ export type ProjectDto = {
   members: string[];
   tasks: string[];
   team: string;
+  archived: boolean;
 };
 export type CreateProjectDto = {
   name: string;
@@ -12,6 +13,7 @@ export type CreateProjectDto = {
   members: string[];
   tasks: string[];
   team: string;
+  archived: boolean;
 };
 export type UpdateProjectMembers = (
   projectId: string,

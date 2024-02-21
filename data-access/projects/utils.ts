@@ -21,5 +21,6 @@ export function projectModelToProjectDto(
     members: convertedMembers,
     tasks: convertedTasks,
     team: convertedTeam,
+    archived: project.archived,
   };
 }

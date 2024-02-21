@@ -11,6 +11,7 @@ export function projectToDto(project: ProjectEntity): ProjectDto {
     members: project.getMembers(),
     tasks: project.getTasks(),
     team: project.getTeam(),
+    archived: project.getArchived(),
   };
 }
 
@@ -23,5 +24,6 @@ export function projectToCreateProjectDto(
     members: project.getMembers(),
     tasks: project.getTasks(),
     team: project.getTeam(),
+    archived: project.getArchived(),
   };
 }

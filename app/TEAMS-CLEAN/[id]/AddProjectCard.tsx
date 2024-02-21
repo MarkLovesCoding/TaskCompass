@@ -35,7 +35,7 @@ const AddProjectCard = ({ teamId }: { teamId: string }) => {
   });
 
   const onNewProjectFormSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log("values", values, "temId", teamId);
+    console.log("values", values, "teamId", teamId);
     await createNewProjectAction(values, teamId);
     router.refresh();
   };

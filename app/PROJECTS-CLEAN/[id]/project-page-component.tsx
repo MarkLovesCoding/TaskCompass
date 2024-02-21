@@ -42,6 +42,9 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 
 import { UserDto } from "@/use-cases/user/types";
 import UnarchiveTaskPopover from "./UnarchiveTaskPopover";
+import ArchiveProjectPopover from "./ArchiveProjectPopover";
+import { Separator } from "@radix-ui/react-dropdown-menu";
+import { Label } from "@/components/ui/label";
 // import UpdateProjectMembersCard from "./UpdateProjectMembersCard";
 export async function ProjectPage({
   userId,
@@ -56,6 +59,7 @@ export async function ProjectPage({
   teamMembers: UserDto[];
   projectMembers: UserDto[];
 }) {
+  const archivedTasks = tasks.filter((task) => task.archived);
   return (
     <div className="flex flex-col w-full min-h-screen">
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10">
@@ -70,7 +74,6 @@ export async function ProjectPage({
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
               {/* <DropdownMenuLabel>Add Users</DropdownMenuLabel> */}
-
               {/* <DropdownMenuSeparator /> */}
               <DropdownMenuGroup>
                 <DropdownMenuSub>
@@ -104,15 +107,31 @@ export async function ProjectPage({
                       {/* <NewTaskCard project={project} /> */}
 
                       <ScrollArea>
-                        {tasks.length === 0
-                          ? "No archived tasks"
-                          : tasks.map((task, task_idx) =>
-                              task.archived ? (
-                                <UnarchiveTaskPopover task={task} />
-                              ) : (
-                                <div key={task_idx}>No Archived Tasks</div>
+                        {archivedTasks.length === 0 ? (
+                          <div className="p-4">No archived tasks</div>
+                        ) : (
+                          <div className="p-4 flex flex-col">
+                            {
+                              // projects.length === 0
+                              //   ? "No archived projects"
+                              //   :
+                              tasks.map(
+                                (task, task_idx) =>
+                                  task.archived && (
+                                    <div key={task_idx}>
+                                      <UnarchiveTaskPopover task={task} />
+
+                                      {task_idx !== 0 ||
+                                        (task_idx !==
+                                          archivedTasks.length - 1 && (
+                                          <Separator className="my-2" />
+                                        ))}
+                                    </div>
+                                  )
                               )
-                            )}
+                            }
+                          </div>
+                        )}
                       </ScrollArea>
                       {/* <AddMemberForm /> */}
                     </DropdownMenuSubContent>
@@ -120,6 +139,21 @@ export async function ProjectPage({
                 </DropdownMenuSub>
               </DropdownMenuGroup>
               {/* <DropdownMenuSeparator /> */}
+              <DropdownMenuGroup>
+                <DropdownMenuSub>
+                  <DropdownMenuSubTrigger>
+                    Archive Project
+                  </DropdownMenuSubTrigger>
+                  <DropdownMenuPortal>
+                    <DropdownMenuSubContent>
+                      <Label className="p-4">Archived Projects</Label>
+                      <Separator className="my-2" />
+                      <ArchiveProjectPopover project={project} />
+                      {/* <AddMemberForm /> */}
+                    </DropdownMenuSubContent>
+                  </DropdownMenuPortal>
+                </DropdownMenuSub>
+              </DropdownMenuGroup>{" "}
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

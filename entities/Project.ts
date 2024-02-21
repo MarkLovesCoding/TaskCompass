@@ -7,7 +7,7 @@ export class ProjectEntity {
   private members: string[];
   private tasks: string[];
   private team: string;
-
+  private archived: boolean;
   constructor({
     id,
     name,
@@ -15,6 +15,7 @@ export class ProjectEntity {
     members,
     tasks,
     team,
+    archived = false,
   }: {
     id?: string;
     name: string;
@@ -22,6 +23,7 @@ export class ProjectEntity {
     members: string[];
     tasks: string[];
     team: string;
+    archived: boolean;
   }) {
     this.id = id;
     this.name = name;
@@ -29,6 +31,7 @@ export class ProjectEntity {
     this.members = members;
     this.tasks = tasks;
     this.team = team;
+    this.archived = archived;
     this.validate();
   }
 
@@ -50,6 +53,10 @@ export class ProjectEntity {
   getId() {
     return this.id;
   }
+  getArchived() {
+    return this.archived;
+  }
+
   addMember(member: string) {
     this.members.push(member);
   }
@@ -69,7 +76,9 @@ export class ProjectEntity {
   updateMembers(members: string[]) {
     this.members = members;
   }
-
+  updateArchived(archived: boolean) {
+    this.archived = archived;
+  }
   addTask(project: string) {
     this.tasks.push(project);
   }
@@ -86,6 +95,7 @@ export class ProjectEntity {
       description: z.string().min(5).max(50),
       members: z.array(z.string()).optional(),
       tasks: z.array(z.string()).optional(),
+      archived: z.boolean(),
     });
     try {
       projectSchema.parse(this);

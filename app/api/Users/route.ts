@@ -44,51 +44,10 @@ export async function POST(req: Request, res: Response): Promise<any> {
 
     // CHECKS IF MANUALLY ADDED USER IS FIRST TIME LOGGING IN>
     if (newUser) {
-      // const newProjectData = {
-      //   name: "My First Project",
-      //   // users: [
-      //   //   { userId: newUserId, name: newUser.name, email: newUser.email },
-      //   // ],
-      //   members: [newUserId],
-      // };
-      // const newTaskData = {
-      //   name: "My First Task",
-      //   description: "Task Description",
-      // };
-      // // }
-      // console.log("NEW Project DATA", newProjectData);
-
-      // let initialProjectAssigned, newProjectId;
-      // try {
-      //   console.log("Try create Project");
-
-      //   initialProjectAssigned = await Project.create({
-      //     name: newProjectData.name,
-      //     members: [...newProjectData.members],
-      //   });
-      //   newProjectId = initialProjectAssigned._id;
-
-      //   console.log("init Project", newProjectId);
-      // } catch (error) {
-      //   console.error("Error creating or updating initial Project:", error);
-      //   await User.findByIdAndDelete(newUserId);
-      //   console.log("User deleted due to Project creation failure");
-
-      //   return false;
-      // }
-
-      // try {
-      //   await User.findByIdAndUpdate(newUserId, {
-      //     $push: { projects: newProjectId },
-      //   });
-      // } catch (error) {
-      //   console.error("Error creating user:", error);
-      //   return false;
-      // }
-
       const newProjectData = {
         name: "My Personal Project",
         description: "This is your default project",
+        archived: false,
       };
       const newTeamData = {
         name: "My First Team",

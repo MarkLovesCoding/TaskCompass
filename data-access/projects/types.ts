@@ -5,4 +5,5 @@ export type ProjectModelType = {
   members: string[];
   tasks: string[];
   team: string;
+  archived: boolean;
 };
