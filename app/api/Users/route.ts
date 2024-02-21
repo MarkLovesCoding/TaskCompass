@@ -4,6 +4,7 @@ import User from "@/db/(models)/User";
 import Project from "@/db/(models)/Project";
 import { UserType } from "@/app/types/types";
 import bcrypt from "bcrypt";
+import Team from "@/db/(models)/Team";
 export async function POST(req: Request, res: Response): Promise<any> {
   try {
     await connectDB();
@@ -43,47 +44,89 @@ export async function POST(req: Request, res: Response): Promise<any> {
 
     // CHECKS IF MANUALLY ADDED USER IS FIRST TIME LOGGING IN>
     if (newUser) {
+      // const newProjectData = {
+      //   name: "My First Project",
+      //   // users: [
+      //   //   { userId: newUserId, name: newUser.name, email: newUser.email },
+      //   // ],
+      //   members: [newUserId],
+      // };
+      // const newTaskData = {
+      //   name: "My First Task",
+      //   description: "Task Description",
+      // };
+      // // }
+      // console.log("NEW Project DATA", newProjectData);
+
+      // let initialProjectAssigned, newProjectId;
+      // try {
+      //   console.log("Try create Project");
+
+      //   initialProjectAssigned = await Project.create({
+      //     name: newProjectData.name,
+      //     members: [...newProjectData.members],
+      //   });
+      //   newProjectId = initialProjectAssigned._id;
+
+      //   console.log("init Project", newProjectId);
+      // } catch (error) {
+      //   console.error("Error creating or updating initial Project:", error);
+      //   await User.findByIdAndDelete(newUserId);
+      //   console.log("User deleted due to Project creation failure");
+
+      //   return false;
+      // }
+
+      // try {
+      //   await User.findByIdAndUpdate(newUserId, {
+      //     $push: { projects: newProjectId },
+      //   });
+      // } catch (error) {
+      //   console.error("Error creating user:", error);
+      //   return false;
+      // }
+
       const newProjectData = {
-        name: userData.name + "'s Tickets",
-        // users: [
-        //   { userId: newUserId, name: newUser.name, email: newUser.email },
-        // ],
-        users: [newUserId],
-        isDefault: true,
+        name: "My Personal Project",
+        description: "This is your default project",
       };
-      console.log("NEW Project DATA", newProjectData);
+      const newTeamData = {
+        name: "My First Team",
+      };
 
-      let initialProjectAssigned, newProjectId;
       try {
-        console.log("Try create Project");
-
-        initialProjectAssigned = await Project.create({
+        //CREATE NEW PROJECT WITH FILLER NAMES
+        let initialProjectAssigned = await Project.create({
           name: newProjectData.name,
-          users: [...newProjectData.users],
-          isDefault: newProjectData.isDefault,
+          description: newProjectData.description,
         });
-        console.log("initial Project DATA", initialProjectAssigned);
 
-        console.log("new Project created", initialProjectAssigned);
-        newProjectId = initialProjectAssigned._id;
-        console.log("init Project", newProjectId);
-      } catch (error) {
-        console.error("Error creating or updating initial Project:", error);
-        await User.findByIdAndDelete(newUserId);
-        console.log("User deleted due to Project creation failure");
+        //CREATE NEW USER
 
-        return false;
-      }
-
-      try {
-        await User.findByIdAndUpdate(newUserId, {
-          $push: { projects: newProjectId },
-          $unSet: { firstLogIn: 1 },
+        //CREATE NEW TEAM WITH FILLER NAME
+        let initialTeamAssigned = await Team.create({
+          name: newTeamData.name,
+          projects: [],
+          members: [],
         });
+
+        newUser.projects.push(initialProjectAssigned._id);
+        newUser.teams.push(initialTeamAssigned._id);
+        await newUser.save();
+
+        initialProjectAssigned.members.push(newUser._id);
+        initialProjectAssigned.team = initialTeamAssigned._id;
+        await initialProjectAssigned.save();
+        initialTeamAssigned.projects.push(initialProjectAssigned._id);
+        initialTeamAssigned.members.push(newUser._id);
+        await initialTeamAssigned.save();
       } catch (error) {
-        console.error("Error creating user:", error);
-        return false;
+        console.error("Error creating User and Defaults:", error);
+        // return false;
+
+        // Handle the error or return from the function as needed
       }
+      // return true; // Continue the sign-in process
     }
     return NextResponse.json({ message: "User Created" }, { status: 201 });
   } catch (err) {

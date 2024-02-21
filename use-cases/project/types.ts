@@ -13,7 +13,11 @@ export type CreateProjectDto = {
   tasks: string[];
   team: string;
 };
-
+export type UpdateProjectMembers = (
+  projectId: string,
+  initialMembers: string[],
+  updatedMembers: string[]
+) => Promise<void>;
 export type CreateNewProject = (project: CreateProjectDto) => Promise<void>;
 export type UpdateProject = (project: ProjectDto) => void;
 export type DeleteProject = (projectId: string) => void;

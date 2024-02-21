@@ -8,7 +8,7 @@ export class TaskEntity {
   private assignees: string[];
   private dueDate?: Date | undefined;
   private startDate: Date;
-  private complete: boolean;
+  private archived: boolean;
   private priority: string;
   private category: string;
   private status: string;
@@ -22,7 +22,7 @@ export class TaskEntity {
     assignees = [],
     dueDate = new Date(new Date().setDate(new Date().getDate() + 7)),
     startDate = new Date(),
-    complete = false,
+    archived = false,
     category = "Personal",
     priority = "Medium",
     status = "To Do",
@@ -36,7 +36,7 @@ export class TaskEntity {
     dueDate?: Date | undefined;
     startDate: Date;
     category: string;
-    complete: boolean;
+    archived: boolean;
     priority: string;
     status: string;
     label?: string | undefined;
@@ -49,7 +49,7 @@ export class TaskEntity {
     this.category = category;
     this.dueDate = dueDate;
     this.startDate = startDate;
-    this.complete = complete;
+    this.archived = archived;
 
     this.priority = priority;
     this.status = status;
@@ -76,8 +76,8 @@ export class TaskEntity {
   getStartDate() {
     return this.startDate;
   }
-  getComplete() {
-    return this.complete;
+  getArchived() {
+    return this.archived;
   }
   getCategory() {
     return this.category;
@@ -121,8 +121,8 @@ export class TaskEntity {
   updateStartDate(startDate: Date) {
     this.startDate = startDate;
   }
-  updateComplete(complete: boolean) {
-    this.complete = complete;
+  updateArchived(archived: boolean) {
+    this.archived = archived;
   }
   updatePriority(priority: string) {
     this.priority = priority;
@@ -148,7 +148,7 @@ export class TaskEntity {
       assignees: z.array(z.string()).min(0),
       dueDate: z.date().optional(),
       startDate: z.date(),
-      complete: z.boolean(),
+      archived: z.boolean(),
       priority: z.string(),
       status: z.string(),
       label: z.string(),

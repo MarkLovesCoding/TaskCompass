@@ -1,3 +1,5 @@
+import { UserDto } from "../user/types";
+
 export type TaskDto = {
   id: string;
   name: string;
@@ -6,7 +8,7 @@ export type TaskDto = {
   assignees: string[];
   dueDate?: Date | undefined;
   startDate: Date;
-  complete: boolean;
+  archived: boolean;
   category: string;
   priority: string;
   status: string;
@@ -20,7 +22,7 @@ export type CreateTaskDto = {
   dueDate?: Date | undefined;
   startDate: Date;
   category: string;
-  complete: boolean;
+  archived: boolean;
   priority: string;
   status: string;
   label?: string | undefined;
@@ -34,6 +36,11 @@ export type UpdateTask = (task: TaskDto) => Promise<void>;
 //   addedAssignees: string[],
 //   removedAssignees: string[]
 // ) => Promise<void>;
+export type UpdateTaskUsers = (
+  taskId: string,
+  addedAssignees: string[],
+  removedAssignees: string[]
+) => Promise<void>;
 export type AddTaskUsers = (taskId: string, userId: string[]) => Promise<void>;
 export type RemoveTaskUsers = (
   taskId: string,

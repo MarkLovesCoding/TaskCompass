@@ -23,7 +23,7 @@ export async function createNewTaskUseCase(
     assignees: [],
     startDate: new Date(),
     dueDate: new Date(new Date().setDate(new Date().getDate() + 7)),
-    complete: false,
+    archived: false,
     category: "Other",
     priority: "Medium",
     status: "Not Started",

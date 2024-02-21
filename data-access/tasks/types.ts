@@ -9,7 +9,7 @@ export type TaskModelType = {
   category: string;
   priority: string;
   status: string;
-  complete: boolean;
+  archived: boolean;
   label: string;
   createdBy: string;
 };

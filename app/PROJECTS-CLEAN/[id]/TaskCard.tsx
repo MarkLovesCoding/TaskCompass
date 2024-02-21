@@ -21,6 +21,13 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  Card,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { toast } from "@/components/ui/use-toast";
 import {
   PopoverTrigger,
@@ -55,6 +62,7 @@ import { updateTaskStatusAction } from "../_actions/update-task-status.action";
 import { updateTaskCategoryAction } from "../_actions/update-task-category.action";
 import { updateTaskStartDateAction } from "../_actions/update-task-start-date.action";
 import { updateTaskDueDateAction } from "../_actions/update-task-due-date.action";
+import { updateTaskArchivedAction } from "../_actions/update-task-archived.action";
 type TaskFormProps = {
   task: TaskDto;
   project: ProjectDto;
@@ -98,6 +106,11 @@ const dueDateFormSchema = z.object({
 const assigneesFormSchema = z.object({
   id: z.string(),
   assignees: z.array(z.string()).min(0),
+  projectId: z.string().length(24),
+});
+const archivedFormSchema = z.object({
+  id: z.string(),
+  archived: z.boolean(),
   projectId: z.string().length(24),
 });
 let renderCount = 0;
@@ -180,6 +193,14 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
       projectId: project.id,
     },
   });
+  const archivedForm = useForm<z.infer<typeof archivedFormSchema>>({
+    resolver: zodResolver(archivedFormSchema),
+    defaultValues: {
+      id: task.id,
+      archived: task.archived,
+      projectId: project.id,
+    },
+  });
   const { field: nameField, fieldState: nameFieldState } = useController({
     name: "name", // Name of the field you want to control
     control: nameForm.control, // Pass the form control from useForm
@@ -239,6 +260,12 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
       control: assigneesForm.control, // Pass the form control from useForm
       defaultValue: task.assignees, // Default value for the field
     });
+  const { field: archivedField, fieldState: archivedFieldState } =
+    useController({
+      name: "archived", // Name of the field you want to control
+      control: archivedForm.control, // Pass the form control from useForm
+      defaultValue: task.archived, // Default value for the field
+    });
 
   const selectedStartDate = useWatch({
     control: startDateForm.control,
@@ -256,6 +283,7 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
     control: descriptionForm.control,
     name: "description",
   });
+
   const [existingAssignees, setExistingAssignees] = useState<string[]>([
     ...task.assignees,
   ]);
@@ -379,6 +407,7 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
     if (open === false) assigneesFormRef.current!.requestSubmit();
     // Trigger the onChange event for the field
   };
+
   const onAssigneesSubmit = async (
     values: z.infer<typeof assigneesFormSchema>
   ) => {
@@ -390,6 +419,33 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
 
     router.refresh();
   };
+
+  const archivedFormRef = React.useRef<HTMLFormElement>(null);
+  const [archivedOpen, setArchivedOpen] = useState(false);
+  const handleArchivedSubmit = () => {
+    archivedForm.setValue("archived", true);
+    // console.log("archivedOpen", archivedOpen);
+    archivedFormRef.current!.requestSubmit();
+    setArchivedOpen(false);
+    // Trigger the onChange event for the field
+  };
+  const handleArchivedCancel = () => {
+    // archivedForm.setValue("archived", false);
+    // archivedFormRef.current!.requestSubmit();
+
+    archivedForm.setValue("archived", task.archived);
+    setArchivedOpen(false);
+    // console.log("archivedOpen", archivedOpen);
+
+    // Trigger the onChange event for the field
+  };
+  const onArchivedSubmit = async (
+    values: z.infer<typeof archivedFormSchema>
+  ) => {
+    await updateTaskArchivedAction(values);
+    router.refresh();
+  };
+
   const categories = ["Household", "Personal", "Work", "School", "Other"];
   const priorityOptions = ["High", "Medium", "Low"];
   const statusOptions = ["Not Started", "Up Next", "In Progress", "Completed"];
@@ -718,6 +774,74 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
                     </DropdownMenu>
                   </FormControl>
                 </div>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </form>
+      </Form>
+      <Form {...archivedForm}>
+        <form
+          ref={archivedFormRef}
+          onSubmit={archivedForm.handleSubmit(onArchivedSubmit)}
+          method="post"
+          className="grid gap-6 w-full max-w-md mx-auto p-6 bg-white rounded-lg shadow-md dark:bg-gray-800"
+        >
+          <FormField
+            control={archivedForm.control}
+            name="archived"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="flex align-middle">
+                  Archive Task
+                </FormLabel>
+                <Popover open={archivedOpen} onOpenChange={setArchivedOpen}>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant={"outline"}
+                        className={cn(
+                          "w-full pl-3 text-left font-normal",
+                          "text-muted-foreground"
+                        )}
+                      >
+                        Archive
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Card>
+                      <CardHeader>
+                        <CardTitle>Archive Task</CardTitle>
+                      </CardHeader>
+                      <CardDescription>
+                        Are you sure you want to archive this task? It can be
+                        retrieved from the archive later.
+                      </CardDescription>
+                      <CardFooter>
+                        <Button
+                          variant="outline"
+                          onClick={() => {
+                            console.log("archived");
+                            handleArchivedSubmit();
+                          }}
+                        >
+                          Archive
+                        </Button>
+                        <Button
+                          variant="outline"
+                          onClick={() => {
+                            handleArchivedCancel();
+                            console.log("cancel");
+                          }}
+                        >
+                          Cancel
+                        </Button>
+                      </CardFooter>
+                    </Card>
+                  </PopoverContent>
+                </Popover>
 
                 <FormMessage />
               </FormItem>

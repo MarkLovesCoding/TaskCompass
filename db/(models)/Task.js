@@ -11,7 +11,7 @@ const TaskSchema = new Schema(
     assignees: [{ type: Schema.Types.ObjectId, ref: "User" }],
     dueDate: Date,
     startDate: Date,
-    complete: Boolean,
+    archived: Boolean,
     priority: String,
     status: String,
     category: String,

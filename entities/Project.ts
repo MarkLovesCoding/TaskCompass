@@ -66,6 +66,10 @@ export class ProjectEntity {
       this.members = this.members.filter((a) => a !== member);
     });
   }
+  updateMembers(members: string[]) {
+    this.members = members;
+  }
+
   addTask(project: string) {
     this.tasks.push(project);
   }

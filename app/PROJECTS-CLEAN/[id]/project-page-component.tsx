@@ -6,18 +6,19 @@ import {
   CardDescription,
   CardHeader,
   Card,
+  CardFooter,
 } from "@/components/ui/card";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
 import { TaskCard } from "./TaskCard";
 import { NewTaskCard } from "./NewTaskCard";
 import { ProjectHeader } from "./ProjectHeader";
-import { CircleEllipsisIcon } from "lucide-react";
+import { Archive, CircleEllipsisIcon } from "lucide-react";
 import { PersonStanding } from "lucide-react";
 import type { ProjectDto } from "@/use-cases/project/types";
 import type { TaskDto } from "@/use-cases/task/types";
 import { AddMemberForm } from "./AddMemberForm";
-
+import UpdateProjectMembersCard from "./UpdateProjectMembersCard";
 import {
   Popover,
   PopoverContent,
@@ -37,15 +38,23 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import EditProjectDetailsCard from "./EditProjectDetailsCard";
+import { ScrollArea } from "@/components/ui/scroll-area";
+
+import { UserDto } from "@/use-cases/user/types";
+import UnarchiveTaskPopover from "./UnarchiveTaskPopover";
+// import UpdateProjectMembersCard from "./UpdateProjectMembersCard";
 export async function ProjectPage({
   userId,
   project,
   tasks,
+  teamMembers,
+  projectMembers,
 }: {
   userId: string;
   project: ProjectDto;
   tasks: TaskDto[];
+  teamMembers: UserDto[];
+  projectMembers: UserDto[];
 }) {
   return (
     <div className="flex flex-col w-full min-h-screen">
@@ -56,7 +65,7 @@ export async function ProjectPage({
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline">
-                <PersonStanding />
+                <CircleEllipsisIcon />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
@@ -68,12 +77,48 @@ export async function ProjectPage({
                   <DropdownMenuSubTrigger>Add users</DropdownMenuSubTrigger>
                   <DropdownMenuPortal>
                     <DropdownMenuSubContent>
-                      <AddMemberForm />
+                      <UpdateProjectMembersCard
+                        userId={userId}
+                        project={project}
+                        teamMembers={teamMembers}
+                        projectMembers={projectMembers}
+                      />
+                      {/* <AddMemberForm /> */}
                     </DropdownMenuSubContent>
                   </DropdownMenuPortal>
                 </DropdownMenuSub>
               </DropdownMenuGroup>
+              <DropdownMenuGroup>
+                <DropdownMenuSub>
+                  <DropdownMenuSubTrigger>
+                    Archived Tasks
+                  </DropdownMenuSubTrigger>
+                  <DropdownMenuPortal>
+                    <DropdownMenuSubContent>
+                      {/* <Popover>
+                  <PopoverTrigger>
+                    Archived
+                    <span className="sr-only">New Task Button</span>
+                  </PopoverTrigger>
+                  <PopoverContent> */}
+                      {/* <NewTaskCard project={project} /> */}
 
+                      <ScrollArea>
+                        {tasks.length === 0
+                          ? "No archived tasks"
+                          : tasks.map((task, task_idx) =>
+                              task.archived ? (
+                                <UnarchiveTaskPopover task={task} />
+                              ) : (
+                                <div key={task_idx}>No Archived Tasks</div>
+                              )
+                            )}
+                      </ScrollArea>
+                      {/* <AddMemberForm /> */}
+                    </DropdownMenuSubContent>
+                  </DropdownMenuPortal>
+                </DropdownMenuSub>
+              </DropdownMenuGroup>
               {/* <DropdownMenuSeparator /> */}
             </DropdownMenuContent>
           </DropdownMenu>

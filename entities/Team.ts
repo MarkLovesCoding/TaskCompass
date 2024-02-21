@@ -54,6 +54,9 @@ export class TeamEntity {
       this.members = this.members.filter((a) => a !== member);
     });
   }
+  updateMembers(members: string[]) {
+    this.members = members;
+  }
   addProject(project: string) {
     this.projects.push(project);
   }
