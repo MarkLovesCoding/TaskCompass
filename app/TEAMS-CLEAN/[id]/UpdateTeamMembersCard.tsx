@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 
@@ -32,20 +32,21 @@ import { UserDto } from "@/use-cases/user/types";
 import getTeamMembers from "@/data-access/users/get-team-members.persistence";
 import { findAssigneesDifferences } from "@/lib/utils";
 import { set } from "mongoose";
+import Team from "@/db/(models)/Team";
+import { Users } from "lucide-react";
 const formSchema = z.object({
   members: z.array(z.string()).min(1),
-  memberId: z.string(),
 });
 
 const UpdateTeamMembersCard = ({
   userId,
   team,
-  filteredUsers,
+  globalUsers,
   teamMembers,
 }: {
   userId: string;
   team: TeamDto;
-  filteredUsers: UserDto[];
+  globalUsers: UserDto[];
   teamMembers: UserDto[];
 }) => {
   const router = useRouter();
@@ -55,37 +56,46 @@ const UpdateTeamMembersCard = ({
       members: [...team.members],
     },
   });
-  const [selectedUser, setSelectedUser] = useState<string>("");
+
+  const filteredUsers = useMemo(() => {
+    return globalUsers.filter((user) => !team.members.includes(user.id));
+  }, [globalUsers, team.members]);
+
   const [usersList, setUsersList] = useState<UserDto[]>(filteredUsers);
   const [membersList, setMembersList] = useState<UserDto[]>(teamMembers);
   console.log("membersList", membersList);
-  console.log("filteredUsers", filteredUsers);
+  // console.log("filteredUsers", filteredUsers);
+  const [showCancelButton, setShowCancelButton] = useState(false);
+  const [showUpdateButton, setShowUpdateButton] = useState(false);
+  const resetMembers = () => {
+    form.setValue("members", [...team.members]);
+    setMembersList(teamMembers);
+    setUsersList(filteredUsers);
+    setShowUpdateButton(false);
+    setShowCancelButton(false);
+  };
+  const handleUpdateTeamMembers = () => {
+    const membersIds = membersList.map((member) => member.id);
+    console.log("membersIds", membersIds);
+    form.setValue("members", membersIds);
+  };
+  const onUpdateTeamMemberFormSubmit = async (
+    values: z.infer<typeof formSchema>
+  ) => {
+    // console.log("existing members", team.members);
+    // console.log("current members", membersList);
+    console.log("values", values);
 
-  const [isSubmittingForm, setIsSubmittingForm] = useState(false);
-  const onAddMemberFormSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log("existing members", team.members);
-    console.log("current members", membersList);
-    setIsSubmittingForm(true);
-
-    if (selectedUser) {
-      const updatedMembers = [...form.getValues("members"), selectedUser];
-      form.setValue("members", updatedMembers);
-    }
-    const existingMembers = team.members;
-    const currentMembers = membersList.map((member) => member.id);
-    const { addedAssignees, removedAssignees } = findAssigneesDifferences(
-      existingMembers,
-      currentMembers
-    );
-
-    await updateTeamMembersAction(team.id, addedAssignees, removedAssignees);
+    await updateTeamMembersAction(team.id, values.members);
+    setShowUpdateButton(false);
+    setShowCancelButton(false);
     router.refresh();
   };
   return (
     <Form {...form}>
       <form
         className="mt-4 mr-2 "
-        onSubmit={form.handleSubmit(onAddMemberFormSubmit)}
+        onSubmit={form.handleSubmit(onUpdateTeamMemberFormSubmit)}
       >
         <h2>Edit Member list</h2>
         <FormField
@@ -99,7 +109,7 @@ const UpdateTeamMembersCard = ({
                   <div key={_index}>{user.name}</div>
                 ))}
                 <FormControl>
-                  <DropdownMenu>
+                  <DropdownMenu onOpenChange={handleUpdateTeamMembers}>
                     <DropdownMenuTrigger asChild>
                       <Button variant="outline"> + </Button>
                     </DropdownMenuTrigger>
@@ -109,65 +119,11 @@ const UpdateTeamMembersCard = ({
                       {teamMembers.length === 0
                         ? "No other users"
                         : membersList?.map((user, index) => (
-                            // <DropdownMenuCheckboxItem
-                            //   key={index}
-                            //   checked={field.value.includes(user.id)} // Check if user is already in assignees
-                            //   onCheckedChange={(checked) => {
-                            //     // const updatedMembers = checked
-                            //     //   ? [...field.value, user.id] // Add user to assignees array
-                            //     //   : field.value.filter(
-                            //     //       (member) => member !== user.id
-                            //     //     ); // Remove user from assignees array
-                            //     if (checked) {
-                            //       setMembersList((prev) => {
-                            //         if (!prev.some((u) => u.id === user.id)) {
-                            //           return [...prev, user];
-                            //         }
-                            //         return prev;
-                            //       });
-                            //       setUsersList((prev) =>
-                            //         prev.filter((u) => u.id !== user.id)
-                            //       );
-                            //       // Update assignees field value
-                            //     } else {
-                            //       setMembersList((prev) =>
-                            //         prev.filter((u) => u.id !== user.id)
-                            //       );
-                            //       setUsersList((prev) => {
-                            //         if (!prev.some((u) => u.id === user.id)) {
-                            //           return [...prev, user];
-                            //         }
-                            //         return prev;
-                            //       });
-                            //     }
-                            //     const membersIds = membersList.map(
-                            //       (member) => member.id
-                            //     );
-                            //     form.setValue("members", membersIds);
-                            //   }}
-                            // >
-                            //   {user.name}
-                            // </DropdownMenuCheckboxItem>
-                            // <DropdownMenuContent>
                             <DropdownMenuItem
                               key={index}
                               // Check if user is already in assignees
-                              onSelect={() => {
-                                // const updatedMembers = checked
-                                //   ? [...field.value, user.id] // Add user to assignees array
-                                //   : field.value.filter(
-                                //       (member) => member !== user.id
-                                //     ); // Remove user from assignees array
-                                // if (checked) {
-                                // setMembersList((prev) => {
-                                //   if (!prev.some((u) => u.id === user.id)) {
-                                //     return [...prev, user];
-                                //   }
-                                //   return prev;
-                                // });
-                                // setUsersList((prev) =>
-                                //   prev.filter((u) => u.id !== user.id)
-                                // );
+                              onSelect={(e) => {
+                                e.preventDefault();
                                 if (user.id !== userId) {
                                   setMembersList((prev) =>
                                     prev.filter((u) => u.id !== user.id)
@@ -178,28 +134,9 @@ const UpdateTeamMembersCard = ({
                                     }
                                     return prev;
                                   });
+                                  setShowUpdateButton(true);
+                                  setShowCancelButton(true);
                                 }
-                                // Update assignees field value
-                                // } else {
-                                // setMembersList((prev) =>
-                                //   prev.filter((u) => u.id !== user.id)
-                                // );
-                                // setUsersList((prev) => {
-                                //   if (!prev.some((u) => u.id === user.id)) {
-                                //     return [...prev, user];
-                                //   }
-                                //   return prev;
-                                // });
-                                // }
-                                const membersIds = membersList.map(
-                                  (member) => member.id
-                                );
-                                form.setValue("members", membersIds);
-                                // field.onChange(updatedMembers); // Update assignees field value
-                                // setMembersList((prev) => [...prev, user]);
-                                // setUsersList((prev) =>
-                                //   prev.filter((u) => u.id !== user.id)
-                                // );
                               }}
                             >
                               {user.name}
@@ -211,75 +148,11 @@ const UpdateTeamMembersCard = ({
                         ? "No other users"
                         : usersList?.map((user, index) => (
                             <>
-                              {/* <DropdownMenuCheckboxItem
-                                key={index}
-                                checked={field.value.includes(user.id)} // Check if user is already in assignees
-                                onCheckedChange={(checked) => {
-                                  // const updatedMembers = checked
-                                  //   ? [...field.value, user.id] // Add user to assignees array
-                                  //   : field.value.filter(
-                                  //       (member) => member !== user.id
-                                  //     ); // Remove user from assignees array
-                                  if (checked) {
-                                    setMembersList((prev) => {
-                                      if (!prev.some((u) => u.id === user.id)) {
-                                        return [...prev, user];
-                                      }
-                                      return prev;
-                                    });
-                                    setUsersList((prev) =>
-                                      prev.filter((u) => u.id !== user.id)
-                                    );
-                                    // Update assignees field value
-                                  } else {
-                                    setMembersList((prev) =>
-                                      prev.filter((u) => u.id !== user.id)
-                                    );
-                                    setUsersList((prev) => {
-                                      if (!prev.some((u) => u.id === user.id)) {
-                                        return [...prev, user];
-                                      }
-                                      return prev;
-                                    });
-                                  }
-                                  const membersIds = membersList.map(
-                                    (member) => member.id
-                                  );
-                                  form.setValue("members", membersIds);
-                                  // field.onChange(updatedMembers); // Update assignees field value
-                                  // setMembersList((prev) => [...prev, user]);
-                                  // setUsersList((prev) =>
-                                  //   prev.filter((u) => u.id !== user.id)
-                                  // );
-                                }}
-                              > */}
-                              {/* {user.name} */}
-                              {/* </DropdownMenuCheckboxItem> */}
-                              {/* <DropdownMenuContent> */}
                               <DropdownMenuItem
                                 key={index}
                                 // Check if user is already in assignees
-                                onSelect={() => {
-                                  // const updatedMembers = checked
-                                  //   ? [...field.value, user.id] // Add user to assignees array
-                                  //   : field.value.filter(
-                                  //       (member) => member !== user.id
-                                  //     ); // Remove user from assignees array
-                                  // if (checked) {
-                                  //   setMembersList((prev) => {
-                                  //     if (
-                                  //       !prev.some((u) => u.id === user.id)
-                                  //     ) {
-                                  //       return [...prev, user];
-                                  //     }
-                                  //     return prev;
-                                  //   });
-                                  //   setUsersList((prev) =>
-                                  //     prev.filter((u) => u.id !== user.id)
-                                  //   );
-                                  // Update assignees field value
-                                  // } else {
-
+                                onSelect={(e) => {
+                                  e.preventDefault();
                                   setMembersList((prev) => {
                                     if (!prev.some((u) => u.id === user.id)) {
                                       return [...prev, user];
@@ -289,30 +162,13 @@ const UpdateTeamMembersCard = ({
                                   setUsersList((prev) =>
                                     prev.filter((u) => u.id !== user.id)
                                   );
-                                  // setMembersList((prev) =>
-                                  //   prev.filter((u) => u.id !== user.id)
-                                  // );
-                                  // setUsersList((prev) => {
-                                  //   if (!prev.some((u) => u.id === user.id)) {
-                                  //     return [...prev, user];
-                                  //   }
-                                  //   return prev;
-                                  // });
-                                  // }
-                                  const membersIds = membersList.map(
-                                    (member) => member.id
-                                  );
-                                  form.setValue("members", membersIds);
-                                  // field.onChange(updatedMembers); // Update assignees field value
-                                  // setMembersList((prev) => [...prev, user]);
-                                  // setUsersList((prev) =>
-                                  //   prev.filter((u) => u.id !== user.id)
-                                  // );
+
+                                  setShowUpdateButton(true);
+                                  setShowCancelButton(true);
                                 }}
                               >
                                 {user.name}
                               </DropdownMenuItem>
-                              {/* </DropdownMenuContent> */}
                             </>
                           ))}
                     </DropdownMenuContent>
@@ -324,16 +180,23 @@ const UpdateTeamMembersCard = ({
             </FormItem>
           )}
         />
-        {/* <DialogFooter className="sm:justify-start mt-10"> */}
-        <Button
-          type="submit"
-          value="Update"
-          className="  py-2 rounded-md "
-          // disabled={isSubmittingForm}
-        >
-          Update
-        </Button>
-        {/* </DialogFooter> */}
+        <div className="mt-5 flex flex-row">
+          {showUpdateButton && (
+            <Button type="submit" value="Update" className="  py-2 rounded-md ">
+              Update
+            </Button>
+          )}
+          {showCancelButton && (
+            <Button
+              type="button"
+              onClick={resetMembers}
+              value="Cancel"
+              className="  py-2 rounded-md "
+            >
+              Cancel
+            </Button>
+          )}
+        </div>
       </form>
     </Form>
   );

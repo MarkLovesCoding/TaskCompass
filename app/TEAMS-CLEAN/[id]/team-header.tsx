@@ -110,21 +110,17 @@ export function TeamHeader({ team }: { team: TeamDto }) {
               render={({ field }) => {
                 return (
                   <FormItem className="self-center">
-                    {/* <FormLabel>Name </FormLabel> */}
                     <FormControl>
                       <Input
-                        //  placeholder=" project name" type="text" {...field}
                         type="text"
                         className={`header-input
                         ${isHeaderEditing ? "editing" : ""}`}
                         maxLength={25}
                         placeholder="Team Name"
                         {...field}
-                        // value={headerText}
                         onClick={handleInputClick}
                         onChange={handleInputChange}
                         onBlur={handleInputBlur}
-                        // readOnly={!isHeaderEditing}
                       />
                     </FormControl>
                     <FormMessage />

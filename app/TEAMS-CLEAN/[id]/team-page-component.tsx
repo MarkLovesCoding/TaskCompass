@@ -97,7 +97,7 @@ export async function TeamPageComponent({
                       <UpdateTeamMembersCard
                         userId={userId}
                         team={team}
-                        filteredUsers={filteredUsers}
+                        globalUsers={usersList}
                         teamMembers={teamMembers}
                       />
                     </DropdownMenuSubContent>
@@ -113,7 +113,7 @@ export async function TeamPageComponent({
                     <DropdownMenuSubContent>
                       <ScrollArea>
                         {archivedProjects.length === 0 ? (
-                          <div className="p-4">"No archived projects"</div>
+                          <div className="p-4">No archived projects</div>
                         ) : (
                           <div className="p-4 flex flex-col">
                             {

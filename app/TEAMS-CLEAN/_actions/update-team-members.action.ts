@@ -1,13 +1,13 @@
 "use server";
 import { updateTeam } from "@/data-access/teams/update-team.persistence";
+import updateTeamMembers from "@/data-access/users/update-team-members.persistence";
 import getTeam from "@/data-access/teams/get-team.persistence";
 import { updateTeamMembersUseCase } from "@/use-cases/team/update-team-members.use-case";
 import { revalidatePath } from "next/cache";
 import { getUserFromSession } from "@/lib/sessionAuth";
 export async function updateTeamMembersAction(
   teamId: string,
-  addedMembers: string[],
-  removedMembers: string[]
+  updatedMembers: string[]
 ) {
   const { getUser } = await getUserFromSession();
 
@@ -15,13 +15,13 @@ export async function updateTeamMembersAction(
     await updateTeamMembersUseCase(
       {
         updateTeam,
+        updateTeamMembers,
         getTeam,
         getUser,
       },
       {
         teamId: teamId,
-        addedMembers: addedMembers,
-        removedMembers: removedMembers,
+        updatedMembers: updatedMembers,
       }
     );
     revalidatePath("/TEAMS-CLEAN/[slug]");
