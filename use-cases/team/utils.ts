@@ -8,6 +8,7 @@ export function teamToDto(team: TeamEntity): TeamDto {
   return {
     id: teamId,
     name: team.getName(),
+    admins: team.getAdmins(),
     members: team.getMembers(),
     projects: team.getProjects(),
   };
@@ -15,6 +16,7 @@ export function teamToDto(team: TeamEntity): TeamDto {
 export function teamToCreateTeamDto(team: TeamEntity): CreateTeamDto {
   return {
     name: team.getName(),
+    admins: team.getAdmins(),
     members: team.getMembers(),
     projects: team.getProjects(),
   };

@@ -32,7 +32,7 @@ const formSchema = z.object({
   members: z.array(z.string()).min(1),
 });
 
-const UpdateProjectMembersCard = ({
+const UpdateProjectUsersCard = ({
   userId,
   project,
   teamMembers,
@@ -215,4 +215,4 @@ const UpdateProjectMembersCard = ({
   );
 };
 
-export default UpdateProjectMembersCard;
+export default UpdateProjectUsersCard;

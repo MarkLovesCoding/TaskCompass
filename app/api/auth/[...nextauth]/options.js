@@ -188,9 +188,11 @@ export const options = {
           email,
           role,
           // projects: [newProjectId],
-          projects: [],
+          projectsAsAdmin: [],
+          projectsAsMember: [],
           tasks: [],
-          teams: [],
+          teamsAsAdmin: [],
+          teamsAsMember: [],
           avatar: "default_avatar.png",
         });
 
@@ -198,18 +200,19 @@ export const options = {
         let initialTeamAssigned = await Team.create({
           name: newTeamData.name,
           projects: [],
+          admins: [],
           members: [],
         });
 
-        newUser.projects.push(initialProjectAssigned._id);
-        newUser.teams.push(initialTeamAssigned._id);
+        newUser.projectsAsAdmin.push(initialProjectAssigned._id);
+        newUser.teamsAsAdmin.push(initialTeamAssigned._id);
         await newUser.save();
 
-        initialProjectAssigned.members.push(newUser._id);
+        initialProjectAssigned.admins.push(newUser._id);
         initialProjectAssigned.team = initialTeamAssigned._id;
         await initialProjectAssigned.save();
         initialTeamAssigned.projects.push(initialProjectAssigned._id);
-        initialTeamAssigned.members.push(newUser._id);
+        initialTeamAssigned.admins.push(newUser._id);
         await initialTeamAssigned.save();
 
         // await Project.findByIdAndUpdate(

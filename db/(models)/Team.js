@@ -5,7 +5,7 @@ import mongoose, { Schema } from "mongoose";
 const TeamSchema = new Schema(
   {
     name: String,
-
+    admins: [{ type: Schema.Types.ObjectId, ref: "User" }],
     members: [{ type: Schema.Types.ObjectId, ref: "User" }],
     projects: [{ type: Schema.Types.ObjectId, ref: "Project" }],
   },

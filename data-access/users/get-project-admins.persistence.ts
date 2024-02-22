@@ -9,7 +9,7 @@ import { userModelToUserDto } from "./utils";
 import { UserModelType } from "./types";
 
 // May require refactpr to get by ID
-async function getTeamMembers(memberIds: string[]): Promise<UserDto[]> {
+async function getProjectAdmins(adminIds: string[]): Promise<UserDto[]> {
   try {
     await connectDB();
   } catch (error) {
@@ -20,16 +20,16 @@ async function getTeamMembers(memberIds: string[]): Promise<UserDto[]> {
   // const userId = user.id;
   try {
     // Find the user by ID
-    const members: UserModelType[] = await User.find({
-      _id: { $in: memberIds },
+    const admins: UserModelType[] = await User.find({
+      _id: { $in: adminIds },
     });
-    const validatedMembers = members.map((member) => {
-      return userModelToUserDto(member);
+    const validatedAdmins = admins.map((admin) => {
+      return userModelToUserDto(admin);
     });
-    return validatedMembers;
+    return validatedAdmins;
   } catch (error) {
     throw new Error("Error retrieving users:" + error);
   }
 }
 
-export default getTeamMembers;
+export default getProjectAdmins;

@@ -5,6 +5,11 @@ import type { UserDto } from "@/use-cases/user/types";
 import { unstable_noStore } from "next/cache";
 import { sessionAuth } from "@/lib/sessionAuth";
 import { notFound } from "next/navigation";
+import getUserTeamsAsMember from "@/data-access/teams/get-user-teams-as-member";
+import getUserProjectsAsMember from "@/data-access/projects/get-user-projects-as-member";
+import getUserTeamsAsAdmin from "@/data-access/teams/get-user-teams-as-admin";
+import getUserProjectsAsAdmin from "@/data-access/projects/get-user-projects-as-admin";
+
 type ParamsType = {
   id: string;
 };
@@ -14,6 +19,7 @@ const UserPage = async ({ params }: { params: ParamsType }) => {
   const { id } = params;
 
   const session = await sessionAuth(`USERPAGE-CLEAN/${id}`);
+
   // if (!session) {
   //   redirect(`/api/auth/signin?callbackUrl=/USERPAGE-CLEAN/${id}`);
   // }
@@ -27,11 +33,21 @@ const UserPage = async ({ params }: { params: ParamsType }) => {
     return notFound();
   }
   // const userIdString = user._id;
+  const usersTeamsAsMember = await getUserTeamsAsMember(user);
+  const usersProjectsAsMember = await getUserProjectsAsMember(user);
+  const usersTeamsAsAdmin = await getUserTeamsAsAdmin(user);
+  const usersProjectsAsAdmin = await getUserProjectsAsAdmin(user);
   // add params
   // const userId = params.userData.id;
   return (
     <div>
-      <UserPageComponent user={user} />
+      <UserPageComponent
+        user={user}
+        usersTeamsAsMember={usersTeamsAsMember}
+        usersTeamsAsAdmin={usersTeamsAsAdmin}
+        usersProjectsAsAdmin={usersProjectsAsAdmin}
+        usersProjectsAsMember={usersProjectsAsMember}
+      />
     </div>
   );
 };

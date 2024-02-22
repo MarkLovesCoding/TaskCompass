@@ -12,12 +12,17 @@ export function projectModelToProjectDto(
     project.members.length > 0
       ? project.members.map((member) => member.toString())
       : [];
+  const convertedAdmins =
+    project.admins.length > 0
+      ? project.admins.map((admin) => admin.toString())
+      : [];
   const convertedId = project._id.toString();
   const convertedTeam = project.team ? project.team.toString() : "";
   return {
     id: convertedId,
     name: project.name,
     description: project.description,
+    admins: convertedAdmins,
     members: convertedMembers,
     tasks: convertedTasks,
     team: convertedTeam,

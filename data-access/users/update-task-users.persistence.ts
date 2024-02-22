@@ -4,10 +4,6 @@ import connectDB from "@/db/connectDB";
 
 import User from "@/db/(models)/User";
 
-import { UserDto } from "@/use-cases/user/types";
-import { userModelToUserDto } from "./utils";
-import { TaskDto } from "@/use-cases/task/types";
-
 async function updateTaskUsers(
   taskId: string,
   removedAssignees: string[],

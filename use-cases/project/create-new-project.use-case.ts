@@ -22,7 +22,8 @@ export async function createNewProjectUseCase(
   const newProject = new ProjectEntity({
     name: data.name,
     description: data.description,
-    members: [user.userId],
+    members: [],
+    admins: [user.userId],
     tasks: [],
     team: data.teamId,
     archived: false,

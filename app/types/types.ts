@@ -14,6 +14,7 @@ export type TaskType = {
 export type ProjectType = {
   name: string;
   description: string;
+  admins: string[];
   members: string[];
   tasks: string[];
   _id?: number | Object | string;
@@ -28,9 +29,11 @@ export type UserType = {
   email: string;
   password?: string;
   avatar: string;
-  projects: string[];
+  projectsAsAdmin: string[];
+  projectsAsMember: string[];
+  teamsAsAdmin: string[];
+  teamsAsMember: string[];
   tasks: string[];
-  teams: string[];
   createdAt: Date;
   id?: string;
 };
@@ -54,6 +57,7 @@ export type Session = {
 };
 export type TeamType = {
   name: string;
+  admins: string[];
   members: string[];
   projects: string[];
   _id?: number | Object | string;

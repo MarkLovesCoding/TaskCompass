@@ -19,10 +19,10 @@ async function getAllUsers(): Promise<UserDto[]> {
   try {
     // Find the user by ID
     const users = await User.find();
-    const cleanedUsers = users.map((user) => {
+    const validatedUsers = users.map((user) => {
       return userModelToUserDto(user);
     });
-    return cleanedUsers;
+    return validatedUsers;
   } catch (error) {
     throw new Error("Error retrieving users:" + error);
   }

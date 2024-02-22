@@ -7,6 +7,7 @@ import { unstable_noStore } from "next/cache";
 import { sessionAuth } from "@/lib/sessionAuth";
 import getAllUsers from "@/data-access/users/get-all-users.persistence";
 import getTeamMembers from "@/data-access/users/get-team-members.persistence";
+import getTeamAdmins from "@/data-access/users/get-team-admins.persistence";
 import getTeamProjects from "@/data-access/projects/get-team-projects";
 
 type ParamsType = {
@@ -22,9 +23,14 @@ const Projects = async ({ params }: { params: ParamsType }) => {
   const projects = await getTeamProjects(team);
   const usersList = await getAllUsers();
   const teamMembers = await getTeamMembers(team.members);
+  const teamAdmins = await getTeamAdmins(team.admins);
 
   if (!team) {
-    return <p>No team found.</p>;
+    return (
+      <p>
+        Team Not Retrieved from Database. Please try again later or reload page.
+      </p>
+    );
   }
 
   return (
@@ -35,6 +41,7 @@ const Projects = async ({ params }: { params: ParamsType }) => {
         projects={projects}
         usersList={usersList}
         teamMembers={teamMembers}
+        teamAdmins={teamAdmins}
       />
     </div>
   );

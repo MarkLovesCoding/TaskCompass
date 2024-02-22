@@ -4,6 +4,7 @@ export class ProjectEntity {
   private id?: string;
   private name: string;
   private description: string;
+  private admins: string[];
   private members: string[];
   private tasks: string[];
   private team: string;
@@ -12,6 +13,7 @@ export class ProjectEntity {
     id,
     name,
     description,
+    admins,
     members,
     tasks,
     team,
@@ -21,6 +23,7 @@ export class ProjectEntity {
     name: string;
     description: string;
     members: string[];
+    admins: string[];
     tasks: string[];
     team: string;
     archived: boolean;
@@ -29,6 +32,7 @@ export class ProjectEntity {
     this.name = name;
     this.description = description;
     this.members = members;
+    this.admins = admins;
     this.tasks = tasks;
     this.team = team;
     this.archived = archived;
@@ -43,6 +47,9 @@ export class ProjectEntity {
   }
   getMembers() {
     return this.members;
+  }
+  getAdmins() {
+    return this.admins;
   }
   getTasks() {
     return this.tasks;
@@ -76,6 +83,9 @@ export class ProjectEntity {
   updateMembers(members: string[]) {
     this.members = members;
   }
+  updateAdmins(admins: string[]) {
+    this.admins = admins;
+  }
   updateArchived(archived: boolean) {
     this.archived = archived;
   }
@@ -94,6 +104,7 @@ export class ProjectEntity {
       name: z.string().min(3).max(20),
       description: z.string().min(5).max(50),
       members: z.array(z.string()).optional(),
+      admins: z.array(z.string()).optional(),
       tasks: z.array(z.string()).optional(),
       archived: z.boolean(),
     });

@@ -5,8 +5,10 @@ export class UserEntity {
   private name: string;
   private email: string;
   private avatar: string;
-  private projects: string[];
-  private teams: string[];
+  private projectsAsAdmin: string[];
+  private projectsAsMember: string[];
+  private teamsAsAdmin: string[];
+  private teamsAsMember: string[];
   private tasks: string[];
 
   constructor({
@@ -14,24 +16,30 @@ export class UserEntity {
     name,
     email,
     avatar,
-    projects,
-    teams,
+    projectsAsAdmin,
+    projectsAsMember,
+    teamsAsAdmin,
+    teamsAsMember,
     tasks,
   }: {
     id?: string;
     name: string;
     email: string;
     avatar: string;
-    projects: string[];
-    teams: string[];
+    projectsAsAdmin: string[];
+    projectsAsMember: string[];
+    teamsAsAdmin: string[];
+    teamsAsMember: string[];
     tasks: string[];
   }) {
     this.id = id;
     this.name = name;
     this.email = email;
     this.avatar = avatar;
-    this.projects = projects;
-    this.teams = teams;
+    this.projectsAsAdmin = projectsAsAdmin;
+    this.projectsAsMember = projectsAsMember;
+    this.teamsAsAdmin = teamsAsAdmin;
+    this.teamsAsMember = teamsAsMember;
     this.tasks = tasks;
     this.validate();
   }
@@ -42,11 +50,17 @@ export class UserEntity {
   getEmail() {
     return this.email;
   }
-  getProjects() {
-    return this.projects;
+  getProjectsAsAdmin() {
+    return this.projectsAsAdmin;
   }
-  getTeams() {
-    return this.teams;
+  getProjectsAsMember() {
+    return this.projectsAsMember;
+  }
+  getTeamsAsAdmin() {
+    return this.teamsAsAdmin;
+  }
+  getTeamsAsMember() {
+    return this.teamsAsMember;
   }
   getTasks() {
     return this.tasks;
@@ -57,18 +71,31 @@ export class UserEntity {
   getAvatar() {
     return this.avatar;
   }
-  addProject(project: string) {
-    this.projects.push(project);
+  addProjectAsAdmin(project: string) {
+    this.projectsAsAdmin.push(project);
   }
-  removeProject(project: string) {
-    this.projects = this.projects.filter((p) => p !== project);
+  removeProjectAsAdmin(project: string) {
+    this.projectsAsAdmin = this.projectsAsAdmin.filter((p) => p !== project);
   }
 
-  addTeam(team: string) {
-    this.teams.push(team);
+  addTeamAsAdmin(team: string) {
+    this.teamsAsAdmin.push(team);
   }
-  removeTeam(team: string) {
-    this.teams = this.teams.filter((t) => t !== team);
+  removeTeamAsAdmin(team: string) {
+    this.teamsAsAdmin = this.teamsAsAdmin.filter((t) => t !== team);
+  }
+  addProjectAsMember(project: string) {
+    this.projectsAsMember.push(project);
+  }
+  removeProjectAsMember(project: string) {
+    this.projectsAsMember = this.projectsAsMember.filter((p) => p !== project);
+  }
+
+  addTeamAsMember(team: string) {
+    this.teamsAsMember.push(team);
+  }
+  removeTeamAsMember(team: string) {
+    this.teamsAsMember = this.teamsAsMember.filter((t) => t !== team);
   }
   addTask(task: string) {
     this.tasks.push(task);

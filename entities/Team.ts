@@ -4,22 +4,26 @@ export class TeamEntity {
   private id?: string;
   private name: string;
   private members: string[];
+  private admins: string[];
   private projects: string[];
 
   constructor({
     id,
     name,
     members,
+    admins,
     projects,
   }: {
     id?: string;
     name: string;
     members: string[];
+    admins: string[];
     projects: string[];
   }) {
     this.id = id;
     this.name = name;
     this.members = members;
+    this.admins = admins;
     this.projects = projects;
 
     this.validate();
@@ -31,6 +35,10 @@ export class TeamEntity {
   getMembers() {
     return this.members;
   }
+  getAdmins() {
+    return this.admins;
+  }
+
   getProjects() {
     return this.projects;
   }
@@ -57,6 +65,10 @@ export class TeamEntity {
   updateMembers(members: string[]) {
     this.members = members;
   }
+  updateAdmins(admins: string[]) {
+    this.admins = admins;
+  }
+
   addProject(project: string) {
     this.projects.push(project);
   }
@@ -67,7 +79,8 @@ export class TeamEntity {
   private validate() {
     const teamSchema = z.object({
       name: z.string().min(3).max(20),
-      members: z.array(z.string()).min(1),
+      members: z.array(z.string()).min(0),
+      admins: z.array(z.string()).min(1),
       projects: z.array(z.string()).optional(),
     });
     try {

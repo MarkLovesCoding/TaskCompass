@@ -26,10 +26,10 @@ async function updateProjectMembers(
       (member) => !updatedMembers.includes(member)
     );
     for (const user of removedMembers) {
-      User.findByIdAndUpdate(user, { $pull: { projects: projectId } });
+      User.findByIdAndUpdate(user, { $pull: { projectsAsMember: projectId } });
     }
     for (const user of addedMembers) {
-      User.findByIdAndUpdate(user, { $push: { projects: projectId } });
+      User.findByIdAndUpdate(user, { $push: { projectsAsMember: projectId } });
     }
   } catch (error) {
     throw new Error("Error updating Project users" + error);

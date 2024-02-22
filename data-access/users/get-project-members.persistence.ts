@@ -23,10 +23,10 @@ async function getProjectMembers(memberIds: string[]): Promise<UserDto[]> {
     const members: UserModelType[] = await User.find({
       _id: { $in: memberIds },
     });
-    const cleanedMembers = members.map((member) => {
+    const validatedMembers = members.map((member) => {
       return userModelToUserDto(member);
     });
-    return cleanedMembers;
+    return validatedMembers;
   } catch (error) {
     throw new Error("Error retrieving users:" + error);
   }

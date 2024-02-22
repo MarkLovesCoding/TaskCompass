@@ -22,7 +22,7 @@ export async function createNewProject(
     await Team.findByIdAndUpdate(project.team, {
       $push: { projects: newProject.id },
     });
-    await User.findByIdAndUpdate(project.members[0], {
+    await User.findByIdAndUpdate(project.admins[0], {
       $push: { projects: newProject.id },
     });
 

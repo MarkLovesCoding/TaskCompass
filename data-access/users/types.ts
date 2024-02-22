@@ -2,8 +2,10 @@ export type UserModelType = {
   _id: string;
   name: string;
   email: string;
-  projects: string[];
-  teams: string[];
+  projectsAsAdmin: string[];
+  projectsAsMember: string[];
+  teamsAsAdmin: string[];
+  teamsAsMember: string[];
   tasks: string[];
   avatar: string;
 };

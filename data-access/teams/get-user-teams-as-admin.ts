@@ -8,7 +8,7 @@ import type { TeamDto } from "@/use-cases/team/types";
 import type { UserDto } from "@/use-cases/user/types";
 import { teamModelToTeamDto } from "./utils";
 // May require refactpr to get by ID
-export async function getUserTeams(user: UserDto): Promise<TeamDto[]> {
+export async function getUserTeamsAsAdmin(user: UserDto): Promise<TeamDto[]> {
   try {
     await connectDB();
   } catch (error) {
@@ -17,7 +17,8 @@ export async function getUserTeams(user: UserDto): Promise<TeamDto[]> {
   }
 
   // const teamId = team.id;
-  const teamIds = user.teams;
+  const teamIds = user.teamsAsAdmin;
+
   const teams: TeamDto[] = [];
   try {
     // Find the user by ID
@@ -31,4 +32,4 @@ export async function getUserTeams(user: UserDto): Promise<TeamDto[]> {
   return teams;
 }
 
-export default getUserTeams;
+export default getUserTeamsAsAdmin;

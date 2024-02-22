@@ -17,7 +17,8 @@ export async function createNewTeamUseCase(
 
   const newTeam = new TeamEntity({
     name: data.name,
-    members: [userId],
+    admins: [userId],
+    members: [],
     projects: [],
   });
   console.log("newTeam", newTeam);

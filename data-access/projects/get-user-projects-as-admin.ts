@@ -8,7 +8,7 @@ import type { ProjectDto } from "@/use-cases/project/types";
 import type { UserDto } from "@/use-cases/user/types";
 import { projectModelToProjectDto } from "./utils";
 // May require refactpr to get by ID
-async function getUserProjects(user: UserDto): Promise<ProjectDto[]> {
+async function getUserProjectsAsAdmin(user: UserDto): Promise<ProjectDto[]> {
   try {
     await connectDB();
   } catch (error) {
@@ -17,7 +17,8 @@ async function getUserProjects(user: UserDto): Promise<ProjectDto[]> {
   }
 
   // const teamId = team.id;
-  const projectIds = user.projects;
+  const projectIds = user.projectsAsAdmin;
+  console.log("=========projectIds: ", projectIds);
   const projects: ProjectDto[] = [];
   try {
     // Find the user by ID
@@ -31,4 +32,4 @@ async function getUserProjects(user: UserDto): Promise<ProjectDto[]> {
   return projects;
 }
 
-export default getUserProjects;
+export default getUserProjectsAsAdmin;

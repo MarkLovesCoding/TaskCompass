@@ -18,20 +18,13 @@ import { PlusIcon } from "lucide-react";
 import UpdateTeamMembersCard from "./UpdateTeamMembersCard";
 import { Separator } from "@/components/ui/separator";
 
-import getAllUsers from "@/data-access/users/get-all-users.persistence";
-import getTeamMembers from "@/data-access/users/get-team-members.persistence";
 import { unstable_noStore } from "next/cache";
-import ArchiveProjectPopover from "@/app/PROJECTS-CLEAN/[id]/ArchiveProjectPopover";
 import UnarchiveProjectPopover from "./UnarchiveProjectPopover";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuPortal,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
@@ -41,29 +34,33 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 
 import { ProjectDto } from "@/use-cases/project/types";
 import { UserDto } from "@/use-cases/user/types";
+import { useEffect } from "react";
 export async function TeamPageComponent({
   team,
   userId,
   projects,
   usersList,
   teamMembers,
+  teamAdmins,
 }: {
   team: TeamDto;
   userId: string;
   projects: ProjectDto[];
   usersList: UserDto[];
   teamMembers: UserDto[];
+  teamAdmins: UserDto[];
 }) {
   unstable_noStore();
   // const projects = await getTeamProjects(team);
   // const usersList = await getAllUsers();
-  const filteredUsers = usersList.filter(
-    (user) => !team.members.includes(user.id)
-  );
+  // const filteredUsers = usersList.filter(
+  //   (user) => !team.members.includes(user.id)
+  // );
   // const teamMembers = await getTeamMembers(team.members);
   console.log("team", team);
   const teamId = team.id;
   const archivedProjects = projects.filter((project) => project.archived);
+  const isUserAdmin = teamAdmins.some((admin) => admin.id === userId);
 
   return (
     <div className="flex flex-col w-full min-h-screen">
@@ -75,79 +72,82 @@ export async function TeamPageComponent({
               <div key={index}>{member.name}</div>
             ))}
           </div>
-          <Dialog>
-            <DialogTrigger>
-              <PlusIcon className="w-4 h-4" />
-              <span className="sr-only">New Project Button</span>
-            </DialogTrigger>
-            <DialogContent className="max-w-[300px]">
-              <AddProjectCard teamId={teamId} />
-            </DialogContent>
-          </Dialog>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <CircleEllipsisIcon />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56">
-              <DropdownMenuGroup>
-                <DropdownMenuSub>
-                  <DropdownMenuSubTrigger>Add users</DropdownMenuSubTrigger>
-                  <DropdownMenuPortal>
-                    <DropdownMenuSubContent>
-                      <UpdateTeamMembersCard
-                        userId={userId}
-                        team={team}
-                        globalUsers={usersList}
-                        teamMembers={teamMembers}
-                      />
-                    </DropdownMenuSubContent>
-                  </DropdownMenuPortal>
-                </DropdownMenuSub>
-              </DropdownMenuGroup>
-              <DropdownMenuGroup>
-                <DropdownMenuSub>
-                  <DropdownMenuSubTrigger>
-                    Archived Projects
-                  </DropdownMenuSubTrigger>
-                  <DropdownMenuPortal>
-                    <DropdownMenuSubContent>
-                      <ScrollArea>
-                        {archivedProjects.length === 0 ? (
-                          <div className="p-4">No archived projects</div>
-                        ) : (
-                          <div className="p-4 flex flex-col">
-                            {
-                              // projects.length === 0
-                              //   ? "No archived projects"
-                              //   :
-                              projects.map(
-                                (project, project_idx) =>
-                                  project.archived && (
-                                    <div key={project_idx}>
-                                      <UnarchiveProjectPopover
-                                        project={project}
-                                      />
+          {isUserAdmin && (
+            <div className="flex flex-row">
+              <Dialog>
+                <DialogTrigger>
+                  <PlusIcon className="w-4 h-4" />
+                  <span className="sr-only">New Project Button</span>
+                </DialogTrigger>
+                <DialogContent className="max-w-[300px]">
+                  <AddProjectCard teamId={teamId} />
+                </DialogContent>
+              </Dialog>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <CircleEllipsisIcon />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56">
+                  <DropdownMenuGroup>
+                    <DropdownMenuSub>
+                      <DropdownMenuSubTrigger>Add users</DropdownMenuSubTrigger>
+                      <DropdownMenuPortal>
+                        <DropdownMenuSubContent>
+                          <UpdateTeamMembersCard
+                            userId={userId}
+                            team={team}
+                            globalUsers={usersList}
+                            teamMembers={teamMembers}
+                          />
+                        </DropdownMenuSubContent>
+                      </DropdownMenuPortal>
+                    </DropdownMenuSub>
+                  </DropdownMenuGroup>
+                  <DropdownMenuGroup>
+                    <DropdownMenuSub>
+                      <DropdownMenuSubTrigger>
+                        Archived Projects
+                      </DropdownMenuSubTrigger>
+                      <DropdownMenuPortal>
+                        <DropdownMenuSubContent>
+                          <ScrollArea>
+                            {archivedProjects.length === 0 ? (
+                              <div className="p-4">No archived projects</div>
+                            ) : (
+                              <div className="p-4 flex flex-col">
+                                {
+                                  // projects.length === 0
+                                  //   ? "No archived projects"
+                                  //   :
+                                  projects.map(
+                                    (project, project_idx) =>
+                                      project.archived && (
+                                        <div key={project_idx}>
+                                          <UnarchiveProjectPopover
+                                            project={project}
+                                          />
 
-                                      {project_idx !== 0 ||
-                                        (project_idx !==
-                                          archivedProjects.length - 1 && (
-                                          <Separator className="my-2" />
-                                        ))}
-                                    </div>
+                                          {project_idx !== 0 ||
+                                            (project_idx !==
+                                              archivedProjects.length - 1 && (
+                                              <Separator className="my-2" />
+                                            ))}
+                                        </div>
+                                      )
                                   )
-                              )
-                            }
-                          </div>
-                        )}
-                      </ScrollArea>
-                    </DropdownMenuSubContent>
-                  </DropdownMenuPortal>
-                </DropdownMenuSub>
-              </DropdownMenuGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
+                                }
+                              </div>
+                            )}
+                          </ScrollArea>
+                        </DropdownMenuSubContent>
+                      </DropdownMenuPortal>
+                    </DropdownMenuSub>
+                  </DropdownMenuGroup>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          )}
         </div>
-
         <div className="grid gap-4 md:grid-cols-3">
           {projects &&
             projects.map((project, project_idx) => (

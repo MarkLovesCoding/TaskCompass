@@ -18,7 +18,7 @@ import { PersonStanding } from "lucide-react";
 import type { ProjectDto } from "@/use-cases/project/types";
 import type { TaskDto } from "@/use-cases/task/types";
 import { AddMemberForm } from "./AddMemberForm";
-import UpdateProjectMembersCard from "./UpdateProjectMembersCard";
+import UpdateProjectUsersCard from "./UpdateProjectUsersCard";
 import {
   Popover,
   PopoverContent,
@@ -45,117 +45,127 @@ import UnarchiveTaskPopover from "./UnarchiveTaskPopover";
 import ArchiveProjectPopover from "./ArchiveProjectPopover";
 import { Separator } from "@radix-ui/react-dropdown-menu";
 import { Label } from "@/components/ui/label";
+import { ProjectHeaderStatic } from "./ProjectHeaderStatic";
 // import UpdateProjectMembersCard from "./UpdateProjectMembersCard";
 export async function ProjectPage({
   userId,
   project,
   tasks,
   teamMembers,
+  teamAdmins,
   projectMembers,
+  projectAdmins,
 }: {
   userId: string;
   project: ProjectDto;
   tasks: TaskDto[];
   teamMembers: UserDto[];
+  teamAdmins: UserDto[];
   projectMembers: UserDto[];
+  projectAdmins: UserDto[];
 }) {
+  const isUserAdmin = project.admins.some((admin) => admin === userId);
   const archivedTasks = tasks.filter((task) => task.archived);
   return (
     <div className="flex flex-col w-full min-h-screen">
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10">
         <div className="flex items-center gap-4">
-          <ProjectHeader project={project} />
-
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline">
-                <CircleEllipsisIcon />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56">
-              {/* <DropdownMenuLabel>Add Users</DropdownMenuLabel> */}
-              {/* <DropdownMenuSeparator /> */}
-              <DropdownMenuGroup>
-                <DropdownMenuSub>
-                  <DropdownMenuSubTrigger>Add users</DropdownMenuSubTrigger>
-                  <DropdownMenuPortal>
-                    <DropdownMenuSubContent>
-                      <UpdateProjectMembersCard
-                        userId={userId}
-                        project={project}
-                        teamMembers={teamMembers}
-                        projectMembers={projectMembers}
-                      />
-                      {/* <AddMemberForm /> */}
-                    </DropdownMenuSubContent>
-                  </DropdownMenuPortal>
-                </DropdownMenuSub>
-              </DropdownMenuGroup>
-              <DropdownMenuGroup>
-                <DropdownMenuSub>
-                  <DropdownMenuSubTrigger>
-                    Archived Tasks
-                  </DropdownMenuSubTrigger>
-                  <DropdownMenuPortal>
-                    <DropdownMenuSubContent>
-                      {/* <Popover>
+          {!isUserAdmin && <ProjectHeaderStatic project={project} />}
+          {isUserAdmin && (
+            <div>
+              <ProjectHeader project={project} />
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline">
+                    <CircleEllipsisIcon />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56">
+                  {/* <DropdownMenuLabel>Add Users</DropdownMenuLabel> */}
+                  {/* <DropdownMenuSeparator /> */}
+                  <DropdownMenuGroup>
+                    <DropdownMenuSub>
+                      <DropdownMenuSubTrigger>Add users</DropdownMenuSubTrigger>
+                      <DropdownMenuPortal>
+                        <DropdownMenuSubContent>
+                          <UpdateProjectUsersCard
+                            userId={userId}
+                            project={project}
+                            teamMembers={teamMembers}
+                            projectMembers={projectMembers}
+                          />
+                          {/* <AddMemberForm /> */}
+                        </DropdownMenuSubContent>
+                      </DropdownMenuPortal>
+                    </DropdownMenuSub>
+                  </DropdownMenuGroup>
+                  <DropdownMenuGroup>
+                    <DropdownMenuSub>
+                      <DropdownMenuSubTrigger>
+                        Archived Tasks
+                      </DropdownMenuSubTrigger>
+                      <DropdownMenuPortal>
+                        <DropdownMenuSubContent>
+                          {/* <Popover>
                   <PopoverTrigger>
                     Archived
                     <span className="sr-only">New Task Button</span>
                   </PopoverTrigger>
                   <PopoverContent> */}
-                      {/* <NewTaskCard project={project} /> */}
+                          {/* <NewTaskCard project={project} /> */}
 
-                      <ScrollArea>
-                        {archivedTasks.length === 0 ? (
-                          <div className="p-4">No archived tasks</div>
-                        ) : (
-                          <div className="p-4 flex flex-col">
-                            {
-                              // projects.length === 0
-                              //   ? "No archived projects"
-                              //   :
-                              tasks.map(
-                                (task, task_idx) =>
-                                  task.archived && (
-                                    <div key={task_idx}>
-                                      <UnarchiveTaskPopover task={task} />
+                          <ScrollArea>
+                            {archivedTasks.length === 0 ? (
+                              <div className="p-4">No archived tasks</div>
+                            ) : (
+                              <div className="p-4 flex flex-col">
+                                {
+                                  // projects.length === 0
+                                  //   ? "No archived projects"
+                                  //   :
+                                  tasks.map(
+                                    (task, task_idx) =>
+                                      task.archived && (
+                                        <div key={task_idx}>
+                                          <UnarchiveTaskPopover task={task} />
 
-                                      {task_idx !== 0 ||
-                                        (task_idx !==
-                                          archivedTasks.length - 1 && (
-                                          <Separator className="my-2" />
-                                        ))}
-                                    </div>
+                                          {task_idx !== 0 ||
+                                            (task_idx !==
+                                              archivedTasks.length - 1 && (
+                                              <Separator className="my-2" />
+                                            ))}
+                                        </div>
+                                      )
                                   )
-                              )
-                            }
-                          </div>
-                        )}
-                      </ScrollArea>
-                      {/* <AddMemberForm /> */}
-                    </DropdownMenuSubContent>
-                  </DropdownMenuPortal>
-                </DropdownMenuSub>
-              </DropdownMenuGroup>
-              {/* <DropdownMenuSeparator /> */}
-              <DropdownMenuGroup>
-                <DropdownMenuSub>
-                  <DropdownMenuSubTrigger>
-                    Archive Project
-                  </DropdownMenuSubTrigger>
-                  <DropdownMenuPortal>
-                    <DropdownMenuSubContent>
-                      <Label className="p-4">Archived Projects</Label>
-                      <Separator className="my-2" />
-                      <ArchiveProjectPopover project={project} />
-                      {/* <AddMemberForm /> */}
-                    </DropdownMenuSubContent>
-                  </DropdownMenuPortal>
-                </DropdownMenuSub>
-              </DropdownMenuGroup>{" "}
-            </DropdownMenuContent>
-          </DropdownMenu>
+                                }
+                              </div>
+                            )}
+                          </ScrollArea>
+                          {/* <AddMemberForm /> */}
+                        </DropdownMenuSubContent>
+                      </DropdownMenuPortal>
+                    </DropdownMenuSub>
+                  </DropdownMenuGroup>
+                  {/* <DropdownMenuSeparator /> */}
+                  <DropdownMenuGroup>
+                    <DropdownMenuSub>
+                      <DropdownMenuSubTrigger>
+                        Archive Project
+                      </DropdownMenuSubTrigger>
+                      <DropdownMenuPortal>
+                        <DropdownMenuSubContent>
+                          <Label className="p-4">Archived Projects</Label>
+                          <Separator className="my-2" />
+                          <ArchiveProjectPopover project={project} />
+                          {/* <AddMemberForm /> */}
+                        </DropdownMenuSubContent>
+                      </DropdownMenuPortal>
+                    </DropdownMenuSub>
+                  </DropdownMenuGroup>{" "}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          )}
         </div>
         <div className="grid gap-4 md:grid-cols-3">
           {tasks.length === 0
@@ -184,17 +194,19 @@ export async function ProjectPage({
                   </DialogContent>
                 </Dialog>
               ))}
-          <div className="">
-            <Popover>
-              <PopoverTrigger>
-                {" "}
-                +<span className="sr-only">New Task Button</span>
-              </PopoverTrigger>
-              <PopoverContent>
-                <NewTaskCard project={project} />
-              </PopoverContent>
-            </Popover>
-          </div>
+          {isUserAdmin && (
+            <div className="">
+              <Popover>
+                <PopoverTrigger>
+                  {" "}
+                  +<span className="sr-only">New Task Button</span>
+                </PopoverTrigger>
+                <PopoverContent>
+                  <NewTaskCard project={project} />
+                </PopoverContent>
+              </Popover>
+            </div>
+          )}
         </div>
       </main>
     </div>
