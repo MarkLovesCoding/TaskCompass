@@ -21,7 +21,9 @@ import {
   PlusIcon,
   LayoutDashboardIcon,
   FolderKanbanIcon,
+  ArrowBigLeftIcon,
 } from "lucide-react";
+import Link from "next/link";
 import { PersonStanding } from "lucide-react";
 import type { ProjectDto } from "@/use-cases/project/types";
 import type { TaskDto } from "@/use-cases/task/types";
@@ -99,6 +101,8 @@ export function ProjectPage({
     <div className="flex flex-col w-full ">
       <main className="flex flex-1 min-h-[calc(100vh-4rem)] flex-col gap-4  md:gap-8">
         <div className="flex items-center gap-4">
+          {" "}
+          <div></div>
           {!isUserAdmin ? (
             <div className="flex px-12 py-6 ">
               <ProjectHeaderStatic project={project} />

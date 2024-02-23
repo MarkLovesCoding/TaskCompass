@@ -1,6 +1,5 @@
 import Link from "next/link";
 
-import { getTeamProjects } from "@/data-access/projects/get-team-projects";
 import AddProjectCard from "./AddProjectCard";
 
 import { TeamHeader } from "@/app/TEAMS-CLEAN/[id]/team-header";
@@ -13,7 +12,7 @@ import {
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 import type { TeamDto } from "@/use-cases/team/types";
-import { Archive, CircleEllipsisIcon } from "lucide-react";
+import { CircleEllipsisIcon } from "lucide-react";
 import { PlusIcon } from "lucide-react";
 import UpdateTeamMembersCard from "./UpdateTeamMembersCard";
 import { Separator } from "@/components/ui/separator";
@@ -31,10 +30,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ScrollArea } from "@/components/ui/scroll-area";
-
 import { ProjectDto } from "@/use-cases/project/types";
 import { UserDto } from "@/use-cases/user/types";
-import { useEffect } from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { getInitials } from "@/app/utils/getInitials";
 export async function TeamPageComponent({
   team,
   userId,
@@ -62,15 +61,32 @@ export async function TeamPageComponent({
   const archivedProjects = projects.filter((project) => project.archived);
   const isUserAdmin = teamAdmins.some((admin) => admin.id === userId);
 
+  const countArchivedProjects = archivedProjects.length;
+  const countProjects = projects.length - countArchivedProjects;
+
+  // const getAvatarBackground = (index: number) => {
+  // const getAvatarBackground = (index: number) => {
+
   return (
     <div className="flex flex-col w-full min-h-screen">
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10">
         <div className="flex flex-row p-10 justify-center align-middle">
           <div className="text-2xl font-bold mr-10">
             <TeamHeader team={team} />
-            {teamMembers.map((member, index) => (
-              <div key={index}>{member.name}</div>
-            ))}
+            <h2 className="py-4 text-sm font-bold">
+              Team Members <span>: {teamMembers.length}</span>
+            </h2>
+            <div className="w-96 flex flex-row">
+              {teamMembers.map((member, index) => (
+                <Avatar key={index} className=" w-12 h-12">
+                  <AvatarImage src={member.avatar} />
+                  <AvatarFallback className={`text-sm bg-gray-500`}>
+                    {getInitials(member.name)}
+                  </AvatarFallback>
+                </Avatar>
+                // <div key={index}>{member.name}</div>
+              ))}
+            </div>
           </div>
           {isUserAdmin && (
             <div className="flex flex-row">
@@ -90,7 +106,9 @@ export async function TeamPageComponent({
                 <DropdownMenuContent className="w-56">
                   <DropdownMenuGroup>
                     <DropdownMenuSub>
-                      <DropdownMenuSubTrigger>Add users</DropdownMenuSubTrigger>
+                      <DropdownMenuSubTrigger>
+                        Team Members
+                      </DropdownMenuSubTrigger>
                       <DropdownMenuPortal>
                         <DropdownMenuSubContent>
                           <UpdateTeamMembersCard
@@ -99,8 +117,14 @@ export async function TeamPageComponent({
                             globalUsers={usersList}
                             teamMembers={teamMembers}
                           />
+                          {/* <UpdateMembersAndInvite
+                            userId={userId}
+                            team={team}
+                            globalUsers={usersList}
+                            teamMembers={teamMembers}
+                          /> */}
                         </DropdownMenuSubContent>
-                      </DropdownMenuPortal>
+                      </DropdownMenuPortal>{" "}
                     </DropdownMenuSub>
                   </DropdownMenuGroup>
                   <DropdownMenuGroup>
@@ -148,21 +172,32 @@ export async function TeamPageComponent({
             </div>
           )}
         </div>
+        <div className="flex flex-row ">
+          <div className="text-md m-4 font-bold">
+            Active Projects: {countProjects}
+          </div>
+          <div className="text-md m-4 font-bold">
+            Archived Projects: {countArchivedProjects}
+          </div>
+        </div>
         <div className="grid gap-4 md:grid-cols-3">
           {projects &&
-            projects.map((project, project_idx) => (
-              <Card
-                key={project_idx}
-                className="border rounded-lg flex items-center w-72 border-gray-500 bg-gray-800 shadow-lg hover:shadow-sm"
-              >
-                <Link href={`/PROJECTS-CLEAN/${project.id}`}>
-                  <CardHeader>
-                    <CardTitle>{project.name}</CardTitle>
-                    <CardDescription>{project.description}</CardDescription>
-                  </CardHeader>
-                </Link>
-              </Card>
-            ))}
+            projects.map(
+              (project, project_idx) =>
+                project.archived === false && (
+                  <Card
+                    key={project_idx}
+                    className="border rounded-lg flex items-center w-72 border-gray-500 bg-gray-800 shadow-lg hover:shadow-sm"
+                  >
+                    <Link href={`/PROJECTS-CLEAN/${project.id}`}>
+                      <CardHeader>
+                        <CardTitle>{project.name}</CardTitle>
+                        <CardDescription>{project.description}</CardDescription>
+                      </CardHeader>
+                    </Link>
+                  </Card>
+                )
+            )}
         </div>
       </main>
     </div>
