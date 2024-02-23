@@ -96,25 +96,26 @@ export function ProjectPage({
   };
 
   return (
-    <div className="flex flex-col w-full max-h-full overflow-y-auto">
-      <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10">
+    <div className="flex flex-col w-full ">
+      <main className="flex flex-1 min-h-[calc(100vh-4rem)] flex-col gap-4  md:gap-8">
         <div className="flex items-center gap-4">
           {!isUserAdmin ? (
             <ProjectHeaderStatic project={project} />
           ) : (
-            <div className="flex ">
+            <div className="flex px-12 py-6">
               <ProjectHeader project={project} />
-              <div className="flex flex-row w-24">
+              <div className="flex flex-row ">
                 <div className="p-4">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      {/* <Button variant="outline"> */}
-                      <CircleEllipsisIcon className="w-8 h-8 self-center" />
-                      {/* </Button> */}
+                      <CircleEllipsisIcon className="w-8 h-8 self-center cursor-pointer" />
+                      {/* <Label> */}
+                      {/* <p className="text-4xl select-none cursor-pointer">
+                          ...
+                        </p> */}
+                      {/* </Label> */}
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-56">
-                      {/* <DropdownMenuLabel>Add Users</DropdownMenuLabel> */}
-                      {/* <DropdownMenuSeparator /> */}
                       <DropdownMenuGroup>
                         <DropdownMenuSub>
                           <DropdownMenuSubTrigger>
@@ -128,7 +129,6 @@ export function ProjectPage({
                                 teamUsers={teamUsers}
                                 projectUsers={projectUsers}
                               />
-                              {/* <AddMemberForm /> */}
                             </DropdownMenuSubContent>
                           </DropdownMenuPortal>
                         </DropdownMenuSub>
@@ -140,14 +140,6 @@ export function ProjectPage({
                           </DropdownMenuSubTrigger>
                           <DropdownMenuPortal>
                             <DropdownMenuSubContent>
-                              {/* <Popover>
-                  <PopoverTrigger>
-                    Archived
-                    <span className="sr-only">New Task Button</span>
-                  </PopoverTrigger>
-                  <PopoverContent> */}
-                              {/* <NewTaskCard project={project} /> */}
-
                               <ScrollArea>
                                 {archivedTasks.length === 0 ? (
                                   <div className="p-4">No archived tasks</div>
@@ -209,7 +201,7 @@ export function ProjectPage({
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       {/* <Button variant="outline"> */}
-                      <FolderKanbanIcon className="w-8 h-8 self-center" />
+                      <FolderKanbanIcon className="w-8 h-8 self-center cursor-pointer" />
                       {/* </Button> */}
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-56">
@@ -237,37 +229,34 @@ export function ProjectPage({
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </div>
+                {/* <div className="p-4"> */}
+                {isUserAdmin && (
+                  <div className="p-4">
+                    <Popover>
+                      <PopoverTrigger>
+                        <PlusIcon className="w-8 h-8 self-center" />
+                        <span className="sr-only">New Task Button</span>
+                      </PopoverTrigger>
+                      <PopoverContent>
+                        <NewTaskCard project={project} />
+                      </PopoverContent>
+                    </Popover>
+                  </div>
+                )}
+                {/* </div> */}
               </div>
             </div>
           )}
         </div>
-        {isUserAdmin && (
-          <div className="">
-            <Popover>
-              <PopoverTrigger>
-                {" "}
-                <PlusIcon className="w-8 h-8 self-center" />
-                <span className="sr-only">New Task Button</span>
-              </PopoverTrigger>
-              <PopoverContent>
-                <NewTaskCard project={project} />
-              </PopoverContent>
-            </Popover>
-          </div>
-        )}
-        <CardView
-          type={sortBy}
-          tasks={tasks}
-          project={project}
-          projectUsers={projectUsers}
-        />
-        {/*   
-        <CardView
-          sortBy={sortBy}
-          tasks={tasks}
-          project={project}
-          projectUsers={projectUsers}
-        /> */}
+
+        <div className="flex-1 h-min-full overflow-x-auto">
+          <CardView
+            type={sortBy}
+            tasks={tasks}
+            project={project}
+            projectUsers={projectUsers}
+          />
+        </div>
       </main>
     </div>
   );

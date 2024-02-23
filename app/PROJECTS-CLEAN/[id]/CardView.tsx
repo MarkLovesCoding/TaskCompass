@@ -42,6 +42,7 @@ const CardView = ({
         return "bg-gray-500";
     }
   };
+
   // console.log(PRIORITY_COLORS["High"]);
   // const highPriorityTasks = tasks.filter((task) => task.priority === "High");
   // const mediumPriorityTasks = tasks.filter(
@@ -55,11 +56,11 @@ const CardView = ({
   // };
 
   return (
-    <div className="flex flex-row w-min-full overflow-x">
+    <div className="flex md:flex-row flex-col w-min-full overflow-x">
       {Object.entries(sortByObject).map((sorted_type, sorted_idx) => (
         <div
           key={sorted_idx}
-          className="flex flex-col  items-center w-min-[500px] p-10 space-y-8 align-top overflow-clip"
+          className="flex flex-col  items-center min-w-[400px] py-10 px-4 space-y-8 align-top overflow-clip"
         >
           <label className="text-2xl font-bold">{`${sorted_type[0]}`}</label>
           {sorted_type[1].length === 0
@@ -69,7 +70,7 @@ const CardView = ({
                   <DialogTrigger>
                     <Card
                       key={task_idx}
-                      className={`border rounded-lg flex items-center w-80 border-gray-500 bg-gray-800 shadow-2xl hover:shadow-sm`}
+                      className={`border rounded-lg flex items-center w-72 border-gray-500 bg-gray-800 shadow-lg hover:shadow-sm`}
                     >
                       <div className="flex flex-col overflow-hidden p-2 ">
                         <CardHeader className="flex justify-start">
