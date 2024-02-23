@@ -1,10 +1,10 @@
 "use client";
-import React, { Fragment, use, useEffect, useState } from "react";
+import React, { Fragment, useState } from "react";
 import { unstable_noStore } from "next/cache";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { RadioGroupItem, RadioGroup } from "@/components/ui/radio-group";
-import { DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu";
+
 import {
   SelectValue,
   SelectTrigger,
@@ -63,19 +63,16 @@ import { updateTaskCategoryAction } from "../_actions/update-task-category.actio
 import { updateTaskStartDateAction } from "../_actions/update-task-start-date.action";
 import { updateTaskDueDateAction } from "../_actions/update-task-due-date.action";
 import { updateTaskArchivedAction } from "../_actions/update-task-archived.action";
-type TaskFormProps = {
-  task: TaskDto;
-  project: ProjectDto;
-};
+import { UserDto } from "@/use-cases/user/types";
 
 const descriptionFormSchema = z.object({
   id: z.string(),
-  description: z.string().min(5),
+  description: z.string().min(5).max(50),
   projectId: z.string().length(24),
 });
 const nameFormSchema = z.object({
   id: z.string(),
-  name: z.string().min(4),
+  name: z.string().min(4).max(25),
   projectId: z.string().length(24),
 });
 const priorityFormSchema = z.object({
@@ -114,17 +111,27 @@ const archivedFormSchema = z.object({
   projectId: z.string().length(24),
 });
 let renderCount = 0;
-export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
+export const TaskCard = ({
+  task,
+  project,
+  projectUsers,
+}: {
+  task: TaskDto;
+  project: ProjectDto;
+  projectUsers: UserDto[];
+}) => {
   unstable_noStore();
-  const projectUsers = project.members;
+
   const [descriptionButtonShow, setDescriptionButtonShow] = useState(false);
 
   const [isNameEditing, setIsNameEditing] = useState(false);
-  // const [nameContent, setNameContent] = useState(task.name);
-  // const [descriptionContent, setDescriptionContent] = useState(
-  //   task.description
-  // );
+
   const [isDescriptionEditing, setIsDescriptionEditing] = useState(false);
+  const [currentAssigneesState, setCurrentAssigneesState] =
+    useState<UserDto[]>();
+  const [existingAssignees, setExistingAssignees] = useState<string[]>([
+    ...task.assignees,
+  ]);
   const router = useRouter();
 
   const nameForm = useForm<z.infer<typeof nameFormSchema>>({
@@ -143,7 +150,6 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
       projectId: project.id,
     },
   });
-
   const priorityForm = useForm<z.infer<typeof priorityFormSchema>>({
     resolver: zodResolver(priorityFormSchema),
     defaultValues: {
@@ -152,7 +158,6 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
       projectId: project.id,
     },
   });
-
   const statusForm = useForm<z.infer<typeof statusFormSchema>>({
     resolver: zodResolver(statusFormSchema),
     defaultValues: {
@@ -283,10 +288,6 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
     control: descriptionForm.control,
     name: "description",
   });
-
-  const [existingAssignees, setExistingAssignees] = useState<string[]>([
-    ...task.assignees,
-  ]);
 
   const nameFormRef = React.useRef<HTMLFormElement>(null);
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -447,76 +448,90 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
   };
 
   const categories = ["Household", "Personal", "Work", "School", "Other"];
-  const priorityOptions = ["High", "Medium", "Low"];
+  const priorityOptions = [
+    { option: "High", color: "red" },
+    { option: "Medium", color: "yellow" },
+    { option: "Low", color: "green" },
+  ];
   const statusOptions = ["Not Started", "Up Next", "In Progress", "Completed"];
   renderCount++;
   return (
     <>
-      <Form {...nameForm}>
-        <form
-          ref={nameFormRef}
-          onSubmit={nameForm.handleSubmit(onNameSubmit)}
-          method="post"
-          className="grid gap-6 w-full max-w-md mx-auto p-6 bg-white rounded-lg shadow-md dark:bg-gray-800"
-        >
-          <FormField
-            control={nameForm.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem className="grid gap-2">
-                <FormControl>
-                  <Input
-                    className={`header-input ${isNameEditing ? "editing" : ""}`}
-                    placeholder="Task Name"
-                    type="text"
-                    {...field}
-                    onClick={handleNameClick}
-                    onChange={handleNameChange}
-                    onBlur={handleNameBlur}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
+      <div className="w-[300px]">
+        <Form {...nameForm}>
+          <form
+            ref={nameFormRef}
+            onSubmit={nameForm.handleSubmit(onNameSubmit)}
+            method="post"
+            className="grid gap-6 w-full max-w-md mr-auto  "
+          >
+            <FormField
+              control={nameForm.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem className="grid gap-2">
+                  <FormControl>
+                    <Input
+                      className={`header-input ${
+                        isNameEditing ? "editing" : ""
+                      }`}
+                      placeholder="Task Name"
+                      type="text"
+                      {...field}
+                      onClick={handleNameClick}
+                      onChange={handleNameChange}
+                      onBlur={handleNameBlur}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </form>
+        </Form>
+      </div>
+      <div className="w-full">
+        <Form {...descriptionForm}>
+          <form
+            onSubmit={descriptionForm.handleSubmit(onDescriptionSubmit)}
+            method="post"
+            className="grid gap-6 w-full max-w-md mr-auto grid-cols-[3fr,1fr] "
+          >
+            <FormField
+              control={descriptionForm.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem className="grid gap-2">
+                  <FormControl>
+                    <Textarea
+                      className={`description-input w-[300px] resize-none ${
+                        isDescriptionEditing ? "editing" : ""
+                      }`}
+                      placeholder="Description"
+                      {...field}
+                      onClick={handleDescriptionClick}
+                      onChange={handleDescriptionChange}
+                      onBlur={handleDescriptionBlur}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {descriptionButtonShow && (
+              <Button className="col-span-1 self-end" type="submit">
+                Save
+              </Button>
             )}
-          />
-        </form>
-      </Form>
-      <Form {...descriptionForm}>
-        <form
-          onSubmit={descriptionForm.handleSubmit(onDescriptionSubmit)}
-          method="post"
-          className="grid gap-6 w-full max-w-md mx-auto p-6 bg-white rounded-lg shadow-md dark:bg-gray-800"
-        >
-          <FormField
-            control={descriptionForm.control}
-            name="description"
-            render={({ field }) => (
-              <FormItem className="grid gap-2">
-                <FormControl>
-                  <Textarea
-                    className={`description-input resize-none ${
-                      isDescriptionEditing ? "editing" : ""
-                    }`}
-                    placeholder="Description"
-                    {...field}
-                    onClick={handleDescriptionClick}
-                    onChange={handleDescriptionChange}
-                    onBlur={handleDescriptionBlur}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          {descriptionButtonShow && <Button type="submit">Save</Button>}
-        </form>
-      </Form>
+          </form>
+        </Form>
+      </div>
       <Form {...priorityForm}>
         <form
           ref={priorityFormRef}
           onSubmit={priorityForm.handleSubmit(onPrioritySubmit)}
           method="post"
-          className="grid gap-6 w-full max-w-md mx-auto p-6 bg-white rounded-lg shadow-md dark:bg-gray-800"
+          className="grid gap-6 w-full max-w-md mx-auto  "
         >
           <FormField
             control={priorityForm.control}
@@ -530,20 +545,22 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
                     id="priority"
                     onValueChange={handlePriorityChange}
                     defaultValue={field.value}
-                    className="flex flex-row space-x-1"
+                    // className="flex flex-col space-y-1"
                   >
                     {priorityOptions.map((priority, _index) => (
                       <Fragment key={_index}>
-                        <FormItem className="flex flex-col items-center space-y-2">
-                          <FormLabel className="font-normal">
-                            {priority}
-                          </FormLabel>
+                        <FormItem
+                          className={"flex items-center space-x-3 space-y-0"}
+                        >
                           <FormControl>
                             <RadioGroupItem
-                              id={`priority-${priority}`}
-                              value={priority}
+                              id={`priority-${priority.option}`}
+                              value={priority.option}
                             />
-                          </FormControl>
+                          </FormControl>{" "}
+                          <FormLabel className={"font-normal"}>
+                            {priority.option}
+                          </FormLabel>
                         </FormItem>
                       </Fragment>
                     ))}
@@ -555,186 +572,191 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
           />{" "}
         </form>
       </Form>
-      <Form {...statusForm}>
-        <form
-          ref={statusFormRef}
-          onSubmit={statusForm.handleSubmit(onStatusSubmit)}
-          method="post"
-          className="grid gap-6 w-full max-w-md mx-auto p-6 bg-white rounded-lg shadow-md dark:bg-gray-800"
-        >
-          <FormField
-            control={statusForm.control}
-            name="status"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Status</FormLabel>
-                <Select
-                  onValueChange={handleStatusChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select a status" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {statusOptions?.map((status, _index) => (
-                      <SelectItem key={_index} value={status}>
-                        {status}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </form>
-      </Form>
-      <Form {...categoryForm}>
-        <form
-          ref={categoryFormRef}
-          onSubmit={categoryForm.handleSubmit(onCategorySubmit)}
-          method="post"
-          className="grid gap-6 w-full max-w-md mx-auto p-6 bg-white rounded-lg shadow-md dark:bg-gray-800"
-        >
-          <FormField
-            control={categoryForm.control}
-            name="category"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Category</FormLabel>
-                <Select
-                  onValueChange={handleCategoryChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select a category" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {categories?.map((category, _index) => (
-                      <SelectItem key={_index} value={category}>
-                        {category}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </form>
-      </Form>
-      <Form {...startDateForm}>
-        <form
-          ref={startDateFormRef}
-          onSubmit={startDateForm.handleSubmit(onStartDateSubmit)}
-          method="post"
-          className="grid gap-6 w-full max-w-md mx-auto p-6 bg-white rounded-lg shadow-md dark:bg-gray-800"
-        >
-          <FormField
-            control={startDateForm.control}
-            name="startDate"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="flex align-middle">Start Date</FormLabel>
-                <Popover onOpenChange={handleStartDateChange}>
-                  <PopoverTrigger asChild>
+      <div className="flex flex-row space-x-4">
+        <Form {...statusForm}>
+          <form
+            ref={statusFormRef}
+            onSubmit={statusForm.handleSubmit(onStatusSubmit)}
+            method="post"
+            className="grid gap-6 w-full max-w-md mx-auto  "
+          >
+            <FormField
+              control={statusForm.control}
+              name="status"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Status</FormLabel>
+                  <Select
+                    onValueChange={handleStatusChange}
+                    defaultValue={field.value}
+                  >
                     <FormControl>
-                      <Button
-                        variant={"outline"}
-                        className={cn(
-                          "w-full pl-3 text-left font-normal",
-                          !field.value && "text-muted-foreground"
-                        )}
-                      >
-                        {field.value ? (
-                          format(field.value, "PPP")
-                        ) : (
-                          <span>Pick a Start Date</span>
-                        )}
-                      </Button>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a status" />
+                      </SelectTrigger>
                     </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={field.value}
-                      onSelect={field.onChange}
-                      disabled={(date) =>
-                        (selectedDueDate && date > selectedDueDate) ||
-                        date < new Date("1947-01-01")
-                      }
-                      initialFocus
-                    />
-                  </PopoverContent>
-                </Popover>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </form>
-      </Form>
-      <Form {...dueDateForm}>
-        <form
-          ref={dueDateFormRef}
-          onSubmit={dueDateForm.handleSubmit(onDueDateSubmit)}
-          method="post"
-          className="grid gap-6 w-full max-w-md mx-auto p-6 bg-white rounded-lg shadow-md dark:bg-gray-800"
-        >
-          <FormField
-            control={dueDateForm.control}
-            name="dueDate"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="flex align-middle">Due Date</FormLabel>
-                <Popover onOpenChange={handleDueDateChange}>
-                  <PopoverTrigger asChild>
+                    <SelectContent>
+                      {statusOptions?.map((status, _index) => (
+                        <SelectItem key={_index} value={status}>
+                          {status}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </form>
+        </Form>
+        <Form {...categoryForm}>
+          <form
+            ref={categoryFormRef}
+            onSubmit={categoryForm.handleSubmit(onCategorySubmit)}
+            method="post"
+            className="grid gap-6 w-full max-w-md mx-auto  "
+          >
+            <FormField
+              control={categoryForm.control}
+              name="category"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Category</FormLabel>
+                  <Select
+                    onValueChange={handleCategoryChange}
+                    defaultValue={field.value}
+                  >
                     <FormControl>
-                      <Button
-                        variant={"outline"}
-                        className={cn(
-                          "w-full pl-3 text-left font-normal",
-                          !field.value && "text-muted-foreground"
-                        )}
-                      >
-                        {field.value ? (
-                          format(field.value, "PPP")
-                        ) : (
-                          <span>Pick a Due Date</span>
-                        )}
-                      </Button>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a category" />
+                      </SelectTrigger>
                     </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={field.value}
-                      onSelect={field.onChange}
-                      disabled={(date) =>
-                        date < selectedStartDate ||
-                        date < new Date("1947-01-01")
-                      }
-                      initialFocus
-                    />
-                  </PopoverContent>
-                </Popover>
+                    <SelectContent>
+                      {categories?.map((category, _index) => (
+                        <SelectItem key={_index} value={category}>
+                          {category}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </form>
+        </Form>
+      </div>
+      <div className="flex flex-row space-x-4">
+        <Form {...startDateForm}>
+          <form
+            ref={startDateFormRef}
+            onSubmit={startDateForm.handleSubmit(onStartDateSubmit)}
+            method="post"
+            className="grid gap-6 w-full max-w-md mx-auto  "
+          >
+            <FormField
+              control={startDateForm.control}
+              name="startDate"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="flex align-middle">
+                    Start Date
+                  </FormLabel>
+                  <Popover onOpenChange={handleStartDateChange}>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant={"outline"}
+                          className={cn(
+                            "w-full pl-3 text-left font-normal",
+                            !field.value && "text-muted-foreground"
+                          )}
+                        >
+                          {field.value ? (
+                            format(field.value, "PPP")
+                          ) : (
+                            <span>Pick a Start Date</span>
+                          )}
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={field.value}
+                        onSelect={field.onChange}
+                        disabled={(date) =>
+                          (selectedDueDate && date > selectedDueDate) ||
+                          date < new Date("1947-01-01")
+                        }
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </form>
+        </Form>
+        <Form {...dueDateForm}>
+          <form
+            ref={dueDateFormRef}
+            onSubmit={dueDateForm.handleSubmit(onDueDateSubmit)}
+            method="post"
+            className="grid gap-6 w-full max-w-md mx-auto  "
+          >
+            <FormField
+              control={dueDateForm.control}
+              name="dueDate"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="flex align-middle">Due Date</FormLabel>
+                  <Popover onOpenChange={handleDueDateChange}>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant={"outline"}
+                          className={cn(
+                            "w-full pl-3 text-left font-normal",
+                            !field.value && "text-muted-foreground"
+                          )}
+                        >
+                          {field.value ? (
+                            format(field.value, "PPP")
+                          ) : (
+                            <span>Pick a Due Date</span>
+                          )}
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={field.value}
+                        onSelect={field.onChange}
+                        disabled={(date) =>
+                          date < selectedStartDate ||
+                          date < new Date("1947-01-01")
+                        }
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
 
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </form>
-      </Form>
-
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </form>
+        </Form>
+      </div>
       <Form {...assigneesForm}>
         <form
           ref={assigneesFormRef}
           onSubmit={assigneesForm.handleSubmit(onAssigneesSubmit)}
           method="post"
-          className="grid gap-6 w-full max-w-md mx-auto p-6 bg-white rounded-lg shadow-md dark:bg-gray-800"
+          className="grid gap-6 w-full max-w-md mx-auto  "
         >
           <FormField
             control={assigneesForm.control}
@@ -757,17 +779,17 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
                         {projectUsers?.map((user, index) => (
                           <DropdownMenuCheckboxItem
                             key={index}
-                            checked={field.value.includes(user)} // Check if user is already in assignees
+                            checked={field.value.includes(user.id)} // Check if user is already in assignees
                             onCheckedChange={(checked) => {
                               const updatedAssignees = checked
-                                ? [...field.value, user] // Add user to assignees array
+                                ? [...field.value, user.id] // Add user to assignees array
                                 : field.value.filter(
-                                    (assignee) => assignee !== user
+                                    (assignee) => assignee !== user.id
                                   ); // Remove user from assignees array
                               field.onChange(updatedAssignees); // Update assignees field value
                             }}
                           >
-                            {user}
+                            {user.name}
                           </DropdownMenuCheckboxItem>
                         ))}
                       </DropdownMenuContent>
@@ -786,7 +808,7 @@ export const TaskCard: React.FC<TaskFormProps> = ({ task, project }) => {
           ref={archivedFormRef}
           onSubmit={archivedForm.handleSubmit(onArchivedSubmit)}
           method="post"
-          className="grid gap-6 w-full max-w-md mx-auto p-6 bg-white rounded-lg shadow-md dark:bg-gray-800"
+          className="grid gap-6 w-full max-w-md mx-auto  "
         >
           <FormField
             control={archivedForm.control}

@@ -15,12 +15,13 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { updateProjectArchivedAction } from "../../TEAMS-CLEAN/_actions/update-project-archived.action";
 import { ProjectDto } from "@/use-cases/project/types";
-
+import { useRouter } from "next/navigation";
 const ArchiveProjectPopover = ({ project }: { project: ProjectDto }) => {
   const archiveProjectFormObject = {
     archived: true,
     projectId: project.id,
   };
+  const router = useRouter();
   const [isOpen, setIsOpen] = React.useState(false);
 
   return (
@@ -28,7 +29,8 @@ const ArchiveProjectPopover = ({ project }: { project: ProjectDto }) => {
       <Popover open={isOpen} onOpenChange={setIsOpen}>
         <PopoverTrigger>
           <div className="p-2">
-            {project.name}
+            {/* {project.name} */}
+            Archive Project
             <span className="sr-only">Archive Project Trigger</span>
           </div>
         </PopoverTrigger>{" "}
@@ -48,6 +50,7 @@ const ArchiveProjectPopover = ({ project }: { project: ProjectDto }) => {
                 onClick={() => {
                   updateProjectArchivedAction(archiveProjectFormObject);
                   setIsOpen(false);
+                  router.push(`/TEAMS-CLEAN/${project.team}`);
                   // handleArchivedSubmit();
                 }}
               >

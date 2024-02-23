@@ -29,63 +29,66 @@ import { updateProjectMembersAction } from "../_actions/update-project-members.a
 import { ProjectDto } from "@/use-cases/project/types";
 import { Filter } from "lucide-react";
 const formSchema = z.object({
-  members: z.array(z.string()).min(1),
+  users: z.array(z.string()).min(1),
 });
 
 const UpdateProjectUsersCard = ({
   userId,
   project,
-  teamMembers,
-  projectMembers,
+  teamUsers,
+  projectUsers,
 }: {
   userId: string;
   project: ProjectDto;
-  teamMembers: UserDto[];
-  projectMembers: UserDto[];
+  teamUsers: UserDto[];
+  projectUsers: UserDto[];
 }) => {
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      members: [...project.members],
+      users: [...project.members, ...project.admins],
     },
   });
-  const filteredTeamMembers = teamMembers.filter(
-    (member) => !projectMembers.some((pMember) => pMember.id === member.id)
+  const filteredTeamUsers = teamUsers.filter(
+    (user) => !projectUsers.some((pUser) => pUser.id === user.id)
   );
   const [showCancelButton, setShowCancelButton] = useState(false);
   const [showUpdateButton, setShowUpdateButton] = useState(false);
-  const [teamMembersList, setTeamMembersList] =
-    useState<UserDto[]>(filteredTeamMembers);
-  console.log("teamMembersList", teamMembersList);
-  const [projectMembersList, setProjectMembersList] =
-    useState<UserDto[]>(projectMembers);
+  const [teamUsersList, setTeamUsersList] =
+    useState<UserDto[]>(filteredTeamUsers);
+  console.log("teamUsersList", teamUsersList);
+  const [projectUsersList, setProjectUsersList] =
+    useState<UserDto[]>(projectUsers);
 
-  console.log("projectMembersList", projectMembersList);
-  const removedMembers = projectMembersList.filter(
-    (member) => !project.members.includes(member.id)
+  console.log("projectUsersList", projectUsersList);
+  const removedUsers = projectUsersList.filter(
+    (member) =>
+      !project.members.includes(member.id) &&
+      !project.admins.includes(member.id)
   );
-  const handleUpdateMembers = () => {
-    const membersIds = projectMembersList.map((member) => member.id);
-    form.setValue("members", membersIds);
+  const handleUpdateUsers = () => {
+    const usersIds = projectUsersList.map((user) => user.id);
+    form.setValue("users", usersIds);
   };
-  const resetMembers = () => {
-    form.setValue("members", [...project.members]);
-    setProjectMembersList(projectMembers);
-    setTeamMembersList(filteredTeamMembers);
+  const resetUsers = () => {
+    form.setValue("users", [...project.members, ...project.admins]);
+    setProjectUsersList(projectUsers);
+    setTeamUsersList(filteredTeamUsers);
     setShowUpdateButton(false);
     setShowCancelButton(false);
   };
-  const onUpdateProjectMemberFormSubmit = async (
+  const onUpdateProjectUserFormSubmit = async (
     values: z.infer<typeof formSchema>
   ) => {
     // if (selectedUser) {
-    //   const updatedMembers = [...form.getValues("members"), selectedUser];
-    //   form.setValue("members", updatedMembers);
+    //   const updatedUsers = [...form.getValues("Users"), selectedUser];
+    //   form.setValue("Users", updatedUsers);
     // }
 
-    if (values.members) console.log("submitting", values.members);
-    await updateProjectMembersAction(project.id, values.members);
+    if (values.users) console.log("submitting", values.users);
+    //need to check member or admin status
+    await updateProjectMembersAction(project.id, values.users);
     setShowUpdateButton(false);
     setShowCancelButton(false);
     router.refresh();
@@ -94,16 +97,16 @@ const UpdateProjectUsersCard = ({
     <Form {...form}>
       <form
         className="mt-4 mr-2 flex flex-col gap-4 w-full"
-        onSubmit={form.handleSubmit(onUpdateProjectMemberFormSubmit)}
+        onSubmit={form.handleSubmit(onUpdateProjectUserFormSubmit)}
       >
         <FormField
           control={form.control}
-          name="members"
+          name="users"
           render={({ field }) => (
             <FormItem className="flex flex-col gap-3 mb-2">
               <FormLabel className="mt-2">Users Assigned</FormLabel>
               <div className="flex flex-col w-full">
-                {projectMembersList.map((user, _index) => (
+                {projectUsersList.map((user, _index) => (
                   <div className="flex p-4 w-full" key={_index}>
                     {user.name}
                   </div>
@@ -112,7 +115,7 @@ const UpdateProjectUsersCard = ({
                   {/* {filteredTeamMembers.length === 0 ? (
                     <div>{"No Other Users Available"}</div>
                   ) : ( */}
-                  <DropdownMenu onOpenChange={handleUpdateMembers}>
+                  <DropdownMenu onOpenChange={handleUpdateUsers}>
                     <DropdownMenuTrigger asChild>
                       <Button variant="outline">Edit </Button>
                     </DropdownMenuTrigger>
@@ -120,11 +123,11 @@ const UpdateProjectUsersCard = ({
                       // onInteractOutside={(e) => e.preventDefault()}
                       className="w-56"
                     >
-                      <DropdownMenuLabel>Project Members</DropdownMenuLabel>
+                      <DropdownMenuLabel>Project Users</DropdownMenuLabel>
                       <DropdownMenuSeparator />
-                      {projectMembers.length === 0
+                      {projectUsers.length === 0
                         ? "No other users"
-                        : projectMembersList?.map((user, index) => (
+                        : projectUsersList?.map((user, index) => (
                             <DropdownMenuItem
                               key={index}
                               // Check if user is already in assignees
@@ -135,10 +138,10 @@ const UpdateProjectUsersCard = ({
                                     alert("User has tasks assigned to them");
                                     return;
                                   }
-                                  setProjectMembersList((prev) =>
+                                  setProjectUsersList((prev) =>
                                     prev.filter((u) => u.id !== user.id)
                                   );
-                                  setTeamMembersList((prev) => {
+                                  setTeamUsersList((prev) => {
                                     if (!prev.some((u) => u.id === user.id)) {
                                       return [...prev, user];
                                     }
@@ -152,25 +155,25 @@ const UpdateProjectUsersCard = ({
                               {user.name}
                             </DropdownMenuItem>
                           ))}
-                      {teamMembersList.length > 0 && (
+                      {teamUsersList.length > 0 && (
                         <>
-                          <DropdownMenuLabel>Team Members</DropdownMenuLabel>
+                          <DropdownMenuLabel>Team Users</DropdownMenuLabel>
                           <DropdownMenuSeparator />
 
-                          {teamMembersList?.map((user, index) => (
+                          {teamUsersList?.map((user, index) => (
                             <>
                               <DropdownMenuItem
                                 key={index}
                                 // Check if user is already in assignees
                                 onSelect={(e) => {
                                   e.preventDefault();
-                                  setProjectMembersList((prev) => {
+                                  setProjectUsersList((prev) => {
                                     if (!prev.some((u) => u.id === user.id)) {
                                       return [...prev, user];
                                     }
                                     return prev;
                                   });
-                                  setTeamMembersList((prev) =>
+                                  setTeamUsersList((prev) =>
                                     prev.filter((u) => u.id !== user.id)
                                   );
                                   setShowUpdateButton(true);
@@ -202,7 +205,7 @@ const UpdateProjectUsersCard = ({
           {showCancelButton && (
             <Button
               type="button"
-              onClick={resetMembers}
+              onClick={resetUsers}
               value="Cancel"
               className="  py-2 rounded-md "
             >
