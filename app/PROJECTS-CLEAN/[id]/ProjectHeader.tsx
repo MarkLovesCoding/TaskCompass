@@ -18,6 +18,8 @@ import { useForm, useController } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { updateProjectDetailsAction } from "@/app/PROJECTS-CLEAN/_actions/update-project-details.action.";
 import { useState } from "react";
+import Link from "next/link";
+import { ArrowBigLeftIcon } from "lucide-react";
 const formSchema = z.object({
   name: z.string().min(4).max(20),
   description: z.string().min(4).max(80),
@@ -138,7 +140,9 @@ export function ProjectHeader({ project }: { project: ProjectDto }) {
           {project.description}
         </p>
       </div> */}
-
+      <Link href={`/TEAMS-CLEAN/${project.team}`}>
+        <ArrowBigLeftIcon className="w-8 h-8 self-start cursor-pointer" />
+      </Link>
       <Form {...form}>
         <form
           className="mt-4 mr-2 "

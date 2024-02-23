@@ -12,7 +12,6 @@ import { ProjectDto } from "@/use-cases/project/types";
 import { TaskDto } from "@/use-cases/task/types";
 import { UserDto } from "@/use-cases/user/types";
 import { sortByType } from "./utils";
-import type { SortType } from "./constants";
 import { SORT_TYPES } from "./constants";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
@@ -65,46 +64,51 @@ const CardView = ({
           <label className="text-2xl font-bold">{`${sorted_type[0]}`}</label>
           {sorted_type[1].length === 0
             ? "No tasks"
-            : sorted_type[1].map((task, task_idx) => (
-                <Dialog key={task_idx}>
-                  <DialogTrigger>
-                    <Card
-                      key={task_idx}
-                      className={`border rounded-lg flex items-center w-72 border-gray-500 bg-gray-800 shadow-lg hover:shadow-sm`}
-                    >
-                      <div className="flex flex-col overflow-hidden p-2 ">
-                        <CardHeader className="flex justify-start">
-                          <Badge
-                            className={cn(
-                              colorByPriority(task.priority),
-                              "w-min"
-                            )}
-                          >
-                            {task.priority}
-                          </Badge>
-                          <CardTitle className="text-start">
-                            {task.name}
-                          </CardTitle>
-                          <CardDescription className="text-start">
-                            {task.description}
-                          </CardDescription>
-                        </CardHeader>
-                      </div>
-                    </Card>
-                  </DialogTrigger>
-                  <DialogContent
-                    onOpenAutoFocus={(event: Event) => event.preventDefault()}
-                    // onCloseAutoFocus={(event: Event) => event.preventDefault()}
-                    className="p-6 w-max-[768px] bg-gray-800 rounded-lg border-2"
-                  >
-                    <TaskCard
-                      task={task}
-                      project={project}
-                      projectUsers={projectUsers}
-                    />
-                  </DialogContent>
-                </Dialog>
-              ))}
+            : sorted_type[1].map(
+                (task, task_idx) =>
+                  !task.archived && (
+                    <Dialog key={task_idx}>
+                      <DialogTrigger>
+                        <Card
+                          key={task_idx}
+                          className={`border rounded-lg flex items-center w-72 border-gray-500 bg-gray-800 shadow-lg hover:shadow-sm`}
+                        >
+                          <div className="flex flex-col overflow-hidden p-2 ">
+                            <CardHeader className="flex justify-start">
+                              <Badge
+                                className={cn(
+                                  colorByPriority(task.priority),
+                                  "w-min"
+                                )}
+                              >
+                                {task.priority}
+                              </Badge>
+                              <CardTitle className="text-start">
+                                {task.name}
+                              </CardTitle>
+                              <CardDescription className="text-start">
+                                {task.description}
+                              </CardDescription>
+                            </CardHeader>
+                          </div>
+                        </Card>
+                      </DialogTrigger>
+                      <DialogContent
+                        onOpenAutoFocus={(event: Event) =>
+                          event.preventDefault()
+                        }
+                        // onCloseAutoFocus={(event: Event) => event.preventDefault()}
+                        className="p-6 w-max-[768px] bg-gray-800 rounded-lg border-2"
+                      >
+                        <TaskCard
+                          task={task}
+                          project={project}
+                          projectUsers={projectUsers}
+                        />
+                      </DialogContent>
+                    </Dialog>
+                  )
+              )}
         </div>
       ))}
     </div>
