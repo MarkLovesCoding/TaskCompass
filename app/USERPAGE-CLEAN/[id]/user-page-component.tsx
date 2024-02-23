@@ -81,7 +81,10 @@ export async function UserPageComponent({
             {usersTeamsAsAdmin &&
               usersTeamsAsAdmin.map((team, team_idx) => {
                 return (
-                  <Card key={team_idx}>
+                  <Card
+                    key={team_idx}
+                    className="border rounded-lg flex items-center w-72 border-gray-500 bg-gray-800 shadow-lg hover:shadow-sm"
+                  >
                     <Link href={`/TEAMS-CLEAN/${team.id}`}>
                       <CardHeader>
                         <CardTitle>{team.name}</CardTitle>
@@ -96,7 +99,10 @@ export async function UserPageComponent({
             {usersTeamsAsMember &&
               usersTeamsAsMember.map((team, team_idx) => {
                 return (
-                  <Card key={team_idx}>
+                  <Card
+                    key={team_idx}
+                    className="border rounded-lg flex items-center w-72 border-gray-500 bg-gray-800 shadow-lg hover:shadow-sm"
+                  >
                     <Link href={`/TEAMS-CLEAN/${team.id}`}>
                       <CardHeader>
                         <CardTitle>{team.name}</CardTitle>
@@ -117,7 +123,10 @@ export async function UserPageComponent({
           <div className="grid gap-4 md:grid-cols-3">
             {usersProjectsAsAdmin &&
               usersProjectsAsAdmin.map((project, project_idx) => (
-                <Card key={project_idx}>
+                <Card
+                  key={project_idx}
+                  className="border rounded-lg flex items-center w-72 border-gray-500 bg-gray-800 shadow-lg hover:shadow-sm"
+                >
                   <Link href={`/PROJECTS-CLEAN/${project.id}`}>
                     <CardHeader>
                       <CardTitle>{project.name}</CardTitle>
@@ -130,7 +139,10 @@ export async function UserPageComponent({
           <div className="grid gap-4 md:grid-cols-3">
             {usersProjectsAsMember &&
               usersProjectsAsMember.map((project, project_idx) => (
-                <Card key={project_idx}>
+                <Card
+                  key={project_idx}
+                  className="border rounded-lg flex items-center w-72 border-gray-500 bg-gray-800 shadow-lg hover:shadow-sm"
+                >
                   <Link href={`/PROJECTS-CLEAN/${project.id}`}>
                     <CardHeader>
                       <CardTitle>{project.name}</CardTitle>
