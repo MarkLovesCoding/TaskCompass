@@ -46,7 +46,7 @@ export function UpdateMembersAndInvite({
         > */}
         <div>
           {/* <UserIcon className="mr-2 h-4 w-4 shrink-0 opacity-50" /> */}
-          Search members...
+          Add members
         </div>
         {/* </Button> */}
       </PopoverTrigger>

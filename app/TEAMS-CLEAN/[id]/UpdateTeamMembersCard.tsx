@@ -34,6 +34,11 @@ import { findAssigneesDifferences } from "@/lib/utils";
 import { set } from "mongoose";
 import Team from "@/db/(models)/Team";
 import { Users } from "lucide-react";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@/components/ui/popover";
 const formSchema = z.object({
   members: z.array(z.string()).min(1),
 });
@@ -92,113 +97,128 @@ const UpdateTeamMembersCard = ({
     router.refresh();
   };
   return (
-    <Form {...form}>
-      <form
-        className="mt-4 mr-2 "
-        onSubmit={form.handleSubmit(onUpdateTeamMemberFormSubmit)}
-      >
-        <h2>Edit Member list</h2>
-        <FormField
-          control={form.control}
-          name="members"
-          render={({ field }) => (
-            <FormItem className="flex flex-col gap-3 mb-2">
-              <FormLabel className="mt-2">Users Assigned</FormLabel>
-              <div className="flex flex-row w-full justify-around">
-                {membersList.map((user, _index) => (
-                  <div key={_index}>{user.name}</div>
-                ))}
-                <FormControl>
-                  <DropdownMenu onOpenChange={handleUpdateTeamMembers}>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="outline"> + </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-56">
-                      <DropdownMenuLabel>Team Users</DropdownMenuLabel>
-                      <DropdownMenuSeparator />
-                      {teamMembers.length === 0
-                        ? "No other users"
-                        : membersList?.map((user, index) => (
-                            <DropdownMenuItem
-                              key={index}
-                              // Check if user is already in assignees
-                              onSelect={(e) => {
-                                e.preventDefault();
-                                if (user.id !== userId) {
-                                  setMembersList((prev) =>
-                                    prev.filter((u) => u.id !== user.id)
-                                  );
-                                  setUsersList((prev) => {
-                                    if (!prev.some((u) => u.id === user.id)) {
-                                      return [...prev, user];
+    <Popover>
+      <PopoverTrigger asChild>
+        <div>Edit members</div>
+      </PopoverTrigger>
+      <PopoverContent className="w-[300px] p-0">
+        <Form {...form}>
+          <form
+            className="mt-4 mr-2 "
+            onSubmit={form.handleSubmit(onUpdateTeamMemberFormSubmit)}
+          >
+            <h2>Edit Member list</h2>
+            <FormField
+              control={form.control}
+              name="members"
+              render={({ field }) => (
+                <FormItem className="flex flex-col gap-3 mb-2">
+                  <FormLabel className="mt-2">Users Assigned</FormLabel>
+                  <div className="flex flex-row w-full justify-around">
+                    {membersList.map((user, _index) => (
+                      <div key={_index}>{user.name}</div>
+                    ))}
+                    <FormControl>
+                      <DropdownMenu onOpenChange={handleUpdateTeamMembers}>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="outline"> + </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="w-56">
+                          <DropdownMenuLabel>Team Users</DropdownMenuLabel>
+                          <DropdownMenuSeparator />
+                          {teamMembers.length === 0
+                            ? "No other users"
+                            : membersList?.map((user, index) => (
+                                <DropdownMenuItem
+                                  key={index}
+                                  // Check if user is already in assignees
+                                  onSelect={(e) => {
+                                    e.preventDefault();
+                                    if (user.id !== userId) {
+                                      setMembersList((prev) =>
+                                        prev.filter((u) => u.id !== user.id)
+                                      );
+                                      setUsersList((prev) => {
+                                        if (
+                                          !prev.some((u) => u.id === user.id)
+                                        ) {
+                                          return [...prev, user];
+                                        }
+                                        return prev;
+                                      });
+                                      setShowUpdateButton(true);
+                                      setShowCancelButton(true);
                                     }
-                                    return prev;
-                                  });
-                                  setShowUpdateButton(true);
-                                  setShowCancelButton(true);
-                                }
-                              }}
-                            >
-                              {user.name}
-                            </DropdownMenuItem>
-                          ))}
-                      <DropdownMenuLabel>Global Users</DropdownMenuLabel>
-                      <DropdownMenuSeparator />
-                      {usersList.length === 0
-                        ? "No other users"
-                        : usersList?.map((user, index) => (
-                            <>
-                              <DropdownMenuItem
-                                key={index}
-                                // Check if user is already in assignees
-                                onSelect={(e) => {
-                                  e.preventDefault();
-                                  setMembersList((prev) => {
-                                    if (!prev.some((u) => u.id === user.id)) {
-                                      return [...prev, user];
-                                    }
-                                    return prev;
-                                  });
-                                  setUsersList((prev) =>
-                                    prev.filter((u) => u.id !== user.id)
-                                  );
+                                  }}
+                                >
+                                  {user.name}
+                                </DropdownMenuItem>
+                              ))}
+                          <DropdownMenuLabel>Global Users</DropdownMenuLabel>
+                          <DropdownMenuSeparator />
+                          {usersList.length === 0
+                            ? "No other users"
+                            : usersList?.map((user, index) => (
+                                <>
+                                  <DropdownMenuItem
+                                    key={index}
+                                    // Check if user is already in assignees
+                                    onSelect={(e) => {
+                                      e.preventDefault();
+                                      setMembersList((prev) => {
+                                        if (
+                                          !prev.some((u) => u.id === user.id)
+                                        ) {
+                                          return [...prev, user];
+                                        }
+                                        return prev;
+                                      });
+                                      setUsersList((prev) =>
+                                        prev.filter((u) => u.id !== user.id)
+                                      );
 
-                                  setShowUpdateButton(true);
-                                  setShowCancelButton(true);
-                                }}
-                              >
-                                {user.name}
-                              </DropdownMenuItem>
-                            </>
-                          ))}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </FormControl>
-              </div>
+                                      setShowUpdateButton(true);
+                                      setShowCancelButton(true);
+                                    }}
+                                  >
+                                    {user.name}
+                                  </DropdownMenuItem>
+                                </>
+                              ))}
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </FormControl>
+                  </div>
 
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <div className="mt-5 flex flex-row">
-          {showUpdateButton && (
-            <Button type="submit" value="Update" className="  py-2 rounded-md ">
-              Update
-            </Button>
-          )}
-          {showCancelButton && (
-            <Button
-              type="button"
-              onClick={resetMembers}
-              value="Cancel"
-              className="  py-2 rounded-md "
-            >
-              Cancel
-            </Button>
-          )}
-        </div>
-      </form>
-    </Form>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="mt-5 flex flex-row">
+              {showUpdateButton && (
+                <Button
+                  type="submit"
+                  value="Update"
+                  className="  py-2 rounded-md "
+                >
+                  Update
+                </Button>
+              )}
+              {showCancelButton && (
+                <Button
+                  type="button"
+                  onClick={resetMembers}
+                  value="Cancel"
+                  className="  py-2 rounded-md "
+                >
+                  Cancel
+                </Button>
+              )}
+            </div>
+          </form>
+        </Form>
+      </PopoverContent>
+    </Popover>
   );
 };
 
