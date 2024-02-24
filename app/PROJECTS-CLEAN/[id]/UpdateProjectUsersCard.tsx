@@ -135,7 +135,9 @@ const UpdateProjectUsersCard = ({
                                 e.preventDefault();
                                 if (user.id !== userId) {
                                   if (user.tasks.length > 0) {
-                                    alert("User has tasks assigned to them");
+                                    console.log(
+                                      "User has tasks assigned to them"
+                                    );
                                     return;
                                   }
                                   setProjectUsersList((prev) =>

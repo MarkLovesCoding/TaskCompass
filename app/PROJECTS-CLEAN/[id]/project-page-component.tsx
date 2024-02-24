@@ -29,6 +29,7 @@ import type { ProjectDto } from "@/use-cases/project/types";
 import type { TaskDto } from "@/use-cases/task/types";
 import { AddMemberForm } from "./AddMemberForm";
 import UpdateProjectUsersCard from "./UpdateProjectUsersCard";
+import { MemberCardSearchTable } from "@/components/component/member-card-search-table";
 import {
   Popover,
   PopoverContent,
@@ -132,12 +133,19 @@ export function ProjectPage({
                       </Avatar>
                       // <div key={index}>{member.name}</div>
                     ))}
+                    <MemberCardSearchTable
+                      userId={userId}
+                      project={project}
+                      teamUsers={uniqueTeamUsers}
+                      projectUsers={uniqueProjectUsers}
+                    />
                   </>
                 </div>
               </div>
               <div className="flex flex-row ">
                 <div className="flex flex-row ">
                   <div className="p-4">
+                    {/* <MemberCardSearchTable /> */}
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <CircleEllipsisIcon className="w-8 h-8 self-center cursor-pointer" />
@@ -161,6 +169,7 @@ export function ProjectPage({
                                   teamUsers={uniqueTeamUsers}
                                   projectUsers={uniqueProjectUsers}
                                 />
+                                {/* <MemberCardSearchTable /> */}
                               </DropdownMenuSubContent>
                             </DropdownMenuPortal>
                           </DropdownMenuSub>
