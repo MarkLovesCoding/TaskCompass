@@ -55,7 +55,7 @@ const CardView = ({
   // };
 
   return (
-    <div className="flex md:flex-row flex-col w-min-full overflow-x">
+    <div className="flex md:flex-row  justify-center flex-col w-min-full overflow-x">
       {Object.entries(sortByObject).map((sorted_type, sorted_idx) => (
         <div
           key={sorted_idx}

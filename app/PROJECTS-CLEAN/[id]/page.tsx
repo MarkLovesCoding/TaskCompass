@@ -34,7 +34,7 @@ const Projects = async ({ params }: { params: ParamsType }) => {
   }
 
   return (
-    <div className=" flex flex-col items-center">
+    <div className=" flex justify-center flex-col items-center">
       <ProjectContextProvider>
         <ProjectPage
           userId={session?.user.id!}

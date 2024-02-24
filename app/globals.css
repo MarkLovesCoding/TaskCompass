@@ -156,7 +156,7 @@
 }
 @layer utilities {
   .header-input {
-    @apply border-2 border-transparent text-xl font-bold outline-none cursor-pointer p-2;
+    @apply border-2 border-transparent text-3xl font-bold outline-none cursor-pointer p-2;
   }
 
   .description-input {

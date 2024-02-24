@@ -140,9 +140,9 @@ export function ProjectHeader({ project }: { project: ProjectDto }) {
           {project.description}
         </p>
       </div> */}
-      <Link href={`/TEAMS-CLEAN/${project.team}`}>
+      {/* <Link href={`/TEAMS-CLEAN/${project.team}`}>
         <ArrowBigLeftIcon className="w-8 h-8 self-start cursor-pointer" />
-      </Link>
+      </Link> */}
       <Form {...form}>
         <form
           className="mt-4 mr-2 "

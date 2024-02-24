@@ -74,22 +74,22 @@ export async function TeamPageComponent({
   // const getAvatarBackground = (index: number) => {
 
   return (
-    <div className="flex flex-col w-full min-h-screen">
-      <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10">
-        <div className="flex flex-row p-10 justify-center align-middle">
-          <div className="text-2xl font-bold mr-10">
+    <div className="flex flex-col w-full  items-center  min-h-screen">
+      <main className="flex flex-1 flex-col max-w-[1400px] gap-4 p-4 md:gap-8 md:p-10">
+        <div className="flex flex-row  mb-10  align-middle">
+          <div className="text-2xl font-bold">
             <TeamHeader team={team} />
             <div className="flex flex-col">
               <div className="flex flex-row py-4 ">
-                <div className="text-sm mr-4 font-bold">
+                <div className="text-lg mr-4 font-bold">
                   Active Projects: {countProjects}
                 </div>
-                <div className="text-sm  font-bold">
+                <div className="text-lg  font-bold">
                   Archived Projects: {countArchivedProjects}
                 </div>
               </div>
               <div>
-                <h2 className="py-2 text-sm font-bold">
+                <h2 className="py-2 text-lg font-bold">
                   Team Members <span>: {teamMembers.length}</span>
                 </h2>
               </div>
@@ -196,7 +196,8 @@ export async function TeamPageComponent({
             </div>
           )}
         </div>
-
+        <h3 className="text-lg font-bold">Team Projects</h3>
+        <Separator className="mb-4" />
         <div className="grid gap-4 md:grid-cols-3">
           {projects &&
             projects.map(
