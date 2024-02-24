@@ -74,7 +74,7 @@ export async function TeamPageComponent({
   // const getAvatarBackground = (index: number) => {
 
   return (
-    <div className="flex flex-col w-full  items-center  min-h-screen">
+    <div className="flex flex-col w-full  items-center  min-h-[calc(100vh-4rem)">
       <main className="flex flex-1 flex-col max-w-[1400px] gap-4 p-4 md:gap-8 md:p-10">
         <div className="flex flex-row  mb-10  align-middle">
           <div className="text-2xl font-bold">

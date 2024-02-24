@@ -121,7 +121,7 @@ export function MemberCardSearchTable({
           variant="outline"
         > */}
         <div>
-          <PlusCircleIcon className="w-12 h-12" />
+          <PlusCircleIcon className="w-10 h-10" />
 
           {/* <PlusIcon className="h-4 w-4" /> */}
           <span className="sr-only">Edit Members</span>

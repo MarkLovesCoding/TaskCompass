@@ -106,34 +106,33 @@ export function ProjectPage({
   };
 
   return (
-    <div className="flex flex-col w-full  min-h-[calc(100vh-4rem)]  ">
-      <main className="flex flex-1 flex-col  ">
-        <div className="flex flex-row  mb-10 max-w-[1400px] justify-center selection:items-center align-middle">
-          <div className="">
-            <Link href={`/TEAMS-CLEAN/${project.team}`}>
-              <h4 className="text-xs text-primary underline cursor-pointer">
-                Back to Team Page
-              </h4>
-              {/* <ArrowBigLeftIcon className="w-8 h-8 self-start cursor-pointer" /> */}
-            </Link>
-          </div>{" "}
+    <div className="flex flex-col justify-start items-center min-h-[calc(100vh-4rem)]  ">
+      <main className="flex flex-col  max-w-[1400px]  ">
+        <div className="flex  flex-row items-center justify-center  mt-4 align-middle">
           <div>
             {" "}
+            <Link href={`/TEAMS-CLEAN/${project.team}`}>
+              <h4 className="text-xs  underline cursor-pointer">
+                Back to Team Page
+              </h4>
+            </Link>
             {!isUserAdmin ? (
-              <div className="flex px-12 py-6 ">
+              <div className="flex  py-2 ">
                 <ProjectHeaderStatic project={project} />
               </div>
             ) : (
-              <div className="flex px-12 py-6">
+              <div className="flex flex-row py-2">
                 <div className="flex flex-col ">
                   <ProjectHeader project={project} />
-                  <h2 className="mb-4">
+                </div>
+                <div className="flex flex-col">
+                  <h2 className="mb-2 text-sm">
                     Project Members: {uniqueProjectUsers.length}
                   </h2>
-                  <div className="w-96 mb-4 flex flex-row">
+                  <div className=" mb-2 flex flex-row">
                     <>
                       {uniqueProjectUsers.map((member, index) => (
-                        <Avatar key={index} className=" w-12 h-12">
+                        <Avatar key={index} className=" w-10 h-10">
                           <AvatarImage src={member.avatar} />
                           <AvatarFallback className={`text-sm bg-gray-500`}>
                             {getInitials(member.name)}
@@ -150,90 +149,90 @@ export function ProjectPage({
                     </>
                   </div>
                 </div>
-                <div className="flex flex-row ">
-                  <div className="flex flex-row ">
-                    <div className="p-4">
-                      {/* <MemberCardSearchTable /> */}
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <CircleEllipsisIcon className="w-8 h-8 self-center cursor-pointer" />
-                          {/* <Label> */}
-                          {/* <p className="text-4xl select-none cursor-pointer">
+                <Separator className="mb-4" orientation="vertical" />
+
+                {/* <div className="flex flex-row "> */}
+                <div className="flex flex-col">
+                  <div className="p-2">
+                    {/* <MemberCardSearchTable /> */}
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <CircleEllipsisIcon className="w-8 h-8 self-center cursor-pointer" />
+                        {/* <Label> */}
+                        {/* <p className="text-4xl select-none cursor-pointer">
                           ...
                         </p> */}
-                          {/* </Label> */}
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent className="w-56">
-                          <DropdownMenuGroup>
-                            <DropdownMenuSub>
-                              <DropdownMenuSubTrigger>
-                                Add users
-                              </DropdownMenuSubTrigger>
-                              <DropdownMenuPortal>
-                                <DropdownMenuSubContent>
-                                  <UpdateProjectUsersCard
-                                    userId={userId}
-                                    project={project}
-                                    teamUsers={uniqueTeamUsers}
-                                    projectUsers={uniqueProjectUsers}
-                                  />
-                                  {/* <MemberCardSearchTable /> */}
-                                </DropdownMenuSubContent>
-                              </DropdownMenuPortal>
-                            </DropdownMenuSub>
-                          </DropdownMenuGroup>
-                          <DropdownMenuGroup>
-                            <DropdownMenuSub>
-                              <DropdownMenuSubTrigger>
-                                Archived Tasks
-                              </DropdownMenuSubTrigger>
-                              <DropdownMenuPortal>
-                                <DropdownMenuSubContent>
-                                  <ScrollArea>
-                                    {archivedTasks.length === 0 ? (
-                                      <div className="p-4">
-                                        No archived tasks
-                                      </div>
-                                    ) : (
-                                      <div className="p-4 flex flex-col">
-                                        {
-                                          // projects.length === 0
-                                          //   ? "No archived projects"
-                                          //   :
-                                          tasks.map(
-                                            (task, task_idx) =>
-                                              task.archived && (
-                                                <div key={task_idx}>
-                                                  <UnarchiveTaskPopover
-                                                    task={task}
-                                                  />
+                        {/* </Label> */}
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className="w-56">
+                        <DropdownMenuGroup>
+                          <DropdownMenuSub>
+                            <DropdownMenuSubTrigger>
+                              Add users
+                            </DropdownMenuSubTrigger>
+                            <DropdownMenuPortal>
+                              <DropdownMenuSubContent>
+                                <UpdateProjectUsersCard
+                                  userId={userId}
+                                  project={project}
+                                  teamUsers={uniqueTeamUsers}
+                                  projectUsers={uniqueProjectUsers}
+                                />
+                                {/* <MemberCardSearchTable /> */}
+                              </DropdownMenuSubContent>
+                            </DropdownMenuPortal>
+                          </DropdownMenuSub>
+                        </DropdownMenuGroup>
+                        <DropdownMenuGroup>
+                          <DropdownMenuSub>
+                            <DropdownMenuSubTrigger>
+                              Archived Tasks
+                            </DropdownMenuSubTrigger>
+                            <DropdownMenuPortal>
+                              <DropdownMenuSubContent>
+                                <ScrollArea>
+                                  {archivedTasks.length === 0 ? (
+                                    <div className="p-2">No archived tasks</div>
+                                  ) : (
+                                    <div className="p-2 flex flex-col">
+                                      {
+                                        // projects.length === 0
+                                        //   ? "No archived projects"
+                                        //   :
+                                        tasks.map(
+                                          (task, task_idx) =>
+                                            task.archived && (
+                                              <div key={task_idx}>
+                                                <UnarchiveTaskPopover
+                                                  task={task}
+                                                />
 
-                                                  {task_idx !== 0 ||
-                                                    (task_idx !==
-                                                      archivedTasks.length -
-                                                        1 && (
-                                                      <Separator className="my-2" />
-                                                    ))}
-                                                </div>
-                                              )
-                                          )
-                                        }
-                                      </div>
-                                    )}
-                                  </ScrollArea>
-                                  {/* <AddMemberForm /> */}
-                                </DropdownMenuSubContent>
-                              </DropdownMenuPortal>
-                            </DropdownMenuSub>
-                          </DropdownMenuGroup>
-                          <Separator className="my-2" />
-                          {/* <DropdownMenuSeparator /> */}
-                          <DropdownMenuGroup>
-                            {/* <DropdownMenuItem> */}
-                            <ArchiveProjectPopover project={project} />
-                            {/* </DropdownMenuItem> */}
+                                                {task_idx !== 0 ||
+                                                  (task_idx !==
+                                                    archivedTasks.length -
+                                                      1 && (
+                                                    <Separator className="my-2" />
+                                                  ))}
+                                              </div>
+                                            )
+                                        )
+                                      }
+                                    </div>
+                                  )}
+                                </ScrollArea>
+                                {/* <AddMemberForm /> */}
+                              </DropdownMenuSubContent>
+                            </DropdownMenuPortal>
+                          </DropdownMenuSub>
+                        </DropdownMenuGroup>
+                        <Separator className="my-2" />
+                        {/* <DropdownMenuSeparator /> */}
+                        <DropdownMenuGroup>
+                          {/* <DropdownMenuItem> */}
+                          <ArchiveProjectPopover project={project} />
+                          {/* </DropdownMenuItem> */}
 
-                            {/* <DropdownMenuSub>
+                          {/* <DropdownMenuSub>
                       <DropdownMenuSubTrigger>
                         Archive Project
                       </DropdownMenuSubTrigger>
@@ -242,77 +241,79 @@ export function ProjectPage({
                           <Label className="p-4">Archived Projects</Label>
                           <Separator className="my-2" />
                           {/* <AddMemberForm /> */}
-                            {/* </DropdownMenuSubContent>
+                          {/* </DropdownMenuSubContent>
                       </DropdownMenuPortal>
                     </DropdownMenuSub> */}
-                          </DropdownMenuGroup>
-                        </DropdownMenuContent>
-                      </DropdownMenu>{" "}
-                    </div>
-                    <div className="p-4">
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          {/* <Button variant="outline"> */}
-                          <FolderKanbanIcon className="w-8 h-8 self-center cursor-pointer" />
-                          {/* </Button> */}
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent className="w-56">
-                          <DropdownMenuLabel>Sort by:</DropdownMenuLabel>
-                          {/* <DropdownMenuLabel>Add Users</DropdownMenuLabel> */}
-                          {/* <DropdownMenuSeparator /> */}
-                          <Separator className="my-2" />
-                          <DropdownMenuRadioGroup
-                            value={sortBy}
-                            onValueChange={setSortBy}
-                          >
-                            <DropdownMenuRadioItem value="priority">
-                              Priority
-                            </DropdownMenuRadioItem>
-                            <DropdownMenuRadioItem value="status">
-                              Status
-                            </DropdownMenuRadioItem>
-                            <DropdownMenuRadioItem value="category">
-                              Category
-                            </DropdownMenuRadioItem>
-                          </DropdownMenuRadioGroup>
-                          {/* <Separator className="my-2" /> */}
-
-                          {/* <DropdownMenuSeparator /> */}
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </div>
-                    {/* <div className="p-4"> */}
-                    {isUserAdmin && (
-                      <div className="p-4">
-                        <Popover>
-                          <PopoverTrigger>
-                            <PlusIcon className="w-8 h-8 self-center" />
-                            <span className="sr-only">New Task Button</span>
-                          </PopoverTrigger>
-                          <PopoverContent>
-                            <NewTaskCard project={project} />
-                          </PopoverContent>
-                        </Popover>
-                      </div>
-                    )}
-                    {/* </div> */}
+                        </DropdownMenuGroup>
+                      </DropdownMenuContent>
+                    </DropdownMenu>{" "}
                   </div>
+                  <div className="p-2">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        {/* <Button variant="outline"> */}
+                        <FolderKanbanIcon className="w-8 h-8 self-center cursor-pointer" />
+                        {/* </Button> */}
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className="w-56">
+                        <DropdownMenuLabel>Sort by:</DropdownMenuLabel>
+                        {/* <DropdownMenuLabel>Add Users</DropdownMenuLabel> */}
+                        {/* <DropdownMenuSeparator /> */}
+                        <Separator className="my-2" />
+                        <DropdownMenuRadioGroup
+                          value={sortBy}
+                          onValueChange={setSortBy}
+                        >
+                          <DropdownMenuRadioItem value="priority">
+                            Priority
+                          </DropdownMenuRadioItem>
+                          <DropdownMenuRadioItem value="status">
+                            Status
+                          </DropdownMenuRadioItem>
+                          <DropdownMenuRadioItem value="category">
+                            Category
+                          </DropdownMenuRadioItem>
+                        </DropdownMenuRadioGroup>
+                        {/* <Separator className="my-2" /> */}
+
+                        {/* <DropdownMenuSeparator /> */}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+                  {/* <div className="p-4"> */}
+                  {isUserAdmin && (
+                    <div className="p-2">
+                      <Popover>
+                        <PopoverTrigger>
+                          <PlusIcon className="w-8 h-8 self-center" />
+                          <span className="sr-only">New Task Button</span>
+                        </PopoverTrigger>
+                        <PopoverContent>
+                          <NewTaskCard project={project} />
+                        </PopoverContent>
+                      </Popover>
+                    </div>
+                  )}
+                  {/* </div> */}
                 </div>
+                {/* </div> */}
               </div>
-            )}{" "}
-            <h3 className="text-lg font-bold">Project Tasks</h3>
-            <Separator className="mb-4" />
+            )}
           </div>
         </div>
-        <div className="flex-1 h-min-full overflow-x-auto">
-          <CardView
-            type={sortBy}
-            tasks={tasks}
-            project={project}
-            projectUsers={uniqueProjectUsers}
-          />
-        </div>
       </main>
+      <div className="flex flex-col w-[700px] md:max-w-screen-sm">
+        <h3 className="text-lg font-bold">Project Tasks</h3>
+        <Separator className="mb-4" />
+      </div>
+      <div className="flex-1 justify-center h-min-full ">
+        <CardView
+          type={sortBy}
+          tasks={tasks}
+          project={project}
+          projectUsers={uniqueProjectUsers}
+        />
+      </div>
     </div>
   );
 }
