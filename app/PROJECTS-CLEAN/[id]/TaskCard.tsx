@@ -64,7 +64,7 @@ import { updateTaskStartDateAction } from "../_actions/update-task-start-date.ac
 import { updateTaskDueDateAction } from "../_actions/update-task-due-date.action";
 import { updateTaskArchivedAction } from "../_actions/update-task-archived.action";
 import { UserDto } from "@/use-cases/user/types";
-
+import { getInitials } from "@/app/utils/getInitials";
 const descriptionFormSchema = z.object({
   id: z.string(),
   description: z.string().min(5).max(50),
@@ -764,21 +764,40 @@ export const TaskCard = ({
             render={({ field }) => (
               <FormItem className="flex flex-col gap-3">
                 <FormLabel>Users Assigned</FormLabel>
-                <div className="flex flex-row w-full justify-around">
-                  {currentAssignees.map((user, _index) => (
-                    <div key={_index}>{user}</div>
-                  ))}
+                <div className="flex flex-row w-full">
+                  {projectUsers
+                    .filter((user) => currentAssignees.includes(user.id))
+                    .map((user, index) => (
+                      <Avatar key={index} className=" w-12 h-12 m-2">
+                        <AvatarImage src={user.avatar} />
+                        <AvatarFallback className={`text-sm bg-gray-500`}>
+                          {getInitials(user.name)}
+                        </AvatarFallback>
+                      </Avatar>
+                    ))}
                   <FormControl>
                     <DropdownMenu onOpenChange={handleAssigneesChange}>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="outline"> + </Button>
+                        <Avatar className="cursor-pointer  w-12 h-12 m-2">
+                          <AvatarFallback
+                            className={`text-sm bg-gray-500 hover:bg-grey:700`}
+                          >
+                            +
+                          </AvatarFallback>
+                        </Avatar>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent className="w-56">
+                      <DropdownMenuContent
+                        onFocusOutside={(e) => e.preventDefault()}
+                        className="w-56"
+                      >
                         <DropdownMenuLabel>Project Users</DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         {projectUsers?.map((user, index) => (
                           <DropdownMenuCheckboxItem
                             key={index}
+                            onSelect={(e) => {
+                              e.preventDefault();
+                            }}
                             checked={field.value.includes(user.id)} // Check if user is already in assignees
                             onCheckedChange={(checked) => {
                               const updatedAssignees = checked
