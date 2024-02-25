@@ -180,39 +180,39 @@ export function MemberCardSearchTable({
               <CommandItem
                 className=" group"
                 value={user.name}
-                onSelect={() => {
-                  if (user.id !== userId) {
-                    setSelectedUser(user);
-                    if (userHasTasksInProject(user, project.id)) {
-                      // if (user.tasks.length > 0) {
-                      toast.error(
-                        `User cannot be removed from Project.\n User still has  ${usersTasksInProjectCount(
-                          user,
-                          project.id
-                        )}  task${
-                          usersTasksInProjectCount(user, project.id) > 1
-                            ? "s"
-                            : ""
-                        } assigned to them.`
-                        // @ts-ignore
-                      );
-                      // handleUserHasTasks(user);
-                      return;
-                    }
-                    setProjectUsersList((prev) =>
-                      prev.filter((u) => u.id !== user.id)
-                    );
-                    setTeamUsersList((prev) => {
-                      if (!prev.some((u) => u.id === user.id)) {
-                        return [...prev, user];
-                      }
-                      return prev;
-                    });
-                    // setShowUpdateButton(true);
-                    // setShowCancelButton(true);
-                    toast.success("User removed from Project");
-                  }
-                }}
+                // onSelect={() => {
+                //   if (user.id !== userId) {
+                //     setSelectedUser(user);
+                //     if (userHasTasksInProject(user, project.id)) {
+                //       // if (user.tasks.length > 0) {
+                //       toast.error(
+                //         `User cannot be removed from Project.\n User still has  ${usersTasksInProjectCount(
+                //           user,
+                //           project.id
+                //         )}  task${
+                //           usersTasksInProjectCount(user, project.id) > 1
+                //             ? "s"
+                //             : ""
+                //         } assigned to them.`
+                //         // @ts-ignore
+                //       );
+                //       // handleUserHasTasks(user);
+                //       return;
+                //     }
+                //     setProjectUsersList((prev) =>
+                //       prev.filter((u) => u.id !== user.id)
+                //     );
+                //     setTeamUsersList((prev) => {
+                //       if (!prev.some((u) => u.id === user.id)) {
+                //         return [...prev, user];
+                //       }
+                //       return prev;
+                //     });
+                //     // setShowUpdateButton(true);
+                //     // setShowCancelButton(true);
+                //     toast.success("User removed from Project");
+                //   }
+                // }}
                 key={index}
               >
                 <div className="flex items-center h-14 gap-2">
@@ -235,16 +235,17 @@ export function MemberCardSearchTable({
                       <div className="col-span-2 flex flex-col justify-center items-end gap-1">
                         <div className="flex items-center gap-1">
                           {" "}
-                          <Badge className="shrink-2 text-xs ">
+                          {/* //BADGES */}
+                          {/* <Badge className="shrink-2 text-xs ">
                             {`${usersTasksInProjectCount(
                               user,
                               project.id
                             )} tasks`}
-                          </Badge>
+                          </Badge> */}
                           {/* {user.id == userId ? ( */}
-                          <Badge className="shrink-0" variant="secondary">
+                          {/* <Badge className="shrink-0" variant="secondary">
                             {getUserType(user, project.id)}
-                          </Badge>
+                          </Badge> */}
                           {/* ) : ( */}
                           {/* // <Select */}
                           {/* //   defaultValue={userTypes[user.id] || "admin"} */}
@@ -264,10 +265,57 @@ export function MemberCardSearchTable({
                         </div>
                       </div>
                     </div>
-
+                    <Select defaultValue={getUserType(user, project.id)}>
+                      <SelectTrigger>
+                        <SelectValue
+                          placeholder={getUserType(user, project.id)}
+                        />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="admin">Admin</SelectItem>
+                        <SelectItem value="member">Member</SelectItem>
+                      </SelectContent>
+                    </Select>
                     <div className=" opacity-0 group-hover:opacity-100">
                       {user.id !== userId && (
-                        <XIcon className="mr-auto text-red-400"></XIcon>
+                        <Button
+                          onClick={() => {
+                            if (user.id !== userId) {
+                              setSelectedUser(user);
+                              if (userHasTasksInProject(user, project.id)) {
+                                // if (user.tasks.length > 0) {
+                                toast.error(
+                                  `User cannot be removed from Project.\n User still has  ${usersTasksInProjectCount(
+                                    user,
+                                    project.id
+                                  )}  task${
+                                    usersTasksInProjectCount(user, project.id) >
+                                    1
+                                      ? "s"
+                                      : ""
+                                  } assigned to them.`
+                                  // @ts-ignore
+                                );
+                                // handleUserHasTasks(user);
+                                return;
+                              }
+                              setProjectUsersList((prev) =>
+                                prev.filter((u) => u.id !== user.id)
+                              );
+                              setTeamUsersList((prev) => {
+                                if (!prev.some((u) => u.id === user.id)) {
+                                  return [...prev, user];
+                                }
+                                return prev;
+                              });
+                              // setShowUpdateButton(true);
+                              // setShowCancelButton(true);
+                              toast.success("User removed from Project");
+                            }
+                          }}
+                        >
+                          <XIcon className="mr-auto text-red-400"></XIcon>
+                        </Button>
                       )}
                     </div>
                   </div>
@@ -312,20 +360,20 @@ export function MemberCardSearchTable({
                 <CommandItem
                   className=" group"
                   value={user.name}
-                  onSelect={() => {
-                    //CHECK IF USER HAS TASKS
+                  // onSelect={() => {
+                  //   //CHECK IF USER HAS TASKS
 
-                    setProjectUsersList((prev) => {
-                      if (!prev.some((u) => u.id === user.id)) {
-                        return [...prev, user];
-                      }
-                      return prev;
-                    });
-                    setTeamUsersList((prev) =>
-                      prev.filter((u) => u.id !== user.id)
-                    );
-                    toast.success("User added to Project");
-                  }}
+                  //   setProjectUsersList((prev) => {
+                  //     if (!prev.some((u) => u.id === user.id)) {
+                  //       return [...prev, user];
+                  //     }
+                  //     return prev;
+                  //   });
+                  //   setTeamUsersList((prev) =>
+                  //     prev.filter((u) => u.id !== user.id)
+                  //   );
+                  //   toast.success("User added to Project");
+                  // }}
                 >
                   <div className="flex items-center gap-2">
                     <div className="flex items-center gap-2">
@@ -352,8 +400,34 @@ export function MemberCardSearchTable({
                           {user.email}
                         </span>
                       </div>
+                      <Select defaultValue={getUserType(user, project.id)}>
+                        <SelectTrigger>
+                          <SelectValue
+                            placeholder={getUserType(user, project.id)}
+                          />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="admin">Admin</SelectItem>
+                          <SelectItem value="member">Member</SelectItem>
+                        </SelectContent>
+                      </Select>
                       <div>
-                        <PlusIcon className=" opacity-0 group-hover:opacity-100 text-green-400"></PlusIcon>
+                        <Button
+                          onClick={() => {
+                            setProjectUsersList((prev) => {
+                              if (!prev.some((u) => u.id === user.id)) {
+                                return [...prev, user];
+                              }
+                              return prev;
+                            });
+                            setTeamUsersList((prev) =>
+                              prev.filter((u) => u.id !== user.id)
+                            );
+                            toast.success("User added to Project");
+                          }}
+                        >
+                          <PlusIcon className=" opacity-0 group-hover:opacity-100 text-green-400"></PlusIcon>
+                        </Button>
                       </div>
                     </div>
                   </div>
