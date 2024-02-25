@@ -1,11 +1,10 @@
 "use client";
+import { UserDto } from "@/use-cases/user/types";
 import React, { createContext, useContext, useState, ReactNode } from "react";
 
 interface ProjectContextType {
-  isNewTaskOpen: boolean;
-  handleNewTaskSubmitClose: (value: boolean) => void;
-  isUpdateTaskOpen: boolean;
-  handleUpdateTaskSubmitClose: (value: boolean) => void;
+  projectUsers: UserDto[];
+  setProjectUsers: React.Dispatch<React.SetStateAction<UserDto[]>>;
 }
 
 const ProjectContext = createContext<ProjectContextType | undefined>(undefined);
@@ -13,24 +12,13 @@ const ProjectContext = createContext<ProjectContextType | undefined>(undefined);
 export const ProjectContextProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [isNewTaskOpen, setIsNewTaskOpen] = useState<boolean>(false);
-
-  const handleNewTaskSubmitClose = (value: boolean) => {
-    setIsNewTaskOpen(value);
-  };
-  const [isUpdateTaskOpen, setIsUpdateTaskOpen] = useState<boolean>(false);
-
-  const handleUpdateTaskSubmitClose = (value: boolean) => {
-    setIsUpdateTaskOpen(value);
-  };
+  const [projectUsers, setProjectUsers] = useState<UserDto[]>([]);
 
   return (
     <ProjectContext.Provider
       value={{
-        isNewTaskOpen,
-        handleNewTaskSubmitClose,
-        isUpdateTaskOpen,
-        handleUpdateTaskSubmitClose,
+        projectUsers,
+        setProjectUsers,
       }}
     >
       {children}

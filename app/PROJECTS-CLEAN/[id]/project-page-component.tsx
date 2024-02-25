@@ -11,6 +11,7 @@ import {
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
 import { TaskCard } from "./TaskCard";
+import { MemberCardWithPermissions } from "./member-card-with-permissions";
 import { NewTaskCard } from "./NewTaskCard";
 import { ProjectHeader } from "./ProjectHeader";
 import {
@@ -29,7 +30,7 @@ import type { ProjectDto } from "@/use-cases/project/types";
 import type { TaskDto } from "@/use-cases/task/types";
 import { AddMemberForm } from "./AddMemberForm";
 import UpdateProjectUsersCard from "./UpdateProjectUsersCard";
-import { MemberCardSearchTable } from "@/components/component/member-card-search-table";
+import { MemberCardSearchTable } from "./member-card-search-table";
 import {
   Popover,
   PopoverContent,
@@ -101,9 +102,7 @@ export function ProjectPage({
   ) as UserDto[];
 
   // let sortBy = "priority";
-  const handleChangeView = (type: string) => {
-    setSortBy(type);
-  };
+  console.log("teamMembers-SECOND COMONENT", teamMembers);
 
   return (
     <div className="flex flex-col justify-start items-center min-h-[calc(100vh-4rem)]  ">
@@ -132,13 +131,27 @@ export function ProjectPage({
                   <div className=" mb-2 flex flex-row">
                     <>
                       {uniqueProjectUsers.map((member, index) => (
-                        <Avatar key={index} className=" w-10 h-10">
-                          <AvatarImage src={member.avatar} />
-                          <AvatarFallback className={`text-sm bg-gray-500`}>
-                            {getInitials(member.name)}
-                          </AvatarFallback>
-                        </Avatar>
-                        // <div key={index}>{member.name}</div>
+                        <div className="p-2">
+                          <Popover>
+                            <PopoverTrigger>
+                              <Avatar key={index} className=" w-10 h-10">
+                                <AvatarImage src={member.avatar} />
+                                <AvatarFallback
+                                  className={`text-sm bg-gray-500`}
+                                >
+                                  {getInitials(member.name)}
+                                </AvatarFallback>
+                              </Avatar>
+                              <span className="sr-only">User Avatar</span>
+                            </PopoverTrigger>
+                            <PopoverContent>
+                              <MemberCardWithPermissions
+                                user={member}
+                                project={project}
+                              />
+                            </PopoverContent>
+                          </Popover>
+                        </div>
                       ))}
                       <MemberCardSearchTable
                         userId={userId}
@@ -151,22 +164,15 @@ export function ProjectPage({
                 </div>
                 <Separator className="mb-4" orientation="vertical" />
 
-                {/* <div className="flex flex-row "> */}
                 <div className="flex flex-col">
                   <div className="p-2">
-                    {/* <MemberCardSearchTable /> */}
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <CircleEllipsisIcon className="w-8 h-8 self-center cursor-pointer" />
-                        {/* <Label> */}
-                        {/* <p className="text-4xl select-none cursor-pointer">
-                          ...
-                        </p> */}
-                        {/* </Label> */}
                       </DropdownMenuTrigger>
                       <DropdownMenuContent className="w-56">
-                        <DropdownMenuGroup>
-                          <DropdownMenuSub>
+                        {/* <DropdownMenuGroup> */}
+                        {/* <DropdownMenuSub>
                             <DropdownMenuSubTrigger>
                               Add users
                             </DropdownMenuSubTrigger>
@@ -179,10 +185,10 @@ export function ProjectPage({
                                   projectUsers={uniqueProjectUsers}
                                 />
                                 {/* <MemberCardSearchTable /> */}
-                              </DropdownMenuSubContent>
+                        {/* </DropdownMenuSubContent>
                             </DropdownMenuPortal>
-                          </DropdownMenuSub>
-                        </DropdownMenuGroup>
+                          </DropdownMenuSub> */}
+                        {/* </DropdownMenuGroup> */}
                         <DropdownMenuGroup>
                           <DropdownMenuSub>
                             <DropdownMenuSubTrigger>
@@ -195,55 +201,33 @@ export function ProjectPage({
                                     <div className="p-2">No archived tasks</div>
                                   ) : (
                                     <div className="p-2 flex flex-col">
-                                      {
-                                        // projects.length === 0
-                                        //   ? "No archived projects"
-                                        //   :
-                                        tasks.map(
-                                          (task, task_idx) =>
-                                            task.archived && (
-                                              <div key={task_idx}>
-                                                <UnarchiveTaskPopover
-                                                  task={task}
-                                                />
+                                      {tasks.map(
+                                        (task, task_idx) =>
+                                          task.archived && (
+                                            <div key={task_idx}>
+                                              <UnarchiveTaskPopover
+                                                task={task}
+                                              />
 
-                                                {task_idx !== 0 ||
-                                                  (task_idx !==
-                                                    archivedTasks.length -
-                                                      1 && (
-                                                    <Separator className="my-2" />
-                                                  ))}
-                                              </div>
-                                            )
-                                        )
-                                      }
+                                              {task_idx !== 0 ||
+                                                (task_idx !==
+                                                  archivedTasks.length - 1 && (
+                                                  <Separator className="my-2" />
+                                                ))}
+                                            </div>
+                                          )
+                                      )}
                                     </div>
                                   )}
                                 </ScrollArea>
-                                {/* <AddMemberForm /> */}
                               </DropdownMenuSubContent>
                             </DropdownMenuPortal>
                           </DropdownMenuSub>
                         </DropdownMenuGroup>
                         <Separator className="my-2" />
-                        {/* <DropdownMenuSeparator /> */}
-                        <DropdownMenuGroup>
-                          {/* <DropdownMenuItem> */}
-                          <ArchiveProjectPopover project={project} />
-                          {/* </DropdownMenuItem> */}
 
-                          {/* <DropdownMenuSub>
-                      <DropdownMenuSubTrigger>
-                        Archive Project
-                      </DropdownMenuSubTrigger>
-                      <DropdownMenuPortal>
-                        <DropdownMenuSubContent>
-                          <Label className="p-4">Archived Projects</Label>
-                          <Separator className="my-2" />
-                          {/* <AddMemberForm /> */}
-                          {/* </DropdownMenuSubContent>
-                      </DropdownMenuPortal>
-                    </DropdownMenuSub> */}
+                        <DropdownMenuGroup>
+                          <ArchiveProjectPopover project={project} />
                         </DropdownMenuGroup>
                       </DropdownMenuContent>
                     </DropdownMenu>{" "}
@@ -251,14 +235,10 @@ export function ProjectPage({
                   <div className="p-2">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        {/* <Button variant="outline"> */}
                         <FolderKanbanIcon className="w-8 h-8 self-center cursor-pointer" />
-                        {/* </Button> */}
                       </DropdownMenuTrigger>
                       <DropdownMenuContent className="w-56">
                         <DropdownMenuLabel>Sort by:</DropdownMenuLabel>
-                        {/* <DropdownMenuLabel>Add Users</DropdownMenuLabel> */}
-                        {/* <DropdownMenuSeparator /> */}
                         <Separator className="my-2" />
                         <DropdownMenuRadioGroup
                           value={sortBy}
@@ -274,13 +254,9 @@ export function ProjectPage({
                             Category
                           </DropdownMenuRadioItem>
                         </DropdownMenuRadioGroup>
-                        {/* <Separator className="my-2" /> */}
-
-                        {/* <DropdownMenuSeparator /> */}
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </div>
-                  {/* <div className="p-4"> */}
                   {isUserAdmin && (
                     <div className="p-2">
                       <Popover>
@@ -294,9 +270,7 @@ export function ProjectPage({
                       </Popover>
                     </div>
                   )}
-                  {/* </div> */}
                 </div>
-                {/* </div> */}
               </div>
             )}
           </div>

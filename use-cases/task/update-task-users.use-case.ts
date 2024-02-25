@@ -1,8 +1,9 @@
 import { TaskEntity } from "@/entities/Task";
 // import { UserEntity } from "@/entities/User";
 import { UpdateTask, GetTask, UpdateTaskUsers } from "@/use-cases/task/types";
-import { GetUser } from "@/use-cases/user/types";
+import { GetUser, UpdateUser } from "@/use-cases/user/types";
 import { taskToDto } from "@/use-cases/task/utils";
+import { createSearchParamsBailoutProxy } from "next/dist/client/components/searchparams-bailout-proxy";
 
 export async function updateTaskUsersUseCase(
   context: {
@@ -24,6 +25,7 @@ export async function updateTaskUsersUseCase(
   const dataTask = await context.getTask(data.taskId);
   const task = new TaskEntity(dataTask);
   const initialAssignees = task.getAssignees();
+
   task.addAssignees(data.addedAssignees);
   task.removeAssignees(data.removedAssignees);
 
@@ -33,4 +35,6 @@ export async function updateTaskUsersUseCase(
     data.removedAssignees,
     data.addedAssignees
   );
+
+  data.addedAssignees.forEach((assignee) => {});
 }

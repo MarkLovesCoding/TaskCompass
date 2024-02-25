@@ -416,6 +416,9 @@ export const TaskCard = ({
       existingAssignees,
       currentAssignees
     );
+    console.log("addedAssignees", addedAssignees);
+    console.log("removedAssignees", removedAssignees);
+
     await updateTaskUsersAction(values.id, addedAssignees, removedAssignees);
 
     router.refresh();

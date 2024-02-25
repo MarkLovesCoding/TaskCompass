@@ -9,7 +9,7 @@ import getProjectTasks from "@/data-access/tasks/get-project-tasks.persistence";
 import getProjectMembers from "@/data-access/users/get-project-members.persistence";
 import getProjectAdmins from "@/data-access/users/get-project-admins.persistence";
 import { ProjectPage } from "@/app/PROJECTS-CLEAN/[id]/project-page-component";
-
+import toast, { Toaster } from "react-hot-toast";
 import { sessionAuth } from "@/lib/sessionAuth";
 import { ProjectContextProvider } from "./ProjectContext";
 
@@ -28,6 +28,10 @@ const Projects = async ({ params }: { params: ParamsType }) => {
   const teamAdmins = await getTeamAdmins(team.admins);
   const projectMembers = await getProjectMembers(project.members);
   const projectAdmins = await getProjectAdmins(project.admins);
+  console.log("teamMembers", teamMembers);
+  console.log("teamAdmins", teamAdmins);
+  console.log("projectMembers", projectMembers);
+  console.log("projectAdmins", projectAdmins);
 
   if (!project) {
     return <p>No project found.</p>;
@@ -45,6 +49,7 @@ const Projects = async ({ params }: { params: ParamsType }) => {
           projectAdmins={projectAdmins}
           tasks={tasks}
         />
+        <Toaster />
       </ProjectContextProvider>
     </div>
   );

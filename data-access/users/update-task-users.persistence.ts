@@ -20,11 +20,15 @@ async function updateTaskUsers(
   try {
     // Find the user by ID
     for (const user of removedAssignees) {
+      console.log("user removed", user);
+      console.log("task id", taskId);
       // const userData = await User.findById(user);
-      User.findByIdAndUpdate(user, { $pull: { tasks: taskId } });
+      await User.findByIdAndUpdate(user, { $pull: { tasks: taskId } });
     }
     for (const user of addedAssignees) {
-      User.findByIdAndUpdate(user, { $push: { tasks: taskId } });
+      console.log("user added", user);
+      console.log("task id", taskId);
+      await User.findByIdAndUpdate(user, { $push: { tasks: taskId } });
     }
   } catch (error) {
     throw new Error("Error updating task users" + error);
