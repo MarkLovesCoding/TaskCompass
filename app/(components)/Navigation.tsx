@@ -24,6 +24,9 @@ import getUser from "@/data-access/users/get-user.persistence";
 import getUserTeamsAsMember from "@/data-access/teams/get-user-teams-as-member";
 import getUserTeamsAsAdmin from "@/data-access/teams/get-user-teams-as-admin";
 import { sessionAuth } from "@/lib/sessionAuth";
+import { ProjectDto } from "@/use-cases/project/types";
+import { TeamDto } from "@/use-cases/team/types";
+import { UserDto } from "@/use-cases/user/types";
 
 const Navigation: React.FC = async () => {
   const session = await sessionAuth();
@@ -31,13 +34,13 @@ const Navigation: React.FC = async () => {
   const sessionUserId = session?.user.id;
   console.log("session", session);
   //move into usecase?
-  let userObject,
-    userProjectsAsAdmin,
-    userProjectsAsMember,
-    userTeamsAsAdmin,
-    userTeamsAsMember;
+  let userObject: UserDto,
+    userProjectsAsAdmin: ProjectDto[],
+    userProjectsAsMember: ProjectDto[],
+    userTeamsAsAdmin: TeamDto[],
+    userTeamsAsMember: TeamDto[];
   if (session) {
-    userObject = await getUser(sessionUserId as string);
+    userObject = await getUser(sessionUserId!);
     userProjectsAsAdmin = await getUserProjectsAsAdmin(userObject);
     userProjectsAsMember = await getUserProjectsAsMember(userObject);
     userTeamsAsAdmin = await getUserTeamsAsAdmin(userObject);
@@ -76,7 +79,7 @@ const Navigation: React.FC = async () => {
                       <DropdownMenuPortal>
                         <DropdownMenuSubContent>
                           {/* <DropdownMenuContent align="start"> */}
-                          {userTeamsAsAdmin?.map((team, team_idx) => (
+                          {userTeamsAsAdmin!.map((team, team_idx) => (
                             <DropdownMenuItem key={team_idx}>
                               <Link href={`/TEAMS-CLEAN/${team.id}`}>
                                 {team.name}
@@ -84,7 +87,7 @@ const Navigation: React.FC = async () => {
                             </DropdownMenuItem>
                           ))}
                           <DropdownMenuSeparator />
-                          {userTeamsAsMember?.map((team, team_idx) => (
+                          {userTeamsAsMember!.map((team, team_idx) => (
                             <DropdownMenuItem key={team_idx}>
                               <Link href={`/TEAMS-CLEAN/${team.id}`}>
                                 {team.name}
@@ -104,7 +107,7 @@ const Navigation: React.FC = async () => {
                       <DropdownMenuPortal>
                         <DropdownMenuSubContent>
                           {/* <DropdownMenuContent align="start"> */}
-                          {userProjectsAsAdmin?.map((project, project_idx) => (
+                          {userProjectsAsAdmin!.map((project, project_idx) => (
                             <DropdownMenuItem key={project_idx}>
                               <Link href={`/PROJECTS-CLEAN/${project.id}`}>
                                 {project.name}
@@ -112,7 +115,7 @@ const Navigation: React.FC = async () => {
                             </DropdownMenuItem>
                           ))}
                           <DropdownMenuSeparator />
-                          {userProjectsAsMember?.map((project, project_idx) => (
+                          {userProjectsAsMember!.map((project, project_idx) => (
                             <DropdownMenuItem key={project_idx}>
                               <Link href={`/PROJECTS-CLEAN/${project.id}`}>
                                 {project.name}
@@ -171,18 +174,18 @@ const Navigation: React.FC = async () => {
                     </Link>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="start">
-                    {userProjectsAsAdmin?.map((project, project_idx) => (
+                    {userProjectsAsAdmin!.map((project, project_idx) => (
                       <DropdownMenuItem key={project_idx}>
                         <Link href={`/PROJECTS-CLEAN/${project.id}`}>
                           {project.name}
                         </Link>
                       </DropdownMenuItem>
                     ))}
-                    {userProjectsAsMember &&
+                    {userProjectsAsMember! &&
                       userProjectsAsMember.length > 0 && (
                         <DropdownMenuSeparator />
                       )}
-                    {userProjectsAsMember?.map((project, project_idx) => (
+                    {userProjectsAsMember!.map((project, project_idx) => (
                       <DropdownMenuItem key={project_idx}>
                         <Link href={`/PROJECTS-CLEAN/${project.id}`}>
                           {project.name}
@@ -204,17 +207,17 @@ const Navigation: React.FC = async () => {
                     </Link>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="start">
-                    {userTeamsAsAdmin?.map((team, team_idx) => (
+                    {userTeamsAsAdmin!.map((team, team_idx) => (
                       <DropdownMenuItem key={team_idx}>
                         <Link href={`/TEAMS-CLEAN/${team.id}`}>
                           {team.name}
                         </Link>
                       </DropdownMenuItem>
                     ))}
-                    {userTeamsAsMember && userTeamsAsMember?.length > 0 && (
+                    {userTeamsAsMember! && userTeamsAsMember?.length > 0 && (
                       <DropdownMenuSeparator />
                     )}
-                    {userTeamsAsMember?.map((team, team_idx) => (
+                    {userTeamsAsMember!.map((team, team_idx) => (
                       <DropdownMenuItem key={team_idx}>
                         <Link href={`/TEAMS-CLEAN/${team.id}`}>
                           {team.name}

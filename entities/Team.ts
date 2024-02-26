@@ -3,40 +3,36 @@ import { ZodError, z } from "zod";
 export class TeamEntity {
   private id?: string;
   private name: string;
-  private members: string[];
-  private admins: string[];
+  private users: string[];
   private projects: string[];
+  private createdBy: string;
 
   constructor({
     id,
     name,
-    members,
-    admins,
+    users,
     projects,
+    createdBy,
   }: {
     id?: string;
     name: string;
-    members: string[];
-    admins: string[];
+    users: string[];
     projects: string[];
+    createdBy: string;
   }) {
     this.id = id;
     this.name = name;
-    this.members = members;
-    this.admins = admins;
+    this.users = users;
     this.projects = projects;
-
+    this.createdBy = createdBy;
     this.validate();
   }
 
   getName() {
     return this.name;
   }
-  getMembers() {
-    return this.members;
-  }
-  getAdmins() {
-    return this.admins;
+  getUsers() {
+    return this.users;
   }
 
   getProjects() {
@@ -46,27 +42,31 @@ export class TeamEntity {
   getId() {
     return this.id;
   }
-  addMember(member: string) {
-    this.members.push(member);
+  getCreatedBy() {
+    return this.createdBy;
   }
-  removeMember(member: string) {
-    this.members = this.members.filter((m) => m !== member);
+  addUser(user: string) {
+    this.users.push(user);
   }
-  addMembers(members: string[]) {
-    members.forEach((member) => {
-      this.members.push(member);
+  removeUser(user: string) {
+    if (user !== this.createdBy) {
+      this.users = this.users.filter((m) => m !== user);
+    }
+  }
+  addUsers(users: string[]) {
+    users.forEach((user) => {
+      this.users.push(user);
     });
   }
-  removeMembers(members: string[]) {
-    members.forEach((member) => {
-      this.members = this.members.filter((a) => a !== member);
+  removeUsers(users: string[]) {
+    users.forEach((user) => {
+      if (user !== this.createdBy) {
+        this.users = this.users.filter((a) => a !== user);
+      }
     });
   }
-  updateMembers(members: string[]) {
-    this.members = members;
-  }
-  updateAdmins(admins: string[]) {
-    this.admins = admins;
+  updateUsers(users: string[]) {
+    this.users = users;
   }
 
   addProject(project: string) {
@@ -79,9 +79,9 @@ export class TeamEntity {
   private validate() {
     const teamSchema = z.object({
       name: z.string().min(3).max(20),
-      members: z.array(z.string()).min(0),
-      admins: z.array(z.string()).min(1),
+      users: z.array(z.string()).min(0),
       projects: z.array(z.string()).optional(),
+      createdBy: z.string(),
     });
     try {
       teamSchema.parse(this);

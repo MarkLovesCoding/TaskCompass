@@ -1,19 +1,19 @@
 import { ProjectEntity } from "@/entities/Project";
 
 import { GetUserSession } from "@/use-cases/user/types";
-import { GetProject, UpdateProject, UpdateProjectAdmins } from "./types";
+import { GetProject, UpdateProject, UpdateProjectUsers } from "./types";
 import { projectToDto } from "./utils";
 
-export async function updateProjectAdminsUseCase(
+export async function updateProjectUsersUseCase(
   context: {
     updateProject: UpdateProject;
-    updateManyProjectAdmins: UpdateProjectAdmins;
+    updateManyProjectUsers: UpdateProjectUsers;
     getProject: GetProject;
     getUser: GetUserSession;
   },
   data: {
     projectId: string;
-    updatedAdmins: string[];
+    updatedUsers: string[];
   }
 ) {
   const { userId } = context.getUser()!;
@@ -21,16 +21,16 @@ export async function updateProjectAdminsUseCase(
 
   const project = await context.getProject(data.projectId);
   const validatedProject = new ProjectEntity(project);
-  // validatedProject.addAdmins(data.addedAdmins);
-  // validatedProject.removeAdmins(data.removedAdmins);
-  const initialAdmins = validatedProject.getAdmins();
-  validatedProject.updateAdmins(data.updatedAdmins);
+  // validatedProject.addMembers(data.addedMembers);
+  // validatedProject.removeMembers(data.removedMembers);
+  const initialUsers = validatedProject.getUsers();
+  validatedProject.updateUsers(data.updatedUsers);
 
   console.log("updatedProject", validatedProject);
   await context.updateProject(projectToDto(validatedProject));
-  await context.updateManyProjectAdmins(
-    data.projectId,
-    initialAdmins,
-    data.updatedAdmins
-  );
+  // await context.updateManyProjectUsers(
+  //   data.projectId,
+  //   initialUsers,
+  //   data.updatedUsers
+  // );
 }

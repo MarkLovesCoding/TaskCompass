@@ -18,8 +18,8 @@ import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
 import { getInitials } from "@/app/utils/getInitials";
 import { ProjectDto } from "@/use-cases/project/types";
 import { UserDto } from "@/use-cases/user/types";
-import { updateProjectMembersAction } from "@/app/PROJECTS-CLEAN/_actions/update-project-members.action";
-import { updateProjectAdminsAction } from "@/app/PROJECTS-CLEAN/_actions/update-project-admins.action";
+import { updateProjectUsersAction } from "@/app/PROJECTS-CLEAN/_actions/update-project-users.action";
+// import { updateProjectAdminsAction } from "@/app/PROJECTS-CLEAN/_actions/update-project-admins.action";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useEffect, useState } from "react";
@@ -100,8 +100,8 @@ export function MemberCardSearchTable({
     //   form.setValue("Users", updatedUsers);
     // }
     // if (isOpen) {
-    await updateProjectMembersAction(project.id, projectUsersIdLists);
-    await updateProjectAdminsAction(project.id, projectUsersIdLists);
+    await updateProjectUsersAction(project.id, projectUsersIdLists);
+    // await updateProjectAdminsAction(project.id, projectUsersIdLists);
     // await updateProjectMembersAction(project.id, projectMembersIdList, projectAdminsIdList);
     // await updateProjectAdminsAction(project.id, projectAdminsIdLists);
     // }
@@ -170,7 +170,7 @@ export function MemberCardSearchTable({
         </div>
         {/* </Button> */}
       </PopoverTrigger>
-      <PopoverContent className="w-96">
+      <PopoverContent className="w-fit">
         <Command>
           <CommandInput className="h-9" placeholder="Search members..." />
           <CommandGroup>
@@ -224,7 +224,7 @@ export function MemberCardSearchTable({
                         {getInitials(user.name)}
                       </AvatarFallback>
                     </Avatar>
-                    <div className="grid grid-cols-3 gap-4">
+                    <div className=" gap-4">
                       <div>
                         <div className="flex flex-col justify-start mr-4">
                           <span className="font-medium">{user.name}</span>{" "}
@@ -266,10 +266,16 @@ export function MemberCardSearchTable({
                         </div>
                       </div>
                     </div>
-                    <MemberCardPermissionsSelect
-                      user={user}
-                      project={project}
-                    />
+                    {project.createdBy !== user.id ? (
+                      <MemberCardPermissionsSelect
+                        user={user}
+                        project={project}
+                      />
+                    ) : (
+                      <Badge className="shrink-0" variant="secondary">
+                        Admin
+                      </Badge>
+                    )}
                     {/* <Select defaultValue={getUserType(user, project.id)}>
                       <SelectTrigger>
                         <SelectValue
@@ -406,10 +412,10 @@ export function MemberCardSearchTable({
                           {user.email}
                         </span>
                       </div>
-                      <MemberCardPermissionsSelect
+                      {/* <MemberCardPermissionsSelect
                         user={user}
                         project={project}
-                      />
+                      /> */}
                       {/* <Select defaultValue={getUserType(user, project.id)}>
                         <SelectTrigger>
                           <SelectValue
@@ -423,6 +429,8 @@ export function MemberCardSearchTable({
                       </Select> */}
                       <div>
                         <Button
+                          variant={"ghost"}
+                          className="bg-transparent "
                           onClick={() => {
                             setProjectUsersList((prev) => {
                               if (!prev.some((u) => u.id === user.id)) {

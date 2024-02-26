@@ -1,18 +1,18 @@
 import { TeamEntity } from "@/entities/Team";
-import { GetTeam, UpdateTeam, UpdateTeamMembers } from "@/use-cases/team/types";
+import { GetTeam, UpdateTeam, UpdateTeamUsers } from "@/use-cases/team/types";
 import { GetUserSession } from "@/use-cases/user/types";
 import { teamToDto } from "@/use-cases/team/utils";
 
-export async function updateTeamMembersUseCase(
+export async function updateTeamUsersUseCase(
   context: {
     updateTeam: UpdateTeam;
-    updateManyTeamMembers: UpdateTeamMembers;
+    updateManyTeamUsers: UpdateTeamUsers;
     getTeam: GetTeam;
     getUser: GetUserSession;
   },
   data: {
     teamId: string;
-    updatedMembers: string[];
+    updatedUsers: string[];
   }
 ) {
   const { userId } = context.getUser()!;
@@ -20,14 +20,14 @@ export async function updateTeamMembersUseCase(
 
   const team = await context.getTeam(data.teamId);
   const validatedTeam = new TeamEntity(team);
-  const initialMembers = validatedTeam.getMembers();
-  validatedTeam.updateMembers(data.updatedMembers);
+  const initialUserss = validatedTeam.getUsers();
+  validatedTeam.updateUsers(data.updatedUsers);
 
   console.log("updatedTeam", validatedTeam);
   await context.updateTeam(teamToDto(validatedTeam));
-  await context.updateManyTeamMembers(
-    data.teamId,
-    initialMembers,
-    data.updatedMembers
-  );
+  // await context.updateManyTeamUserss(
+  //   data.teamId,
+  //   initialUserss,
+  //   data.updatedUserss
+  // );
 }

@@ -2,19 +2,19 @@ import type { UserModelType } from "./types";
 import type { UserDto } from "@/use-cases/user/types";
 export function userModelToUserDto(user: UserModelType): UserDto {
   const convertedProjectsAsAdmin =
-    user.projectsAsAdmin.length > 0
+    user.projectsAsAdmin && user.projectsAsAdmin.length > 0
       ? user.projectsAsAdmin.map((user) => user.toString())
       : [];
   const convertedTeamsAsAdmin =
-    user.teamsAsAdmin.length > 0
+    user.teamsAsAdmin && user.teamsAsAdmin.length > 0
       ? user.teamsAsAdmin.map((user) => user.toString())
       : [];
   const convertedProjectsAsMember =
-    user.projectsAsMember.length > 0
+    user.projectsAsMember && user.projectsAsMember.length > 0
       ? user.projectsAsMember.map((user) => user.toString())
       : [];
   const convertedTeamsAsMember =
-    user.teamsAsMember.length > 0
+    user.teamsAsMember && user.teamsAsMember.length > 0
       ? user.teamsAsMember.map((user) => user.toString())
       : [];
   const convertedTasks =

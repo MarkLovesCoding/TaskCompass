@@ -50,6 +50,9 @@ const MemberCardPermissionsSelect = ({
   };
   const handleRoleChangeSubmit = async () => {
     console.log("handleRoleChangeSubmit", selectedRole);
+    console.log("user", user);
+    console.log("project", project);
+    console.log("selectedRole", selectedRole);
     // You can perform additional actions here if needed
     await UpdateProjectUserRoleAction(
       user.id,

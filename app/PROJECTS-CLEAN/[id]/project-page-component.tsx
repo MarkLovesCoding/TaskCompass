@@ -70,39 +70,40 @@ import CardView from "./CardView";
 // import UpdateProjectMembersCard from "./UpdateProjectMembersCard";
 export function ProjectPage({
   userId,
+  user,
   project,
   tasks,
-  teamMembers,
-  teamAdmins,
-  projectMembers,
-  projectAdmins,
-}: {
+  teamUsers,
+  // teamAdmins,
+  projectUsers,
+}: // projectAdmins,
+{
   userId: string;
+  user: UserDto;
   project: ProjectDto;
   tasks: TaskDto[];
-  teamMembers: UserDto[];
-  teamAdmins: UserDto[];
-  projectMembers: UserDto[];
-  projectAdmins: UserDto[];
+  teamUsers: UserDto[];
+  // teamAdmins: UserDto[];
+  projectUsers: UserDto[];
+  // projectAdmins: UserDto[];
 }) {
   type SortTypeType = "priority" | "status" | "category";
 
   const [sortBy, setSortBy] = useState<string>("priority");
-  const isUserAdmin = project.admins.some((admin) => admin === userId);
+  const isUserAdmin = user.projectsAsAdmin.some((id) => id === project.id);
   const archivedTasks = tasks.filter((task) => task.archived);
-  const allTeamUsers = [...teamMembers, ...teamAdmins];
-  const uniqueTeamUserIds = new Set(allTeamUsers.map((user) => user.id));
-  const uniqueTeamUsers = Array.from(uniqueTeamUserIds, (userId) =>
-    allTeamUsers.find((user) => user.id === userId)
-  ) as UserDto[];
-  const allProjectUsers = [...projectMembers, ...projectAdmins];
-  const uniqueProjectUserIds = new Set(allProjectUsers.map((user) => user.id));
-  const uniqueProjectUsers = Array.from(uniqueProjectUserIds, (userId) =>
-    allProjectUsers.find((user) => user.id === userId)
-  ) as UserDto[];
+  const uniqueTeamUsers = [...teamUsers];
+  // const uniqueTeamUserIds = new Set(allTeamUsers.map((user) => user.id));
+  // const uniqueTeamUsers = Array.from(uniqueTeamUserIds, (userId) =>
+  //   allTeamUsers.find((user) => user.id === userId)
+  // ) as UserDto[];
+  const uniqueProjectUsers = [...projectUsers];
+  // const uniqueProjectUserIds = new Set(allProjectUsers.map((user) => user.id));
+  // const uniqueProjectUsers = Array.from(uniqueProjectUserIds, (userId) =>
+  //   allProjectUsers.find((user) => user.id === userId)
+  // ) as UserDto[];
 
   // let sortBy = "priority";
-  console.log("teamMembers-SECOND COMONENT", teamMembers);
 
   return (
     <div className="flex flex-col justify-start items-center min-h-[calc(100vh-4rem)]  ">

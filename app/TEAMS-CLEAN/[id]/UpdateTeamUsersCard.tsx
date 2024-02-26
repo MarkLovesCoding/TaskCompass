@@ -26,7 +26,8 @@ import * as z from "zod";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TeamDto } from "@/use-cases/team/types";
-import { updateTeamMembersAction } from "../_actions/update-team-members.action";
+// import { updateTeamMembersAction } from "../_actions/update-team-members.action";
+import { updateTeamUsersAction } from "../_actions/update-team-users.action";
 import getAllUsers from "@/data-access/users/get-all-users.persistence";
 import { UserDto } from "@/use-cases/user/types";
 import getTeamMembers from "@/data-access/users/get-team-members.persistence";
@@ -43,44 +44,44 @@ const formSchema = z.object({
   members: z.array(z.string()).min(1),
 });
 
-const UpdateTeamMembersCard = ({
+const UpdateTeamUsersCard = ({
   userId,
   team,
   globalUsers,
-  teamMembers,
+  teamUsers,
 }: {
   userId: string;
   team: TeamDto;
   globalUsers: UserDto[];
-  teamMembers: UserDto[];
+  teamUsers: UserDto[];
 }) => {
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      members: [...team.members],
+      members: [...team.users],
     },
   });
 
   const filteredUsers = useMemo(() => {
-    return globalUsers.filter((user) => !team.members.includes(user.id));
-  }, [globalUsers, team.members]);
+    return globalUsers.filter((user) => !team.users.includes(user.id));
+  }, [globalUsers, team.users]);
 
   const [usersList, setUsersList] = useState<UserDto[]>(filteredUsers);
-  const [membersList, setMembersList] = useState<UserDto[]>(teamMembers);
-  console.log("membersList", membersList);
+  const [teamUsersList, setTeamUsersList] = useState<UserDto[]>(teamUsers);
+  console.log("membersList", teamUsersList);
   // console.log("filteredUsers", filteredUsers);
   const [showCancelButton, setShowCancelButton] = useState(false);
   const [showUpdateButton, setShowUpdateButton] = useState(false);
   const resetMembers = () => {
-    form.setValue("members", [...team.members]);
-    setMembersList(teamMembers);
+    form.setValue("members", [...team.users]);
+    setTeamUsersList(teamUsers);
     setUsersList(filteredUsers);
     setShowUpdateButton(false);
     setShowCancelButton(false);
   };
-  const handleUpdateTeamMembers = () => {
-    const membersIds = membersList.map((member) => member.id);
+  const handleUpdateTeamUsers = () => {
+    const membersIds = teamUsersList.map((user) => user.id);
     console.log("membersIds", membersIds);
     form.setValue("members", membersIds);
   };
@@ -91,7 +92,7 @@ const UpdateTeamMembersCard = ({
     // console.log("current members", membersList);
     console.log("values", values);
 
-    await updateTeamMembersAction(team.id, values.members);
+    await updateTeamUsersAction(team.id, values.members);
     setShowUpdateButton(false);
     setShowCancelButton(false);
     router.refresh();
@@ -115,27 +116,27 @@ const UpdateTeamMembersCard = ({
                 <FormItem className="flex flex-col gap-3 mb-2">
                   <FormLabel className="mt-2">Users Assigned</FormLabel>
                   <div className="flex flex-row w-full justify-around">
-                    {membersList.map((user, _index) => (
+                    {teamUsersList.map((user, _index) => (
                       <div key={_index}>{user.name}</div>
                     ))}
                     <FormControl>
-                      <DropdownMenu onOpenChange={handleUpdateTeamMembers}>
+                      <DropdownMenu onOpenChange={handleUpdateTeamUsers}>
                         <DropdownMenuTrigger asChild>
                           <Button variant="outline"> + </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent className="w-56">
                           <DropdownMenuLabel>Team Users</DropdownMenuLabel>
                           <DropdownMenuSeparator />
-                          {teamMembers.length === 0
+                          {teamUsers.length === 0
                             ? "No other users"
-                            : membersList?.map((user, index) => (
+                            : teamUsersList?.map((user, index) => (
                                 <DropdownMenuItem
                                   key={index}
                                   // Check if user is already in assignees
                                   onSelect={(e) => {
                                     e.preventDefault();
                                     if (user.id !== userId) {
-                                      setMembersList((prev) =>
+                                      setTeamUsersList((prev) =>
                                         prev.filter((u) => u.id !== user.id)
                                       );
                                       setUsersList((prev) => {
@@ -165,7 +166,7 @@ const UpdateTeamMembersCard = ({
                                     // Check if user is already in assignees
                                     onSelect={(e) => {
                                       e.preventDefault();
-                                      setMembersList((prev) => {
+                                      setTeamUsersList((prev) => {
                                         if (
                                           !prev.some((u) => u.id === user.id)
                                         ) {
@@ -222,4 +223,4 @@ const UpdateTeamMembersCard = ({
   );
 };
 
-export default UpdateTeamMembersCard;
+export default UpdateTeamUsersCard;

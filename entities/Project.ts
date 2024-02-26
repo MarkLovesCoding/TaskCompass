@@ -1,40 +1,45 @@
+import { StyledString } from "next/dist/build/swc";
 import { ZodError, z } from "zod";
 
 export class ProjectEntity {
   private id?: string;
   private name: string;
   private description: string;
-  private admins: string[];
-  private members: string[];
+  private users: string[];
+  // private members: string[];
   private tasks: string[];
   private team: string;
+  private createdBy: string;
   private archived: boolean;
   constructor({
     id,
     name,
     description,
-    admins,
-    members,
+    users,
+    // members,
     tasks,
     team,
+    createdBy,
     archived = false,
   }: {
     id?: string;
     name: string;
     description: string;
-    members: string[];
-    admins: string[];
+    users: string[];
+    // admins: string[];
     tasks: string[];
     team: string;
+    createdBy: string;
     archived: boolean;
   }) {
     this.id = id;
     this.name = name;
     this.description = description;
-    this.members = members;
-    this.admins = admins;
+    this.users = users;
+    // this.admins = admins;
     this.tasks = tasks;
     this.team = team;
+    this.createdBy = createdBy;
     this.archived = archived;
     this.validate();
   }
@@ -44,12 +49,6 @@ export class ProjectEntity {
   }
   getDescription() {
     return this.description;
-  }
-  getMembers() {
-    return this.members;
-  }
-  getAdmins() {
-    return this.admins;
   }
   getTasks() {
     return this.tasks;
@@ -63,29 +62,36 @@ export class ProjectEntity {
   getArchived() {
     return this.archived;
   }
+  getUsers() {
+    return this.users;
+  }
+  getCreatedBy() {
+    return this.createdBy;
+  }
+  addUser(user: string) {
+    this.users.push(user);
+  }
+  removeUser(user: string) {
+    if (user !== this.createdBy) {
+      this.users = this.users.filter((m) => m !== user);
+    }
+  }
+  addUsers(users: string[]) {
+    users.forEach((user) => {
+      this.users.push(user);
+    });
+  }
+  removeUsers(users: string[]) {
+    users.forEach((user) => {
+      if (user !== this.createdBy) {
+        this.users = this.users.filter((a) => a !== user);
+      }
+    });
+  }
+  updateUsers(users: string[]) {
+    this.users = users;
+  }
 
-  addMember(member: string) {
-    this.members.push(member);
-  }
-  removeMember(member: string) {
-    this.members = this.members.filter((m) => m !== member);
-  }
-  addMembers(members: string[]) {
-    members.forEach((member) => {
-      this.members.push(member);
-    });
-  }
-  removeMembers(members: string[]) {
-    members.forEach((member) => {
-      this.members = this.members.filter((a) => a !== member);
-    });
-  }
-  updateMembers(members: string[]) {
-    this.members = members;
-  }
-  updateAdmins(admins: string[]) {
-    this.admins = admins;
-  }
   updateArchived(archived: boolean) {
     this.archived = archived;
   }
@@ -98,23 +104,15 @@ export class ProjectEntity {
   updateDescription(description: string) {
     this.description = description;
   }
-  updateUserRole(userId: string, role: "admin" | "member") {
-    if (role === "admin") {
-      this.members = this.members.filter((m) => m !== userId);
-      this.admins.push(userId);
-    } else if (role === "member") {
-      this.admins = this.admins.filter((a) => a !== userId);
-      this.members.push(userId);
-    }
-  }
 
   private validate() {
     const projectSchema = z.object({
       name: z.string().min(3).max(20),
       description: z.string().min(5).max(50),
-      members: z.array(z.string()).optional(),
-      admins: z.array(z.string()).optional(),
+      users: z.array(z.string()).optional(),
+      // admins: z.array(z.string()).optional(),
       tasks: z.array(z.string()).optional(),
+      createdBy: z.string(),
       archived: z.boolean(),
     });
     try {

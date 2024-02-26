@@ -4,15 +4,13 @@ export function teamModelToTeamDto(team: TeamModelType) {
     team.projects.length > 0
       ? team.projects.map((team) => team.toString())
       : [];
-  const convertedAdmins =
-    team.admins.length > 0 ? team.admins.map((team) => team.toString()) : [];
-  const convertedMembers =
-    team.members.length > 0 ? team.members.map((team) => team.toString()) : [];
+  const convertedUsers =
+    team.users.length > 0 ? team.users.map((user) => user.toString()) : [];
   return {
     id: team._id.toString(),
     name: team.name,
     projects: convertedProjects,
-    admins: convertedAdmins,
-    members: convertedMembers,
+    users: convertedUsers,
+    createdBy: team.createdBy.toString(),
   };
 }

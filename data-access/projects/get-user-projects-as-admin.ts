@@ -18,7 +18,6 @@ async function getUserProjectsAsAdmin(user: UserDto): Promise<ProjectDto[]> {
 
   // const teamId = team.id;
   const projectIds = user.projectsAsAdmin;
-  console.log("=========projectIds: ", projectIds);
   const projects: ProjectDto[] = [];
   try {
     // Find the user by ID
@@ -27,7 +26,7 @@ async function getUserProjectsAsAdmin(user: UserDto): Promise<ProjectDto[]> {
       projects.push(projectModelToProjectDto(project));
     }
   } catch (error) {
-    throw new Error("Error retrieving team:" + error);
+    throw new Error("Error retrieving user projects:" + error);
   }
   return projects;
 }

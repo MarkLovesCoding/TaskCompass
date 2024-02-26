@@ -8,10 +8,10 @@ export function projectToDto(project: ProjectEntity): ProjectDto {
     id: projectId,
     name: project.getName(),
     description: project.getDescription(),
-    members: project.getMembers(),
-    admins: project.getAdmins(),
+    users: project.getUsers(),
     tasks: project.getTasks(),
     team: project.getTeam(),
+    createdBy: project.getCreatedBy(),
     archived: project.getArchived(),
   };
 }
@@ -22,10 +22,10 @@ export function projectToCreateProjectDto(
   return {
     name: project.getName(),
     description: project.getDescription(),
-    members: project.getMembers(),
-    admins: project.getAdmins(),
+    users: project.getUsers(),
     tasks: project.getTasks(),
     team: project.getTeam(),
+    createdBy: project.getCreatedBy(),
     archived: project.getArchived(),
   };
 }

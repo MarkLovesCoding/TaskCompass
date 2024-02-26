@@ -2,31 +2,27 @@ export type ProjectDto = {
   id: string;
   name: string;
   description: string;
-  members: string[];
-  admins: string[];
+  users: string[];
   tasks: string[];
   team: string;
+  createdBy: string;
   archived: boolean;
 };
 export type CreateProjectDto = {
   name: string;
   description: string;
-  members: string[];
-  admins: string[];
+  users: string[];
   tasks: string[];
   team: string;
+  createdBy: string;
   archived: boolean;
 };
-export type UpdateProjectMembers = (
+export type UpdateProjectUsers = (
   projectId: string,
-  initialMembers: string[],
-  updatedMembers: string[]
+  initialUsers: string[],
+  updatedUsers: string[]
 ) => Promise<void>;
-export type UpdateProjectAdmins = (
-  projectId: string,
-  initialAdmins: string[],
-  updatedAdmins: string[]
-) => Promise<void>;
+
 export type CreateNewProject = (project: CreateProjectDto) => Promise<void>;
 export type UpdateProject = (project: ProjectDto) => void;
 export type DeleteProject = (projectId: string) => void;

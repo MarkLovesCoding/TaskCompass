@@ -12,6 +12,7 @@ import Task from "@/db/(models)/Task";
 
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
+import { createDecipheriv } from "crypto";
 // let newUser;
 
 export const options = {
@@ -200,19 +201,20 @@ export const options = {
         let initialTeamAssigned = await Team.create({
           name: newTeamData.name,
           projects: [],
-          admins: [],
-          members: [],
+          users: [],
+          createdBy: newUser._id,
         });
 
         newUser.projectsAsAdmin.push(initialProjectAssigned._id);
         newUser.teamsAsAdmin.push(initialTeamAssigned._id);
         await newUser.save();
 
-        initialProjectAssigned.admins.push(newUser._id);
+        initialProjectAssigned.users.push(newUser._id);
         initialProjectAssigned.team = initialTeamAssigned._id;
+        initialProjectAssigned.createdBy = newUser._id;
         await initialProjectAssigned.save();
         initialTeamAssigned.projects.push(initialProjectAssigned._id);
-        initialTeamAssigned.admins.push(newUser._id);
+        initialTeamAssigned.users.push(newUser._id);
         await initialTeamAssigned.save();
 
         // await Project.findByIdAndUpdate(

@@ -110,10 +110,16 @@ export class UserEntity {
     projectId: string,
     updateType: "admin" | "member"
   ) {
-    if (updateType === "admin") {
+    if (
+      updateType === "admin" &&
+      !this.getProjectsAsAdmin().includes(projectId)
+    ) {
       this.addProjectAsAdmin(projectId);
       this.removeProjectAsMember(projectId);
-    } else if (updateType === "member") {
+    } else if (
+      updateType === "member" &&
+      !this.getProjectsAsMember().includes(projectId)
+    ) {
       this.addProjectAsMember(projectId);
       this.removeProjectAsAdmin(projectId);
     } else {

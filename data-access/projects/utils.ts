@@ -8,24 +8,21 @@ export function projectModelToProjectDto(
     project.tasks.length > 0
       ? project.tasks.map((task) => task.toString())
       : [];
-  const convertedMembers =
-    project.members.length > 0
-      ? project.members.map((member) => member.toString())
+  const convertedUsers =
+    project.users.length > 0
+      ? project.users.map((user) => user.toString())
       : [];
-  const convertedAdmins =
-    project.admins.length > 0
-      ? project.admins.map((admin) => admin.toString())
-      : [];
+
   const convertedId = project._id.toString();
   const convertedTeam = project.team ? project.team.toString() : "";
   return {
     id: convertedId,
     name: project.name,
     description: project.description,
-    admins: convertedAdmins,
-    members: convertedMembers,
+    users: convertedUsers,
     tasks: convertedTasks,
     team: convertedTeam,
+    createdBy: project.createdBy.toString(),
     archived: project.archived,
   };
 }

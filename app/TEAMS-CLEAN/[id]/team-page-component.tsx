@@ -14,7 +14,7 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import type { TeamDto } from "@/use-cases/team/types";
 import { CircleEllipsisIcon } from "lucide-react";
 import { PlusIcon } from "lucide-react";
-import UpdateTeamMembersCard from "./UpdateTeamMembersCard";
+// import UpdateTeamMembersCard from "./UpdateTeamUsersCard";
 import { Separator } from "@/components/ui/separator";
 
 import { unstable_noStore } from "next/cache";
@@ -35,6 +35,7 @@ import { UserDto } from "@/use-cases/user/types";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getInitials } from "@/app/utils/getInitials";
 import { UpdateMembersAndInvite } from "./update-members-and-invite";
+import UpdateTeamUsersCard from "./UpdateTeamUsersCard";
 import {
   Popover,
   PopoverContent,
@@ -42,18 +43,18 @@ import {
 } from "@/components/ui/popover";
 export async function TeamPageComponent({
   team,
+  user,
   userId,
   projects,
   usersList,
-  teamMembers,
-  teamAdmins,
+  teamUsers,
 }: {
   team: TeamDto;
   userId: string;
+  user: UserDto;
   projects: ProjectDto[];
   usersList: UserDto[];
-  teamMembers: UserDto[];
-  teamAdmins: UserDto[];
+  teamUsers: UserDto[];
 }) {
   unstable_noStore();
   // const projects = await getTeamProjects(team);
@@ -65,7 +66,7 @@ export async function TeamPageComponent({
   console.log("team", team);
   const teamId = team.id;
   const archivedProjects = projects.filter((project) => project.archived);
-  const isUserAdmin = teamAdmins.some((admin) => admin.id === userId);
+  const isUserAdmin = user.teamsAsAdmin.some((team) => team === teamId);
 
   const countArchivedProjects = archivedProjects.length;
   const countProjects = projects.length - countArchivedProjects;
@@ -90,12 +91,12 @@ export async function TeamPageComponent({
               </div>
               <div>
                 <h2 className="py-2 text-lg font-bold">
-                  Team Members <span>: {teamMembers.length}</span>
+                  Team Members <span>: {teamUsers.length}</span>
                 </h2>
               </div>
             </div>
             <div className="w-96 flex flex-row">
-              {teamMembers.map((member, index) => (
+              {teamUsers.map((member, index) => (
                 <Avatar key={index} className=" w-12 h-12">
                   <AvatarImage src={member.avatar} />
                   <AvatarFallback className={`text-sm bg-gray-500`}>
@@ -132,19 +133,19 @@ export async function TeamPageComponent({
                         </DropdownMenuSubTrigger>
                         <DropdownMenuPortal>
                           <DropdownMenuSubContent>
-                            <UpdateMembersAndInvite
+                            {/* <UpdateMembersAndInvite
                               userId={userId}
                               team={team}
                               globalUsers={usersList}
-                              teamMembers={teamMembers}
-                            />
+                              teamUsers={teamUsers}
+                            /> */}
                             <Separator className="my-2" />
 
-                            <UpdateTeamMembersCard
+                            <UpdateTeamUsersCard
                               userId={userId}
                               team={team}
                               globalUsers={usersList}
-                              teamMembers={teamMembers}
+                              teamUsers={teamUsers}
                             />
                           </DropdownMenuSubContent>
                         </DropdownMenuPortal>{" "}

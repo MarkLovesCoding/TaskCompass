@@ -1,25 +1,20 @@
 export type TeamDto = {
   id: string;
   name: string;
-  admins: string[];
-  members: string[];
+  users: string[];
   projects: string[];
+  createdBy: string;
 };
 export type CreateTeamDto = {
   name: string;
-  admins: string[];
-  members: string[];
+  users: string[];
   projects: string[];
+  createdBy: string;
 };
-export type UpdateTeamMembers = (
+export type UpdateTeamUsers = (
   teamId: string,
-  initialMembers: string[],
-  updatedMembers: string[]
-) => Promise<void>;
-export type UpdateTeamAdmins = (
-  teamId: string,
-  initialAdmins: string[],
-  updatedAdmins: string[]
+  initialUsers: string[],
+  updatedUsers: string[]
 ) => Promise<void>;
 export type GetTeam = (teamId: string) => Promise<TeamDto>;
 export type CreateNewTeam = (team: CreateTeamDto) => Promise<void>;

@@ -22,11 +22,11 @@ export async function createNewProjectUseCase(
   const newProject = new ProjectEntity({
     name: data.name,
     description: data.description,
-    members: [],
-    admins: [user.userId],
+    users: [user.userId],
     tasks: [],
     team: data.teamId,
     archived: false,
+    createdBy: user.userId,
   });
   console.log("____________newProject", newProject);
   await context.createNewProject(projectToCreateProjectDto(newProject));

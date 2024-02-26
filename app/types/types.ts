@@ -11,14 +11,14 @@ export type TaskType = {
   label: string;
   _id?: number | Object | string;
 };
-export type ProjectType = {
-  name: string;
-  description: string;
-  admins: string[];
-  members: string[];
-  tasks: string[];
-  _id?: number | Object | string;
-};
+// export type ProjectType = {
+//   name: string;
+//   description: string;
+//   admins: string[];
+//   members: string[];
+//   tasks: string[];
+//   _id?: number | Object | string;
+// };
 export type ParamsType = {
   id: string;
 };
@@ -37,15 +37,15 @@ export type UserType = {
   createdAt: Date;
   id?: string;
 };
-export type ConnectionType = {
-  userId: string;
-  // id: Number,
-  name: string;
-  email: string;
+// export type ConnectionType = {
+//   userId: string;
+//   // id: Number,
+//   name: string;
+//   email: string;
 
-  projects: string[];
-  tasks: string[];
-};
+//   projects: string[];
+//   tasks: string[];
+// };
 export type Session = {
   user: {
     id: string;

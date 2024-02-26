@@ -6,9 +6,10 @@ import type { TeamDto } from "@/use-cases/team/types";
 import { unstable_noStore } from "next/cache";
 import { sessionAuth } from "@/lib/sessionAuth";
 import getAllUsers from "@/data-access/users/get-all-users.persistence";
-import getTeamMembers from "@/data-access/users/get-team-members.persistence";
-import getTeamAdmins from "@/data-access/users/get-team-admins.persistence";
+import getTeamUsers from "@/data-access/users/get-team-users.persistence";
 import getTeamProjects from "@/data-access/projects/get-team-projects";
+import getUserObject from "@/data-access/users/get-user.persistence";
+import { UserDto } from "@/use-cases/user/types";
 
 type ParamsType = {
   id: string;
@@ -20,10 +21,10 @@ const Projects = async ({ params }: { params: ParamsType }) => {
 
   const teamId = params.id;
   const team: TeamDto = await getTeam(teamId);
+  const user: UserDto = await getUserObject(session!.user.id);
   const projects = await getTeamProjects(team);
   const usersList = await getAllUsers();
-  const teamMembers = await getTeamMembers(team.members);
-  const teamAdmins = await getTeamAdmins(team.admins);
+  const teamUsers = await getTeamUsers(team.users);
 
   if (!team) {
     return (
@@ -37,11 +38,11 @@ const Projects = async ({ params }: { params: ParamsType }) => {
     <div className=" flex justify-center flex-col items-center">
       <TeamPageComponent
         team={team}
+        user={user}
         userId={session?.user.id!}
         projects={projects}
         usersList={usersList}
-        teamMembers={teamMembers}
-        teamAdmins={teamAdmins}
+        teamUsers={teamUsers}
       />
     </div>
   );
