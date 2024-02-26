@@ -58,78 +58,157 @@ const CardView = ({
     <div className="flex md:flex-row  justify-center flex-col w-min-full overflow-x">
       <div className="flex md:flex-row justify-center flex-col w-min-full overflow-x">
         {/* Render div elements for entries where tasks exist */}
-        {Object.entries(sortByObject)
-          .filter(([_, tasks]) => tasks.length > 0)
-          .map(([sorted_type, tasks], sorted_idx) => (
-            <div
-              key={sorted_idx}
-              className={cn(
-                "min-w-[325px]",
-                `flex flex-col items-center py-10 px-4 space-y-8 align-top overflow-clip`
-              )}
-            >
-              <label className="text-2xl font-bold">{`${sorted_type}`}</label>
-              {tasks.map(
-                (task, task_idx) =>
-                  !task.archived && (
-                    <Dialog key={task_idx}>
-                      <DialogTrigger>
-                        <Card
-                          key={task_idx}
-                          className={`border rounded-lg flex items-center w-72 border-gray-500 bg-gray-800 shadow-lg hover:shadow-sm`}
-                        >
-                          <div className="flex flex-col overflow-hidden p-2 ">
-                            <CardHeader className="flex justify-start">
-                              <Badge
-                                className={cn(
-                                  colorByPriority(task.priority),
-                                  "w-min"
-                                )}
-                              >
-                                {task.priority}
-                              </Badge>
-                              <CardTitle className="text-start">
-                                {task.name}
-                              </CardTitle>
-                              <CardDescription className="text-start">
-                                {task.description}
-                              </CardDescription>
-                            </CardHeader>
-                          </div>
-                        </Card>
-                      </DialogTrigger>
-                      <DialogContent
-                        onOpenAutoFocus={(event: Event) =>
-                          event.preventDefault()
-                        }
-                        className="p-6 w-max-[768px] bg-gray-800 rounded-lg border-2"
-                      >
-                        <TaskCard
-                          task={task}
-                          project={project}
-                          projectUsers={projectUsers}
-                        />
-                      </DialogContent>
-                    </Dialog>
-                  )
-              )}
-            </div>
-          ))}
-        {/* Render div element for "No Tasks" case */}
-        {Object.entries(sortByObject)
-          .filter(([_, tasks]) => tasks.length === 0)
-          .map(([sorted_type], sorted_idx) => (
-            <div
-              key={sorted_idx}
-              className={cn(
-                "min-w-[325px]",
-                `flex flex-col items-center py-10 px-4 space-y-8 align-top overflow-clip`
-              )}
-            >
-              <label className="text-2xl font-bold">{`${sorted_type}`}</label>
-              <span>No tasks</span>
-            </div>
-          ))}
+        {type === "category" ? (
+          <>
+            {Object.entries(sortByObject)
+              .filter(([_, tasks]) => tasks.length > 0)
+              .map(([sorted_type, tasks], sorted_idx) => (
+                <div
+                  key={sorted_idx}
+                  className={cn(
+                    "min-w-[325px]",
+                    `flex flex-col items-center py-10 px-4 space-y-8 align-top overflow-clip`
+                  )}
+                >
+                  <label className="text-2xl font-bold">{`${sorted_type}`}</label>
+                  {tasks.map(
+                    (task, task_idx) =>
+                      !task.archived && (
+                        <Dialog key={task_idx}>
+                          <DialogTrigger>
+                            <Card
+                              key={task_idx}
+                              className={`border rounded-lg flex items-center w-72 border-gray-500 bg-gray-800 shadow-lg hover:shadow-sm`}
+                            >
+                              <div className="flex flex-col overflow-hidden p-2 ">
+                                <CardHeader className="flex justify-start">
+                                  <Badge
+                                    className={cn(
+                                      colorByPriority(task.priority),
+                                      "w-min"
+                                    )}
+                                  >
+                                    {task.priority}
+                                  </Badge>
+                                  <CardTitle className="text-start">
+                                    {task.name}
+                                  </CardTitle>
+                                  <CardDescription className="text-start">
+                                    {task.description}
+                                  </CardDescription>
+                                </CardHeader>
+                              </div>
+                            </Card>
+                          </DialogTrigger>
+                          <DialogContent
+                            onOpenAutoFocus={(event: Event) =>
+                              event.preventDefault()
+                            }
+                            className="p-6 w-max-[768px] bg-gray-800 rounded-lg border-2"
+                          >
+                            <TaskCard
+                              task={task}
+                              project={project}
+                              projectUsers={projectUsers}
+                            />
+                          </DialogContent>
+                        </Dialog>
+                      )
+                  )}
+                </div>
+              ))}
+            {/* Render div element for "No Tasks" case */}
+            {Object.entries(sortByObject)
+              .filter(([_, tasks]) => tasks.length === 0)
+              .map(([sorted_type], sorted_idx) => (
+                <div
+                  key={sorted_idx}
+                  className={cn(
+                    "min-w-[325px]",
+                    `flex flex-col items-center py-10 px-4 space-y-8 align-top overflow-clip`
+                  )}
+                >
+                  <label className="text-2xl font-bold">{`${sorted_type}`}</label>
+                  <span>No tasks</span>
+                </div>
+              ))}
+          </>
+        ) : (
+          <>
+            {Object.entries(sortByObject)
+              .filter(([_, tasks]) => tasks.length > 0)
+              .map(([sorted_type, tasks], sorted_idx) => (
+                <div
+                  key={sorted_idx}
+                  className={cn(
+                    "min-w-[325px]",
+                    `flex flex-col items-center py-10 px-4 space-y-8 align-top overflow-clip`
+                  )}
+                >
+                  <label className="text-2xl font-bold">{`${sorted_type}`}</label>
+                  {tasks.map(
+                    (task, task_idx) =>
+                      !task.archived && (
+                        <Dialog key={task_idx}>
+                          <DialogTrigger>
+                            <Card
+                              key={task_idx}
+                              className={`border rounded-lg flex items-center w-72 border-gray-500 bg-gray-800 shadow-lg hover:shadow-sm`}
+                            >
+                              <div className="flex flex-col overflow-hidden p-2 ">
+                                <CardHeader className="flex justify-start">
+                                  <Badge
+                                    className={cn(
+                                      colorByPriority(task.priority),
+                                      "w-min"
+                                    )}
+                                  >
+                                    {task.priority}
+                                  </Badge>
+                                  <CardTitle className="text-start">
+                                    {task.name}
+                                  </CardTitle>
+                                  <CardDescription className="text-start">
+                                    {task.description}
+                                  </CardDescription>
+                                </CardHeader>
+                              </div>
+                            </Card>
+                          </DialogTrigger>
+                          <DialogContent
+                            onOpenAutoFocus={(event: Event) =>
+                              event.preventDefault()
+                            }
+                            className="p-6 w-max-[768px] bg-gray-800 rounded-lg border-2"
+                          >
+                            <TaskCard
+                              task={task}
+                              project={project}
+                              projectUsers={projectUsers}
+                            />
+                          </DialogContent>
+                        </Dialog>
+                      )
+                  )}
+                </div>
+              ))}
+            {/* Render div element for "No Tasks" case */}
+            {Object.entries(sortByObject)
+              .filter(([_, tasks]) => tasks.length === 0)
+              .map(([sorted_type], sorted_idx) => (
+                <div
+                  key={sorted_idx}
+                  className={cn(
+                    "min-w-[325px]",
+                    `flex flex-col items-center py-10 px-4 space-y-8 align-top overflow-clip`
+                  )}
+                >
+                  <label className="text-2xl font-bold">{`${sorted_type}`}</label>
+                  <span>No tasks</span>
+                </div>
+              ))}
+          </>
+        )}
       </div>
 
       {/* {Object.entries(sortByObject).map((sorted_type, sorted_idx) => (
