@@ -1,15 +1,15 @@
 import { ProjectEntity } from "@/entities/Project";
 
-import { GetUser } from "@/use-cases/user/types";
+import { GetUserSession } from "@/use-cases/user/types";
 import { GetProject, UpdateProject, UpdateProjectMembers } from "./types";
 import { projectToDto } from "./utils";
 
 export async function updateProjectMembersUseCase(
   context: {
     updateProject: UpdateProject;
-    updateProjectMembers: UpdateProjectMembers;
+    updateManyProjectMembers: UpdateProjectMembers;
     getProject: GetProject;
-    getUser: GetUser;
+    getUser: GetUserSession;
   },
   data: {
     projectId: string;
@@ -28,7 +28,7 @@ export async function updateProjectMembersUseCase(
 
   console.log("updatedProject", validatedProject);
   await context.updateProject(projectToDto(validatedProject));
-  await context.updateProjectMembers(
+  await context.updateManyProjectMembers(
     data.projectId,
     initialMembers,
     data.updatedMembers

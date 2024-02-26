@@ -1,7 +1,7 @@
 import { TaskEntity } from "@/entities/Task";
 // import { UserEntity } from "@/entities/User";
 import { UpdateTask, GetTask, UpdateTaskUsers } from "@/use-cases/task/types";
-import { GetUser, UpdateUser } from "@/use-cases/user/types";
+import { GetUserSession, UpdateUser } from "@/use-cases/user/types";
 import { taskToDto } from "@/use-cases/task/utils";
 import { createSearchParamsBailoutProxy } from "next/dist/client/components/searchparams-bailout-proxy";
 
@@ -9,7 +9,7 @@ export async function updateTaskUsersUseCase(
   context: {
     updateTask: UpdateTask;
     getTask: GetTask;
-    getUser: GetUser;
+    getUser: GetUserSession;
     updateTaskUsers: UpdateTaskUsers;
   },
   data: {

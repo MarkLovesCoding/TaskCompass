@@ -1,7 +1,7 @@
 "use server";
 import { updateProject } from "@/data-access/projects/update-project.persistence";
 import getProject from "@/data-access/projects/get-project.persistence";
-import updateProjectMembers from "@/data-access/users/update-project-members.persistence";
+import updateManyProjectMembers from "@/data-access/users/update-many-project-members.persistence";
 import { updateProjectMembersUseCase } from "@/use-cases/project/update-project-members.use-case";
 import { revalidatePath } from "next/cache";
 import { getUserFromSession } from "@/lib/sessionAuth";
@@ -15,7 +15,7 @@ export async function updateProjectMembersAction(
     await updateProjectMembersUseCase(
       {
         updateProject,
-        updateProjectMembers,
+        updateManyProjectMembers,
         getProject,
         getUser,
       },

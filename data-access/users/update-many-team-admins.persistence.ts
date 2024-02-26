@@ -4,7 +4,7 @@ import connectDB from "@/db/connectDB";
 
 import User from "@/db/(models)/User";
 
-async function updateTeamAdmins(
+async function updateManyTeamAdmins(
   projectId: string,
   initialAdmins: string[],
   updatedAdmins: string[]
@@ -35,4 +35,4 @@ async function updateTeamAdmins(
     throw new Error("Error updating Project users" + error);
   }
 }
-export default updateTeamAdmins;
+export default updateManyTeamAdmins;

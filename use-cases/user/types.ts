@@ -14,7 +14,8 @@ export type UserTeamsAsAdmin = string[];
 export type UserTeamsAsMember = string[];
 
 export type UpdateUser = (user: UserDto) => Promise<void>;
-export type GetUser = () => User | undefined;
+export type GetUser = (userId: string) => Promise<UserDto>;
+export type GetUserSession = () => User | undefined;
 export type GetUserTeamsAsAdmin = (
   user: UserDto
 ) => UserTeamsAsAdmin | undefined;

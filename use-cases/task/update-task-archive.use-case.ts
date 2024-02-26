@@ -1,13 +1,13 @@
 import { TaskEntity } from "@/entities/Task";
 import { UpdateTask, GetTask } from "@/use-cases/task/types";
-import { GetUser } from "@/use-cases/user/types";
+import { GetUserSession } from "@/use-cases/user/types";
 import { taskToDto } from "@/use-cases/task/utils";
 
 export async function updateTaskArchivedUseCase(
   context: {
     updateTask: UpdateTask;
     getTask: GetTask;
-    getUser: GetUser;
+    getUser: GetUserSession;
   },
   data: {
     id: string;

@@ -12,6 +12,7 @@ import { UserDto } from "@/use-cases/user/types";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { UpdateProjectUserRoleAction } from "../_actions/update-project-user-role.action";
 type MemberCardSearchUserBlockProps = {
   user: UserDto;
   project: ProjectDto;
@@ -19,7 +20,7 @@ type MemberCardSearchUserBlockProps = {
 const getUserType = (user: UserDto, projectId: string) => {
   if (user.projectsAsAdmin.includes(projectId)) {
     return "admin";
-  } else if (user.projectsAsMember.includes(projectId)) {
+  } else {
     return "member";
   }
 };
@@ -29,7 +30,9 @@ const MemberCardPermissionsSelect = ({
 }: MemberCardSearchUserBlockProps) => {
   const existingRole = getUserType(user, project.id);
   console.log("existingRole", existingRole);
-  const [selectedRole, setSelectedRole] = useState(existingRole); // Default value is 'admin'
+  const [selectedRole, setSelectedRole] = useState(
+    existingRole as "admin" | "member"
+  ); // Default value is 'admin'
   console.log("selectedRole init", selectedRole);
   const [showSubmitButton, setShowSubmitButton] = useState(false);
   useEffect(() => {
@@ -42,13 +45,17 @@ const MemberCardPermissionsSelect = ({
   }, [selectedRole, existingRole]);
   const handleRoleChange = (value: string) => {
     console.log("handleRoleChange", value);
-    setSelectedRole(value);
+    setSelectedRole(value as "admin" | "member");
     // You can perform additional actions here if needed
   };
-  const handleRoleChangeSubmit = () => {
+  const handleRoleChangeSubmit = async () => {
     console.log("handleRoleChangeSubmit", selectedRole);
     // You can perform additional actions here if needed
-
+    await UpdateProjectUserRoleAction(
+      user.id,
+      project.id,
+      selectedRole as "admin" | "member"
+    );
     // updateProjectUserRoleAction(user, project, selectedRole);
     toast.success(`User role updated to ${selectedRole}`);
     setShowSubmitButton(false);

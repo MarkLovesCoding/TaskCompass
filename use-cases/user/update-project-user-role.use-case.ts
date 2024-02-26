@@ -1,19 +1,21 @@
 import { ProjectEntity } from "@/entities/Project";
-
-import { GetUser } from "@/use-cases/user/types";
-import { GetProject, UpdateProject, UpdateProjectAdmins } from "./types";
-import { projectToDto } from "./utils";
-
-export async function updateProjectAdminsUseCase(
+import { UserEntity } from "@/entities/User";
+import { GetUser, GetUserSession, UpdateUser } from "@/use-cases/user/types";
+import { GetProject, UpdateProject } from "../project//types";
+import { projectToDto } from "../project/utils";
+import { userToDto } from "./utils";
+export async function updateProjectUserRoleUseCase(
   context: {
     updateProject: UpdateProject;
-    updateProjectAdmins: UpdateProjectAdmins;
     getProject: GetProject;
-    getUser: GetUser;
+    updateUser: UpdateUser;
+    getUser: GetUserSession;
+    getUserObject: GetUser;
   },
   data: {
     projectId: string;
-    updatedAdmins: string[];
+    updateType: "admin" | "member";
+    projectUserId: string;
   }
 ) {
   const { userId } = context.getUser()!;
@@ -21,16 +23,16 @@ export async function updateProjectAdminsUseCase(
 
   const project = await context.getProject(data.projectId);
   const validatedProject = new ProjectEntity(project);
+  validatedProject.updateUserRole(data.projectUserId, data.updateType);
   // validatedProject.addAdmins(data.addedAdmins);
   // validatedProject.removeAdmins(data.removedAdmins);
-  const initialAdmins = validatedProject.getAdmins();
-  validatedProject.updateAdmins(data.updatedAdmins);
-
+  const projectUser = await context.getUserObject(data.projectUserId);
+  const validatedProjectUser = new UserEntity(projectUser);
+  validatedProjectUser.updateUserProjectPermissions(
+    data.projectId,
+    data.updateType
+  );
   console.log("updatedProject", validatedProject);
   await context.updateProject(projectToDto(validatedProject));
-  await context.updateProjectAdmins(
-    data.projectId,
-    initialAdmins,
-    data.updatedAdmins
-  );
+  await context.updateUser(userToDto(validatedProjectUser));
 }

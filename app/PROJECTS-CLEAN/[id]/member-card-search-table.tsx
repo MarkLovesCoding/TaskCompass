@@ -19,6 +19,7 @@ import { getInitials } from "@/app/utils/getInitials";
 import { ProjectDto } from "@/use-cases/project/types";
 import { UserDto } from "@/use-cases/user/types";
 import { updateProjectMembersAction } from "@/app/PROJECTS-CLEAN/_actions/update-project-members.action";
+import { updateProjectAdminsAction } from "@/app/PROJECTS-CLEAN/_actions/update-project-admins.action";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useEffect, useState } from "react";
@@ -28,7 +29,6 @@ import { Label } from "@/components/ui/label";
 
 import toast from "react-hot-toast";
 import { set } from "mongoose";
-import { Dropdown } from "react-day-picker";
 import { DropdownMenu } from "@/components/ui/dropdown-menu";
 import {
   Select,
@@ -101,6 +101,7 @@ export function MemberCardSearchTable({
     // }
     // if (isOpen) {
     await updateProjectMembersAction(project.id, projectUsersIdLists);
+    await updateProjectAdminsAction(project.id, projectUsersIdLists);
     // await updateProjectMembersAction(project.id, projectMembersIdList, projectAdminsIdList);
     // await updateProjectAdminsAction(project.id, projectAdminsIdLists);
     // }

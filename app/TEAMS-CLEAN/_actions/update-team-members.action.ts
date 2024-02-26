@@ -1,6 +1,6 @@
 "use server";
 import { updateTeam } from "@/data-access/teams/update-team.persistence";
-import updateTeamMembers from "@/data-access/users/update-team-members.persistence";
+import updateManyTeamMembers from "@/data-access/users/update-many-team-members.persistence";
 import getTeam from "@/data-access/teams/get-team.persistence";
 import { updateTeamMembersUseCase } from "@/use-cases/team/update-team-members.use-case";
 import { revalidatePath } from "next/cache";
@@ -15,7 +15,7 @@ export async function updateTeamMembersAction(
     await updateTeamMembersUseCase(
       {
         updateTeam,
-        updateTeamMembers,
+        updateManyTeamMembers,
         getTeam,
         getUser,
       },

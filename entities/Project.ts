@@ -98,6 +98,15 @@ export class ProjectEntity {
   updateDescription(description: string) {
     this.description = description;
   }
+  updateUserRole(userId: string, role: "admin" | "member") {
+    if (role === "admin") {
+      this.members = this.members.filter((m) => m !== userId);
+      this.admins.push(userId);
+    } else if (role === "member") {
+      this.admins = this.admins.filter((a) => a !== userId);
+      this.members.push(userId);
+    }
+  }
 
   private validate() {
     const projectSchema = z.object({

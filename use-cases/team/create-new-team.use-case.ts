@@ -1,12 +1,12 @@
 import { TeamEntity } from "@/entities/Team";
 import { CreateNewTeam } from "@/use-cases/team/types";
-import { GetUser } from "@/use-cases/user/types";
+import { GetUserSession } from "@/use-cases/user/types";
 import { teamToCreateTeamDto } from "@/use-cases/team/utils";
 
 export async function createNewTeamUseCase(
   context: {
     createNewTeam: CreateNewTeam;
-    getUser: GetUser;
+    getUser: GetUserSession;
   },
   data: {
     name: string;

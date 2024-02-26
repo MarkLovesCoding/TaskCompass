@@ -1,12 +1,12 @@
 import { TaskEntity } from "@/entities/Task";
 import { CreateTask } from "@/use-cases/task/types";
-import { GetUser } from "@/use-cases/user/types";
+import { GetUserSession } from "@/use-cases/user/types";
 import { taskToCreateTaskDto } from "@/use-cases/task/utils";
 
 export async function createNewTaskUseCase(
   context: {
     createNewTask: CreateTask;
-    getUser: GetUser;
+    getUser: GetUserSession;
   },
   data: {
     name: string;

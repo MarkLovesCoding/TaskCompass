@@ -8,7 +8,7 @@ import { UserDto } from "@/use-cases/user/types";
 import { userModelToUserDto } from "./utils";
 
 // May require refactpr to get by ID
-async function getUser(userId: string): Promise<UserDto> {
+async function getUserObject(userId: string): Promise<UserDto> {
   try {
     await connectDB();
   } catch (error) {
@@ -27,4 +27,4 @@ async function getUser(userId: string): Promise<UserDto> {
   }
 }
 
-export default getUser;
+export default getUserObject;

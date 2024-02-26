@@ -4,7 +4,7 @@ import connectDB from "@/db/connectDB";
 
 import User from "@/db/(models)/User";
 
-async function updateTaskUsers(
+async function updateManyTaskUsers(
   taskId: string,
   removedAssignees: string[],
   addedAssignees: string[]
@@ -34,4 +34,4 @@ async function updateTaskUsers(
     throw new Error("Error updating task users" + error);
   }
 }
-export default updateTaskUsers;
+export default updateManyTaskUsers;

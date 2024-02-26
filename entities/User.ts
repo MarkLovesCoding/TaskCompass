@@ -1,9 +1,9 @@
 import { ZodError, z } from "zod";
 
 export class UserEntity {
-  private id?: string;
+  private id: string;
   private name: string;
-  private email: string;
+  private email?: string;
   private avatar: string;
   private projectsAsAdmin: string[];
   private projectsAsMember: string[];
@@ -22,9 +22,9 @@ export class UserEntity {
     teamsAsMember,
     tasks,
   }: {
-    id?: string;
+    id: string;
     name: string;
-    email: string;
+    email?: string;
     avatar: string;
     projectsAsAdmin: string[];
     projectsAsMember: string[];
@@ -106,7 +106,20 @@ export class UserEntity {
   updateAvatar(avatar: string) {
     this.avatar = avatar;
   }
-
+  updateUserProjectPermissions(
+    projectId: string,
+    updateType: "admin" | "member"
+  ) {
+    if (updateType === "admin") {
+      this.addProjectAsAdmin(projectId);
+      this.removeProjectAsMember(projectId);
+    } else if (updateType === "member") {
+      this.addProjectAsMember(projectId);
+      this.removeProjectAsAdmin(projectId);
+    } else {
+      throw new Error("Invalid update type");
+    }
+  }
   private validate() {
     const projectSchema = z.object({
       name: z.string().min(3).max(20),
