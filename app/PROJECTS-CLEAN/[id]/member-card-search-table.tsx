@@ -37,7 +37,7 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-import { MemberCardWithPermissions } from "./member-card-with-permissions";
+import MemberCardPermissionsSelect from "./MemberCardPermissionsSelect";
 const formSchema = z.object({
   users: z.array(z.string()).min(1),
 });
@@ -265,7 +265,11 @@ export function MemberCardSearchTable({
                         </div>
                       </div>
                     </div>
-                    <Select defaultValue={getUserType(user, project.id)}>
+                    <MemberCardPermissionsSelect
+                      user={user}
+                      project={project}
+                    />
+                    {/* <Select defaultValue={getUserType(user, project.id)}>
                       <SelectTrigger>
                         <SelectValue
                           placeholder={getUserType(user, project.id)}
@@ -275,7 +279,7 @@ export function MemberCardSearchTable({
                         <SelectItem value="admin">Admin</SelectItem>
                         <SelectItem value="member">Member</SelectItem>
                       </SelectContent>
-                    </Select>
+                    </Select> */}
                     <div className=" opacity-0 group-hover:opacity-100">
                       {user.id !== userId && (
                         <Button
@@ -360,6 +364,7 @@ export function MemberCardSearchTable({
                 <CommandItem
                   className=" group"
                   value={user.name}
+                  key={index}
                   // onSelect={() => {
                   //   //CHECK IF USER HAS TASKS
 
@@ -400,7 +405,11 @@ export function MemberCardSearchTable({
                           {user.email}
                         </span>
                       </div>
-                      <Select defaultValue={getUserType(user, project.id)}>
+                      <MemberCardPermissionsSelect
+                        user={user}
+                        project={project}
+                      />
+                      {/* <Select defaultValue={getUserType(user, project.id)}>
                         <SelectTrigger>
                           <SelectValue
                             placeholder={getUserType(user, project.id)}
@@ -410,7 +419,7 @@ export function MemberCardSearchTable({
                           <SelectItem value="admin">Admin</SelectItem>
                           <SelectItem value="member">Member</SelectItem>
                         </SelectContent>
-                      </Select>
+                      </Select> */}
                       <div>
                         <Button
                           onClick={() => {

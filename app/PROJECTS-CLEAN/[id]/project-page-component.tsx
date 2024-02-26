@@ -131,7 +131,7 @@ export function ProjectPage({
                   <div className=" mb-2 flex flex-row">
                     <>
                       {uniqueProjectUsers.map((member, index) => (
-                        <div className="p-2">
+                        <div key={index} className="p-2">
                           <Popover>
                             <PopoverTrigger>
                               <Avatar key={index} className=" w-10 h-10">
