@@ -16,7 +16,7 @@ import * as z from "zod";
 import { LayoutIcon } from "lucide-react";
 import { useForm, useController } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { updateTeamDetailsAction } from "../_actions/update-team-details.action.";
+import { updateTeamDetailsAction } from "../_actions/update-team-details.action";
 import { useState } from "react";
 
 const formSchema = z.object({

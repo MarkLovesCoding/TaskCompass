@@ -126,6 +126,20 @@ export class UserEntity {
       throw new Error("Invalid update type");
     }
   }
+  updateUserTeamPermissions(teamId: string, updateType: "admin" | "member") {
+    if (updateType === "admin" && !this.getTeamsAsAdmin().includes(teamId)) {
+      this.addTeamAsAdmin(teamId);
+      this.removeTeamAsMember(teamId);
+    } else if (
+      updateType === "member" &&
+      !this.getTeamsAsMember().includes(teamId)
+    ) {
+      this.addTeamAsMember(teamId);
+      this.removeTeamAsAdmin(teamId);
+    } else {
+      throw new Error("Invalid update type");
+    }
+  }
   private validate() {
     const projectSchema = z.object({
       name: z.string().min(3).max(20),

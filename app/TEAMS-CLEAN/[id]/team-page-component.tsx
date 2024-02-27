@@ -41,6 +41,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { TeamMemberTable } from "./TeamMemberTable";
 export async function TeamPageComponent({
   team,
   user,
@@ -105,6 +106,13 @@ export async function TeamPageComponent({
                 </Avatar>
                 // <div key={index}>{member.name}</div>
               ))}
+              <TeamMemberTable
+                userId={userId}
+                team={team}
+                teamUsers={teamUsers}
+                globalUsers={usersList}
+                projects={projects}
+              />
             </div>
           </div>
           {isUserAdmin && (

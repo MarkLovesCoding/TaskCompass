@@ -18,7 +18,7 @@ import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
 import { getInitials } from "@/app/utils/getInitials";
 import { ProjectDto } from "@/use-cases/project/types";
 import { UserDto } from "@/use-cases/user/types";
-import { updateProjectUsersAction } from "@/app/PROJECTS-CLEAN/_actions/update-project-users.action";
+import { updateTeamUsersAction } from "@/app/TEAMS-CLEAN/_actions/update-team-users.action";
 // import { updateProjectAdminsAction } from "@/app/PROJECTS-CLEAN/_actions/update-project-admins.action";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -26,7 +26,6 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Label } from "@/components/ui/label";
-
 import toast from "react-hot-toast";
 import { set } from "mongoose";
 import { DropdownMenu } from "@/components/ui/dropdown-menu";
@@ -37,21 +36,25 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-import MemberCardPermissionsSelect from "./MemberCardPermissionsSelect";
+import TeamMemberCardPermissionsSelect from "./TeamMemberCardPermissionsSelect";
+import { TeamDto } from "@/use-cases/team/types";
+import MemberCardPermissionsSelect from "./TeamMemberCardPermissionsSelect";
 const formSchema = z.object({
   users: z.array(z.string()).min(1),
 });
 
-export function MemberCardSearchTable({
+export function TeamMemberTable({
   userId,
-  project,
+  team,
   teamUsers,
-  projectUsers,
+  globalUsers,
+  projects,
 }: {
   userId: string;
-  project: ProjectDto;
+  team: TeamDto;
   teamUsers: UserDto[];
-  projectUsers: UserDto[];
+  globalUsers: UserDto[];
+  projects: ProjectDto[];
 }) {
   const router = useRouter();
   // const form = useForm<z.infer<typeof formSchema>>({
@@ -60,21 +63,32 @@ export function MemberCardSearchTable({
   //     users: [...project.members, ...project.admins],
   //   },
   // });
-  const filteredTeamUsers = teamUsers.filter(
-    (user) => !projectUsers.some((pUser) => pUser.id === user.id)
+  const filteredGlobalUsers = globalUsers.filter(
+    (user) => !teamUsers.some((tUser) => tUser.id === user.id)
+  );
+
+  const [projectTasksInTeam, setProjectTasksInTeam] = useState<string[]>(
+    projects.map((project) => project.tasks).flat()
   );
   const [selectedUser, setSelectedUser] = useState<UserDto | null>(
-    teamUsers[0]
+    globalUsers[0]
   );
   const [isOpen, setIsOpen] = useState(false);
   const [alertOpen, setAlertOpen] = useState(false);
-  const [teamUsersList, setTeamUsersList] =
-    useState<UserDto[]>(filteredTeamUsers);
-  console.log("teamUsersList", teamUsersList);
-  const [projectUsersList, setProjectUsersList] =
-    useState<UserDto[]>(projectUsers);
-  console.log("projectUsersList", projectUsersList);
-  const projectUsersIdLists = projectUsersList.map((user) => user.id);
+
+  // useEffect(() => {
+  //   const getProjects = async () => {
+  //     const projects = await getTeamProjects(team);
+  //     const allProjectTasks = projects.map((project) => project.tasks).flat();
+  //     setProjectTasksInTeam(allProjectTasks);
+  //     console.log("projects", projects);
+  //   };
+  // }, [team]);
+
+  const [globalUsersList, setGlobalUsersList] =
+    useState<UserDto[]>(filteredGlobalUsers);
+  const [teamUsersList, setTeamUsersList] = useState<UserDto[]>(teamUsers);
+  const teamUsersIdLists = teamUsersList.map((user) => user.id);
 
   const getUserType = (user: UserDto, projectId: string) => {
     if (user.projectsAsAdmin.includes(projectId)) {
@@ -83,22 +97,20 @@ export function MemberCardSearchTable({
       return "member";
     }
   };
-  const userHasTasksInProject = (user: UserDto, projectId: string): boolean => {
-    return user.tasks.some((task) => project.tasks.includes(task));
+  const userHasTasksInTeamProjects = (user: UserDto): boolean => {
+    return user.tasks.some((task) => projectTasksInTeam.includes(task));
   };
-  const usersTasksInProjectCount = (
-    user: UserDto,
-    projectId: string
-  ): number => {
-    return user.tasks.filter((task) => project.tasks.includes(task)).length;
+  const usersTasksInProjectCount = (user: UserDto): number => {
+    return user.tasks.filter((task) => projectTasksInTeam.includes(task))
+      .length;
   };
-  const onUpdateProjectUserFormSubmit = async (isOpen: boolean) => {
+  const onUpdateTeamUserFormSubmit = async (isOpen: boolean) => {
     // if (selectedUser) {
     //   const updatedUsers = [...form.getValues("Users"), selectedUser];
     //   form.setValue("Users", updatedUsers);
     // }
     // if (isOpen) {
-    await updateProjectUsersAction(project.id, projectUsersIdLists);
+    await updateTeamUsersAction(team.id, teamUsersIdLists);
     // await updateProjectAdminsAction(project.id, projectUsersIdLists);
     // await updateProjectMembersAction(project.id, projectMembersIdList, projectAdminsIdList);
     // await updateProjectAdminsAction(project.id, projectAdminsIdLists);
@@ -112,14 +124,14 @@ export function MemberCardSearchTable({
     const userTypes: Record<string, string> = {}; // Define userTypes as an object with string index signature
     projectUsers.forEach((user) => {
       // if (user) {
-      userTypes[user.id as string] = getUserType(user, project.id) as string; // Make sure project.id is defined and correct
+      userTypes[user.id as string] = getUserType(user, team.id) as string; // Make sure project.id is defined and correct
       // }
     });
     return userTypes;
   };
 
   const [userTypes, setUserTypes] = useState({
-    ...getUserTypes(projectUsersList),
+    ...getUserTypes(teamUsersList),
   });
 
   // Function to handle the change in user type
@@ -153,7 +165,7 @@ export function MemberCardSearchTable({
     },
   };
   return (
-    <Popover onOpenChange={onUpdateProjectUserFormSubmit}>
+    <Popover onOpenChange={onUpdateTeamUserFormSubmit}>
       <PopoverTrigger asChild>
         {/* <Button
           className="w-12 h-12 p-3 text-sm rounded-full flex items-center font-semibold gap-1"
@@ -173,9 +185,9 @@ export function MemberCardSearchTable({
           <CommandInput className="h-9" placeholder="Search members..." />
           <CommandGroup>
             <Label className="m-4">
-              <div className="font-semibold">Project Members</div>
+              <div className="font-semibold">Team Members</div>
             </Label>
-            {projectUsersList?.map((user, index) => (
+            {teamUsersList?.map((user, index) => (
               <CommandItem className=" group" value={user.name} key={index}>
                 <div className="flex items-center h-14 gap-2">
                   <div className="flex w-full items-center gap-2">
@@ -198,10 +210,10 @@ export function MemberCardSearchTable({
                         <div className="flex items-center gap-1"></div>
                       </div>
                     </div>
-                    {project.createdBy !== user.id ? (
-                      <MemberCardPermissionsSelect
+                    {team.createdBy !== user.id ? (
+                      <TeamMemberCardPermissionsSelect
                         user={user}
-                        project={project}
+                        team={team}
                       />
                     ) : (
                       <Badge className="shrink-0" variant="secondary">
@@ -215,15 +227,13 @@ export function MemberCardSearchTable({
                           onClick={() => {
                             if (user.id !== userId) {
                               setSelectedUser(user);
-                              if (userHasTasksInProject(user, project.id)) {
+                              if (userHasTasksInTeamProjects(user)) {
                                 // if (user.tasks.length > 0) {
                                 toast.error(
                                   `User cannot be removed from Project.\n User still has  ${usersTasksInProjectCount(
-                                    user,
-                                    project.id
+                                    user
                                   )}  task${
-                                    usersTasksInProjectCount(user, project.id) >
-                                    1
+                                    usersTasksInProjectCount(user) > 1
                                       ? "s"
                                       : ""
                                   } assigned to them.`
@@ -232,10 +242,10 @@ export function MemberCardSearchTable({
                                 // handleUserHasTasks(user);
                                 return;
                               }
-                              setProjectUsersList((prev) =>
+                              setTeamUsersList((prev) =>
                                 prev.filter((u) => u.id !== user.id)
                               );
-                              setTeamUsersList((prev) => {
+                              setGlobalUsersList((prev) => {
                                 if (!prev.some((u) => u.id === user.id)) {
                                   return [...prev, user];
                                 }
@@ -255,41 +265,14 @@ export function MemberCardSearchTable({
                 </div>
               </CommandItem>
             ))}
-            {/* <div className="flex items-center gap-2">
-              <div className="flex items-center gap-2">
-                <img
-                  alt="Avatar"
-                  className="rounded-full border border-gray-200 w-8 h-8 object-cover"
-                  height="32"
-                  src="/placeholder.svg"
-                  style={{
-                    aspectRatio: "32/32",
-                    objectFit: "cover",
-                  }}
-                  width="32"
-                />
-                <div>
-                  <span className="font-medium">carol</span>
-                  <div className="flex items-center gap-1">
-                    <Badge className="shrink-0">5 tasks</Badge>
-                    <Badge className="shrink-0" variant="secondary">
-                      Member
-                    </Badge>
-                  </div>
-                  <span className="text-xs text-gray-500 dark:text-gray-400">
-                    carol@example.com
-                  </span>
-                </div>
-              </div>
-            </div> */}
           </CommandGroup>
           <Separator />
-          {teamUsersList.length > 0 && (
+          {globalUsersList.length > 0 && (
             <CommandGroup>
               <Label className="m-4">
-                <div className="font-semibold">Team Members</div>
+                <div className="font-semibold">Global Users</div>
               </Label>
-              {teamUsersList?.map((user, index) => (
+              {globalUsersList?.map((user, index) => (
                 <CommandItem className=" group" value={user.name} key={index}>
                   <div className="flex items-center gap-2">
                     <div className="flex items-center gap-2">
@@ -312,16 +295,16 @@ export function MemberCardSearchTable({
                           variant={"ghost"}
                           className="bg-transparent "
                           onClick={() => {
-                            setProjectUsersList((prev) => {
+                            setTeamUsersList((prev) => {
                               if (!prev.some((u) => u.id === user.id)) {
                                 return [...prev, user];
                               }
                               return prev;
                             });
-                            setTeamUsersList((prev) =>
+                            setGlobalUsersList((prev) =>
                               prev.filter((u) => u.id !== user.id)
                             );
-                            toast.success("User added to Project");
+                            toast.success("User added to Team");
                           }}
                         >
                           <PlusIcon className=" opacity-0 group-hover:opacity-100 text-green-400"></PlusIcon>

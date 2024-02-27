@@ -23,7 +23,6 @@ export async function updateProjectUsersUseCase(
   const validatedProject = new ProjectEntity(project);
   // validatedProject.addMembers(data.addedMembers);
   // validatedProject.removeMembers(data.removedMembers);
-  const initialUsers = validatedProject.getUsers();
   validatedProject.updateUsers(data.updatedUsers);
 
   console.log("updatedProject", validatedProject);

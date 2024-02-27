@@ -20,7 +20,6 @@ export async function updateTeamUsersUseCase(
 
   const team = await context.getTeam(data.teamId);
   const validatedTeam = new TeamEntity(team);
-  const initialUserss = validatedTeam.getUsers();
   validatedTeam.updateUsers(data.updatedUsers);
 
   console.log("updatedTeam", validatedTeam);
