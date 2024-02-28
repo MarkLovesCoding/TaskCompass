@@ -29,7 +29,7 @@ import { PersonStanding } from "lucide-react";
 import type { ProjectDto } from "@/use-cases/project/types";
 import type { TaskDto } from "@/use-cases/task/types";
 import { AddMemberForm } from "./AddMemberForm";
-import UpdateProjectUsersCard from "./UpdateProjectUsersCard";
+// import UpdateProjectUsersCard from "./UpdateProjectUsersCard";
 import { MemberCardSearchTable } from "./member-card-search-table";
 import {
   Popover,

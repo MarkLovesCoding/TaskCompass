@@ -11,14 +11,13 @@ export type TaskType = {
   label: string;
   _id?: number | Object | string;
 };
-// export type ProjectType = {
-//   name: string;
-//   description: string;
-//   admins: string[];
-//   members: string[];
-//   tasks: string[];
-//   _id?: number | Object | string;
-// };
+export type ProjectType = {
+  name: string;
+  description: string;
+  users: string[];
+  tasks: string[];
+  _id?: number | Object | string;
+};
 export type ParamsType = {
   id: string;
 };
@@ -57,8 +56,7 @@ export type Session = {
 };
 export type TeamType = {
   name: string;
-  admins: string[];
-  members: string[];
+  users: string[];
   projects: string[];
   _id?: number | Object | string;
 };

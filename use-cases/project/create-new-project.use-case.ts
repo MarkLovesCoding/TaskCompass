@@ -29,5 +29,8 @@ export async function createNewProjectUseCase(
     createdBy: user.userId,
   });
   console.log("____________newProject", newProject);
-  await context.createNewProject(projectToCreateProjectDto(newProject));
+  await context.createNewProject(
+    projectToCreateProjectDto(newProject),
+    user.userId
+  );
 }

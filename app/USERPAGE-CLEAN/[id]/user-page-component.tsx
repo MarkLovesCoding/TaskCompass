@@ -1,4 +1,7 @@
 import Link from "next/link";
+
+import AddTeamCard from "./AddTeamCard";
+
 import { Button } from "@/components/ui/button";
 import {
   CardTitle,
@@ -11,14 +14,16 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
-import type { UserDto } from "@/use-cases/user/types";
-import AddTeamCard from "./AddTeamCard";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
-import { ProjectDto } from "@/use-cases/project/types";
-import { TeamDto } from "@/use-cases/team/types";
-// get teams
 
+import { PlusIcon } from "lucide-react";
+
+import type { UserDto } from "@/use-cases/user/types";
+import type { ProjectDto } from "@/use-cases/project/types";
+import type { TeamDto } from "@/use-cases/team/types";
+
+// get teams
 // get projects
 export async function UserPageComponent({
   user,
@@ -155,49 +160,5 @@ export async function UserPageComponent({
         </div>
       </main>
     </div>
-  );
-}
-
-//@ts-expect-error
-function LayoutIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
-      <line x1="3" x2="21" y1="9" y2="9" />
-      <line x1="9" x2="9" y1="21" y2="9" />
-    </svg>
-  );
-}
-
-//@ts-expect-error
-
-function PlusIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M5 12h14" />
-      <path d="M12 5v14" />
-    </svg>
   );
 }

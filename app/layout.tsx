@@ -6,7 +6,7 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 import Navigation from "./(components)/Navigation";
 import AuthProvider from "./(components)/AuthProvider";
 import { ThemeProvider } from "@/components/ui/theme-provider";
-
+import QueryProvider from "./utils/Providers";
 config.autoAddCss = false;
 
 export const metadata: Metadata = {
@@ -27,17 +27,21 @@ export default function RootLayout({
   return (
     <html suppressHydrationWarning lang="en">
       <AuthProvider>
-        <body className="bg-background">
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="dark"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <Navigation />
-            <div>{children}</div>
-          </ThemeProvider>
-        </body>
+        <QueryProvider>
+          {/* <QueryClientProvider client={new QueryClient()}> */}
+          <body className="bg-background">
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="dark"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <Navigation />
+              <div>{children}</div>
+            </ThemeProvider>
+          </body>
+        </QueryProvider>
+        {/* </QueryClientProvider> */}
       </AuthProvider>
     </html>
   );

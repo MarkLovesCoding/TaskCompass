@@ -1,15 +1,19 @@
 import React from "react";
-
-import { TeamPageComponent } from "./team-page-component";
-import getTeam from "@/data-access/teams/get-team.persistence";
-import type { TeamDto } from "@/use-cases/team/types";
 import { unstable_noStore } from "next/cache";
+
 import { sessionAuth } from "@/lib/sessionAuth";
+
+import { TeamPageComponent } from "./TeamPageComponent";
+
+import type { TeamDto } from "@/use-cases/team/types";
+
+import getTeam from "@/data-access/teams/get-team.persistence";
 import getAllUsers from "@/data-access/users/get-all-users.persistence";
 import getTeamUsers from "@/data-access/users/get-team-users.persistence";
 import getTeamProjects from "@/data-access/projects/get-team-projects";
 import getUserObject from "@/data-access/users/get-user.persistence";
-import { UserDto } from "@/use-cases/user/types";
+
+import type { UserDto } from "@/use-cases/user/types";
 
 type ParamsType = {
   id: string;
@@ -33,13 +37,15 @@ const Projects = async ({ params }: { params: ParamsType }) => {
       </p>
     );
   }
-
+  if (!session) {
+    return <p>Session not found</p>;
+  }
   return (
     <div className=" flex justify-center flex-col items-center">
       <TeamPageComponent
         team={team}
         user={user}
-        userId={session?.user.id!}
+        userId={session?.user.id}
         projects={projects}
         usersList={usersList}
         teamUsers={teamUsers}

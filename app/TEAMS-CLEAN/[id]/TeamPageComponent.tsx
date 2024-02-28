@@ -1,24 +1,24 @@
 import Link from "next/link";
-
+import { unstable_noStore } from "next/cache";
+import { useQuery } from "@tanstack/react-query";
 import AddProjectCard from "./AddProjectCard";
-
+import { TeamMemberTable } from "./TeamMemberTable";
 import { TeamHeader } from "@/app/TEAMS-CLEAN/[id]/team-header";
+import UpdateTeamUsersCard from "./UpdateTeamUsersCard";
+import UnarchiveProjectPopover from "./UnarchiveProjectPopover";
+import { UpdateMembersAndInvite } from "./update-members-and-invite";
+
+import { getInitials } from "@/app/utils/getInitials";
+
 import {
   CardTitle,
   CardDescription,
   CardHeader,
   Card,
 } from "@/components/ui/card";
+
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
-import type { TeamDto } from "@/use-cases/team/types";
-import { CircleEllipsisIcon } from "lucide-react";
-import { PlusIcon } from "lucide-react";
-// import UpdateTeamMembersCard from "./UpdateTeamUsersCard";
-import { Separator } from "@/components/ui/separator";
-
-import { unstable_noStore } from "next/cache";
-import UnarchiveProjectPopover from "./UnarchiveProjectPopover";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,19 +29,26 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { ProjectDto } from "@/use-cases/project/types";
-import { UserDto } from "@/use-cases/user/types";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { getInitials } from "@/app/utils/getInitials";
-import { UpdateMembersAndInvite } from "./update-members-and-invite";
-import UpdateTeamUsersCard from "./UpdateTeamUsersCard";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { TeamMemberTable } from "./TeamMemberTable";
+import { CircleEllipsisIcon, PlusIcon } from "lucide-react";
+// import UpdateTeamMembersCard from "./UpdateTeamUsersCard";
+import getTeam from "@/data-access/teams/get-team.persistence";
+import getAllUsers from "@/data-access/users/get-all-users.persistence";
+import getTeamUsers from "@/data-access/users/get-team-users.persistence";
+import getTeamProjects from "@/data-access/projects/get-team-projects";
+import getUserObject from "@/data-access/users/get-user.persistence";
+
+import type { TeamDto } from "@/use-cases/team/types";
+import type { UserDto } from "@/use-cases/user/types";
+import type { ProjectDto } from "@/use-cases/project/types";
+
 export async function TeamPageComponent({
   team,
   user,
@@ -64,6 +71,48 @@ export async function TeamPageComponent({
   //   (user) => !team.members.includes(user.id)
   // );
   // const teamMembers = await getTeamMembers(team.members);
+
+  // const team: TeamDto = await getTeam(teamId);
+  // const user: UserDto = await getUserObject(session!.user.id);
+  // const projects = await getTeamProjects(team);
+  // const usersList = await getAllUsers();
+  // const teamUsers = await getTeamUsers(team.users);
+
+  // const { data } = useQuery(["team"], getTeam);
+  // const { data: team, isLoading: isTeamLoading } = useQuery({
+  //   queryKey: "team",
+  //   queryFn: getTeam,
+  // });
+
+  // const { data: allUsers, isLoading: isAllUsersLoading } = useQuery({
+  //   queryKey: "allUsers",
+  //   queryFn: getAllUsers,
+  // });
+
+  // const { data: teamUsers, isLoading: isTeamUsersLoading } = useQuery({
+  //   queryKey: ["teamUsers"],
+  //   queryFn: getTeamUsers,
+  // });
+
+  // const { data: teamProjects, isLoading: isTeamProjectsLoading } = useQuery({
+  //   queryKey: ["teamProjects"],
+  //   queryFn: getTeamProjects,
+  // });
+
+  // const { data: userObject, isLoading: isUserObjectLoading } = useQuery({
+  //   queryKey: ["userObject"],
+  //   queryFn: getUserObject,
+  // });
+  // if (
+  //   isTeamLoading ||
+  //   isAllUsersLoading ||
+  //   isTeamUsersLoading ||
+  //   isTeamProjectsLoading ||
+  //   isUserObjectLoading
+  // ) {
+  //   return <div>Loading...</div>;
+  // }
+
   console.log("team", team);
   const teamId = team.id;
   const archivedProjects = projects.filter((project) => project.archived);
@@ -71,9 +120,6 @@ export async function TeamPageComponent({
 
   const countArchivedProjects = archivedProjects.length;
   const countProjects = projects.length - countArchivedProjects;
-
-  // const getAvatarBackground = (index: number) => {
-  // const getAvatarBackground = (index: number) => {
 
   return (
     <div className="flex flex-col w-full  items-center  min-h-[calc(100vh-4rem)">

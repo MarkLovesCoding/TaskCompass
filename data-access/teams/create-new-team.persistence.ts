@@ -18,7 +18,7 @@ export async function createNewTeam(team: CreateTeamDto): Promise<void> {
     const newTeam = await Team.create(team);
     const newTeamId = newTeam.id;
 
-    await User.findByIdAndUpdate(team.admins[0], {
+    await User.findByIdAndUpdate(team.users[0], {
       $push: { teamsAsAdmin: newTeamId },
     });
     console.log("New Team Created", newTeam);
