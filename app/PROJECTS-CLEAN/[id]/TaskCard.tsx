@@ -1,10 +1,10 @@
 "use client";
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { unstable_noStore } from "next/cache";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { RadioGroupItem, RadioGroup } from "@/components/ui/radio-group";
-
+import { CATEGORIES } from "./constants";
 import {
   SelectValue,
   SelectTrigger,
@@ -115,13 +115,21 @@ export const TaskCard = ({
   task,
   project,
   projectUsers,
+  isTaskOpen,
 }: {
   task: TaskDto;
   project: ProjectDto;
   projectUsers: UserDto[];
+  isTaskOpen: boolean;
 }) => {
   unstable_noStore();
-
+  useEffect(() => {
+    // if (isTaskOpen === false) {
+    // Trigger your event here when the dialog closes
+    console.log("taskOpe:", isTaskOpen);
+    // console.log("task closing");
+    // }
+  }, [isTaskOpen]);
   const [descriptionButtonShow, setDescriptionButtonShow] = useState(false);
 
   const [isNameEditing, setIsNameEditing] = useState(false);

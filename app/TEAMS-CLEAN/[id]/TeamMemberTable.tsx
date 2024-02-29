@@ -59,7 +59,11 @@ export function TeamMemberTable({
   const [globalUsersList, setGlobalUsersList] =
     useState<UserDto[]>(filteredGlobalUsers);
   const [teamUsersList, setTeamUsersList] = useState<UserDto[]>(teamUsers);
-  const teamUsersIdLists = teamUsersList.map((user) => user.id);
+  const [teamUsersIdLists, setTeamUsersIdLists] = useState<string[]>(
+    teamUsersList.map((user) => user.id)
+  );
+
+  // const teamUsersIdLists = teamUsersList.map((user) => user.id);
 
   const getUserType = (user: UserDto, projectId: string) => {
     if (user.projectsAsAdmin.includes(projectId)) {
@@ -76,29 +80,12 @@ export function TeamMemberTable({
       .length;
   };
   const onUpdateTeamUserFormSubmit = async (isOpen: boolean) => {
-    // if (selectedUser) {
-    //   const updatedUsers = [...form.getValues("Users"), selectedUser];
-    //   form.setValue("Users", updatedUsers);
-    // }
-    if (isOpen === false) {
-      setIsOpen(true);
-      await updateTeamUsersAction(team.id, teamUsersIdLists);
-    } else setIsOpen(false);
-    // await updateProjectAdminsAction(project.id, projectUsersIdLists);
-    // await updateProjectMembersAction(project.id, projectMembersIdList, projectAdminsIdList);
-    // await updateProjectAdminsAction(project.id, projectAdminsIdLists);
-    // }
-    //need to check member or admin status
-    // setShowUpdateButton(false);
-    // setShowCancelButton(false);
-    router.refresh();
+    await updateTeamUsersAction(team.id, teamUsersIdLists);
   };
   const getUserTypes = (projectUsers: UserDto[]) => {
     const userTypes: Record<string, string> = {}; // Define userTypes as an object with string index signature
     projectUsers.forEach((user) => {
-      // if (user) {
       userTypes[user.id as string] = getUserType(user, team.id) as string; // Make sure project.id is defined and correct
-      // }
     });
     return userTypes;
   };
@@ -114,44 +101,27 @@ export function TeamMemberTable({
       [userId]: userType, // Update the userType for the specific userId
     }));
   };
-  // const { toast } = useToast();
   const toastOptions = {
     duration: 3000,
     position: "top-center",
 
-    // Styling
     style: {},
     className: "",
 
-    // Custom Icon
     icon: "🧐",
-    // Change colors of success/error/loading icon
-    // iconTheme: {
-    //   primary: "#000",
-    //   secondary: "#fff",
-    // },
-
-    // Aria
     ariaProps: {
       role: "status",
       "aria-live": "polite",
     },
   };
   return (
-    <Popover open={isOpen} onOpenChange={onUpdateTeamUserFormSubmit}>
+    <Popover onOpenChange={onUpdateTeamUserFormSubmit}>
       <PopoverTrigger asChild>
-        {/* <Button
-          className="w-12 h-12 p-3 text-sm rounded-full flex items-center font-semibold gap-1"
-          size="icon"
-          variant="outline"
-        > */}
         <div>
           <PlusCircleIcon className="w-10 h-10" />
 
-          {/* <PlusIcon className="h-4 w-4" /> */}
           <span className="sr-only">Edit Members</span>
         </div>
-        {/* </Button> */}
       </PopoverTrigger>
       <PopoverContent className="w-fit">
         <Command>
@@ -165,7 +135,7 @@ export function TeamMemberTable({
                 <div className="flex items-center h-14 gap-2">
                   <div className="flex w-full items-center gap-2">
                     <Avatar className=" w-10 h-10">
-                      <AvatarImage src={user.avatar} />
+                      {/* <AvatarImage src={user.avatar} /> */}
                       <AvatarFallback className={`text-sm bg-gray-500`}>
                         {getInitials(user.name)}
                       </AvatarFallback>
@@ -203,7 +173,7 @@ export function TeamMemberTable({
                               if (userHasTasksInTeamProjects(user)) {
                                 // if (user.tasks.length > 0) {
                                 toast.error(
-                                  `User cannot be removed from Project.\n User still has  ${usersTasksInProjectCount(
+                                  `User cannot be removed from Team.\n User still has  ${usersTasksInProjectCount(
                                     user
                                   )}  task${
                                     usersTasksInProjectCount(user) > 1
@@ -224,9 +194,7 @@ export function TeamMemberTable({
                                 }
                                 return prev;
                               });
-                              // setShowUpdateButton(true);
-                              // setShowCancelButton(true);
-                              toast.success("User removed from Project");
+                              toast.success("User removed from Team");
                             }
                           }}
                         >

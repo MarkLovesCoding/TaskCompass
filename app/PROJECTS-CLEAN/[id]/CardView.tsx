@@ -6,7 +6,7 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
-import React from "react";
+import React, { useEffect } from "react";
 import { TaskCard } from "./TaskCard";
 import { ProjectDto } from "@/use-cases/project/types";
 import { TaskDto } from "@/use-cases/task/types";
@@ -53,6 +53,10 @@ const CardView = ({
   //   Medium: { tasks: mediumPriorityTasks, color: "yellow" },
   //   Low: { tasks: lowPriorityTasks, color: "green" },
   // };
+  const [isTaskOpen, setIsTaskOpen] = React.useState<boolean>(false);
+  const handleTaskOpen = () => {
+    setIsTaskOpen(!isTaskOpen);
+  };
 
   return (
     <div className="flex md:flex-row  justify-center flex-col w-min-full overflow-x">
@@ -74,7 +78,11 @@ const CardView = ({
                   {tasks.map(
                     (task, task_idx) =>
                       !task.archived && (
-                        <Dialog key={task_idx}>
+                        <Dialog
+                          open={isTaskOpen}
+                          onOpenChange={handleTaskOpen}
+                          key={task_idx}
+                        >
                           <DialogTrigger>
                             <Card
                               key={task_idx}
@@ -110,6 +118,7 @@ const CardView = ({
                               task={task}
                               project={project}
                               projectUsers={projectUsers}
+                              isTaskOpen={isTaskOpen}
                             />
                           </DialogContent>
                         </Dialog>
@@ -146,7 +155,11 @@ const CardView = ({
                   : sorted_type[1].map(
                       (task, task_idx) =>
                         !task.archived && (
-                          <Dialog key={task_idx}>
+                          <Dialog
+                            key={task_idx}
+                            open={isTaskOpen}
+                            onOpenChange={handleTaskOpen}
+                          >
                             <DialogTrigger>
                               <Card
                                 key={task_idx}
@@ -183,6 +196,7 @@ const CardView = ({
                                 task={task}
                                 project={project}
                                 projectUsers={projectUsers}
+                                isTaskOpen={isTaskOpen}
                               />
                             </DialogContent>
                           </Dialog>

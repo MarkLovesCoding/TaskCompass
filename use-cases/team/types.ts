@@ -17,5 +17,8 @@ export type UpdateTeamUsers = (
   updatedUsers: string[]
 ) => Promise<void>;
 export type GetTeam = (teamId: string) => Promise<TeamDto>;
-export type CreateNewTeam = (team: CreateTeamDto) => Promise<void>;
+export type CreateNewTeam = (
+  team: CreateTeamDto,
+  userId: string
+) => Promise<void>;
 export type UpdateTeam = (team: TeamDto) => Promise<void>;

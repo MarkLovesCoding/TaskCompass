@@ -31,30 +31,22 @@ const MemberCardPermissionsSelect = ({
   team,
 }: MemberCardSearchUserBlockProps) => {
   const existingRole = getUserType(user, team.id);
-  console.log("existingRole", existingRole);
   const [selectedRole, setSelectedRole] = useState(
     existingRole as "admin" | "member"
   ); // Default value is 'admin'
-  console.log("selectedRole init", selectedRole);
   const [showSubmitButton, setShowSubmitButton] = useState(false);
   useEffect(() => {
     if (selectedRole !== existingRole) {
-      console.log("equality", selectedRole !== existingRole);
       setShowSubmitButton(true);
     } else {
       setShowSubmitButton(false);
     }
   }, [selectedRole, existingRole]);
   const handleRoleChange = (value: string) => {
-    console.log("handleRoleChange", value);
     setSelectedRole(value as "admin" | "member");
     // You can perform additional actions here if needed
   };
   const handleRoleChangeSubmit = async () => {
-    console.log("handleRoleChangeSubmit", selectedRole);
-    console.log("user", user);
-    console.log("team", team);
-    console.log("selectedRole", selectedRole);
     // You can perform additional actions here if needed
     await UpdateTeamUserRoleAction(
       user.id,

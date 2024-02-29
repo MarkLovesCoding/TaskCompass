@@ -7,7 +7,10 @@ import User from "@/db/(models)/User";
 
 import { CreateTeamDto } from "@/use-cases/team/types";
 
-export async function createNewTeam(team: CreateTeamDto): Promise<void> {
+export async function createNewTeam(
+  team: CreateTeamDto,
+  userId: string
+): Promise<void> {
   try {
     await connectDB();
   } catch (error) {
@@ -18,7 +21,7 @@ export async function createNewTeam(team: CreateTeamDto): Promise<void> {
     const newTeam = await Team.create(team);
     const newTeamId = newTeam.id;
 
-    await User.findByIdAndUpdate(team.users[0], {
+    await User.findByIdAndUpdate(userId, {
       $push: { teamsAsAdmin: newTeamId },
     });
     console.log("New Team Created", newTeam);
