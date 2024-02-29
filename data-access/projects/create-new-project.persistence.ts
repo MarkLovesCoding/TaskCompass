@@ -8,7 +8,8 @@ import Team from "@/db/(models)/Team";
 import User from "@/db/(models)/User";
 
 export async function createNewProject(
-  project: CreateProjectDto
+  project: CreateProjectDto,
+  user: string
 ): Promise<void> {
   try {
     await connectDB();
@@ -22,8 +23,8 @@ export async function createNewProject(
     await Team.findByIdAndUpdate(project.team, {
       $push: { projects: newProject.id },
     });
-    await User.findByIdAndUpdate(project.users[0], {
-      $push: { projects: newProject.id },
+    await User.findByIdAndUpdate(user, {
+      $push: { projectsAsAdmin: newProject.id },
     });
 
     console.log("New Project Created", newProject);
