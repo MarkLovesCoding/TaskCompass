@@ -53,15 +53,7 @@ import { ProjectDto } from "@/use-cases/project/types";
 import { TaskDto } from "@/use-cases/task/types";
 import { format } from "date-fns";
 import { useRouter } from "next/navigation";
-import { findAssigneesDifferences } from "@/lib/utils";
-import { updateTaskUsersAction } from "../_actions/update-task-users.action";
-import { updateTaskNameAction } from "../_actions/update-task-name.action";
-import { updateTaskDescriptionAction } from "../_actions/update-task-description.action";
-import { updateTaskPriorityAction } from "../_actions/update-task-priority.action";
-import { updateTaskStatusAction } from "../_actions/update-task-status.action";
-import { updateTaskCategoryAction } from "../_actions/update-task-category.action";
-import { updateTaskStartDateAction } from "../_actions/update-task-start-date.action";
-import { updateTaskDueDateAction } from "../_actions/update-task-due-date.action";
+
 import { updateTaskArchivedAction } from "../_actions/update-task-archived.action";
 import { updateTaskAction } from "../_actions/update-task.action";
 import { UserDto } from "@/use-cases/user/types";
@@ -76,7 +68,6 @@ const taskFormSchema = z.object({
   startDate: z.date(),
   dueDate: z.date(),
   assignees: z.array(z.string()).min(0),
-  // archived: z.boolean(),
   projectId: z.string().length(24),
 });
 const archivedFormSchema = z.object({
@@ -113,21 +104,11 @@ export const TaskCard = ({
         formRef.current.requestSubmit();
       }
     }
-
-    // Trigger your event here when the dialog closes
-    console.log("taskOpe:", isTaskOpen);
-    // console.log("task closing");
-    // }
   }, [isTaskOpen]);
-  // const [descriptionButtonShow, setDescriptionButtonShow] = useState(false);
   const [isNameEditing, setIsNameEditing] = useState(false);
 
   const [isDescriptionEditing, setIsDescriptionEditing] = useState(false);
-  // const [currentAssigneesState, setCurrentAssigneesState] =
-  //   useState<UserDto[]>();
-  // const [existingAssignees, setExistingAssignees] = useState<string[]>([
-  //   ...task.assignees,
-  // ]);
+
   const router = useRouter();
 
   const form = useForm({
@@ -142,7 +123,6 @@ export const TaskCard = ({
       startDate: task.startDate,
       dueDate: task.dueDate,
       assignees: task.assignees,
-      // archived: task.archived,
       projectId: project.id,
     },
   });
@@ -180,21 +160,12 @@ export const TaskCard = ({
 
   const [archivedOpen, setArchivedOpen] = useState(false);
 
-  // const handleArchivedSubmit = () => {
-  //   archivedForm.setValue("archived", true);
-  //   setArchivedOpen(false);
-  // };
-
   const handleArchivedCancel = () => {
     archivedForm.setValue("archived", task.archived);
     setArchivedOpen(false);
-    // console.log("archivedOpen", archivedOpen);
-
-    // Trigger the onChange event for the field
   };
   const handleArchivedSubmit = () => {
     archivedForm.setValue("archived", true);
-    // console.log("archivedOpen", archivedOpen);
     setIsTaskSelected(false);
     archivedFormRef.current!.requestSubmit();
     setArchivedOpen(false);
@@ -218,9 +189,6 @@ export const TaskCard = ({
   const handleDescriptionBlur = () => {
     // descriptionField.onBlur(); // Trigger the onBlur event for the field
     setIsDescriptionEditing(false);
-    // if (task.description == currentDescription) {
-    //   setDescriptionButtonShow(false);
-    // }
   };
   const handleDescriptionClick = () => {
     setIsDescriptionEditing(true);

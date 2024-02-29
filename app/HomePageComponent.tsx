@@ -3,8 +3,8 @@
 import { signIn, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import SignUpForm from "./(components)/SignUpForm";
-import SignInForm from "./(components)/SignInForm";
+import SignUpForm from "./SignUpForm";
+import SignInForm from "./SignInForm";
 const HomePageComponent = () => {
   const { data: session } = useSession();
   const router = useRouter();
