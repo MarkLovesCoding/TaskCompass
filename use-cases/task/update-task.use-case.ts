@@ -11,15 +11,17 @@ export async function updateTaskUseCase(
   },
   data: {
     id: string;
+    name: string;
+    description: string;
     project: string;
-    // assignees: string[];
-    // dueDate?: Date | undefined;
-    // startDate: Date;
-    // category: string;
-    // complete: boolean;
-    // priority: string;
-    // status: string;
-    label?: string | undefined;
+    assignees: string[];
+    dueDate: Date;
+    startDate: Date;
+    category: string;
+    archived: boolean;
+    priority: string;
+    status: string;
+    // label?: string | undefined;
   }
 ) {
   const user = context.getUser();
@@ -29,14 +31,16 @@ export async function updateTaskUseCase(
   const taskAsEntity = new TaskEntity({
     ...task,
     project: data.project,
-    // assignees: data.assignees,
-    // dueDate: data.dueDate,
-    // startDate: data.startDate,
-    // complete: data.complete,
-    // category: data.category,
-    // priority: data.priority,
-    // status: data.status,
-    label: data.label,
+    name: data.name,
+    description: data.description,
+    assignees: data.assignees,
+    dueDate: data.dueDate,
+    startDate: data.startDate,
+    archived: data.archived,
+    category: data.category,
+    priority: data.priority,
+    status: data.status,
+    // label: data.label,
   });
   console.log("updatedTaskEntity", taskAsEntity);
   await context.updateTask(taskToDto(taskAsEntity));

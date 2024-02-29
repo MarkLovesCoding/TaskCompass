@@ -6,13 +6,13 @@ export class TaskEntity {
   private description: string;
   private project: string;
   private assignees: string[];
-  private dueDate?: Date | undefined;
+  private dueDate: Date;
   private startDate: Date;
   private archived: boolean;
   private priority: string;
   private category: string;
   private status: string;
-  private label?: string;
+  // private label?: string;
 
   constructor({
     id,
@@ -26,20 +26,20 @@ export class TaskEntity {
     category = "Personal",
     priority = "Medium",
     status = "To Do",
-    label,
-  }: {
+  }: // label,
+  {
     id?: string;
     name: string;
     description: string;
     project: string;
     assignees: string[];
-    dueDate?: Date | undefined;
+    dueDate: Date;
     startDate: Date;
     category: string;
     archived: boolean;
     priority: string;
     status: string;
-    label?: string | undefined;
+    // label?: string | undefined;
   }) {
     this.id = id;
     this.name = name;
@@ -53,7 +53,7 @@ export class TaskEntity {
 
     this.priority = priority;
     this.status = status;
-    this.label = label;
+    // this.label = label;
 
     this.validate();
   }
@@ -88,9 +88,9 @@ export class TaskEntity {
   getStatus() {
     return this.status;
   }
-  getLabel() {
-    return this.label;
-  }
+  // getLabel() {
+  //   return this.label;
+  // }
   getId() {
     return this.id;
   }
@@ -115,7 +115,7 @@ export class TaskEntity {
       this.assignees = this.assignees.filter((a) => a !== assignee);
     });
   }
-  updateDueDate(dueDate: Date | undefined) {
+  updateDueDate(dueDate: Date) {
     this.dueDate = dueDate;
   }
   updateStartDate(startDate: Date) {
@@ -130,9 +130,9 @@ export class TaskEntity {
   updateStatus(status: string) {
     this.status = status;
   }
-  updateLabel(label: string) {
-    this.label = label;
-  }
+  // updateLabel(label: string) {
+  //   this.label = label;
+  // }
   updateCategory(category: string) {
     this.category = category;
   }
@@ -151,7 +151,7 @@ export class TaskEntity {
       archived: z.boolean(),
       priority: z.string(),
       status: z.string(),
-      label: z.string(),
+      // label: z.string(),
     });
     try {
       taskSchema.parse(this);

@@ -6,7 +6,7 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { TaskCard } from "./TaskCard";
 import { ProjectDto } from "@/use-cases/project/types";
 import { TaskDto } from "@/use-cases/task/types";
@@ -41,23 +41,29 @@ const CardView = ({
         return "bg-gray-500";
     }
   };
+  // Generate unique IDs for each task
+  const taskIds = tasks.map((task) => task.id);
 
-  // console.log(PRIORITY_COLORS["High"]);
-  // const highPriorityTasks = tasks.filter((task) => task.priority === "High");
-  // const mediumPriorityTasks = tasks.filter(
-  //   (task) => task.priority === "Medium"
-  // );
-  // const lowPriorityTasks = tasks.filter((task) => task.priority === "Low");
-  // const priorityObject = {
-  //   High: { tasks: highPriorityTasks, color: "red" },
-  //   Medium: { tasks: mediumPriorityTasks, color: "yellow" },
-  //   Low: { tasks: lowPriorityTasks, color: "green" },
+  // Initialize task card open states with all tasks initially closed
+  const initialTaskCardOpenStates: Record<string, boolean> = {};
+  taskIds.forEach((id) => {
+    initialTaskCardOpenStates[id] = false;
+  });
+  // const [isTaskOpen, setIsTaskOpen] = useState<boolean>(false);
+  // const handleTaskOpen = () => {
+  //   setIsTaskOpen(!isTaskOpen);
   // };
-  const [isTaskOpen, setIsTaskOpen] = React.useState<boolean>(false);
-  const handleTaskOpen = () => {
-    setIsTaskOpen(!isTaskOpen);
-  };
+  const [taskCardOpenStates, setTaskCardOpenStates] = useState<
+    Record<string, boolean>
+  >(initialTaskCardOpenStates);
 
+  const toggleTaskCard = (id: string) => {
+    setTaskCardOpenStates((prevState) => {
+      const newState = { ...prevState };
+      newState[id] = !newState[id];
+      return newState;
+    });
+  };
   return (
     <div className="flex md:flex-row  justify-center flex-col w-min-full overflow-x">
       <div className="flex md:flex-row justify-center flex-col w-min-full overflow-x">
@@ -79,9 +85,9 @@ const CardView = ({
                     (task, task_idx) =>
                       !task.archived && (
                         <Dialog
-                          open={isTaskOpen}
-                          onOpenChange={handleTaskOpen}
-                          key={task_idx}
+                          open={taskCardOpenStates[task.id]}
+                          onOpenChange={() => toggleTaskCard(task.id)}
+                          key={task.id}
                         >
                           <DialogTrigger>
                             <Card
@@ -118,7 +124,7 @@ const CardView = ({
                               task={task}
                               project={project}
                               projectUsers={projectUsers}
-                              isTaskOpen={isTaskOpen}
+                              isTaskOpen={taskCardOpenStates[task.id]}
                             />
                           </DialogContent>
                         </Dialog>
@@ -157,8 +163,8 @@ const CardView = ({
                         !task.archived && (
                           <Dialog
                             key={task_idx}
-                            open={isTaskOpen}
-                            onOpenChange={handleTaskOpen}
+                            open={taskCardOpenStates[task.id]}
+                            onOpenChange={() => toggleTaskCard(task.id)}
                           >
                             <DialogTrigger>
                               <Card
@@ -196,7 +202,7 @@ const CardView = ({
                                 task={task}
                                 project={project}
                                 projectUsers={projectUsers}
-                                isTaskOpen={isTaskOpen}
+                                isTaskOpen={taskCardOpenStates[task.id]}
                               />
                             </DialogContent>
                           </Dialog>

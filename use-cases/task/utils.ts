@@ -16,7 +16,7 @@ export function taskToDto(task: TaskEntity): TaskDto {
     archived: task.getArchived(),
     priority: task.getPriority(),
     status: task.getStatus(),
-    label: task.getLabel(),
+    // label: task.getLabel(),
   };
 }
 export function taskToCreateTaskDto(task: TaskEntity): CreateTaskDto {
@@ -31,6 +31,6 @@ export function taskToCreateTaskDto(task: TaskEntity): CreateTaskDto {
     archived: task.getArchived(),
     priority: task.getPriority(),
     status: task.getStatus(),
-    label: task.getLabel(),
+    // label: task.getLabel(),
   };
 }

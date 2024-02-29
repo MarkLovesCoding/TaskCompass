@@ -7,16 +7,17 @@ import { revalidatePath } from "next/cache";
 
 type FormData = {
   id: string;
-
-  project: string;
-  // assignees: string[];
-  // dueDate?: Date | undefined;
-  // startDate: Date;
-  // complete: boolean;
-  // category: string;
-  // priority: string;
-  // status: string;
-  label?: string | undefined;
+  name: string;
+  description: string;
+  projectId: string;
+  assignees: string[];
+  dueDate: Date;
+  startDate: Date;
+  archived: boolean;
+  category: string;
+  priority: string;
+  status: string;
+  // label?: string | undefined;
 };
 
 export async function updateTaskAction(formData: FormData) {
@@ -32,26 +33,33 @@ export async function updateTaskAction(formData: FormData) {
       },
       {
         id: formData.id,
-        project: formData.project,
-        // assignees: formData.assignees,
-        // complete: formData.complete,
-        label: formData.label,
+        name: formData.name,
+        description: formData.description,
+        project: formData.projectId,
+        assignees: formData.assignees,
+        dueDate: formData.dueDate,
+        startDate: formData.startDate,
+        archived: formData.archived,
+        category: formData.category,
+        priority: formData.priority,
+        status: formData.status,
+        // label: formData.label,
       }
     );
-    revalidatePath(`/PROJECTS-CLEAN/${formData.project}`);
+    revalidatePath(`/PROJECTS-CLEAN/${formData.projectId}`);
     // revalidatePath("/PROJECTS-CLEAN/[slug]");
     return {
       id: formData.id,
 
-      project: formData.project,
-      // assignees: formData.assignees,
-      // dueDate: formData.dueDate,
-      // startDate: formData.startDate,
-      // complete: formData.complete,
-      // category: formData.category,
-      // priority: formData.priority,
-      // status: formData.status,
-      label: formData.label,
+      project: formData.projectId,
+      assignees: formData.assignees,
+      dueDate: formData.dueDate,
+      startDate: formData.startDate,
+      archived: formData.archived,
+      category: formData.category,
+      priority: formData.priority,
+      status: formData.status,
+      // label: formData.label,
     };
   } catch (error: any) {
     console.error(error);
