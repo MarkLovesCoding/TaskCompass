@@ -20,28 +20,14 @@ import { ProjectDto } from "@/use-cases/project/types";
 import { UserDto } from "@/use-cases/user/types";
 import { updateTeamUsersAction } from "@/app/TEAMS-CLEAN/_actions/update-team-users.action";
 // import { updateProjectAdminsAction } from "@/app/PROJECTS-CLEAN/_actions/update-project-admins.action";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { ChangeEvent, useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { useState } from "react";
+
 import { Label } from "@/components/ui/label";
 import toast from "react-hot-toast";
-import { set } from "mongoose";
-import { DropdownMenu } from "@/components/ui/dropdown-menu";
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from "@/components/ui/select";
+
 import TeamMemberCardPermissionsSelect from "./TeamMemberCardPermissionsSelect";
 import { TeamDto } from "@/use-cases/team/types";
-import MemberCardPermissionsSelect from "./TeamMemberCardPermissionsSelect";
-const formSchema = z.object({
-  users: z.array(z.string()).min(1),
-});
 
 export function TeamMemberTable({
   userId,
@@ -57,12 +43,7 @@ export function TeamMemberTable({
   projects: ProjectDto[];
 }) {
   const router = useRouter();
-  // const form = useForm<z.infer<typeof formSchema>>({
-  //   resolver: zodResolver(formSchema),
-  //   defaultValues: {
-  //     users: [...project.members, ...project.admins],
-  //   },
-  // });
+
   const filteredGlobalUsers = globalUsers.filter(
     (user) => !teamUsers.some((tUser) => tUser.id === user.id)
   );
@@ -74,16 +55,6 @@ export function TeamMemberTable({
     globalUsers[0]
   );
   const [isOpen, setIsOpen] = useState(false);
-  const [alertOpen, setAlertOpen] = useState(false);
-
-  // useEffect(() => {
-  //   const getProjects = async () => {
-  //     const projects = await getTeamProjects(team);
-  //     const allProjectTasks = projects.map((project) => project.tasks).flat();
-  //     setProjectTasksInTeam(allProjectTasks);
-  //     console.log("projects", projects);
-  //   };
-  // }, [team]);
 
   const [globalUsersList, setGlobalUsersList] =
     useState<UserDto[]>(filteredGlobalUsers);
@@ -109,8 +80,10 @@ export function TeamMemberTable({
     //   const updatedUsers = [...form.getValues("Users"), selectedUser];
     //   form.setValue("Users", updatedUsers);
     // }
-    // if (isOpen) {
-    await updateTeamUsersAction(team.id, teamUsersIdLists);
+    if (isOpen === false) {
+      setIsOpen(true);
+      await updateTeamUsersAction(team.id, teamUsersIdLists);
+    } else setIsOpen(false);
     // await updateProjectAdminsAction(project.id, projectUsersIdLists);
     // await updateProjectMembersAction(project.id, projectMembersIdList, projectAdminsIdList);
     // await updateProjectAdminsAction(project.id, projectAdminsIdLists);
@@ -165,7 +138,7 @@ export function TeamMemberTable({
     },
   };
   return (
-    <Popover onOpenChange={onUpdateTeamUserFormSubmit}>
+    <Popover open={isOpen} onOpenChange={onUpdateTeamUserFormSubmit}>
       <PopoverTrigger asChild>
         {/* <Button
           className="w-12 h-12 p-3 text-sm rounded-full flex items-center font-semibold gap-1"

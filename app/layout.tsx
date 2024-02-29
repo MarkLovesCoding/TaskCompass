@@ -3,10 +3,9 @@ import "./globals.css";
 
 import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
-import Navigation from "./(components)/Navigation";
-import AuthProvider from "./(components)/AuthProvider";
+import Navigation from "./Navigation";
 import { ThemeProvider } from "@/components/ui/theme-provider";
-import QueryProvider from "./utils/Providers";
+import Provider from "./utils/Providers";
 config.autoAddCss = false;
 
 export const metadata: Metadata = {
@@ -26,23 +25,19 @@ export default function RootLayout({
 }) {
   return (
     <html suppressHydrationWarning lang="en">
-      <AuthProvider>
-        <QueryProvider>
-          {/* <QueryClientProvider client={new QueryClient()}> */}
-          <body className="bg-background">
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="dark"
-              enableSystem
-              disableTransitionOnChange
-            >
-              <Navigation />
-              <div>{children}</div>
-            </ThemeProvider>
-          </body>
-        </QueryProvider>
-        {/* </QueryClientProvider> */}
-      </AuthProvider>
+      <Provider>
+        <body className="bg-background">
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <Navigation />
+            <div>{children}</div>
+          </ThemeProvider>
+        </body>
+      </Provider>
     </html>
   );
 }

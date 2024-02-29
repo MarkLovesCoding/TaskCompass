@@ -180,7 +180,7 @@ export function MemberCardSearchTable({
                 <div className="flex items-center h-14 gap-2">
                   <div className="flex w-full items-center gap-2">
                     <Avatar className=" w-10 h-10">
-                      <AvatarImage src={user.avatar} />
+                      {/* <AvatarImage src={user.avatar} /> */}
                       <AvatarFallback className={`text-sm bg-gray-500`}>
                         {getInitials(user.name)}
                       </AvatarFallback>
@@ -255,33 +255,6 @@ export function MemberCardSearchTable({
                 </div>
               </CommandItem>
             ))}
-            {/* <div className="flex items-center gap-2">
-              <div className="flex items-center gap-2">
-                <img
-                  alt="Avatar"
-                  className="rounded-full border border-gray-200 w-8 h-8 object-cover"
-                  height="32"
-                  src="/placeholder.svg"
-                  style={{
-                    aspectRatio: "32/32",
-                    objectFit: "cover",
-                  }}
-                  width="32"
-                />
-                <div>
-                  <span className="font-medium">carol</span>
-                  <div className="flex items-center gap-1">
-                    <Badge className="shrink-0">5 tasks</Badge>
-                    <Badge className="shrink-0" variant="secondary">
-                      Member
-                    </Badge>
-                  </div>
-                  <span className="text-xs text-gray-500 dark:text-gray-400">
-                    carol@example.com
-                  </span>
-                </div>
-              </div>
-            </div> */}
           </CommandGroup>
           <Separator />
           {teamUsersList.length > 0 && (

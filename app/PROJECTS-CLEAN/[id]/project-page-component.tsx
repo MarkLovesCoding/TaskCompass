@@ -28,7 +28,6 @@ import Link from "next/link";
 import { PersonStanding } from "lucide-react";
 import type { ProjectDto } from "@/use-cases/project/types";
 import type { TaskDto } from "@/use-cases/task/types";
-import { AddMemberForm } from "./AddMemberForm";
 // import UpdateProjectUsersCard from "./UpdateProjectUsersCard";
 import { MemberCardSearchTable } from "./member-card-search-table";
 import {
@@ -59,58 +58,38 @@ import { UserDto } from "@/use-cases/user/types";
 import UnarchiveTaskPopover from "./UnarchiveTaskPopover";
 import ArchiveProjectPopover from "./ArchiveProjectPopover";
 
-import { Label } from "@/components/ui/label";
 import { ProjectHeaderStatic } from "./ProjectHeaderStatic";
-// import PriorityView from "./PriorityView";
 import { getInitials } from "@/app/utils/getInitials";
 
-import { sortByType } from "./utils";
 import { useState } from "react";
 import CardView from "./CardView";
-// import UpdateProjectMembersCard from "./UpdateProjectMembersCard";
 export function ProjectPage({
   userId,
   user,
   project,
   tasks,
   teamUsers,
-  // teamAdmins,
   projectUsers,
-}: // projectAdmins,
-{
+}: {
   userId: string;
   user: UserDto;
   project: ProjectDto;
   tasks: TaskDto[];
   teamUsers: UserDto[];
-  // teamAdmins: UserDto[];
-  projectUsers: UserDto[];
-  // projectAdmins: UserDto[];
-}) {
-  type SortTypeType = "priority" | "status" | "category";
 
+  projectUsers: UserDto[];
+}) {
   const [sortBy, setSortBy] = useState<string>("priority");
   const isUserAdmin = user.projectsAsAdmin.some((id) => id === project.id);
   const archivedTasks = tasks.filter((task) => task.archived);
   const uniqueTeamUsers = [...teamUsers];
-  // const uniqueTeamUserIds = new Set(allTeamUsers.map((user) => user.id));
-  // const uniqueTeamUsers = Array.from(uniqueTeamUserIds, (userId) =>
-  //   allTeamUsers.find((user) => user.id === userId)
-  // ) as UserDto[];
   const uniqueProjectUsers = [...projectUsers];
-  // const uniqueProjectUserIds = new Set(allProjectUsers.map((user) => user.id));
-  // const uniqueProjectUsers = Array.from(uniqueProjectUserIds, (userId) =>
-  //   allProjectUsers.find((user) => user.id === userId)
-  // ) as UserDto[];
-
-  // let sortBy = "priority";
 
   return (
     <div className="flex flex-col justify-start items-center min-h-[calc(100vh-4rem)]  ">
       <main className="flex flex-col  max-w-[1400px]  ">
         <div className="flex  flex-row items-center justify-center  mt-4 align-middle">
           <div>
-            {" "}
             <Link href={`/TEAMS-CLEAN/${project.team}`}>
               <h4 className="text-xs  underline cursor-pointer">
                 Back to Team Page
@@ -136,7 +115,7 @@ export function ProjectPage({
                           <Popover>
                             <PopoverTrigger>
                               <Avatar key={index} className=" w-10 h-10">
-                                <AvatarImage src={member.avatar} />
+                                {/* <AvatarImage src={member.avatar} /> */}
                                 <AvatarFallback
                                   className={`text-sm bg-gray-500`}
                                 >
@@ -172,24 +151,6 @@ export function ProjectPage({
                         <CircleEllipsisIcon className="w-8 h-8 self-center cursor-pointer" />
                       </DropdownMenuTrigger>
                       <DropdownMenuContent className="w-56">
-                        {/* <DropdownMenuGroup> */}
-                        {/* <DropdownMenuSub>
-                            <DropdownMenuSubTrigger>
-                              Add users
-                            </DropdownMenuSubTrigger>
-                            <DropdownMenuPortal>
-                              <DropdownMenuSubContent>
-                                <UpdateProjectUsersCard
-                                  userId={userId}
-                                  project={project}
-                                  teamUsers={uniqueTeamUsers}
-                                  projectUsers={uniqueProjectUsers}
-                                />
-                                {/* <MemberCardSearchTable /> */}
-                        {/* </DropdownMenuSubContent>
-                            </DropdownMenuPortal>
-                          </DropdownMenuSub> */}
-                        {/* </DropdownMenuGroup> */}
                         <DropdownMenuGroup>
                           <DropdownMenuSub>
                             <DropdownMenuSubTrigger>
@@ -209,7 +170,6 @@ export function ProjectPage({
                                               <UnarchiveTaskPopover
                                                 task={task}
                                               />
-
                                               {task_idx !== 0 ||
                                                 (task_idx !==
                                                   archivedTasks.length - 1 && (

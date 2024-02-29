@@ -18,7 +18,9 @@ type UserDataForNavType = {
   projects: ProjectDto[];
   teams: TeamDto[];
 };
-async function getUserNavObject(userId: string): Promise<UserDataForNavType> {
+async function getUserProjectsAndTeams(
+  userId: string
+): Promise<UserDataForNavType> {
   // console.log("asdfasdfasfdasdf>>>>>>>>>>>>getUserObject userId", userId);
   try {
     await connectDB();
@@ -56,4 +58,4 @@ async function getUserNavObject(userId: string): Promise<UserDataForNavType> {
   }
 }
 
-export default getUserNavObject;
+export default getUserProjectsAndTeams;

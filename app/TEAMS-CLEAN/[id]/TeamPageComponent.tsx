@@ -4,9 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import AddProjectCard from "./AddProjectCard";
 import { TeamMemberTable } from "./TeamMemberTable";
 import { TeamHeader } from "@/app/TEAMS-CLEAN/[id]/team-header";
-import UpdateTeamUsersCard from "./UpdateTeamUsersCard";
 import UnarchiveProjectPopover from "./UnarchiveProjectPopover";
-import { UpdateMembersAndInvite } from "./update-members-and-invite";
 
 import { getInitials } from "@/app/utils/getInitials";
 
@@ -145,12 +143,11 @@ export async function TeamPageComponent({
             <div className="w-96 flex flex-row">
               {teamUsers.map((member, index) => (
                 <Avatar key={index} className=" w-12 h-12">
-                  <AvatarImage src={member.avatar} />
+                  {/* <AvatarImage src={member.avatar} /> */}
                   <AvatarFallback className={`text-sm bg-gray-500`}>
                     {getInitials(member.name)}
                   </AvatarFallback>
                 </Avatar>
-                // <div key={index}>{member.name}</div>
               ))}
               <TeamMemberTable
                 userId={userId}
@@ -183,31 +180,6 @@ export async function TeamPageComponent({
                     <DropdownMenuGroup>
                       <DropdownMenuSub>
                         <DropdownMenuSubTrigger>
-                          Team Members
-                        </DropdownMenuSubTrigger>
-                        <DropdownMenuPortal>
-                          <DropdownMenuSubContent>
-                            {/* <UpdateMembersAndInvite
-                              userId={userId}
-                              team={team}
-                              globalUsers={usersList}
-                              teamUsers={teamUsers}
-                            /> */}
-                            <Separator className="my-2" />
-
-                            <UpdateTeamUsersCard
-                              userId={userId}
-                              team={team}
-                              globalUsers={usersList}
-                              teamUsers={teamUsers}
-                            />
-                          </DropdownMenuSubContent>
-                        </DropdownMenuPortal>{" "}
-                      </DropdownMenuSub>
-                    </DropdownMenuGroup>
-                    <DropdownMenuGroup>
-                      <DropdownMenuSub>
-                        <DropdownMenuSubTrigger>
                           Archived Projects
                         </DropdownMenuSubTrigger>
                         <DropdownMenuPortal>
@@ -217,27 +189,22 @@ export async function TeamPageComponent({
                                 <div className="p-4">No archived projects</div>
                               ) : (
                                 <div className="p-4 flex flex-col">
-                                  {
-                                    // projects.length === 0
-                                    //   ? "No archived projects"
-                                    //   :
-                                    projects.map(
-                                      (project, project_idx) =>
-                                        project.archived && (
-                                          <div key={project_idx}>
-                                            <UnarchiveProjectPopover
-                                              project={project}
-                                            />
+                                  {projects.map(
+                                    (project, project_idx) =>
+                                      project.archived && (
+                                        <div key={project_idx}>
+                                          <UnarchiveProjectPopover
+                                            project={project}
+                                          />
 
-                                            {project_idx !== 0 ||
-                                              (project_idx !==
-                                                archivedProjects.length - 1 && (
-                                                <Separator className="my-2" />
-                                              ))}
-                                          </div>
-                                        )
-                                    )
-                                  }
+                                          {project_idx !== 0 ||
+                                            (project_idx !==
+                                              archivedProjects.length - 1 && (
+                                              <Separator className="my-2" />
+                                            ))}
+                                        </div>
+                                      )
+                                  )}
                                 </div>
                               )}
                             </ScrollArea>
