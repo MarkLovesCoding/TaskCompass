@@ -18,7 +18,7 @@ export async function updateTaskUseCase(
     dueDate: Date;
     startDate: Date;
     category: string;
-    archived: boolean;
+    // archived: boolean;
     priority: string;
     status: string;
     // label?: string | undefined;
@@ -36,7 +36,7 @@ export async function updateTaskUseCase(
     assignees: data.assignees,
     dueDate: data.dueDate,
     startDate: data.startDate,
-    archived: data.archived,
+    // archived: data.archived,
     category: data.category,
     priority: data.priority,
     status: data.status,

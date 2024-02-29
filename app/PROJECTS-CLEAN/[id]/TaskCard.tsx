@@ -76,10 +76,14 @@ const taskFormSchema = z.object({
   startDate: z.date(),
   dueDate: z.date(),
   assignees: z.array(z.string()).min(0),
+  // archived: z.boolean(),
+  projectId: z.string().length(24),
+});
+const archivedFormSchema = z.object({
+  id: z.string(),
   archived: z.boolean(),
   projectId: z.string().length(24),
 });
-
 let renderCount = 0;
 export const TaskCard = ({
   task,
@@ -94,6 +98,7 @@ export const TaskCard = ({
 }) => {
   unstable_noStore();
   const formRef = React.useRef<HTMLFormElement>(null);
+  const archivedFormRef = React.useRef<HTMLFormElement>(null);
   const [isTaskSelected, setIsTaskSelected] = useState(false);
 
   useEffect(() => {
@@ -114,15 +119,15 @@ export const TaskCard = ({
     // console.log("task closing");
     // }
   }, [isTaskOpen]);
-  const [descriptionButtonShow, setDescriptionButtonShow] = useState(false);
+  // const [descriptionButtonShow, setDescriptionButtonShow] = useState(false);
   const [isNameEditing, setIsNameEditing] = useState(false);
 
   const [isDescriptionEditing, setIsDescriptionEditing] = useState(false);
-  const [currentAssigneesState, setCurrentAssigneesState] =
-    useState<UserDto[]>();
-  const [existingAssignees, setExistingAssignees] = useState<string[]>([
-    ...task.assignees,
-  ]);
+  // const [currentAssigneesState, setCurrentAssigneesState] =
+  //   useState<UserDto[]>();
+  // const [existingAssignees, setExistingAssignees] = useState<string[]>([
+  //   ...task.assignees,
+  // ]);
   const router = useRouter();
 
   const form = useForm({
@@ -137,17 +142,29 @@ export const TaskCard = ({
       startDate: task.startDate,
       dueDate: task.dueDate,
       assignees: task.assignees,
+      // archived: task.archived,
+      projectId: project.id,
+    },
+  });
+  const archivedForm = useForm<z.infer<typeof archivedFormSchema>>({
+    resolver: zodResolver(archivedFormSchema),
+    defaultValues: {
+      id: task.id,
       archived: task.archived,
       projectId: project.id,
     },
   });
-
   const onSubmit = async (values: z.infer<typeof taskFormSchema>) => {
     // Handle form submission
     console.log("Form values:", values);
     await updateTaskAction(values);
   };
-
+  const { field: archivedField, fieldState: archivedFieldState } =
+    useController({
+      name: "archived", // Name of the field you want to control
+      control: archivedForm.control, // Pass the form control from useForm
+      defaultValue: task.archived, // Default value for the field
+    });
   const selectedStartDate = useWatch({
     control: form.control,
     name: "startDate",
@@ -162,18 +179,34 @@ export const TaskCard = ({
   });
 
   const [archivedOpen, setArchivedOpen] = useState(false);
-  const handleArchivedSubmit = () => {
-    form.setValue("archived", true);
-    setArchivedOpen(false);
-  };
+
+  // const handleArchivedSubmit = () => {
+  //   archivedForm.setValue("archived", true);
+  //   setArchivedOpen(false);
+  // };
+
   const handleArchivedCancel = () => {
-    form.setValue("archived", task.archived);
+    archivedForm.setValue("archived", task.archived);
     setArchivedOpen(false);
     // console.log("archivedOpen", archivedOpen);
 
     // Trigger the onChange event for the field
   };
+  const handleArchivedSubmit = () => {
+    archivedForm.setValue("archived", true);
+    // console.log("archivedOpen", archivedOpen);
+    setIsTaskSelected(false);
+    archivedFormRef.current!.requestSubmit();
+    setArchivedOpen(false);
+    // Trigger the onChange event for the field
+  };
 
+  const onArchivedFormSubmit = async (
+    values: z.infer<typeof archivedFormSchema>
+  ) => {
+    await updateTaskArchivedAction(values);
+    router.refresh();
+  };
   const handleNameBlur = () => {
     // nameField.onBlur();
     setIsNameEditing(false);
@@ -254,11 +287,6 @@ export const TaskCard = ({
                 </FormItem>
               )}
             />
-            {descriptionButtonShow && (
-              <Button className="col-span-1 self-end" type="submit">
-                Save
-              </Button>
-            )}
             <FormField
               control={form.control}
               name="priority"
@@ -502,9 +530,18 @@ export const TaskCard = ({
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            />{" "}
+          </form>
+        </Form>{" "}
+        <Form {...form}>
+          <form
+            ref={archivedFormRef}
+            onSubmit={archivedForm.handleSubmit(onArchivedFormSubmit)}
+            method="post"
+            className="grid gap-6 w-full max-w-md mr-auto  "
+          >
             <FormField
-              control={form.control}
+              control={archivedForm.control}
               name="archived"
               render={({ field }) => (
                 <FormItem>

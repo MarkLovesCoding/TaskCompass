@@ -13,7 +13,7 @@ type FormData = {
   assignees: string[];
   dueDate: Date;
   startDate: Date;
-  archived: boolean;
+  // archived: boolean;
   category: string;
   priority: string;
   status: string;
@@ -39,7 +39,7 @@ export async function updateTaskAction(formData: FormData) {
         assignees: formData.assignees,
         dueDate: formData.dueDate,
         startDate: formData.startDate,
-        archived: formData.archived,
+        // archived: formData.archived,
         category: formData.category,
         priority: formData.priority,
         status: formData.status,
@@ -55,7 +55,7 @@ export async function updateTaskAction(formData: FormData) {
       assignees: formData.assignees,
       dueDate: formData.dueDate,
       startDate: formData.startDate,
-      archived: formData.archived,
+      // archived: formData.archived,
       category: formData.category,
       priority: formData.priority,
       status: formData.status,
