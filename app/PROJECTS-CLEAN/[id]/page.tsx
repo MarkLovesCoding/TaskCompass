@@ -10,7 +10,6 @@ import getProjectAdmins from "@/data-access/users/get-project-admins.persistence
 import { ProjectPage } from "@/app/PROJECTS-CLEAN/[id]/project-page-component";
 import toast, { Toaster } from "react-hot-toast";
 import { sessionAuth } from "@/lib/sessionAuth";
-import { ProjectContextProvider } from "./ProjectContext";
 import getUserObject from "@/data-access/users/get-user.persistence";
 
 type ParamsType = {
@@ -34,17 +33,15 @@ const Projects = async ({ params }: { params: ParamsType }) => {
 
   return (
     <div className=" flex justify-center align-baseline max-h-[calc(100vh-4rem)]">
-      <ProjectContextProvider>
-        <ProjectPage
-          user={user}
-          userId={session?.user.id!}
-          project={project}
-          teamUsers={teamUsers}
-          projectUsers={projectUsers}
-          tasks={tasks}
-        />
-        <Toaster />
-      </ProjectContextProvider>
+      <ProjectPage
+        user={user}
+        userId={session?.user.id!}
+        project={project}
+        teamUsers={teamUsers}
+        projectUsers={projectUsers}
+        tasks={tasks}
+      />
+      <Toaster />
     </div>
   );
 };

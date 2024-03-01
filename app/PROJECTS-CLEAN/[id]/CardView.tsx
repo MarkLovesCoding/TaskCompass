@@ -15,8 +15,9 @@ import { sortByType } from "./utils";
 import { SORT_TYPES } from "./constants";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import TaskCardSmallDialog from "./TaskCardSmallDialog";
 // import { PRIORITY_COLORS } from "./constants";
-
+import { Draggable, Droppable } from "@hello-pangea/dnd";
 const CardView = ({
   type,
   tasks,
@@ -73,64 +74,89 @@ const CardView = ({
             {Object.entries(sortByObject)
               .filter(([_, tasks]) => tasks.length > 0)
               .map(([sorted_type, tasks], sorted_idx) => (
-                <div
-                  key={sorted_idx}
-                  className={cn(
-                    "min-w-[325px]",
-                    `flex flex-col items-center py-10 px-4 space-y-8 align-top overflow-clip`
-                  )}
-                >
-                  <label className="text-2xl font-bold">{`${sorted_type}`}</label>
-                  {tasks.map(
-                    (task, task_idx) =>
-                      !task.archived && (
-                        <Dialog
-                          open={taskCardOpenStates[task.id]}
-                          onOpenChange={() => toggleTaskCard(task.id)}
-                          key={task.id}
-                        >
-                          <DialogTrigger>
-                            <Card
-                              key={task_idx}
-                              className={`border rounded-lg flex items-center w-72 border-gray-500 bg-gray-800 shadow-lg hover:shadow-sm`}
+                //column below
+                <Droppable droppableId={sorted_type} key={sorted_idx}>
+                  {(droppableProvided, snapshot) => (
+                    <div
+                      ref={droppableProvided.innerRef}
+                      key={sorted_idx}
+                      {...droppableProvided.droppableProps}
+                      className={cn(
+                        "min-w-[325px]",
+                        `flex flex-col items-center py-10 px-4 space-y-8 align-top overflow-clip`
+                      )}
+                    >
+                      <label className="text-2xl font-bold">{`${sorted_type}`}</label>
+                      {tasks.map(
+                        (task, task_idx) =>
+                          !task.archived && (
+                            <Draggable
+                              draggableId={String(task.id)}
+                              index={task_idx}
                             >
-                              <div className="flex flex-col overflow-hidden p-2 ">
-                                <CardHeader className="flex justify-start">
-                                  <Badge
-                                    className={cn(
-                                      colorByPriority(task.priority),
-                                      "w-min"
-                                    )}
+                              {(provided, snapshot) => (
+                                // <TaskCardSmallDialog
+                                //   {...provided.draggableProps}
+                                //   {...provided.dragHandleProps}
+                                //   ref={provided.innerRef}
+                                //   tasks={tasks}
+                                //   task={task}
+                                //   project={project}
+                                //   projectUsers={projectUsers}
+                                // />
+                                <div ref={droppableProvided.innerRef}>
+                                  <Dialog
+                                    open={taskCardOpenStates[task.id]}
+                                    onOpenChange={() => toggleTaskCard(task.id)}
+                                    key={task.id}
                                   >
-                                    {task.priority}
-                                  </Badge>
-                                  <CardTitle className="text-start">
-                                    {task.name}
-                                  </CardTitle>
-                                  <CardDescription className="text-start">
-                                    {task.description}
-                                  </CardDescription>
-                                </CardHeader>
-                              </div>
-                            </Card>
-                          </DialogTrigger>
-                          <DialogContent
-                            onOpenAutoFocus={(event: Event) =>
-                              event.preventDefault()
-                            }
-                            className="p-6 w-max-[768px] bg-gray-800 rounded-lg border-2"
-                          >
-                            <TaskCard
-                              task={task}
-                              project={project}
-                              projectUsers={projectUsers}
-                              isTaskOpen={taskCardOpenStates[task.id]}
-                            />
-                          </DialogContent>
-                        </Dialog>
-                      )
+                                    <DialogTrigger>
+                                      <Card
+                                        key={task_idx}
+                                        className={`border rounded-lg flex items-center w-72 border-gray-500 bg-gray-800 shadow-lg hover:shadow-sm`}
+                                      >
+                                        <div className="flex flex-col overflow-hidden p-2 ">
+                                          <CardHeader className="flex justify-start">
+                                            <Badge
+                                              className={cn(
+                                                colorByPriority(task.priority),
+                                                "w-min"
+                                              )}
+                                            >
+                                              {task.priority}
+                                            </Badge>
+                                            <CardTitle className="text-start">
+                                              {task.name}
+                                            </CardTitle>
+                                            <CardDescription className="text-start">
+                                              {task.description}
+                                            </CardDescription>
+                                          </CardHeader>
+                                        </div>
+                                      </Card>
+                                    </DialogTrigger>
+                                    <DialogContent
+                                      onOpenAutoFocus={(event: Event) =>
+                                        event.preventDefault()
+                                      }
+                                      className="p-6 w-max-[768px] bg-gray-800 rounded-lg border-2"
+                                    >
+                                      <TaskCard
+                                        task={task}
+                                        project={project}
+                                        projectUsers={projectUsers}
+                                        isTaskOpen={taskCardOpenStates[task.id]}
+                                      />
+                                    </DialogContent>
+                                  </Dialog>
+                                </div>
+                              )}
+                            </Draggable>
+                          )
+                      )}
+                    </div>
                   )}
-                </div>
+                </Droppable>
               ))}
             {/* Render div element for "No Tasks" case */}
             {Object.entries(sortByObject)
@@ -161,51 +187,57 @@ const CardView = ({
                   : sorted_type[1].map(
                       (task, task_idx) =>
                         !task.archived && (
-                          <Dialog
-                            key={task_idx}
-                            open={taskCardOpenStates[task.id]}
-                            onOpenChange={() => toggleTaskCard(task.id)}
-                          >
-                            <DialogTrigger>
-                              <Card
-                                key={task_idx}
-                                className={`border rounded-lg flex items-center w-72 border-gray-500 bg-gray-800 shadow-lg hover:shadow-sm`}
-                              >
-                                <div className="flex flex-col overflow-hidden p-2 ">
-                                  <CardHeader className="flex justify-start">
-                                    <Badge
-                                      className={cn(
-                                        colorByPriority(task.priority),
-                                        "w-min"
-                                      )}
-                                    >
-                                      {task.priority}
-                                    </Badge>
-                                    <CardTitle className="text-start">
-                                      {task.name}
-                                    </CardTitle>
-                                    <CardDescription className="text-start">
-                                      {task.description}
-                                    </CardDescription>
-                                  </CardHeader>
-                                </div>
-                              </Card>
-                            </DialogTrigger>
-                            <DialogContent
-                              onOpenAutoFocus={(event: Event) =>
-                                event.preventDefault()
-                              }
-                              // onCloseAutoFocus={(event: Event) => event.preventDefault()}
-                              className="p-6 w-max-[768px] bg-gray-800 rounded-lg border-2"
-                            >
-                              <TaskCard
-                                task={task}
-                                project={project}
-                                projectUsers={projectUsers}
-                                isTaskOpen={taskCardOpenStates[task.id]}
-                              />
-                            </DialogContent>
-                          </Dialog>
+                          // <Dialog
+                          //   key={task_idx}
+                          //   open={taskCardOpenStates[task.id]}
+                          //   onOpenChange={() => toggleTaskCard(task.id)}
+                          // >
+                          //   <DialogTrigger>
+                          //     <Card
+                          //       key={task_idx}
+                          //       className={`border rounded-lg flex items-center w-72 border-gray-500 bg-gray-800 shadow-lg hover:shadow-sm`}
+                          //     >
+                          //       <div className="flex flex-col overflow-hidden p-2 ">
+                          //         <CardHeader className="flex justify-start">
+                          //           <Badge
+                          //             className={cn(
+                          //               colorByPriority(task.priority),
+                          //               "w-min"
+                          //             )}
+                          //           >
+                          //             {task.priority}
+                          //           </Badge>
+                          //           <CardTitle className="text-start">
+                          //             {task.name}
+                          //           </CardTitle>
+                          //           <CardDescription className="text-start">
+                          //             {task.description}
+                          //           </CardDescription>
+                          //         </CardHeader>
+                          //       </div>
+                          //     </Card>
+                          //   </DialogTrigger>
+                          //   <DialogContent
+                          //     onOpenAutoFocus={(event: Event) =>
+                          //       event.preventDefault()
+                          //     }
+                          //     // onCloseAutoFocus={(event: Event) => event.preventDefault()}
+                          //     className="p-6 w-max-[768px] bg-gray-800 rounded-lg border-2"
+                          //   >
+                          //     <TaskCard
+                          //       task={task}
+                          //       project={project}
+                          //       projectUsers={projectUsers}
+                          //       isTaskOpen={taskCardOpenStates[task.id]}
+                          //     />
+                          //   </DialogContent>
+                          // </Dialog>
+                          <TaskCardSmallDialog
+                            tasks={tasks}
+                            task={task}
+                            project={project}
+                            projectUsers={projectUsers}
+                          />
                         )
                     )}
               </div>

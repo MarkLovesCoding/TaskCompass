@@ -36,36 +36,16 @@ export function TeamHeader({ team }: { team: TeamDto }) {
     control: form.control, // Pass the form control from useForm
     defaultValue: team.name, // Default value for the field
     rules: {
-      // Optional rules for validation
       minLength: 4,
       maxLength: 25,
     },
   });
 
-  // const inputWatch = form.watch("name");
-  // console.log(inputWatch);
-  // console.log(form.formState.isSubmitSuccessful);
-  // // const { field } = useController();
   const [buttonShow, setButtonShow] = useState(false);
   // const [headerText, setHeaderText] = useState(team.name);
   const [isHeaderEditing, setIsHeaderEditing] = useState(false);
   const originalName = team.name;
-  // useEffect(() => {
-  //   setButtonShow(true);
-  // }, [inputWatch]);
 
-  // const handleHeaderClick = () => {
-  //   setIsHeaderEditing(true);
-  // };
-
-  // const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   setButtonShow(true);
-  //   setHeaderText(event.target.value);
-  // };
-
-  // const handleHeaderInputBlur = () => {
-  //   setIsHeaderEditing(false);
-  // };
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     field.onChange(event); // Trigger the onChange event for the field
     setButtonShow(true);
