@@ -12,17 +12,22 @@ import React, { useState } from "react";
 import { TaskCard } from "./TaskCard";
 import { ProjectDto } from "@/use-cases/project/types";
 import { UserDto } from "@/use-cases/user/types";
+import { Draggable, Droppable, DragDropContext } from "@hello-pangea/dnd";
 
 const TaskCardSmallDialog = ({
   tasks,
   task,
   project,
   projectUsers,
+  task_idx,
+  sorted_idx,
 }: {
   tasks: TaskDto[];
   task: TaskDto;
   project: ProjectDto;
   projectUsers: UserDto[];
+  task_idx: number;
+  sorted_idx: number;
 }) => {
   const colorByPriority = (priority: string) => {
     switch (priority) {
@@ -66,22 +71,35 @@ const TaskCardSmallDialog = ({
       key={task.id}
     >
       <DialogTrigger>
-        <Card
-          key={task.id}
-          className={`border rounded-lg flex items-center w-72 border-gray-500 bg-gray-800 shadow-lg hover:shadow-sm`}
+        <Draggable
+          // key={task_idx }
+          draggableId={String(task.id)}
+          index={task_idx + sorted_idx}
         >
-          <div className="flex flex-col overflow-hidden p-2 ">
-            <CardHeader className="flex justify-start">
-              <Badge className={cn(colorByPriority(task.priority), "w-min")}>
-                {task.priority}
-              </Badge>
-              <CardTitle className="text-start">{task.name}</CardTitle>
-              <CardDescription className="text-start">
-                {task.description}
-              </CardDescription>
-            </CardHeader>
-          </div>
-        </Card>
+          {(provided, snapshot) => (
+            <Card
+              {...provided.draggableProps}
+              {...provided.dragHandleProps}
+              ref={provided.innerRef}
+              key={task.id}
+              className={`border rounded-lg flex items-center w-72 border-gray-500 bg-gray-800 shadow-lg hover:shadow-sm`}
+            >
+              <div className="flex flex-col overflow-hidden p-2 ">
+                <CardHeader className="flex justify-start">
+                  <Badge
+                    className={cn(colorByPriority(task.priority), "w-min")}
+                  >
+                    {task.priority}
+                  </Badge>
+                  <CardTitle className="text-start">{task.name}</CardTitle>
+                  <CardDescription className="text-start">
+                    {task.description}
+                  </CardDescription>
+                </CardHeader>
+              </div>
+            </Card>
+          )}
+        </Draggable>
       </DialogTrigger>
       <DialogContent
         onOpenAutoFocus={(event: Event) => event.preventDefault()}
