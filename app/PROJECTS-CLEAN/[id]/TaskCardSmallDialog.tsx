@@ -12,7 +12,7 @@ import React, { useState } from "react";
 import { TaskCard } from "./TaskCard";
 import { ProjectDto } from "@/use-cases/project/types";
 import { UserDto } from "@/use-cases/user/types";
-import { Draggable, Droppable, DragDropContext } from "@hello-pangea/dnd";
+import { Draggable } from "@hello-pangea/dnd";
 
 const TaskCardSmallDialog = ({
   tasks,
@@ -71,17 +71,13 @@ const TaskCardSmallDialog = ({
       key={task.id}
     >
       <DialogTrigger>
-        <Draggable
-          // key={task_idx }
-          draggableId={String(task.id)}
-          index={task_idx + sorted_idx}
-        >
+        <Draggable draggableId={String(task.id)} index={task_idx}>
           {(provided, snapshot) => (
             <Card
               {...provided.draggableProps}
               {...provided.dragHandleProps}
               ref={provided.innerRef}
-              key={task.id}
+              // key={task.id}
               className={`border rounded-lg flex items-center w-72 border-gray-500 bg-gray-800 shadow-lg hover:shadow-sm`}
             >
               <div className="flex flex-col overflow-hidden p-2 ">

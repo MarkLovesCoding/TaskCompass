@@ -46,8 +46,8 @@ export async function updateTaskAction(formData: FormData) {
         // label: formData.label,
       }
     );
-    revalidatePath(`/PROJECTS-CLEAN/${formData.projectId}`);
-    // revalidatePath("/PROJECTS-CLEAN/[slug]");
+    revalidatePath(`/PROJECTS-CLEAN/${formData.projectId}/page`);
+    // revalidatePath("/PROJECTS-CLEAN/[slug]/page");
     return {
       id: formData.id,
 

@@ -1,25 +1,25 @@
 "use client";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
-import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
-import React, { useEffect, useState } from "react";
-import { TaskCard } from "./TaskCard";
+import React, { useState, useEffect } from "react";
 import { ProjectDto } from "@/use-cases/project/types";
 import { TaskDto } from "@/use-cases/task/types";
 import { UserDto } from "@/use-cases/user/types";
 import { sortByType } from "./utils";
 import { SORT_TYPES } from "./constants";
-import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import TaskCardSmallDialog from "./TaskCardSmallDialog";
 // import { PRIORITY_COLORS } from "./constants";
 import styled from "styled-components";
-import { Draggable, Droppable, DragDropContext } from "@hello-pangea/dnd";
+import { updateTaskPriorityAction } from "../_actions/update-task-priority.action";
+import { updateTaskCategoryAction } from "../_actions/update-task-category.action";
+import { updateTaskStatusAction } from "../_actions/update-task-status.action";
+import { Droppable, DragDropContext } from "@hello-pangea/dnd";
+import { previousDay } from "date-fns";
 const Container = styled.div``;
+interface Columns {
+  [key: string]: {
+    taskIds: string[];
+  };
+}
 const CardView = ({
   type,
   tasks,
@@ -32,19 +32,23 @@ const CardView = ({
   projectUsers: UserDto[];
 }) => {
   const sortByObject = sortByType(type, SORT_TYPES, tasks);
-  const colorByPriority = (priority: string) => {
-    switch (priority) {
-      case "High":
-        return "bg-red-500";
-      case "Medium":
-        return "bg-yellow-500";
-      case "Low":
-        return "bg-green-500";
-      default:
-        return "bg-gray-500";
-    }
-  };
+  const columns = {} as Columns;
   // Generate unique IDs for each task
+  const [columnObject, setColumnObject] = useState(sortByObject);
+  useEffect(() => {
+    setColumnObject(sortByObject);
+  }, [type]);
+  // Iterate over each key-value pair in the currentObject
+  Object.entries(sortByObject).forEach(([key, tasks]) => {
+    // Extract the taskIds from the array of TaskDto
+    const taskIds = tasks.map((task) => task.id);
+
+    // Assign the taskIds to the corresponding key in columns
+    columns[key] = {
+      taskIds: taskIds,
+    };
+  });
+  const [columnsForDnd, setColumnsForDnd] = React.useState(columns);
   const taskIds = tasks.map((task) => task.id);
 
   // Initialize task card open states with all tasks initially closed
@@ -52,30 +56,105 @@ const CardView = ({
   taskIds.forEach((id) => {
     initialTaskCardOpenStates[id] = false;
   });
-  // const [isTaskOpen, setIsTaskOpen] = useState<boolean>(false);
-  // const handleTaskOpen = () => {
-  //   setIsTaskOpen(!isTaskOpen);
-  // };
-  const [taskCardOpenStates, setTaskCardOpenStates] = useState<
-    Record<string, boolean>
-  >(initialTaskCardOpenStates);
 
-  const toggleTaskCard = (id: string) => {
-    setTaskCardOpenStates((prevState) => {
-      const newState = { ...prevState };
-      newState[id] = !newState[id];
-      return newState;
-    });
-  };
   const onDragEnd = (result: any) => {
     // dropped outside the list
-    if (!result.destination) {
+    const {
+      destination,
+      source,
+      draggableId,
+    }: { destination: any; source: any; draggableId: string } = result;
+    if (!destination) {
       return;
     }
-    // const items = Array.from(tasks);
-    // const [reorderedItem] = items.splice(result.source.index, 1);
-    // items.splice(result.destination.index, 0, reorderedItem);
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    ) {
+      return;
+    }
+    const sourceIndex = source.index;
+    const destinationIndex = destination.index;
+    const columnTasks = columnObject[source.droppableId];
+    console.log("draggedId", draggableId);
+    console.log("source.droppableId", source.droppableId);
+    console.log("column", columnTasks);
+    console.log("columns", columnObject);
+
+    const newTasks = columnTasks;
+    console.log("sourceIndex", sourceIndex);
+    console.log("destinationIndex", destinationIndex);
+
+    const newTask = columnTasks.find((task) => task.id === draggableId);
+    newTasks.splice(sourceIndex, 1);
+    newTasks.splice(destinationIndex, 0, newTask!);
+    console.log("newTaskIds_edited", newTasks);
+    console.log("newTask", newTask);
+
+    console.log("type", type);
+    console.log("sourcedroppableId", source.droppableId);
+    console.log("destinationdroppableId", destination.droppableId);
+
+    // setColumnObject((prev) => {
+    //   return {
+    //     ...prev,
+    //     [source.droppableId]: newTasks,
+    //   };
+    // });
+    // console.log("columnsForDnd", columnsForDnd);
+    // Update the task order in the backend
+    // create function to abstract this
+    updateTaskByColumnChange(type, destination.droppableId, draggableId);
+    // if (type === "priority") {
+    //   updateTaskPriorityAction({
+    //     id: draggableId,
+    //     priority: destination.droppableId,
+    //   });
+    // }
+
+    // Update the task order in the backend
+    // updateTaskOrder({
+    //   variables: {
+    //     input: {
+    //       taskId: task.id,
+    //       sourceIndex,
+    //       destinationIndex,
+    //       sourceDroppableId,
+    //       destinationDroppableId,
+    //     },
+    //   },
+    // });
   };
+
+  const updateTaskByColumnChange = (
+    type: string,
+    destinationColumn: string,
+    taskId: string
+  ) => {
+    switch (type) {
+      case "priority":
+        updateTaskPriorityAction({
+          id: taskId,
+          priority: destinationColumn,
+        });
+        break;
+      case "status":
+        updateTaskStatusAction({
+          id: taskId,
+          status: destinationColumn,
+        });
+        break;
+      case "category":
+        updateTaskCategoryAction({
+          id: taskId,
+          category: destinationColumn,
+        });
+        break;
+      default:
+        break;
+    }
+  };
+
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div className="flex md:flex-row  justify-center flex-col w-min-full overflow-x">
@@ -83,34 +162,25 @@ const CardView = ({
           {/* Render div elements for entries where tasks exist */}
           {type === "category" ? (
             <>
-              {Object.entries(sortByObject)
+              {Object.entries(columnObject)
                 .filter(([_, tasks]) => tasks.length > 0)
                 .map(([sorted_type, tasks], sorted_idx) => (
-                  //column below
-                  <Droppable droppableId={sorted_type[0]} key={sorted_idx}>
+                  <Droppable droppableId={sorted_type} key={sorted_idx}>
                     {(provided, snapshot) => (
+                      //COLUMNS
                       <Container
                         ref={provided.innerRef}
                         key={sorted_idx}
                         {...provided.droppableProps}
                         className={cn(
                           "min-w-[325px]",
-                          `flex flex-col items-center min-h-[500x] py-10 px-4 space-y-8 align-top overflow-clip`
+                          `flex flex-col items-center min-h-[500x] px-4 space-y-8 align-top `
                         )}
                       >
                         <label className="text-2xl font-bold">{`${sorted_type}`}</label>
                         {tasks.map(
                           (task, task_idx) =>
                             !task.archived && (
-                              // <TaskCardSmallDialog
-                              //   {...provided.draggableProps}
-                              //   {...provided.dragHandleProps}
-                              //   ref={provided.innerRef}
-                              //   tasks={tasks}
-                              //   task={task}
-                              //   project={project}
-                              //   projectUsers={projectUsers}
-                              // />
                               <div key={task.id}>
                                 <TaskCardSmallDialog
                                   tasks={tasks}
@@ -120,63 +190,6 @@ const CardView = ({
                                   task_idx={task_idx}
                                   sorted_idx={sorted_idx}
                                 />
-                                {/* {task.name} */}
-                                {/* <Dialog
-                                  open={taskCardOpenStates[task.id]}
-                                  onOpenChange={() => toggleTaskCard(task.id)}
-                                >
-                                  <DialogTrigger>
-                                    <Draggable
-                                      key={task_idx + sorted_idx}
-                                      draggableId={String(task.id)}
-                                      index={task_idx + sorted_idx}
-                                    >
-                                      {(provided, snapshot) => (
-                                        <Card
-                                          {...provided.draggableProps}
-                                          {...provided.dragHandleProps}
-                                          ref={provided.innerRef}
-                                          key={task_idx}
-                                          className={`border rounded-lg min-h-[200px] flex items-center w-72 border-gray-500 bg-gray-800 shadow-lg hover:shadow-sm`}
-                                        >
-                                          <div className="flex flex-col overflow-hidden p-2 ">
-                                            <CardHeader className="flex justify-start">
-                                              <Badge
-                                                className={cn(
-                                                  colorByPriority(
-                                                    task.priority
-                                                  ),
-                                                  "w-min"
-                                                )}
-                                              >
-                                                {task.priority}
-                                              </Badge>
-                                              <CardTitle className="text-start">
-                                                {task.name}
-                                              </CardTitle>
-                                              <CardDescription className="text-start">
-                                                {task.description}
-                                              </CardDescription>
-                                            </CardHeader>
-                                          </div>
-                                        </Card>
-                                      )}
-                                    </Draggable>
-                                  </DialogTrigger>
-                                  <DialogContent
-                                    onOpenAutoFocus={(event: Event) =>
-                                      event.preventDefault()
-                                    }
-                                    className="p-6 w-max-[768px] bg-gray-800 rounded-lg border-2"
-                                  >
-                                    <TaskCard
-                                      task={task}
-                                      project={project}
-                                      projectUsers={projectUsers}
-                                      isTaskOpen={taskCardOpenStates[task.id]}
-                                    />
-                                  </DialogContent>
-                                </Dialog> */}
                               </div>
                             )
                         )}
@@ -186,14 +199,14 @@ const CardView = ({
                   </Droppable>
                 ))}
               {/* Render div element for "No Tasks" case */}
-              {Object.entries(sortByObject)
+              {Object.entries(columnObject)
                 .filter(([_, tasks]) => tasks.length === 0)
                 .map(([sorted_type], sorted_idx) => (
                   <div
                     key={sorted_idx}
                     className={cn(
                       "min-w-[325px]",
-                      `flex flex-col items-center py-10 px-4 space-y-8 align-top overflow-clip`
+                      `flex flex-col items-center min-h-[500px] py-10 px-4 space-y-8 align-top overflow-clip`
                     )}
                   >
                     <label className="text-2xl font-bold">{`${sorted_type}`}</label>
@@ -203,159 +216,43 @@ const CardView = ({
             </>
           ) : (
             <>
-              {Object.entries(sortByObject).map((sorted_type, sorted_idx) => (
-                <Droppable
-                  droppableId={`droppableId-${sorted_type[sorted_idx]}`}
-                  key={sorted_idx}
-                >
-                  {(provided, snapshot) => (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.droppableProps}
-                      key={sorted_idx}
-                      className="flex flex-col  items-center min-w-[400px] py-10 px-4 space-y-8 align-top overflow-clip"
-                    >
-                      <label className="text-2xl font-bold">{`${sorted_type[0]}`}</label>
-                      {sorted_type[1].length === 0
-                        ? "No tasks"
-                        : sorted_type[1].map(
-                            (task, task_idx) =>
-                              !task.archived && (
-                                // <Dialog
-                                //   key={task_idx}
-                                //   open={taskCardOpenStates[task.id]}
-                                //   onOpenChange={() => toggleTaskCard(task.id)}
-                                // >
-                                //   <DialogTrigger>
-                                //     <Card
-                                //       key={task_idx}
-                                //       className={`border rounded-lg flex items-center w-72 border-gray-500 bg-gray-800 shadow-lg hover:shadow-sm`}
-                                //     >
-                                //       <div className="flex flex-col overflow-hidden p-2 ">
-                                //         <CardHeader className="flex justify-start">
-                                //           <Badge
-                                //             className={cn(
-                                //               colorByPriority(task.priority),
-                                //               "w-min"
-                                //             )}
-                                //           >
-                                //             {task.priority}
-                                //           </Badge>
-                                //           <CardTitle className="text-start">
-                                //             {task.name}
-                                //           </CardTitle>
-                                //           <CardDescription className="text-start">
-                                //             {task.description}
-                                //           </CardDescription>
-                                //         </CardHeader>
-                                //       </div>
-                                //     </Card>
-                                //   </DialogTrigger>
-                                //   <DialogContent
-                                //     onOpenAutoFocus={(event: Event) =>
-                                //       event.preventDefault()
-                                //     }
-                                //     // onCloseAutoFocus={(event: Event) => event.preventDefault()}
-                                //     className="p-6 w-max-[768px] bg-gray-800 rounded-lg border-2"
-                                //   >
-                                //     <TaskCard
-                                //       task={task}
-                                //       project={project}
-                                //       projectUsers={projectUsers}
-                                //       isTaskOpen={taskCardOpenStates[task.id]}
-                                //     />
-                                //   </DialogContent>
-                                // </Dialog>
-                                // <Draggable
-                                //   draggableId={String(task.id)}
-                                //   index={task_idx}
-                                // >
-                                //   {(provided, snapshot) => (
-                                <div
-                                // ref={provided.innerRef}
-                                // {...provided.draggableProps}
-                                // {...provided.dragHandleProps}
-                                >
-                                  <TaskCardSmallDialog
-                                    tasks={tasks}
-                                    task={task}
-                                    project={project}
-                                    projectUsers={projectUsers}
-                                    task_idx={task_idx}
-                                    sorted_idx={sorted_idx}
-                                  />
-                                </div>
-                                //   )}
-                                // </Draggable>
-                              )
-                          )}
-                      {provided.placeholder}
-                    </div>
-                  )}
-                </Droppable>
-              ))}
+              {Object.entries(columnObject).map(
+                ([sorted_type, tasks], sorted_idx) => (
+                  <Droppable droppableId={sorted_type} key={sorted_idx}>
+                    {(provided, snapshot) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.droppableProps}
+                        key={sorted_idx}
+                        className="flex flex-col  items-center min-w-[400px] py-10 px-4 space-y-8 align-top overflow-clip"
+                      >
+                        <label className="text-2xl font-bold">{`${sorted_type}`}</label>
+                        {tasks.length === 0
+                          ? "No tasks"
+                          : tasks.map(
+                              (task, task_idx) =>
+                                !task.archived && (
+                                  <div key={task_idx}>
+                                    <TaskCardSmallDialog
+                                      tasks={tasks}
+                                      task={task}
+                                      project={project}
+                                      projectUsers={projectUsers}
+                                      task_idx={task_idx}
+                                      sorted_idx={sorted_idx}
+                                    />
+                                  </div>
+                                )
+                            )}
+                        {provided.placeholder}
+                      </div>
+                    )}
+                  </Droppable>
+                )
+              )}
             </>
           )}
         </div>
-
-        {/* {Object.entries(sortByObject).map((sorted_type, sorted_idx) => (
-        <div
-          key={sorted_idx}
-          className={cn(
-            sorted_type[1].length === 0 ? "w-100px" : "min-w-[325px]",
-            `flex flex-col  items-center  py-10 px-4 space-y-8 align-top overflow-clip`
-          )}
-        >
-          <label className="text-2xl font-bold">{`${sorted_type[0]}`}</label>
-          {sorted_type[1].length === 0
-            ? "No tasks"
-            : sorted_type[1].map(
-                (task, task_idx) =>
-                  !task.archived && (
-                    <Dialog key={task_idx}>
-                      <DialogTrigger>
-                        <Card
-                          key={task_idx}
-                          className={`border rounded-lg flex items-center w-72 border-gray-500 bg-gray-800 shadow-lg hover:shadow-sm`}
-                        >
-                          <div className="flex flex-col overflow-hidden p-2 ">
-                            <CardHeader className="flex justify-start">
-                              <Badge
-                                className={cn(
-                                  colorByPriority(task.priority),
-                                  "w-min"
-                                )}
-                              >
-                                {task.priority}
-                              </Badge>
-                              <CardTitle className="text-start">
-                                {task.name}
-                              </CardTitle>
-                              <CardDescription className="text-start">
-                                {task.description}
-                              </CardDescription>
-                            </CardHeader>
-                          </div>
-                        </Card>
-                      </DialogTrigger>
-                      <DialogContent
-                        onOpenAutoFocus={(event: Event) =>
-                          event.preventDefault()
-                        }
-                        // onCloseAutoFocus={(event: Event) => event.preventDefault()}
-                        className="p-6 w-max-[768px] bg-gray-800 rounded-lg border-2"
-                      >
-                        <TaskCard
-                          task={task}
-                          project={project}
-                          projectUsers={projectUsers}
-                        />
-                      </DialogContent>
-                    </Dialog>
-                  )
-              )}
-        </div>
-      ))} */}
       </div>
     </DragDropContext>
   );

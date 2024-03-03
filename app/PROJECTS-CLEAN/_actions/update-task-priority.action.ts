@@ -8,7 +8,7 @@ import { revalidatePath } from "next/cache";
 type FormData = {
   id: string;
   priority: string;
-  projectId: string;
+  // projectId: string;
 };
 
 export async function updateTaskPriorityAction(formData: FormData) {
@@ -28,10 +28,7 @@ export async function updateTaskPriorityAction(formData: FormData) {
       }
     );
     // revalidatePath(`/PROJECTS-CLEAN/${formData.projectId}`);
-    revalidatePath("/PROJECTS-CLEAN/[slug]");
-    return {
-      id: formData.id,
-    };
+    revalidatePath("/PROJECTS-CLEAN/[slug]/page");
   } catch (error: any) {
     console.error(error);
   }

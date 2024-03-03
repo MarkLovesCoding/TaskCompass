@@ -8,7 +8,7 @@ import { revalidatePath } from "next/cache";
 type FormData = {
   id: string;
   category: string;
-  projectId: string;
+  // projectId: string;
 };
 
 export async function updateTaskCategoryAction(formData: FormData) {
@@ -27,10 +27,7 @@ export async function updateTaskCategoryAction(formData: FormData) {
       }
     );
     // revalidatePath(`/PROJECTS-CLEAN/${formData.projectId}`);
-    revalidatePath("/PROJECTS-CLEAN/[slug]");
-    return {
-      id: formData.id,
-    };
+    revalidatePath("/PROJECTS-CLEAN/[slug]/page");
   } catch (error: any) {
     console.error(error);
   }
