@@ -7,4 +7,5 @@ export type ProjectModelType = {
   team: string;
   createdBy: string;
   archived: boolean;
+  listsNextAvailable: object;
 };

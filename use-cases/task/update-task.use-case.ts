@@ -6,6 +6,7 @@ import { taskToDto } from "@/use-cases/task/utils";
 export async function updateTaskUseCase(
   context: {
     updateTask: UpdateTask;
+
     getTask: GetTask;
     getUser: GetUserSession;
   },
@@ -21,6 +22,7 @@ export async function updateTaskUseCase(
     // archived: boolean;
     priority: string;
     status: string;
+    originalAssignees: string[];
     // label?: string | undefined;
   }
 ) {
@@ -42,6 +44,24 @@ export async function updateTaskUseCase(
     status: data.status,
     // label: data.label,
   });
+  // if(data.originalAssignees.length >0){
+  const removedAssignees =
+    data.originalAssignees.length > 0
+      ? data.originalAssignees.filter(
+          (assignee) => !data.assignees.includes(assignee)
+        )
+      : [];
+
+  const addedAssignees =
+    data.assignees.length > 0
+      ? data.assignees.filter(
+          (assignee) => !data.originalAssignees.includes(assignee)
+        )
+      : [];
   console.log("updatedTaskEntity", taskAsEntity);
-  await context.updateTask(taskToDto(taskAsEntity));
+  await context.updateTask(
+    taskToDto(taskAsEntity),
+    removedAssignees,
+    addedAssignees
+  );
 }

@@ -24,5 +24,6 @@ export function projectModelToProjectDto(
     team: convertedTeam,
     createdBy: project.createdBy.toString(),
     archived: project.archived,
+    listsNextAvailable: project.listsNextAvailable,
   };
 }

@@ -13,6 +13,7 @@ export function projectToDto(project: ProjectEntity): ProjectDto {
     team: project.getTeam(),
     createdBy: project.getCreatedBy(),
     archived: project.getArchived(),
+    listsNextAvailable: project.getListsNextAvailable(),
   };
 }
 
@@ -27,5 +28,6 @@ export function projectToCreateProjectDto(
     team: project.getTeam(),
     createdBy: project.getCreatedBy(),
     archived: project.getArchived(),
+    listsNextAvailable: project.getListsNextAvailable(),
   };
 }

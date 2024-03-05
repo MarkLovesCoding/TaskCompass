@@ -20,7 +20,10 @@ type FormData = {
   // label?: string | undefined;
 };
 
-export async function updateTaskAction(formData: FormData) {
+export async function updateTaskAction(
+  formData: FormData,
+  originalAssignees: string[]
+) {
   console.log("updatingformData", formData);
   const { getUser } = await getUserFromSession();
 
@@ -44,23 +47,11 @@ export async function updateTaskAction(formData: FormData) {
         priority: formData.priority,
         status: formData.status,
         // label: formData.label,
+        originalAssignees: originalAssignees,
       }
     );
     revalidatePath(`/PROJECTS-CLEAN/${formData.projectId}/page`);
     // revalidatePath("/PROJECTS-CLEAN/[slug]/page");
-    return {
-      id: formData.id,
-
-      project: formData.projectId,
-      assignees: formData.assignees,
-      dueDate: formData.dueDate,
-      startDate: formData.startDate,
-      // archived: formData.archived,
-      category: formData.category,
-      priority: formData.priority,
-      status: formData.status,
-      // label: formData.label,
-    };
   } catch (error: any) {
     console.error(error);
   }

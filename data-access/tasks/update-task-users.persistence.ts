@@ -15,6 +15,8 @@ export async function updateTaskUsers(
     // Handle connectDB error
     throw new Error("Error connecting to the database:" + error);
   }
+  console.log("<<<<<<<<<<<<<Added Assignees", addedAssignees);
+  console.log(">>>>>>>>>>>>>Removed Assignees", removedAssignees);
   try {
     if (addedAssignees.length > 0) {
       addedAssignees.forEach(async (userId) => {

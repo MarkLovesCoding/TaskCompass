@@ -12,6 +12,7 @@ export type TaskDto = {
   category: string;
   priority: string;
   status: string;
+  orderInLists: object;
   // label?: string;
 };
 export type CreateTaskDto = {
@@ -25,12 +26,17 @@ export type CreateTaskDto = {
   archived: boolean;
   priority: string;
   status: string;
+  orderInLists: object;
   // label?: string | undefined;
 };
 export type CreateTask = (task: CreateTaskDto) => Promise<void>;
 export type GetTask = (id: string) => Promise<TaskDto>;
 export type GetUser = () => Promise<string>;
-export type UpdateTask = (task: TaskDto) => Promise<void>;
+export type UpdateTask = (
+  task: TaskDto,
+  removedAssignees: string[],
+  addedAssignees: string[]
+) => Promise<void>;
 // export type UpdateTaskUsers = (
 //   taskId: string,
 //   addedAssignees: string[],

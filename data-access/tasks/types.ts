@@ -10,6 +10,7 @@ export type TaskModelType = {
   priority: string;
   status: string;
   archived: boolean;
-  label: string;
+  orderInLists: object;
+  // label: string;
   createdBy: string;
 };

@@ -7,6 +7,7 @@ export type ProjectDto = {
   team: string;
   createdBy: string;
   archived: boolean;
+  listsNextAvailable: object;
 };
 export type CreateProjectDto = {
   name: string;
@@ -16,6 +17,7 @@ export type CreateProjectDto = {
   team: string;
   createdBy: string;
   archived: boolean;
+  listsNextAvailable: object;
 };
 export type UpdateProjectUsers = (
   projectId: string,
