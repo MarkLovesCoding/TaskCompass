@@ -13,8 +13,11 @@ import { TaskCard } from "./TaskCard";
 import { ProjectDto } from "@/use-cases/project/types";
 import { UserDto } from "@/use-cases/user/types";
 import { Draggable } from "@hello-pangea/dnd";
+import styled from "styled-components";
 
+const Container = styled.div``;
 const TaskCardSmallDialog = ({
+  isDraggingOver,
   tasks,
   task,
   project,
@@ -22,6 +25,7 @@ const TaskCardSmallDialog = ({
   task_idx,
   sorted_idx,
 }: {
+  isDraggingOver: boolean;
   tasks: TaskDto[];
   task: TaskDto;
   project: ProjectDto;
@@ -73,27 +77,39 @@ const TaskCardSmallDialog = ({
       <DialogTrigger>
         <Draggable draggableId={String(task.id)} index={task_idx}>
           {(provided, snapshot) => (
-            <Card
+            <Container
               {...provided.draggableProps}
               {...provided.dragHandleProps}
               ref={provided.innerRef}
-              // key={task.id}
-              className={`border rounded-lg flex  w-72 border-gray-500 bg-gray-800 shadow-lg hover:shadow-sm`}
+              // className={`${
+              //   snapshot.isDragging
+              //     ? "bg-blue-300  border-green-500 "
+              //     : "bg-gray-800  border-gray-500 "
+              // } border rounded-lg flex w-72 shadow-lg hover:shadow-sm`}
             >
-              <div className="flex flex-col overflow-hidden p-2 ">
-                <CardHeader className="flex justify-start">
-                  <Badge
-                    className={cn(colorByPriority(task.priority), "w-min")}
-                  >
-                    {task.priority}
-                  </Badge>
-                  <CardTitle className="text-start">{task.name}</CardTitle>
-                  <CardDescription className="text-start">
-                    {task.description}
-                  </CardDescription>
-                </CardHeader>
-              </div>
-            </Card>
+              <Card
+                // key={task.id}
+                className={`${
+                  snapshot.isDragging
+                    ? "bg-blue-300  border-green-500 "
+                    : "bg-gray-800  border-gray-500 "
+                } border rounded-lg flex w-72 shadow-lg hover:shadow-sm`}
+              >
+                <div className="flex flex-col overflow-hidden p-2 ">
+                  <CardHeader className="flex justify-start">
+                    <Badge
+                      className={cn(colorByPriority(task.priority), "w-min")}
+                    >
+                      {task.priority}
+                    </Badge>
+                    <CardTitle className="text-start">{task.name}</CardTitle>
+                    <CardDescription className="text-start">
+                      {snapshot.isDragging ? task.description : "Drag to move"}
+                    </CardDescription>
+                  </CardHeader>
+                </div>
+              </Card>
+            </Container>
           )}
         </Draggable>
       </DialogTrigger>

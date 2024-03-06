@@ -1,5 +1,5 @@
 // import "use server";
-
+"use server";
 import connectDB from "@/db/connectDB";
 
 import Project from "@/db/(models)/Project";
@@ -8,7 +8,7 @@ import { ProjectDto } from "@/use-cases/project/types";
 import { projectModelToProjectDto } from "./utils";
 
 // May require refactpr to get by ID
-export async function getProject(projectId: string): Promise<ProjectDto> {
+async function getProject(projectId: string): Promise<ProjectDto> {
   try {
     await connectDB();
   } catch (error) {

@@ -40,6 +40,7 @@ const Projects = async ({ params }: { params: ParamsType }) => {
         teamUsers={teamUsers}
         projectUsers={projectUsers}
         tasks={tasks}
+        // id={params.id}
       />
       <Toaster />
     </div>

@@ -1,5 +1,5 @@
-import "server-only";
-
+// import "server-only";
+"use server";
 import connectDB from "@/db/connectDB";
 
 import Task from "@/db/(models)/Task";

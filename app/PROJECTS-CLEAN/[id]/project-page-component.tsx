@@ -53,6 +53,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import getProject from "@/data-access/projects/get-project.persistence";
+import getProjectTasks from "@/data-access/tasks/get-project-tasks.persistence";
 
 import { UserDto } from "@/use-cases/user/types";
 import UnarchiveTaskPopover from "./UnarchiveTaskPopover";
@@ -61,9 +63,10 @@ import ArchiveProjectPopover from "./ArchiveProjectPopover";
 import { ProjectHeaderStatic } from "./ProjectHeaderStatic";
 import { getInitials } from "@/app/utils/getInitials";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CardView from "./CardView";
 export function ProjectPage({
+  // id,
   userId,
   user,
   project,
@@ -71,6 +74,7 @@ export function ProjectPage({
   teamUsers,
   projectUsers,
 }: {
+  // id: string;
   userId: string;
   user: UserDto;
   project: ProjectDto;
@@ -79,12 +83,28 @@ export function ProjectPage({
 
   projectUsers: UserDto[];
 }) {
+  // const [project, setProject] = useState<ProjectDto>();
+  // const [tasks, setTasks] = useState<TaskDto[]>([]);
+  // useEffect(() => {
+  //   console.log("projectUsers", projectUsers);
+
+  //   const fetchData = async () => {
+  //     const project = await getProject(id);
+  //     setProject(project);
+  //     const tasks = await getProjectTasks(project);
+  //     setTasks(tasks);
+  //     // Do something with project and tasks
+  //   };
+
+  //   fetchData();
+  // }, [projectUsers, id]);
   const [sortBy, setSortBy] = useState<string>("priority");
-  const isUserAdmin = user.projectsAsAdmin.some((id) => id === project.id);
+  const isUserAdmin =
+    project && user.projectsAsAdmin.some((id) => id === project.id);
   const archivedTasks = tasks.filter((task) => task.archived);
   const uniqueTeamUsers = [...teamUsers];
   const uniqueProjectUsers = [...projectUsers];
-
+  if (!project || !tasks) return <div>Loading...</div>;
   return (
     <div className="flex flex-col justify-start items-center min-h-[calc(100vh-4rem)]  ">
       <main className="flex flex-col  max-w-[1400px]  ">
