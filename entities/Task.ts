@@ -1,4 +1,5 @@
 import { ZodError, z } from "zod";
+export type OrderInLists = Record<string, [string, number]>;
 
 export class TaskEntity {
   private id?: string;
@@ -12,6 +13,7 @@ export class TaskEntity {
   private priority: string;
   private category: string;
   private status: string;
+  private orderInLists: OrderInLists;
   // private label?: string;
 
   constructor({
@@ -26,6 +28,7 @@ export class TaskEntity {
     category = "Personal",
     priority = "Medium",
     status = "To Do",
+    orderInLists,
   }: // label,
   {
     id?: string;
@@ -39,6 +42,7 @@ export class TaskEntity {
     archived: boolean;
     priority: string;
     status: string;
+    orderInLists: OrderInLists;
     // label?: string | undefined;
   }) {
     this.id = id;
@@ -53,6 +57,7 @@ export class TaskEntity {
 
     this.priority = priority;
     this.status = status;
+    this.orderInLists = orderInLists;
     // this.label = label;
 
     this.validate();
@@ -91,6 +96,9 @@ export class TaskEntity {
   // getLabel() {
   //   return this.label;
   // }
+  getOrderInLists() {
+    return this.orderInLists;
+  }
   getId() {
     return this.id;
   }
@@ -136,7 +144,9 @@ export class TaskEntity {
   updateCategory(category: string) {
     this.category = category;
   }
-
+  updateOrderInLists(orderInLists: OrderInLists) {
+    this.orderInLists = orderInLists;
+  }
   removeAssignee(assignee: string) {
     this.assignees = this.assignees.filter((a) => a !== assignee);
   }
@@ -151,6 +161,11 @@ export class TaskEntity {
       archived: z.boolean(),
       priority: z.string(),
       status: z.string(),
+      orderInLists: z.object({
+        priority: z.array(z.union([z.string(), z.number()])).min(2),
+        status: z.array(z.union([z.string(), z.number()])).min(2),
+        category: z.array(z.union([z.string(), z.number()])).min(2),
+      }),
       // label: z.string(),
     });
     try {

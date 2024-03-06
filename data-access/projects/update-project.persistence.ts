@@ -16,13 +16,16 @@ export async function updateProject(project: ProjectDto): Promise<void> {
   }
 
   const projectId = project.id;
+  console.log("-------------------------------project", project);
+  console.log("-------------------------------projectId", projectId);
 
   try {
     const updatedProject = await Project.findByIdAndUpdate(
       {
         _id: projectId,
       },
-      { ...project }
+      { ...project },
+      { new: true }
     );
     console.log("Project Updated", updatedProject);
   } catch (error) {

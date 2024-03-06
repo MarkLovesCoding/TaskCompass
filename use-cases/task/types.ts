@@ -1,4 +1,5 @@
 import { UserDto } from "../user/types";
+export type OrderInLists = Record<string, [string, number]>;
 
 export type TaskDto = {
   id: string;
@@ -12,7 +13,7 @@ export type TaskDto = {
   category: string;
   priority: string;
   status: string;
-  orderInLists: object;
+  orderInLists: OrderInLists;
   // label?: string;
 };
 export type CreateTaskDto = {
@@ -26,7 +27,7 @@ export type CreateTaskDto = {
   archived: boolean;
   priority: string;
   status: string;
-  orderInLists: object;
+  orderInLists: OrderInLists;
   // label?: string | undefined;
 };
 export type CreateTask = (task: CreateTaskDto) => Promise<void>;
@@ -37,6 +38,8 @@ export type UpdateTask = (
   removedAssignees: string[],
   addedAssignees: string[]
 ) => Promise<void>;
+export type UpdateTaskOrderInLists = (task: TaskDto) => Promise<void>;
+export type UpdateTasksOrderInLists = (tasks: TaskDto[]) => Promise<void>;
 // export type UpdateTaskUsers = (
 //   taskId: string,
 //   addedAssignees: string[],

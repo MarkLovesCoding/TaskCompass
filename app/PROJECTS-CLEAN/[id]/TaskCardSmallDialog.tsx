@@ -78,7 +78,7 @@ const TaskCardSmallDialog = ({
               {...provided.dragHandleProps}
               ref={provided.innerRef}
               // key={task.id}
-              className={`border rounded-lg flex items-center w-72 border-gray-500 bg-gray-800 shadow-lg hover:shadow-sm`}
+              className={`border rounded-lg flex  w-72 border-gray-500 bg-gray-800 shadow-lg hover:shadow-sm`}
             >
               <div className="flex flex-col overflow-hidden p-2 ">
                 <CardHeader className="flex justify-start">

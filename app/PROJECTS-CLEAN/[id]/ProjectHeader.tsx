@@ -8,7 +8,6 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
@@ -18,8 +17,7 @@ import { useForm, useController } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { updateProjectDetailsAction } from "@/app/PROJECTS-CLEAN/_actions/update-project-details.action.";
 import { useState } from "react";
-import Link from "next/link";
-import { ArrowBigLeftIcon } from "lucide-react";
+
 const formSchema = z.object({
   name: z.string().min(4).max(20),
   description: z.string().min(4).max(80),
@@ -27,8 +25,6 @@ const formSchema = z.object({
 
 export function ProjectHeader({ project }: { project: ProjectDto }) {
   const [buttonShow, setButtonShow] = useState(false);
-  // const [headerText, setHeaderText] = useState(project.name);
-  // const [descriptionText, setDescriptionText] = useState(project.description);
   const [isHeaderEditing, setIsHeaderEditing] = useState(false);
   const [isDescriptionEditing, setIsDescriptionEditing] = useState(false);
   const originalName = project.name;
@@ -58,13 +54,6 @@ export function ProjectHeader({ project }: { project: ProjectDto }) {
     setIsDescriptionEditing(false);
   };
 
-  // const handleDescriptionClick = () => {
-  //   setIsDescriptionEditing(true); // Trigger the onClick event for the field
-  // };
-
-  // const handleHeaderClick = () => {
-  //   setIsHeaderEditing(true);
-  // };
   const handleDescriptionClick = () => {
     setIsDescriptionEditing(true);
   };
@@ -80,23 +69,7 @@ export function ProjectHeader({ project }: { project: ProjectDto }) {
     }
     setButtonShow(false);
   };
-  // const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   setButtonShow(true);
-  //   setHeaderText(event.target.value);
-  // };
 
-  // const handleDescriptionInputChange = (
-  //   event: React.ChangeEvent<HTMLTextAreaElement>
-  // ) => {
-  //   setButtonShow(true);
-  //   setDescriptionText(event.target.value);
-  // };
-  // const handleHeaderInputBlur = () => {
-  //   setIsHeaderEditing(false);
-  // };
-  // const handleDescriptionInputBlur = () => {
-  //   setIsDescriptionEditing(false);
-  // };
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -134,15 +107,6 @@ export function ProjectHeader({ project }: { project: ProjectDto }) {
   };
   return (
     <div className="flex items-center gap-4">
-      {/* <div className="grid gap-1">
-        <h1 className="text-lg font-bold">{project.name}</h1>
-        <p className="text-sm font-normal leading-none text-gray-500 dark:text-gray-400">
-          {project.description}
-        </p>
-      </div> */}
-      {/* <Link href={`/TEAMS-CLEAN/${project.team}`}>
-        <ArrowBigLeftIcon className="w-8 h-8 self-start cursor-pointer" />
-      </Link> */}
       <Form {...form}>
         <form
           className="mt-4 mr-2 "
@@ -156,26 +120,17 @@ export function ProjectHeader({ project }: { project: ProjectDto }) {
               render={({ field }) => {
                 return (
                   <FormItem className="self-center">
-                    {/* <FormLabel>Name </FormLabel> */}
                     <FormControl>
                       <Input
-                        //  placeholder=" project name" type="text" {...field}
                         type="text"
                         className={`header-input ${
                           isHeaderEditing ? "editing" : ""
                         }`}
-                        // value={headerText}
-
                         placeholder="Task"
                         {...field}
-                        // value={headerText}
                         onClick={handleNameClick}
                         onChange={handleNameChange}
                         onBlur={handleNameBlur}
-                        // onClick={handleHeaderClick}
-                        // onChange={handleInputChange}
-                        // onBlur={handleHeaderInputBlur}
-                        // readOnly={!isHeaderEditing}
                       />
                     </FormControl>
                     <FormMessage />
@@ -191,28 +146,16 @@ export function ProjectHeader({ project }: { project: ProjectDto }) {
             render={({ field }) => {
               return (
                 <FormItem className="mt-2">
-                  {/* <FormLabel className="text-xs text-gray-600">
-                    {" "}
-                    Description
-                  </FormLabel> */}
                   <FormControl>
                     <Textarea
-                      // placeholder=" project description" {...field}
-
                       className={`description-input resize-none ${
                         isDescriptionEditing ? "editing" : ""
                       }`}
-                      // value={descriptionText}
                       placeholder="Description"
                       {...field}
-                      // value={headerText}
                       onClick={handleDescriptionClick}
                       onChange={handleDescriptionChange}
                       onBlur={handleDescriptionBlur}
-                      // onClick={handleDescriptionClick}
-                      // onChange={handleDescriptionInputChange}
-                      // onBlur={handleDescriptionInputBlur}
-                      // readOnly={!isDescriptionEditing}
                     />
                   </FormControl>
                   <FormMessage />

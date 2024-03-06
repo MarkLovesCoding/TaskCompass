@@ -16,6 +16,7 @@ export function taskModelToTaskDto(task: TaskModelType) {
     priority: task.priority,
     status: task.status,
     archived: task.archived,
-    label: task.category,
+    orderInLists: task.orderInLists,
+    // label: task.category,
   };
 }

@@ -27,6 +27,16 @@ export async function createNewProjectUseCase(
     team: data.teamId,
     archived: false,
     createdBy: user.userId,
+    listsNextAvailable: {
+      priority: { High: 1, Medium: 1, Low: 1 },
+      status: {
+        "Not Started": 1,
+        "Up Next": 1,
+        "In Progress": 1,
+        Completed: 1,
+      },
+      category: { Household: 1, Personal: 1, Work: 1, School: 1, Other: 1 },
+    },
   });
   console.log("____________newProject", newProject);
   await context.createNewProject(

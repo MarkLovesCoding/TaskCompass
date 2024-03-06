@@ -134,10 +134,11 @@ export const TaskCard = ({
       projectId: project.id,
     },
   });
+
   const onSubmit = async (values: z.infer<typeof taskFormSchema>) => {
     // Handle form submission
     console.log("Form values:", values);
-    await updateTaskAction(values);
+    await updateTaskAction(values, task.assignees);
   };
   const { field: archivedField, fieldState: archivedFieldState } =
     useController({
@@ -446,7 +447,7 @@ export const TaskCard = ({
                       .filter((user) => currentAssignees.includes(user.id))
                       .map((user, index) => (
                         <Avatar key={index} className=" w-12 h-12 m-2">
-                          <AvatarImage src={user.avatar} />
+                          {/* <AvatarImage src={user.avatar} /> */}
                           <AvatarFallback className={`text-sm bg-gray-500`}>
                             {getInitials(user.name)}
                           </AvatarFallback>

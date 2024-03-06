@@ -7,5 +7,6 @@ export type ProjectModelType = {
   team: string;
   createdBy: string;
   archived: boolean;
-  listsNextAvailable: object;
+  listsNextAvailable: ListsNextAvailable;
 };
+export type ListsNextAvailable = Record<string, Record<string, number>>;

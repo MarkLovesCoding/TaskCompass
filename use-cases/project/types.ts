@@ -1,3 +1,5 @@
+export type ListsNextAvailable = Record<string, Record<string, number>>;
+
 export type ProjectDto = {
   id: string;
   name: string;
@@ -7,7 +9,7 @@ export type ProjectDto = {
   team: string;
   createdBy: string;
   archived: boolean;
-  listsNextAvailable: object;
+  listsNextAvailable: ListsNextAvailable;
 };
 export type CreateProjectDto = {
   name: string;
@@ -17,7 +19,7 @@ export type CreateProjectDto = {
   team: string;
   createdBy: string;
   archived: boolean;
-  listsNextAvailable: object;
+  listsNextAvailable: ListsNextAvailable;
 };
 export type UpdateProjectUsers = (
   projectId: string,

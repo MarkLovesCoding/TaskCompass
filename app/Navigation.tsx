@@ -9,7 +9,6 @@ import {
   DropdownMenuLabel,
   DropdownMenuPortal,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
@@ -18,11 +17,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-// import getUserProjectsAsAdmin from "@/data-access/projects/get-user-projects-as-admin";
-// import getUserProjectsAsMember from "@/data-access/projects/get-user-projects-as-member";
-// import getUser from "@/data-access/users/get-user.persistence";
-// import getUserTeamsAsMember from "@/data-access/teams/get-user-teams-as-member";
-// import getUserTeamsAsAdmin from "@/data-access/teams/get-user-teams-as-admin";
 import getUserProjectsAndTeams from "@/data-access/users/get-user-full-nav.persistence";
 import { sessionAuth } from "@/lib/sessionAuth";
 import { ProjectDto } from "@/use-cases/project/types";
@@ -31,23 +25,14 @@ import { UserDto } from "@/use-cases/user/types";
 
 const Navigation: React.FC = async () => {
   const session = await sessionAuth();
-  // const session = await getServerSession(options);
   const sessionUserId = session?.user.id;
   console.log("session", session);
   //move into usecase?
   let userObject: UserDto,
     userProjectsAndTeams: { projects: ProjectDto[]; teams: TeamDto[] };
-  // userProjectsAsMember: ProjectDto[],
-  // userTeamsAsAdmin: TeamDto[],
-  // userTeamsAsMember: TeamDto[];
   if (session) {
-    // userObject = await getUser(sessionUserId!);
-    // userProjectsAsAdmin = await getUserProjectsAsAdmin(userObject);
-    // userProjectsAsMember = await getUserProjectsAsMember(userObject);
-    // userTeamsAsAdmin = await getUserTeamsAsAdmin(userObject);
-    // userTeamsAsMember = await getUserTeamsAsMember(userObject);
     userProjectsAndTeams = await getUserProjectsAndTeams(sessionUserId!);
-  } else return <div>Loading...</div>;
+  } else return <div></div>;
   const { teams, projects } = userProjectsAndTeams;
 
   return (

@@ -46,7 +46,6 @@ import { ProjectDto } from "@/use-cases/project/types";
 import { TaskDto } from "@/use-cases/task/types";
 import { createNewTaskAction } from "../_actions/create-new-task.action";
 import { updateTaskAction } from "../_actions/update-task.action";
-import { useProjectContext } from "./ProjectContext";
 import { useRouter } from "next/navigation";
 import { updateTaskUsersAction } from "../_actions/update-task-users.action";
 import { PopoverClose } from "@radix-ui/react-popover";

@@ -22,6 +22,7 @@ export async function updateTaskUseCase(
     // archived: boolean;
     priority: string;
     status: string;
+    // orderInLists: { string: [string, number] };
     originalAssignees: string[];
     // label?: string | undefined;
   }

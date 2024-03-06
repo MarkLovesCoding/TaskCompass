@@ -17,6 +17,20 @@ const TaskSchema = new Schema(
     category: String,
     createdBy: { type: Schema.Types.ObjectId, ref: "User" },
     label: String,
+    orderInLists: {
+      priority: {
+        type: [String, Number],
+        default: ["Medium", 0],
+      },
+      status: {
+        type: [String, Number],
+        default: ["Not Started", 0],
+      },
+      category: {
+        type: [String, Number],
+        default: ["Other", 0],
+      },
+    },
   },
   {
     timestamps: true,

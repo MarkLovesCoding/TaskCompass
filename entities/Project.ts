@@ -1,6 +1,6 @@
 import { StyledString } from "next/dist/build/swc";
 import { ZodError, z } from "zod";
-
+export type ListsNextAvailable = Record<string, Record<string, number>>;
 export class ProjectEntity {
   private id?: string;
   private name: string;
@@ -11,6 +11,7 @@ export class ProjectEntity {
   private team: string;
   private createdBy: string;
   private archived: boolean;
+  private listsNextAvailable: ListsNextAvailable;
   constructor({
     id,
     name,
@@ -21,6 +22,7 @@ export class ProjectEntity {
     team,
     createdBy,
     archived = false,
+    listsNextAvailable,
   }: {
     id?: string;
     name: string;
@@ -31,6 +33,7 @@ export class ProjectEntity {
     team: string;
     createdBy: string;
     archived: boolean;
+    listsNextAvailable: ListsNextAvailable;
   }) {
     this.id = id;
     this.name = name;
@@ -41,6 +44,7 @@ export class ProjectEntity {
     this.team = team;
     this.createdBy = createdBy;
     this.archived = archived;
+    this.listsNextAvailable = listsNextAvailable;
     this.validate();
   }
 
@@ -67,6 +71,9 @@ export class ProjectEntity {
   }
   getCreatedBy() {
     return this.createdBy;
+  }
+  getListsNextAvailable() {
+    return this.listsNextAvailable;
   }
   addUser(user: string) {
     this.users.push(user);
@@ -104,6 +111,12 @@ export class ProjectEntity {
   updateDescription(description: string) {
     this.description = description;
   }
+  updateListsNextAvailable(listsNextAvailable: ListsNextAvailable) {
+    this.listsNextAvailable = listsNextAvailable;
+  }
+  updateTeam(team: string) {
+    this.team = team;
+  }
 
   private validate() {
     const projectSchema = z.object({
@@ -114,6 +127,26 @@ export class ProjectEntity {
       tasks: z.array(z.string()).optional(),
       createdBy: z.string(),
       archived: z.boolean(),
+      listsNextAvailable: z.object({
+        priority: z.object({
+          High: z.number(),
+          Medium: z.number(),
+          Low: z.number(),
+        }),
+        status: z.object({
+          "Not Started": z.number(),
+          "Up Next": z.number(),
+          "In Progress": z.number(),
+          Completed: z.number(),
+        }),
+        category: z.object({
+          Household: z.number(),
+          Personal: z.number(),
+          Work: z.number(),
+          School: z.number(),
+          Other: z.number(),
+        }),
+      }),
     });
     try {
       projectSchema.parse(this);
