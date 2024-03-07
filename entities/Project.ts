@@ -1,6 +1,7 @@
 import { StyledString } from "next/dist/build/swc";
 import { ZodError, z } from "zod";
 export type ListsNextAvailable = Record<string, Record<string, number>>;
+export type ColumnOrder = Record<string, string[]>;
 export class ProjectEntity {
   private id?: string;
   private name: string;
@@ -11,6 +12,7 @@ export class ProjectEntity {
   private team: string;
   private createdBy: string;
   private archived: boolean;
+  private columnOrder: ColumnOrder;
   private listsNextAvailable: ListsNextAvailable;
   constructor({
     id,
@@ -23,6 +25,7 @@ export class ProjectEntity {
     createdBy,
     archived = false,
     listsNextAvailable,
+    columnOrder,
   }: {
     id?: string;
     name: string;
@@ -34,6 +37,7 @@ export class ProjectEntity {
     createdBy: string;
     archived: boolean;
     listsNextAvailable: ListsNextAvailable;
+    columnOrder: ColumnOrder;
   }) {
     this.id = id;
     this.name = name;
@@ -45,6 +49,7 @@ export class ProjectEntity {
     this.createdBy = createdBy;
     this.archived = archived;
     this.listsNextAvailable = listsNextAvailable;
+    this.columnOrder = columnOrder;
     this.validate();
   }
 
@@ -74,6 +79,9 @@ export class ProjectEntity {
   }
   getListsNextAvailable() {
     return this.listsNextAvailable;
+  }
+  getColumnOrder() {
+    return this.columnOrder;
   }
   addUser(user: string) {
     this.users.push(user);
@@ -114,6 +122,9 @@ export class ProjectEntity {
   updateListsNextAvailable(listsNextAvailable: ListsNextAvailable) {
     this.listsNextAvailable = listsNextAvailable;
   }
+  updateColumnOrder(columnOrder: ColumnOrder) {
+    this.columnOrder = columnOrder;
+  }
   updateTeam(team: string) {
     this.team = team;
   }
@@ -146,6 +157,11 @@ export class ProjectEntity {
           School: z.number(),
           Other: z.number(),
         }),
+      }),
+      columnOrder: z.object({
+        priority: z.array(z.string()).min(3),
+        status: z.array(z.string()).min(3),
+        category: z.array(z.string()).min(3),
       }),
     });
     try {

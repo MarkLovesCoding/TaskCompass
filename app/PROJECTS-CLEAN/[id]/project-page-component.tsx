@@ -263,7 +263,7 @@ export function ProjectPage({
       </div>
       <div className="flex-1 justify-center h-min-full ">
         <CardView
-          type={sortBy}
+          viewType={sortBy}
           tasks={tasks}
           project={project}
           projectUsers={uniqueProjectUsers}

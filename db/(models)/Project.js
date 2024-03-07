@@ -35,6 +35,17 @@ const ProjectSchema = new Schema(
         Other: { type: Number, default: 0 },
       },
     },
+    columnOrder: {
+      priority: { type: [String], default: ["High", "Medium", "Low"] },
+      status: {
+        type: [String],
+        default: ["Not Started", "Up Next", "In Progress", "Completed"],
+      },
+      category: {
+        type: [String],
+        default: ["Household", "Personal", "Work", "School", "Other"],
+      },
+    },
   },
   {
     timestamps: true,

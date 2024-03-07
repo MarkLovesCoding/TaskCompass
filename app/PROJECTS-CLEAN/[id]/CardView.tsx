@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { ProjectDto } from "@/use-cases/project/types";
+import { ColumnOrder, ProjectDto } from "@/use-cases/project/types";
 import { TaskDto } from "@/use-cases/task/types";
 import { UserDto } from "@/use-cases/user/types";
 import { sortByType } from "./utils";
@@ -8,49 +8,127 @@ import { SORT_TYPES } from "./constants";
 // import { PRIORITY_COLORS } from "./constants";
 import { updateProjectAction } from "../_actions/update-project.action";
 import { updateTasksOrderInListsAction } from "../_actions/update-tasks-order-in-lists.action";
+import { updateProjectColumnOrderAction } from "../_actions/update-project-column-order.action";
 import { Droppable, DragDropContext } from "@hello-pangea/dnd";
 import CardColumn from "./CardColumn";
 import { cn } from "@/lib/utils";
+import { set } from "mongoose";
 interface Columns {
   [key: string]: {
     taskIds: string[];
   };
 }
 const CardView = ({
-  type,
+  viewType,
   tasks,
   project,
   projectUsers,
 }: {
-  type: string;
+  viewType: string;
   tasks: TaskDto[];
   project: ProjectDto;
   projectUsers: UserDto[];
 }) => {
-  const sortByObject = sortByType(type, SORT_TYPES, tasks);
-  console.log("sortByObject", sortByObject);
+  // const sortByObject = sortByType(viewType, SORT_TYPES, tasks);
+  // type SortByType = ReturnType<typeof sortByType>;
+  // // const sortedKeys = project.columnOrder.filter((type: string)=>columnObject[type]);
+  // console.log("sortByObject", sortByObject);
 
+  // const [columnObject, setColumnObject] = useState(sortByObject);
+  // const sortedTasksArray = project.columnOrder[viewType].map((type) => [
+  //   type,
+  //   columnObject[type],
+  // ]);
+  // console.log("-*--------SORTED TASKS ARRAY", sortedTasksArray);
+  // const [sortedColumns, setSortedColumns] = useState(sortedTasksArray);
+  // const [tasksList, setTasksList] = useState(tasks);
+  // const [projectData, setProjectData] = useState(project);
+
+  // useEffect(() => {
+  //   setTasksList(tasks);
+  // }, [tasks]);
+  // useEffect(() => {
+  //   setProjectData(project);
+  // }, [project]);
+  // useEffect(() => {
+  //   setColumnObject(sortByType(viewType, SORT_TYPES, tasks));
+  // }, [viewType, tasks]);
+  // useEffect(() => {
+  //   const sortedTasksArray = project.columnOrder[viewType].map((type) => [
+  //     type,
+  //     columnObject[type],
+  //   ]);
+
+  //   setSortedColumns(sortedTasksArray);
+  // }, [viewType, tasks]);
+  const taskIds = tasks.map((task) => task.id);
+  const sortByObject = sortByType(viewType, SORT_TYPES, tasks);
+  // Initialize state variables
   const [columnObject, setColumnObject] = useState(sortByObject);
-  const [tasksList, setTasksList] = useState(tasks);
-  const [projectData, setProjectData] = useState(project);
+  const [sortedColumns, setSortedColumns] = useState<any[]>([]);
+  const [tasksList, setTasksList] = useState<TaskDto[]>([]);
+  const [projectData, setProjectData] = useState<ProjectDto>(project);
 
+  // Update sortedColumns when viewType or tasks change
+  useEffect(() => {
+    const sortedTasksArray = projectData.columnOrder[viewType].map(
+      (type: string) => [type, columnObject[type]]
+    );
+    setSortedColumns(sortedTasksArray);
+  }, [viewType, columnObject, projectData.columnOrder]);
+
+  // Update tasksList and projectData when tasks or project change
   useEffect(() => {
     setTasksList(tasks);
-  }, [tasks]);
-  useEffect(() => {
     setProjectData(project);
-  }, [project]);
+  }, [tasks, project]);
+
+  // Update columnObject when viewType or tasks change
   useEffect(() => {
-    setColumnObject(sortByType(type, SORT_TYPES, tasks));
-  }, [type, tasks]);
-
-  const taskIds = tasks.map((task) => task.id);
-
+    setColumnObject(sortByType(viewType, SORT_TYPES, tasks));
+  }, [viewType, tasks]);
   // Initialize task card open states with all tasks initially closed
   const initialTaskCardOpenStates: Record<string, boolean> = {};
   taskIds.forEach((id) => {
     initialTaskCardOpenStates[id] = false;
   });
+  const updateColumnsOrder = async (
+    // project: ProjectDto,
+    // tasks: TaskDto[],
+    // movedTaskId: string,
+    // type: string,
+    // sourceDroppableId: string,
+    // destinationDroppableId: string,
+    // sourceIndex: number,
+    destinationIndex: number,
+    draggableId: string
+  ) => {
+    const existingProjectData = { ...project };
+    const newColumnOrder = projectData.columnOrder[viewType];
+    const existingIndex = newColumnOrder.indexOf(draggableId);
+    console.log("newColumnOrder", newColumnOrder);
+
+    newColumnOrder.splice(existingIndex, 1);
+    console.log("newColumnOrder2", newColumnOrder);
+
+    newColumnOrder.splice(destinationIndex, 0, draggableId);
+    console.log("newColumnOrder3", newColumnOrder);
+    //update project data in db
+    const newProjectData = { ...projectData };
+    newProjectData.columnOrder[viewType] = newColumnOrder;
+    console.log("newProjectData", newProjectData);
+    setProjectData(newProjectData);
+    // console.log("newProjectData", newProjectData);
+
+    // await updateProjectColumnOrderAction(project.id, viewType, newColumnOrder);
+    try {
+      await updateProjectAction(projectData);
+    } catch (error: any) {
+      setProjectData(existingProjectData);
+      console.log("error updating project, reverting to existing data");
+      console.error(error);
+    }
+  };
 
   const updateTasksOrderInLists = async (
     project: ProjectDto,
@@ -170,7 +248,9 @@ const CardView = ({
       destination,
       source,
       draggableId,
-    }: { destination: any; source: any; draggableId: string } = result;
+      type,
+    }: { destination: any; source: any; draggableId: string; type: string } =
+      result;
     if (!destination) {
       return;
     }
@@ -183,159 +263,82 @@ const CardView = ({
     const sourceIndex = source.index;
     const destinationIndex = destination.index;
     // updateTaskByColumnChange(type, destination.droppableId, draggableId);
-
-    return updateTasksOrderInLists(
-      projectData,
-      tasksList,
-      draggableId,
-      type,
-      source.droppableId,
-      destination.droppableId,
-      sourceIndex,
-      destinationIndex
-    );
+    if (type == "task") {
+      return updateTasksOrderInLists(
+        projectData,
+        tasksList,
+        draggableId,
+        viewType,
+        source.droppableId,
+        destination.droppableId,
+        sourceIndex,
+        destinationIndex
+      );
+    }
+    if (type == "column") {
+      // return updateColumnsOrder(destinationIndex, draggableId);
+      // )
+      // const newColumnOrder = projectData.columnOrder[viewType];
+      // const existingIndex = newColumnOrder.indexOf(draggableId);
+      // console.log("newColumnOrder", newColumnOrder);
+      // newColumnOrder.splice(existingIndex, 1);
+      // console.log("newColumnOrder2", newColumnOrder);
+      // newColumnOrder.splice(destinationIndex, 0, draggableId);
+      // console.log("newColumnOrder3", newColumnOrder);
+      // //update project data in db
+      // const newProjectData = { ...projectData };
+      // newProjectData.columnOrder[viewType] = newColumnOrder;
+      // console.log("newProjectData", newProjectData);
+      // setProjectData(newProjectData);
+      // console.log("newProjectData", newProjectData);
+      // await updateProjectAction(newProjectData);
+      // const newColumnOrder = Array.from(SORT_TYPES);
+      // newColumnOrder.splice(source.index, 1);
+      // newColumnOrder.splice(destination.index, 0, SORT_TYPES[source.index]);
+      // const newColumnOrderObject: Columns = {};
+      // newColumnOrder.forEach((columnType) => {
+      //   newColumnOrderObject[columnType] = columnObject[columnType];
+      // });
+      // setColumnObject(newColumnOrderObject);
+    }
   };
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       {/* <div className="flex md:flex-row  justify-center flex-col w-min-full overflow-x"> */}
-      <div className="flex md:flex-row justify-center flex-col w-min-full ">
-        {/* Render div elements for entries where tasks exist */}
-        {/* {type === "category" ? (
-          <>
-            {Object.entries(columnObject)
-              .filter(([_, tasks]) => tasks.length > 0)
-              .map(([sorted_type, tasksList], sorted_idx) => (
-                // <Droppable droppableId={sorted_type} key={sorted_idx}>
-                //   {(provided, snapshot) => (
-                //     //COLUMNS
-
-                //     <div
-                //       ref={provided.innerRef}
-                //       key={sorted_idx}
-                //       {...provided.droppableProps}
-                //       className={cn(
-                //         snapshot.isDraggingOver
-                //           ? "bg-gray-800   "
-                //           : "border-gray-500 border-1",
-                //         ` min-w-[325px] m-6  flex flex-col items-center align-top px-4  `
-                //       )}
-                //     >
-                //       <label className="text-2xl font-bold">{`${sorted_type}`}</label>
-                //       {tasksList.map(
-                //         (task, task_idx) =>
-                //           !task.archived && (
-                //             <div key={task.id}>
-                //               <TaskCardSmallDialog
-                //                 isDraggingOver={snapshot.isDraggingOver}
-                //                 tasks={tasksList}
-                //                 task={task}
-                //                 project={projectData}
-                //                 projectUsers={projectUsers}
-                //                 task_idx={task_idx}
-                //                 sorted_idx={sorted_idx}
-                //               />
-                //             </div>
-                //           )
-                //       )}
-                //       {provided.placeholder}
-                //     </div>
-                //   )}
-                // </Droppable>
+      <Droppable droppableId="all-columns" direction="horizontal" type="column">
+        {(provided, snapshot) => (
+          <div
+            {...provided.droppableProps}
+            ref={provided.innerRef}
+            className="flex md:flex-row justify-center flex-col w-min-full "
+          >
+            <>
+              {/* {Object.entries(columnObject).map(
+                ([sorted_type, tasksList], sorted_idx) => (
+                  <CardColumn
+                    tasksList={tasksList}
+                    projectData={projectData}
+                    sorted_idx={sorted_idx}
+                    projectUsers={projectUsers}
+                    sorted_type={sorted_type}
+                  />
+                )
+              )} */}
+              {sortedColumns.map((column, sorted_idx) => (
                 <CardColumn
-                  tasksList={tasksList}
+                  tasksList={column[1] as TaskDto[]}
                   projectData={projectData}
                   sorted_idx={sorted_idx}
                   projectUsers={projectUsers}
-                  sorted_type={sorted_type}
+                  sorted_type={column[0] as string}
                 />
               ))}
-            {/* Render div element for "No Tasks" case */}
-        {/* {Object.entries(columnObject)
-              // .filter(([_, tasks]) => tasks.length === 0)
-              // .map(([sorted_type], sorted_idx) => ( */}
-        {/* // <CardColumn */}
-        {/* //   tasksList={tasks}
-                //   projectData={projectData}
-                //   sorted_idx={sorted_idx}
-                //   projectUsers={projectUsers}
-                //   sorted_type={sorted_type}
-                // />
-
-        //         <Droppable droppableId={sorted_type} key={sorted_idx}> */}
-        {/* //           {(provided, snapshot) => ( */}
-        {/* //             <div
-        //               ref={provided.innerRef}
-        //               key={sorted_idx}
-        //               {...provided.droppableProps}
-        //               className={cn(
-        //                 snapshot.isDraggingOver
-        //                   ? "bg-gray-800   "
-        //                   : "border-gray-500 border-1",
-        //                 ` min-w-[325px] m-6  flex flex-col items-center align-top px-4  `
-        //               )}
-        //             >
-        //               <label className="text-2xl font-bold">{`${sorted_type}`}</label>
-        //               <span>No tasks</span>
-        //             </div>
-        //           )}
-        //         </Droppable>
-        //       ))}
-        //   </> */}
-        {/* // ) : ( */}
-        {/* <> */}
-        <>
-          {Object.entries(columnObject).map(
-            ([sorted_type, tasksList], sorted_idx) => (
-              // <Droppable droppableId={sorted_type} key={sorted_idx}>
-              //   {(provided, snapshot) => (
-              //     <div
-              //       ref={provided.innerRef}
-              //       {...provided.droppableProps}
-              //       // key={sorted_idx}
-              //       className={cn(
-              //         snapshot.isDraggingOver
-              //           ? "bg-gray-800   "
-              //           : "border-gray-500 border-1",
-              //         ` min-w-[325px] m-6  flex flex-col items-center align-top px-4  `
-              //       )}
-              //     >
-              //       <label className="text-2xl font-bold">{`${sorted_type}`}</label>
-              //       {tasksList.length === 0
-              //         ? "No tasks"
-              //         : tasksList.map(
-              //             (task, task_idx) =>
-              //               !task.archived && (
-              //                 <div key={task_idx}>
-              //                   <TaskCardSmallDialog
-              //                     isDraggingOver={snapshot.isDraggingOver}
-              //                     tasks={tasksList}
-              //                     task={task}
-              //                     project={projectData}
-              //                     projectUsers={projectUsers}
-              //                     task_idx={task_idx}
-              //                     sorted_idx={sorted_idx}
-              //                   />
-              //                 </div>
-              //               )
-              //           )}
-              //       {provided.placeholder}
-              //     </div>
-              //   )}
-              // </Droppable>
-              <CardColumn
-                tasksList={tasksList}
-                projectData={projectData}
-                sorted_idx={sorted_idx}
-                projectUsers={projectUsers}
-                sorted_type={sorted_type}
-              />
-            )
-          )}
-        </>
-        {/* </> */}
-      </div>
-      {/* </div> */}
+            </>
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
     </DragDropContext>
   );
 };

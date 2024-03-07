@@ -1,4 +1,5 @@
 export type ListsNextAvailable = Record<string, Record<string, number>>;
+export type ColumnOrder = Record<string, string[]>;
 
 export type ProjectDto = {
   id: string;
@@ -10,6 +11,7 @@ export type ProjectDto = {
   createdBy: string;
   archived: boolean;
   listsNextAvailable: ListsNextAvailable;
+  columnOrder: ColumnOrder;
 };
 export type CreateProjectDto = {
   name: string;
@@ -20,13 +22,17 @@ export type CreateProjectDto = {
   createdBy: string;
   archived: boolean;
   listsNextAvailable: ListsNextAvailable;
+  columnOrder: ColumnOrder;
 };
 export type UpdateProjectUsers = (
   projectId: string,
   initialUsers: string[],
   updatedUsers: string[]
 ) => Promise<void>;
-
+export type UpdateColumnOrder = (
+  projectId: string,
+  columnOrder: ColumnOrder
+) => Promise<void>;
 export type CreateNewProject = (
   project: CreateProjectDto,
   userId: string

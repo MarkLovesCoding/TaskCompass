@@ -14,6 +14,7 @@ export function projectToDto(project: ProjectEntity): ProjectDto {
     createdBy: project.getCreatedBy(),
     archived: project.getArchived(),
     listsNextAvailable: project.getListsNextAvailable(),
+    columnOrder: project.getColumnOrder(),
   };
 }
 
@@ -29,5 +30,6 @@ export function projectToCreateProjectDto(
     createdBy: project.getCreatedBy(),
     archived: project.getArchived(),
     listsNextAvailable: project.getListsNextAvailable(),
+    columnOrder: project.getColumnOrder(),
   };
 }
