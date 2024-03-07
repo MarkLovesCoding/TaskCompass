@@ -69,14 +69,24 @@ const CardView = ({
   // Initialize state variables
   const [columnObject, setColumnObject] = useState(sortByObject);
   const [sortedColumns, setSortedColumns] = useState<any[]>([]);
-  const [tasksList, setTasksList] = useState<TaskDto[]>([]);
-  const [projectData, setProjectData] = useState<ProjectDto>(project);
 
+  console.log("sortedColumns", sortedColumns);
+  const [tasksList, setTasksList] = useState<TaskDto[]>([]);
+  console.log("tasksList", tasksList);
+  console.log("projectData.columnOrder", project.columnOrder);
+
+  const [projectData, setProjectData] = useState<ProjectDto>(project);
+  const sortedTasksArray = projectData.columnOrder[viewType].map(
+    (type: string) => [type, sortByObject[type]]
+  );
+  console.log("sortedTasksArray", sortedTasksArray);
   // Update sortedColumns when viewType or tasks change
   useEffect(() => {
     const sortedTasksArray = projectData.columnOrder[viewType].map(
       (type: string) => [type, columnObject[type]]
     );
+
+    console.log("sortedTasksArray", sortedTasksArray);
     setSortedColumns(sortedTasksArray);
   }, [viewType, columnObject, projectData.columnOrder]);
 
@@ -328,7 +338,7 @@ const CardView = ({
                   />
                 )
               )} */}
-              {sortedColumns.map((column, sorted_idx) => (
+              {sortedTasksArray.map((column, sorted_idx) => (
                 <div key={sorted_idx}>
                   <CardColumn
                     tasksList={column[1] as TaskDto[]}
