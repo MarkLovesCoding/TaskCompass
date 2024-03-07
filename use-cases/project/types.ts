@@ -29,9 +29,10 @@ export type UpdateProjectUsers = (
   initialUsers: string[],
   updatedUsers: string[]
 ) => Promise<void>;
-export type UpdateColumnOrder = (
+export type UpdateProjectColumnOrder = (
   projectId: string,
-  columnOrder: ColumnOrder
+  type: string,
+  columnOrder: string[]
 ) => Promise<void>;
 export type CreateNewProject = (
   project: CreateProjectDto,

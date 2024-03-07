@@ -2,7 +2,7 @@
 // import { updateProjectMembersUseCase } from "@/use-cases/project/update-project-members.use-case";
 // import { updateProjectAdminsUseCase } from "@/use-cases/project/update-project-admins.use-case";
 import getUserObject from "@/data-access/users/get-user.persistence";
-import { getProject } from "@/data-access/projects/get-project.persistence";
+import getProject from "@/data-access/projects/get-project.persistence";
 import { updateUser } from "@/data-access/users/update-user.persistence";
 import { updateProjectUserRoleUseCase } from "@/use-cases/user/update-project-user-role.use-case";
 import { revalidatePath } from "next/cache";

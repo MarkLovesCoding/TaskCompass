@@ -37,6 +37,11 @@ export async function createNewProjectUseCase(
       },
       category: { Household: 1, Personal: 1, Work: 1, School: 1, Other: 1 },
     },
+    columnOrder: {
+      priority: ["High", "Medium", "Low"],
+      status: ["Not Started", "Up Next", "In Progress", "Completed"],
+      category: ["Household", "Personal", "Work", "School", "Other"],
+    },
   });
   console.log("____________newProject", newProject);
   await context.createNewProject(

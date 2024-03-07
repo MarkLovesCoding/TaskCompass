@@ -33,7 +33,8 @@ export type CreateTaskDto = {
 export type CreateTask = (task: CreateTaskDto) => Promise<void>;
 export type GetTask = (id: string) => Promise<TaskDto>;
 export type GetUser = () => Promise<string>;
-export type UpdateTask = (
+export type UpdateTask = (task: TaskDto) => Promise<void>;
+export type UpdateTaskFullCard = (
   task: TaskDto,
   removedAssignees: string[],
   addedAssignees: string[]

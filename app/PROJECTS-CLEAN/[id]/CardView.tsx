@@ -8,7 +8,7 @@ import { SORT_TYPES } from "./constants";
 // import { PRIORITY_COLORS } from "./constants";
 import { updateProjectAction } from "../_actions/update-project.action";
 import { updateTasksOrderInListsAction } from "../_actions/update-tasks-order-in-lists.action";
-import { updateProjectColumnOrderAction } from "../_actions/update-project-column-order.action";
+// import { updateProjectColumnOrderAction } from "../_actions/update-project-column-order.action";
 import { Droppable, DragDropContext } from "@hello-pangea/dnd";
 import CardColumn from "./CardColumn";
 import { cn } from "@/lib/utils";
@@ -61,8 +61,11 @@ const CardView = ({
 
   //   setSortedColumns(sortedTasksArray);
   // }, [viewType, tasks]);
+  console.log("VIEW TYPE", viewType);
   const taskIds = tasks.map((task) => task.id);
+  console.log("TASK IDS", taskIds);
   const sortByObject = sortByType(viewType, SORT_TYPES, tasks);
+  console.log("sortByObject", sortByObject);
   // Initialize state variables
   const [columnObject, setColumnObject] = useState(sortByObject);
   const [sortedColumns, setSortedColumns] = useState<any[]>([]);
@@ -276,7 +279,7 @@ const CardView = ({
       );
     }
     if (type == "column") {
-      // return updateColumnsOrder(destinationIndex, draggableId);
+      return updateColumnsOrder(destinationIndex, draggableId);
       // )
       // const newColumnOrder = projectData.columnOrder[viewType];
       // const existingIndex = newColumnOrder.indexOf(draggableId);
@@ -326,13 +329,15 @@ const CardView = ({
                 )
               )} */}
               {sortedColumns.map((column, sorted_idx) => (
-                <CardColumn
-                  tasksList={column[1] as TaskDto[]}
-                  projectData={projectData}
-                  sorted_idx={sorted_idx}
-                  projectUsers={projectUsers}
-                  sorted_type={column[0] as string}
-                />
+                <div key={sorted_idx}>
+                  <CardColumn
+                    tasksList={column[1] as TaskDto[]}
+                    projectData={projectData}
+                    sorted_idx={sorted_idx}
+                    projectUsers={projectUsers}
+                    sorted_type={column[0] as string}
+                  />
+                </div>
               ))}
             </>
             {provided.placeholder}

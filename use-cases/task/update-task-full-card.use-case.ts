@@ -1,11 +1,11 @@
 import { TaskEntity } from "@/entities/Task";
-import { UpdateTask, GetTask } from "@/use-cases/task/types";
+import { UpdateTaskFullCard, GetTask } from "@/use-cases/task/types";
 import { GetUserSession } from "@/use-cases/user/types";
 import { taskToDto } from "@/use-cases/task/utils";
 
-export async function updateTaskUseCase(
+export async function updateTaskFullCardUseCase(
   context: {
-    updateTask: UpdateTask;
+    updateTaskFullCard: UpdateTaskFullCard;
 
     getTask: GetTask;
     getUser: GetUserSession;
@@ -46,7 +46,23 @@ export async function updateTaskUseCase(
     // label: data.label,
   });
   // if(data.originalAssignees.length >0){
+  const removedAssignees =
+    data.originalAssignees.length > 0
+      ? data.originalAssignees.filter(
+          (assignee) => !data.assignees.includes(assignee)
+        )
+      : [];
 
+  const addedAssignees =
+    data.assignees.length > 0
+      ? data.assignees.filter(
+          (assignee) => !data.originalAssignees.includes(assignee)
+        )
+      : [];
   console.log("updatedTaskEntity", taskAsEntity);
-  await context.updateTask(taskToDto(taskAsEntity));
+  await context.updateTaskFullCard(
+    taskToDto(taskAsEntity),
+    removedAssignees,
+    addedAssignees
+  );
 }

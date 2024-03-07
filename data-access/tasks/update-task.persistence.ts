@@ -3,14 +3,9 @@ import "server-only";
 import connectDB from "@/db/connectDB";
 
 import Task from "@/db/(models)/Task";
-import User from "@/db/(models)/User";
 import { TaskDto } from "@/use-cases/task/types";
 
-export async function updateTask(
-  task: TaskDto,
-  removedAssignees: string[],
-  addedAssignees: string[]
-): Promise<void> {
+export async function updateTask(task: TaskDto): Promise<void> {
   try {
     await connectDB();
   } catch (error) {
@@ -19,19 +14,6 @@ export async function updateTask(
   }
   try {
     const taskToBeUpdated = await Task.findByIdAndUpdate(task.id, task);
-
-    console.log(" Task Updated", taskToBeUpdated);
-
-    if (addedAssignees.length > 0) {
-      addedAssignees.forEach(async (userId) => {
-        await User.findByIdAndUpdate(userId, { $push: { tasks: task.id } });
-      });
-    }
-    if (removedAssignees.length > 0) {
-      removedAssignees.forEach(async (userId) => {
-        await User.findByIdAndUpdate(userId, { $pull: { tasks: task.id } });
-      });
-    }
   } catch (error) {
     throw new Error("Error creating project:" + error);
   }

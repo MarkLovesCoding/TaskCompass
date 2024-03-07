@@ -3,7 +3,6 @@ import { TaskEntity } from "@/entities/Task";
 import { UpdateTask, GetTask, UpdateTaskUsers } from "@/use-cases/task/types";
 import { GetUserSession, UpdateUser } from "@/use-cases/user/types";
 import { taskToDto } from "@/use-cases/task/utils";
-import { createSearchParamsBailoutProxy } from "next/dist/client/components/searchparams-bailout-proxy";
 
 export async function updateTaskUsersUseCase(
   context: {
@@ -29,7 +28,7 @@ export async function updateTaskUsersUseCase(
   task.addAssignees(data.addedAssignees);
   task.removeAssignees(data.removedAssignees);
 
-  await context.updateTask(taskToDto(task));
+  // await context.updateTask(taskToDto(task));
   await context.updateTaskUsers(
     data.taskId,
     data.removedAssignees,

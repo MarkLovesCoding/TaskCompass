@@ -7,15 +7,15 @@ import {
 import {
   GetProject,
   ProjectDto,
-  UpdateProject,
+  UpdateProjectColumnOrder,
 } from "@/use-cases/project/types";
 import { GetUserSession } from "@/use-cases/user/types";
 import { taskToDto } from "@/use-cases/task/utils";
 import { OrderInLists } from "@/use-cases/task/types";
 export async function updateProjectColumnOrderUseCase(
   context: {
-    updateProjectColumns: UpdateProject;
-    getProject: GetProject;
+    updateProjectColumnOrder: UpdateProjectColumnOrder;
+
     getUser: GetUserSession;
   },
   data: {
@@ -32,7 +32,7 @@ export async function updateProjectColumnOrderUseCase(
 
   // console.log("updatedTaskEntity w name", taskAsEntity);
   //perform validation on data access layer to prevent many db calls
-  await context.updateProjectColumns(
+  await context.updateProjectColumnOrder(
     data.projectId,
     data.type,
     data.columnOrder
