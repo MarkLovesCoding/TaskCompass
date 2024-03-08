@@ -20,7 +20,7 @@ const CardColumn = ({
   sorted_type,
 }: CardColumnProps) => {
   return (
-    <Draggable draggableId={sorted_type} index={sorted_idx}>
+    <Draggable draggableId={sorted_type} index={sorted_idx} key={sorted_type}>
       {(provided, snapshot) => (
         <div
           ref={provided.innerRef}

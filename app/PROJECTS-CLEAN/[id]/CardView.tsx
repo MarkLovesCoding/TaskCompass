@@ -29,111 +29,51 @@ const CardView = ({
   project: ProjectDto;
   projectUsers: UserDto[];
 }) => {
-  // const sortByObject = sortByType(viewType, SORT_TYPES, tasks);
-  // type SortByType = ReturnType<typeof sortByType>;
-  // // const sortedKeys = project.columnOrder.filter((type: string)=>columnObject[type]);
-  // console.log("sortByObject", sortByObject);
-
-  // const [columnObject, setColumnObject] = useState(sortByObject);
-  // const sortedTasksArray = project.columnOrder[viewType].map((type) => [
-  //   type,
-  //   columnObject[type],
-  // ]);
-  // console.log("-*--------SORTED TASKS ARRAY", sortedTasksArray);
-  // const [sortedColumns, setSortedColumns] = useState(sortedTasksArray);
-  // const [tasksList, setTasksList] = useState(tasks);
-  // const [projectData, setProjectData] = useState(project);
-
-  // useEffect(() => {
-  //   setTasksList(tasks);
-  // }, [tasks]);
-  // useEffect(() => {
-  //   setProjectData(project);
-  // }, [project]);
-  // useEffect(() => {
-  //   setColumnObject(sortByType(viewType, SORT_TYPES, tasks));
-  // }, [viewType, tasks]);
-  // useEffect(() => {
-  //   const sortedTasksArray = project.columnOrder[viewType].map((type) => [
-  //     type,
-  //     columnObject[type],
-  //   ]);
-
-  //   setSortedColumns(sortedTasksArray);
-  // }, [viewType, tasks]);
   console.log("VIEW TYPE", viewType);
   const taskIds = tasks.map((task) => task.id);
   console.log("TASK IDS", taskIds);
   const sortByObject = sortByType(viewType, SORT_TYPES, tasks);
-  console.log("sortByObject", sortByObject);
   // Initialize state variables
-  const [columnObject, setColumnObject] = useState(sortByObject);
-  const [sortedColumns, setSortedColumns] = useState<any[]>([]);
+  // const [columnObject, setColumnObject] = useState(sortByObject);
+  // const [sortedColumns, setSortedColumns] = useState<any[]>([]);
 
-  console.log("sortedColumns", sortedColumns);
   const [tasksList, setTasksList] = useState<TaskDto[]>([]);
-  console.log("tasksList", tasksList);
   console.log("projectData.columnOrder", project.columnOrder);
 
   const [projectData, setProjectData] = useState<ProjectDto>(project);
   const sortedTasksArray = projectData.columnOrder[viewType].map(
     (type: string) => [type, sortByObject[type]]
   );
-  console.log("sortedTasksArray", sortedTasksArray);
-  // Update sortedColumns when viewType or tasks change
-  useEffect(() => {
-    const sortedTasksArray = projectData.columnOrder[viewType].map(
-      (type: string) => [type, columnObject[type]]
-    );
 
-    console.log("sortedTasksArray", sortedTasksArray);
-    setSortedColumns(sortedTasksArray);
-  }, [viewType, columnObject, projectData.columnOrder]);
-
-  // Update tasksList and projectData when tasks or project change
   useEffect(() => {
     setTasksList(tasks);
     setProjectData(project);
   }, [tasks, project]);
 
   // Update columnObject when viewType or tasks change
-  useEffect(() => {
-    setColumnObject(sortByType(viewType, SORT_TYPES, tasks));
-  }, [viewType, tasks]);
+  // useEffect(() => {
+  //   setColumnObject(sortByType(viewType, SORT_TYPES, tasks));
+  // }, [viewType, tasks]);
   // Initialize task card open states with all tasks initially closed
   const initialTaskCardOpenStates: Record<string, boolean> = {};
   taskIds.forEach((id) => {
     initialTaskCardOpenStates[id] = false;
   });
   const updateColumnsOrder = async (
-    // project: ProjectDto,
-    // tasks: TaskDto[],
-    // movedTaskId: string,
-    // type: string,
-    // sourceDroppableId: string,
-    // destinationDroppableId: string,
-    // sourceIndex: number,
+    sourceIndex: number,
     destinationIndex: number,
     draggableId: string
   ) => {
     const existingProjectData = { ...project };
     const newColumnOrder = projectData.columnOrder[viewType];
-    const existingIndex = newColumnOrder.indexOf(draggableId);
-    console.log("newColumnOrder", newColumnOrder);
 
-    newColumnOrder.splice(existingIndex, 1);
-    console.log("newColumnOrder2", newColumnOrder);
+    newColumnOrder.splice(sourceIndex, 1);
 
     newColumnOrder.splice(destinationIndex, 0, draggableId);
-    console.log("newColumnOrder3", newColumnOrder);
     //update project data in db
     const newProjectData = { ...projectData };
     newProjectData.columnOrder[viewType] = newColumnOrder;
-    console.log("newProjectData", newProjectData);
     setProjectData(newProjectData);
-    // console.log("newProjectData", newProjectData);
-
-    // await updateProjectColumnOrderAction(project.id, viewType, newColumnOrder);
     try {
       await updateProjectAction(projectData);
     } catch (error: any) {
@@ -153,6 +93,8 @@ const CardView = ({
     sourceIndex: number,
     destinationIndex: number
   ) => {
+    const existingTasksData = [...tasks];
+    const existingProjectData = { ...project };
     const newTasks = [...tasks];
     const tasksAffected = new Set<TaskDto>([]);
     if (
@@ -240,7 +182,7 @@ const CardView = ({
         return task;
       });
 
-      // Updates state first. Then updates the backend
+      // Optimistic Updates state first. Then updates the backend, reverting if there is an error
       const tempProject = { ...projectData };
       if (tempProject.listsNextAvailable[type][sourceDroppableId] > 0) {
         tempProject.listsNextAvailable[type][sourceDroppableId]--;
@@ -249,11 +191,26 @@ const CardView = ({
       setProjectData(tempProject);
       setTasksList(updatedTasks);
 
-      await updateProjectAction(projectData);
+      try {
+        await updateProjectAction(projectData);
+      } catch (error: any) {
+        setTasksList(existingTasksData);
+        setProjectData(existingProjectData);
+        console.log(
+          "error updating project, reverting to existing data for task and project"
+        );
+        console.error(error);
+      }
     }
     //update DB
     const affectedTasksArray = Array.from(tasksAffected);
-    await updateTasksOrderInListsAction(project.id, affectedTasksArray);
+    try {
+      await updateTasksOrderInListsAction(project.id, affectedTasksArray);
+    } catch (error: any) {
+      setTasksList(existingTasksData);
+      console.log("error updating tasks, reverting to existing data");
+      console.error(error);
+    }
   };
   const onDragEnd = (result: any) => {
     // dropped outside the list
@@ -289,30 +246,7 @@ const CardView = ({
       );
     }
     if (type == "column") {
-      return updateColumnsOrder(destinationIndex, draggableId);
-      // )
-      // const newColumnOrder = projectData.columnOrder[viewType];
-      // const existingIndex = newColumnOrder.indexOf(draggableId);
-      // console.log("newColumnOrder", newColumnOrder);
-      // newColumnOrder.splice(existingIndex, 1);
-      // console.log("newColumnOrder2", newColumnOrder);
-      // newColumnOrder.splice(destinationIndex, 0, draggableId);
-      // console.log("newColumnOrder3", newColumnOrder);
-      // //update project data in db
-      // const newProjectData = { ...projectData };
-      // newProjectData.columnOrder[viewType] = newColumnOrder;
-      // console.log("newProjectData", newProjectData);
-      // setProjectData(newProjectData);
-      // console.log("newProjectData", newProjectData);
-      // await updateProjectAction(newProjectData);
-      // const newColumnOrder = Array.from(SORT_TYPES);
-      // newColumnOrder.splice(source.index, 1);
-      // newColumnOrder.splice(destination.index, 0, SORT_TYPES[source.index]);
-      // const newColumnOrderObject: Columns = {};
-      // newColumnOrder.forEach((columnType) => {
-      //   newColumnOrderObject[columnType] = columnObject[columnType];
-      // });
-      // setColumnObject(newColumnOrderObject);
+      return updateColumnsOrder(sourceIndex, destinationIndex, draggableId);
     }
   };
 
@@ -327,17 +261,6 @@ const CardView = ({
             className="flex md:flex-row justify-center flex-col w-min-full "
           >
             <>
-              {/* {Object.entries(columnObject).map(
-                ([sorted_type, tasksList], sorted_idx) => (
-                  <CardColumn
-                    tasksList={tasksList}
-                    projectData={projectData}
-                    sorted_idx={sorted_idx}
-                    projectUsers={projectUsers}
-                    sorted_type={sorted_type}
-                  />
-                )
-              )} */}
               {sortedTasksArray.map((column, sorted_idx) => (
                 <div key={sorted_idx}>
                   <CardColumn

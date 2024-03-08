@@ -261,7 +261,7 @@ export function ProjectPage({
         <h3 className="text-lg font-bold">Project Tasks</h3>
         <Separator className="mb-4" />
       </div>
-      <div className="flex-1 justify-center h-min-full ">
+      <div className="flex-1  h-min-full ">
         <CardView
           viewType={sortBy}
           tasks={tasks}
