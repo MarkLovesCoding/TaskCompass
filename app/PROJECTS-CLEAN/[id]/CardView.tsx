@@ -15,6 +15,7 @@ import CardColumn from "./CardColumn";
 import { TasksOrder } from "@/data-access/projects/types";
 import { cn } from "@/lib/utils";
 import { set } from "mongoose";
+import toast from "react-hot-toast";
 interface Columns {
   [key: string]: {
     taskIds: string[];
@@ -151,23 +152,16 @@ const CardView = ({
       destinationIndex !== sourceIndex
     ) {
       const newTaskOrder = projectData.tasksOrder[viewType][sourceDroppableId];
-      console.log("newTaskOrder", newTaskOrder);
       newTaskOrder.splice(sourceIndex, 1);
-      console.log("newTaskOrder2", newTaskOrder);
       newTaskOrder.splice(destinationIndex, 0, draggableId);
-      console.log("newTaskOrder3", newTaskOrder);
 
       newProjectData.tasksOrder[viewType][sourceDroppableId] = newTaskOrder;
-      console.log("newProjectData", newProjectData);
       setProjectData(newProjectData);
 
       try {
         await updateProjectAction(projectData);
       } catch (error: any) {
         setProjectData(existingProjectData);
-        console.log(
-          "error updating project, reverting to existing data for task and project"
-        );
         console.error(error);
       }
     } else if (sourceDroppableId !== destinationDroppableId) {
@@ -182,20 +176,14 @@ const CardView = ({
 
       const newSourceTaskOrder =
         projectData.tasksOrder[viewType][sourceDroppableId];
-      console.log("newSourceTaskOrder", newSourceTaskOrder);
       const newDestinationTaskOrder =
         projectData.tasksOrder[viewType][destinationDroppableId];
-      console.log("newDestinationTaskOrder", newDestinationTaskOrder);
       newSourceTaskOrder.splice(sourceIndex, 1);
-      console.log("newSourceTaskOrder2", newSourceTaskOrder);
       newDestinationTaskOrder.splice(destinationIndex, 0, draggableId);
-      console.log("newDestinationTaskOrder2", newDestinationTaskOrder);
       newProjectData.tasksOrder[viewType][sourceDroppableId] =
         newSourceTaskOrder;
-      console.log("newProjectData", newProjectData);
       newProjectData.tasksOrder[viewType][destinationDroppableId] =
         newDestinationTaskOrder;
-      console.log("newProjectData2", newProjectData);
 
       setProjectData(newProjectData);
 
@@ -208,7 +196,8 @@ const CardView = ({
         console.log(
           "error updating tasks , reverting to existing data for task "
         );
-        console.error(error);
+        toast.error("Error updating tasks, reverting to existing data");
+        throw error;
       }
 
       try {
@@ -218,19 +207,14 @@ const CardView = ({
         console.log(
           "error updating project, reverting to existing data for task and project"
         );
-        console.error(error);
+        toast.error("Error updating project, reverting to existing data");
+        throw error;
       }
+      const taskNameMoved = tasksList.find((task) => task.id === draggableId);
+      toast.success(
+        `Task moved from ${sourceDroppableId} to ${destinationDroppableId} `
+      );
     }
-
-    //update DB
-    // const affectedTasksArray = Array.from(tasksAffected);
-    // try {
-    //   await updateTasksOrderInListsAction(project.id, affectedTasksArray);
-    // } catch (error: any) {
-    //   setTasksList(existingTasksData);
-    //   console.log("error updating tasks, reverting to existing data");
-    //   console.error(error);
-    // }
   };
   const onDragEnd = (result: any) => {
     // dropped outside the list

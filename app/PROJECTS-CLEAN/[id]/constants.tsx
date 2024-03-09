@@ -1,8 +1,3 @@
-// export const PRIORITIES_BY_COLORS = [
-//   { option: "High", color: "red" },
-//   { option: "Medium", color: "yellow" },
-//   { option: "Low", color: "green" },
-// ];
 export const PRIORITY_COLORS = {
   High: "red",
   Medium: "yellow",

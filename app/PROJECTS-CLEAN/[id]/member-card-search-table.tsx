@@ -19,24 +19,13 @@ import { getInitials } from "@/app/utils/getInitials";
 import { ProjectDto } from "@/use-cases/project/types";
 import { UserDto } from "@/use-cases/user/types";
 import { updateProjectUsersAction } from "@/app/PROJECTS-CLEAN/_actions/update-project-users.action";
-// import { updateProjectAdminsAction } from "@/app/PROJECTS-CLEAN/_actions/update-project-admins.action";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { ChangeEvent, useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useState } from "react";
+
 import { z } from "zod";
 import { Label } from "@/components/ui/label";
 
 import toast from "react-hot-toast";
-import { set } from "mongoose";
-import { DropdownMenu } from "@/components/ui/dropdown-menu";
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from "@/components/ui/select";
 import MemberCardPermissionsSelect from "./MemberCardPermissionsSelect";
 const formSchema = z.object({
   users: z.array(z.string()).min(1),
@@ -54,20 +43,12 @@ export function MemberCardSearchTable({
   projectUsers: UserDto[];
 }) {
   const router = useRouter();
-  // const form = useForm<z.infer<typeof formSchema>>({
-  //   resolver: zodResolver(formSchema),
-  //   defaultValues: {
-  //     users: [...project.members, ...project.admins],
-  //   },
-  // });
   const filteredTeamUsers = teamUsers.filter(
     (user) => !projectUsers.some((pUser) => pUser.id === user.id)
   );
   const [selectedUser, setSelectedUser] = useState<UserDto | null>(
     teamUsers[0]
   );
-  const [isOpen, setIsOpen] = useState(false);
-  const [alertOpen, setAlertOpen] = useState(false);
   const [teamUsersList, setTeamUsersList] =
     useState<UserDto[]>(filteredTeamUsers);
   console.log("teamUsersList", teamUsersList);
@@ -93,27 +74,13 @@ export function MemberCardSearchTable({
     return user.tasks.filter((task) => project.tasks.includes(task)).length;
   };
   const onUpdateProjectUserFormSubmit = async (isOpen: boolean) => {
-    // if (selectedUser) {
-    //   const updatedUsers = [...form.getValues("Users"), selectedUser];
-    //   form.setValue("Users", updatedUsers);
-    // }
-    // if (isOpen) {
     await updateProjectUsersAction(project.id, projectUsersIdLists);
-    // await updateProjectAdminsAction(project.id, projectUsersIdLists);
-    // await updateProjectMembersAction(project.id, projectMembersIdList, projectAdminsIdList);
-    // await updateProjectAdminsAction(project.id, projectAdminsIdLists);
-    // }
-    //need to check member or admin status
-    // setShowUpdateButton(false);
-    // setShowCancelButton(false);
     router.refresh();
   };
   const getUserTypes = (projectUsers: UserDto[]) => {
     const userTypes: Record<string, string> = {}; // Define userTypes as an object with string index signature
     projectUsers.forEach((user) => {
-      // if (user) {
       userTypes[user.id as string] = getUserType(user, project.id) as string; // Make sure project.id is defined and correct
-      // }
     });
     return userTypes;
   };
@@ -129,7 +96,6 @@ export function MemberCardSearchTable({
       [userId]: userType, // Update the userType for the specific userId
     }));
   };
-  // const { toast } = useToast();
   const toastOptions = {
     duration: 3000,
     position: "top-center",
@@ -155,18 +121,11 @@ export function MemberCardSearchTable({
   return (
     <Popover onOpenChange={onUpdateProjectUserFormSubmit}>
       <PopoverTrigger asChild>
-        {/* <Button
-          className="w-12 h-12 p-3 text-sm rounded-full flex items-center font-semibold gap-1"
-          size="icon"
-          variant="outline"
-        > */}
         <div>
           <PlusCircleIcon className="w-10 h-10" />
 
-          {/* <PlusIcon className="h-4 w-4" /> */}
           <span className="sr-only">Edit Members</span>
         </div>
-        {/* </Button> */}
       </PopoverTrigger>
       <PopoverContent className="w-fit">
         <Command>
@@ -241,8 +200,6 @@ export function MemberCardSearchTable({
                                 }
                                 return prev;
                               });
-                              // setShowUpdateButton(true);
-                              // setShowCancelButton(true);
                               toast.success("User removed from Project");
                             }
                           }}

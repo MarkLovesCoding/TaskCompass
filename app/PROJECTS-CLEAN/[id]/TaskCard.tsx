@@ -4,7 +4,8 @@ import { unstable_noStore } from "next/cache";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { RadioGroupItem, RadioGroup } from "@/components/ui/radio-group";
-import { CATEGORIES } from "./constants";
+import toast from "react-hot-toast";
+
 import {
   SelectValue,
   SelectTrigger,
@@ -28,7 +29,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { toast } from "@/components/ui/use-toast";
 import {
   PopoverTrigger,
   PopoverContent,
@@ -58,7 +58,6 @@ import { updateTaskArchivedAction } from "../_actions/update-task-archived.actio
 import { updateTaskAction } from "../_actions/update-task.action";
 import { UserDto } from "@/use-cases/user/types";
 import { getInitials } from "@/app/utils/getInitials";
-import { updateProject } from "@/data-access/projects/update-project.persistence";
 import { updateProjectTasksOrderFromTaskCardAction } from "../_actions/update-project-tasks-order-from-task-card.action";
 const taskFormSchema = z.object({
   id: z.string(),
@@ -106,7 +105,7 @@ export const TaskCard = ({
         formRef.current.requestSubmit();
       }
     }
-  }, [isTaskOpen]);
+  }, [isTaskOpen, isTaskSelected]);
   const [isNameEditing, setIsNameEditing] = useState(false);
 
   const [isDescriptionEditing, setIsDescriptionEditing] = useState(false);
@@ -185,13 +184,26 @@ export const TaskCard = ({
       values.category
     );
     if (taskOrderChanges !== null) {
-      await updateProjectTasksOrderFromTaskCardAction(
-        values.projectId,
-        values.id,
-        taskOrderChanges
-      );
+      try {
+        await updateProjectTasksOrderFromTaskCardAction(
+          values.projectId,
+          values.id,
+
+          taskOrderChanges
+        );
+      } catch (error) {
+        toast.error("Error updating task order");
+      }
+      // toast.success("Task updated");
     }
-    await updateTaskAction(values, task.assignees);
+    try {
+      await updateTaskAction(values, task.assignees);
+    } catch (error) {
+      toast.error("Error updating task");
+    }
+    toast.success("Task updated");
+
+    router.refresh();
   };
   const { field: archivedField, fieldState: archivedFieldState } =
     useController({
