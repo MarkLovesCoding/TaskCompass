@@ -27,15 +27,21 @@ export async function createNewProjectUseCase(
     team: data.teamId,
     archived: false,
     createdBy: user.userId,
-    listsNextAvailable: {
-      priority: { High: 1, Medium: 1, Low: 1 },
+    tasksOrder: {
+      priority: { High: [], Medium: [], Low: [] },
       status: {
-        "Not Started": 1,
-        "Up Next": 1,
-        "In Progress": 1,
-        Completed: 1,
+        "Not Started": [],
+        "Up Next": [],
+        "In Progress": [],
+        Completed: [],
       },
-      category: { Household: 1, Personal: 1, Work: 1, School: 1, Other: 1 },
+      category: {
+        Household: [],
+        Personal: [],
+        Work: [],
+        School: [],
+        Other: [],
+      },
     },
     columnOrder: {
       priority: ["High", "Medium", "Low"],
