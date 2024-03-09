@@ -1,6 +1,4 @@
 "use server";
-// import { updateProjectMembersUseCase } from "@/use-cases/project/update-project-members.use-case";
-// import { updateProjectAdminsUseCase } from "@/use-cases/project/update-project-admins.use-case";
 import getUserObject from "@/data-access/users/get-user.persistence";
 import getTeam from "@/data-access/teams/get-team.persistence";
 import { updateUser } from "@/data-access/users/update-user.persistence";
@@ -13,9 +11,6 @@ export async function UpdateTeamUserRoleAction(
   updateType: "admin" | "member"
 ) {
   const { getUser } = await getUserFromSession();
-  console.log("teamId", teamId);
-  console.log("teamUserId", teamUserId);
-  console.log("updateType", updateType);
 
   try {
     await updateTeamUserRoleUseCase(
@@ -31,7 +26,7 @@ export async function UpdateTeamUserRoleAction(
         updateType: updateType,
       }
     );
-    revalidatePath("/TEAMS-CLEAN/[slug]");
+    revalidatePath("/TEAMS-CLEAN/[slug]/page");
 
     //for toasts, not yet implemented
     return { success: true };

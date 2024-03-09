@@ -1,8 +1,6 @@
 import { TaskEntity } from "@/entities/Task";
-// import { UserEntity } from "@/entities/User";
 import { UpdateTask, GetTask, UpdateTaskUsers } from "@/use-cases/task/types";
 import { GetUserSession, UpdateUser } from "@/use-cases/user/types";
-import { taskToDto } from "@/use-cases/task/utils";
 
 export async function updateTaskUsersUseCase(
   context: {
@@ -23,7 +21,6 @@ export async function updateTaskUsersUseCase(
 
   const dataTask = await context.getTask(data.taskId);
   const task = new TaskEntity(dataTask);
-  const initialAssignees = task.getAssignees();
 
   task.addAssignees(data.addedAssignees);
   task.removeAssignees(data.removedAssignees);

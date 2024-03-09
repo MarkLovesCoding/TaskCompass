@@ -158,8 +158,8 @@ export class ProjectEntity {
 
   private validate() {
     const projectSchema = z.object({
-      name: z.string().min(3).max(20),
-      description: z.string().min(5).max(50),
+      name: z.string().min(3).max(30),
+      description: z.string().min(3).max(50),
       users: z.array(z.string()).optional(),
       // admins: z.array(z.string()).optional(),
       tasks: z.array(z.string()).optional(),

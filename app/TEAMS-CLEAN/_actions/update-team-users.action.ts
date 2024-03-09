@@ -5,6 +5,7 @@ import getTeam from "@/data-access/teams/get-team.persistence";
 import { updateTeamUsersUseCase } from "@/use-cases/team/update-team-users.use-case";
 import { revalidatePath } from "next/cache";
 import { getUserFromSession } from "@/lib/sessionAuth";
+
 export async function updateTeamUsersAction(
   teamId: string,
   updatedUsers: string[]
@@ -24,7 +25,7 @@ export async function updateTeamUsersAction(
         updatedUsers: updatedUsers,
       }
     );
-    revalidatePath(`/TEAMS-CLEAN/${teamId}`);
+    revalidatePath(`/TEAMS-CLEAN/${teamId}/page`);
 
     //for toasts, not yet implemented
     return { success: true };

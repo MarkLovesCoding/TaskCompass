@@ -1,9 +1,7 @@
 "use server";
 import { updateTeamDetailsUseCase } from "@/use-cases/team/update-team-details.use-case";
-
 import { updateTeam } from "@/data-access/teams/update-team.persistence";
 import getTeam from "@/data-access/teams/get-team.persistence";
-
 import { revalidatePath } from "next/cache";
 import { getUserFromSession } from "@/lib/sessionAuth";
 type Form = {
@@ -11,7 +9,6 @@ type Form = {
 };
 
 export async function updateTeamDetailsAction(form: Form, teamId: string) {
-  console.log("_____________________________________form", form);
   const { getUser } = await getUserFromSession();
 
   try {

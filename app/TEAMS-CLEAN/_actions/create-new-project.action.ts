@@ -9,7 +9,6 @@ type Form = {
 };
 
 export async function createNewProjectAction(form: Form, teamId: string) {
-  console.log("form", form);
   const { getUser } = await getUserFromSession();
 
   try {
@@ -24,7 +23,7 @@ export async function createNewProjectAction(form: Form, teamId: string) {
         teamId: teamId,
       }
     );
-    revalidatePath("/TEAMS-CLEAN/[slug]");
+    revalidatePath("/TEAMS-CLEAN/[slug]/page");
     return { form: { name: "" } };
   } catch (error: any) {
     console.error(error);

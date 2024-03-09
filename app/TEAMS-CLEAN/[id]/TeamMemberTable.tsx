@@ -62,7 +62,8 @@ export function TeamMemberTable({
   const [teamUsersIdLists, setTeamUsersIdLists] = useState<string[]>(
     teamUsersList.map((user) => user.id)
   );
-
+  console.log("teamUsersIdLists", teamUsersIdLists);
+  console.log("teamUsersList", teamUsersList);
   // const teamUsersIdLists = teamUsersList.map((user) => user.id);
 
   const getUserType = (user: UserDto, projectId: string) => {
@@ -80,7 +81,13 @@ export function TeamMemberTable({
       .length;
   };
   const onUpdateTeamUserFormSubmit = async (isOpen: boolean) => {
-    await updateTeamUsersAction(team.id, teamUsersIdLists);
+    console.log("onUpdateTeamUserFormSubmit", isOpen);
+    console.log("teamUsersIdLists", teamUsersIdLists);
+    console.log("team.id", team.id);
+    await updateTeamUsersAction(
+      team.id,
+      teamUsersList.map((user) => user.id)
+    );
   };
   const getUserTypes = (projectUsers: UserDto[]) => {
     const userTypes: Record<string, string> = {}; // Define userTypes as an object with string index signature
@@ -101,19 +108,7 @@ export function TeamMemberTable({
       [userId]: userType, // Update the userType for the specific userId
     }));
   };
-  const toastOptions = {
-    duration: 3000,
-    position: "top-center",
 
-    style: {},
-    className: "",
-
-    icon: "🧐",
-    ariaProps: {
-      role: "status",
-      "aria-live": "polite",
-    },
-  };
   return (
     <Popover onOpenChange={onUpdateTeamUserFormSubmit}>
       <PopoverTrigger asChild>
@@ -136,7 +131,7 @@ export function TeamMemberTable({
                   <div className="flex w-full items-center gap-2">
                     <Avatar className=" w-10 h-10">
                       {/* <AvatarImage src={user.avatar} /> */}
-                      <AvatarFallback className={`text-sm bg-gray-500`}>
+                      <AvatarFallback className={`text-sm bg-orange-500`}>
                         {getInitials(user.name)}
                       </AvatarFallback>
                     </Avatar>

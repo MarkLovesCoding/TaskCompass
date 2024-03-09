@@ -21,8 +21,8 @@ import * as z from "zod";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 const formSchema = z.object({
-  email: z.string().email().min(1),
-  password: z.string().min(1),
+  email: z.string().email().min(5),
+  password: z.string().min(6),
 });
 
 // import { useSession } from "next-auth/react";

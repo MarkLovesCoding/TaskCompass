@@ -19,19 +19,12 @@ import * as z from "zod";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 const formSchema = z.object({
-  name: z.string().min(5),
+  name: z.string().min(5).max(30),
   email: z.string().email().min(5),
-  password: z.string().min(1),
+  password: z.string().min(6),
   role: z.string().min(1),
   firstLogIn: z.boolean(),
 });
-interface FormData {
-  name?: string;
-  email?: string;
-  password?: string;
-  role: string;
-  firstLogIn: boolean;
-}
 
 const SignUpForm = () => {
   const router = useRouter();

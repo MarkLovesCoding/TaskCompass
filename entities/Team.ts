@@ -78,7 +78,7 @@ export class TeamEntity {
 
   private validate() {
     const teamSchema = z.object({
-      name: z.string().min(3).max(20),
+      name: z.string().min(3).max(30),
       users: z.array(z.string()).min(0),
       projects: z.array(z.string()).optional(),
       createdBy: z.string(),

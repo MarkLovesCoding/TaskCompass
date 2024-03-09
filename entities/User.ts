@@ -142,12 +142,12 @@ export class UserEntity {
   }
   private validate() {
     const projectSchema = z.object({
-      name: z.string().min(3).max(20),
+      name: z.string().min(3).max(30),
       email: z.string().email(),
       projects: z.array(z.string()).optional(),
       teams: z.array(z.string()).optional(),
       tasks: z.array(z.string()).optional(),
-      avatar: z.string().min(3).max(20),
+      avatar: z.string().min(3),
     });
     try {
       projectSchema.parse(this);
