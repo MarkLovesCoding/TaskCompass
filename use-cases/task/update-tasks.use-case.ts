@@ -1,15 +1,11 @@
 import { TaskEntity } from "@/entities/Task";
-import {
-  GetTask,
-  TaskDto,
-  UpdateTasksOrderInLists,
-} from "@/use-cases/task/types";
+import { GetTask, TaskDto, UpdateTasks } from "@/use-cases/task/types";
 import { GetUserSession } from "@/use-cases/user/types";
 import { taskToDto } from "@/use-cases/task/utils";
 import { OrderInLists } from "@/use-cases/task/types";
-export async function updateTasksOrderInListsUseCase(
+export async function updateTasksUseCase(
   context: {
-    updateTasksOrderInLists: UpdateTasksOrderInLists;
+    updateTasks: UpdateTasks;
     getTask: GetTask;
     getUser: GetUserSession;
   },
@@ -26,5 +22,5 @@ export async function updateTasksOrderInListsUseCase(
 
   // console.log("updatedTaskEntity w name", taskAsEntity);
   //perform validation on data access layer to prevent many db calls
-  await context.updateTasksOrderInLists(data.tasks);
+  await context.updateTasks(data.tasks);
 }

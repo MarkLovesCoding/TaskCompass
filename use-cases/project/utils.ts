@@ -13,7 +13,8 @@ export function projectToDto(project: ProjectEntity): ProjectDto {
     team: project.getTeam(),
     createdBy: project.getCreatedBy(),
     archived: project.getArchived(),
-    listsNextAvailable: project.getListsNextAvailable(),
+    // listsNextAvailable: project.getListsNextAvailable(),
+    tasksOrder: project.getTasksOrder(),
     columnOrder: project.getColumnOrder(),
   };
 }
@@ -29,7 +30,8 @@ export function projectToCreateProjectDto(
     team: project.getTeam(),
     createdBy: project.getCreatedBy(),
     archived: project.getArchived(),
-    listsNextAvailable: project.getListsNextAvailable(),
+    // listsNextAvailable: project.getListsNextAvailable(),
+    tasksOrder: project.getTasksOrder(),
     columnOrder: project.getColumnOrder(),
   };
 }

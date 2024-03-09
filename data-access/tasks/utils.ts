@@ -5,7 +5,6 @@ export function taskModelToTaskDto(task: TaskModelType) {
       ? task.assignees.map((task) => task.toString())
       : [];
 
-  const plainifyOrderInLists = JSON.parse(JSON.stringify(task.orderInLists));
   return {
     id: task._id.toString(),
     name: task.name,
@@ -18,7 +17,7 @@ export function taskModelToTaskDto(task: TaskModelType) {
     priority: task.priority,
     status: task.status,
     archived: task.archived,
-    orderInLists: plainifyOrderInLists,
+
     // label: task.category,
   };
 }

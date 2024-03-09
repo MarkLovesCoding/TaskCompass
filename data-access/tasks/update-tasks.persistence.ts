@@ -7,7 +7,7 @@ import { TaskEntity } from "@/entities/Task";
 import { OrderInLists } from "@/data-access/tasks/types";
 import { TaskDto } from "@/use-cases/task/types";
 import { taskToDto } from "@/use-cases/task/utils";
-export async function updateTasksOrderInLists(tasks: TaskDto[]): Promise<void> {
+export async function updateTasks(tasks: TaskDto[]): Promise<void> {
   try {
     await connectDB();
   } catch (error) {

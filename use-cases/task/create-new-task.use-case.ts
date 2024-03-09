@@ -27,11 +27,6 @@ export async function createNewTaskUseCase(
     category: "Other",
     priority: "Medium",
     status: "Not Started",
-    orderInLists: {
-      priority: ["Medium", 0],
-      status: ["Not Started", 0],
-      category: ["Other", 0],
-    },
   });
 
   await context.createNewTask(taskToCreateTaskDto(newTask));

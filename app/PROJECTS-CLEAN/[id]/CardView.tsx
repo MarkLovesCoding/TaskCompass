@@ -7,10 +7,12 @@ import { sortByType } from "./utils";
 import { SORT_TYPES } from "./constants";
 // import { PRIORITY_COLORS } from "./constants";
 import { updateProjectAction } from "../_actions/update-project.action";
-import { updateTasksOrderInListsAction } from "../_actions/update-tasks-order-in-lists.action";
+import { updateTasksAction } from "../_actions/update-tasks.action";
 // import { updateProjectColumnOrderAction } from "../_actions/update-project-column-order.action";
+import { updateTaskAction } from "../_actions/update-task.action";
 import { Droppable, DragDropContext } from "@hello-pangea/dnd";
 import CardColumn from "./CardColumn";
+import { TasksOrder } from "@/data-access/projects/types";
 import { cn } from "@/lib/utils";
 import { set } from "mongoose";
 interface Columns {
@@ -29,10 +31,59 @@ const CardView = ({
   project: ProjectDto;
   projectUsers: UserDto[];
 }) => {
-  console.log("VIEW TYPE", viewType);
   const taskIds = tasks.map((task) => task.id);
-  console.log("TASK IDS", taskIds);
-  const sortByObject = sortByType(viewType, SORT_TYPES, tasks);
+  const projectTasksIdsOrder = project.tasksOrder[viewType];
+
+  function updateTaskInArray(
+    tasksToUpdate: TaskDto[],
+    taskIdToUpdate: string,
+    columnTypeToUpdate: string,
+    type: string
+  ): TaskDto[] {
+    const updatedTasks = [...tasksToUpdate]; // Create a copy of the original array
+    console.log("updatedTasksExisting", updatedTasks);
+    const index = updatedTasks.findIndex((task) => task.id === taskIdToUpdate); // Find the index of the task with the specified ID
+    // const existingTasksData = { ...tasksList };
+    console.log("index", index);
+    if (index !== -1) {
+      const updatedTask = updatedTasks.find(
+        (task) => task.id === taskIdToUpdate
+      ) as TaskDto;
+      // const newTaskData = { ...existingTask };
+      console.log("updatedTask", updatedTask);
+      if (type == "status" || type == "priority" || type == "category") {
+        console.log("type", type);
+        updatedTask[type] = columnTypeToUpdate;
+        console.log("columnTypeToUpdate", columnTypeToUpdate);
+        console.log("updatedTask in IF", updatedTask);
+      }
+
+      // If the task with the specified ID is found
+      updatedTasks[index] = updatedTask; // Replace the task at that index with the new task
+    }
+    console.log("updatedTasksFinal", updatedTasks);
+    return updatedTasks; // Return the updated array
+  }
+
+  function mapIdsToTasks(
+    projectTaskIdsOrder: Record<string, string[]>,
+    tasks: TaskDto[]
+  ): Record<string, TaskDto[]> {
+    const projectTasksOrder: Record<string, TaskDto[]> = {};
+
+    for (const key in projectTaskIdsOrder) {
+      if (key in projectTaskIdsOrder) {
+        const ids = projectTaskIdsOrder[key];
+        projectTasksOrder[key] = ids
+          .map((id) => tasks.find((task) => task.id === id))
+          .filter(Boolean) as TaskDto[];
+      }
+    }
+
+    return projectTasksOrder;
+  }
+  const sortByObject = mapIdsToTasks(projectTasksIdsOrder, tasks);
+  // const sortByObject = sortByType(viewType, SORT_TYPES, tasks);
   // Initialize state variables
   // const [columnObject, setColumnObject] = useState(sortByObject);
   // const [sortedColumns, setSortedColumns] = useState<any[]>([]);
@@ -84,117 +135,85 @@ const CardView = ({
   };
 
   const updateTasksOrderInLists = async (
-    project: ProjectDto,
-    tasks: TaskDto[],
-    movedTaskId: string,
-    type: string,
+    // tasks: TaskDto[],
+    // movedTaskId: string,
+    // type: string,
     sourceDroppableId: string,
     destinationDroppableId: string,
     sourceIndex: number,
-    destinationIndex: number
+    destinationIndex: number,
+    draggableId: string
   ) => {
-    const existingTasksData = [...tasks];
-    const existingProjectData = { ...project };
-    const newTasks = [...tasks];
-    const tasksAffected = new Set<TaskDto>([]);
+    const existingProjectData = { ...projectData };
+    const newProjectData = { ...projectData };
     if (
       sourceDroppableId === destinationDroppableId &&
       destinationIndex !== sourceIndex
     ) {
-      // task moves position in original column
+      const newTaskOrder = projectData.tasksOrder[viewType][sourceDroppableId];
+      console.log("newTaskOrder", newTaskOrder);
+      newTaskOrder.splice(sourceIndex, 1);
+      console.log("newTaskOrder2", newTaskOrder);
+      newTaskOrder.splice(destinationIndex, 0, draggableId);
+      console.log("newTaskOrder3", newTaskOrder);
 
-      const updatedTasks = newTasks.map((task) => {
-        if (task.id === movedTaskId) {
-          task.orderInLists[type][0] = destinationDroppableId;
-          task.orderInLists[type][1] = destinationIndex;
-          console.log("taskid", task.id);
-
-          console.log("movedTask", task);
-          tasksAffected.add(task);
-        }
-        //move from above
-        else if (
-          task.orderInLists[type][0] == sourceDroppableId &&
-          task.orderInLists[type][1] >= destinationIndex &&
-          sourceIndex > destinationIndex
-        ) {
-          console.log("taskid", task.id);
-          console.log("else if before", task.orderInLists);
-
-          task.orderInLists[type][1] = Number(task.orderInLists[type][1]) + 1;
-          console.log("else if after", task.orderInLists);
-          tasksAffected.add(task);
-        }
-        //move from below
-        else if (
-          task.orderInLists[type][0] == sourceDroppableId &&
-          task.orderInLists[type][1] <= destinationIndex &&
-          task.orderInLists[type][1] > 0 &&
-          sourceIndex < destinationIndex
-        ) {
-          console.log("taskid", task.id);
-
-          console.log("else if 2 before", task.orderInLists);
-
-          task.orderInLists[type][1] = Number(task.orderInLists[type][1]) - 1;
-          console.log("else if 2 after", task.orderInLists);
-
-          tasksAffected.add(task);
-        }
-        return task;
-      });
-      setTasksList(updatedTasks);
-    } else if (sourceDroppableId !== destinationDroppableId) {
-      // task moves column
-      const updatedTasks = newTasks.map((task) => {
-        if (
-          task.orderInLists[type][0] == sourceDroppableId &&
-          task.orderInLists[type][1] > sourceIndex &&
-          task.id !== movedTaskId
-        ) {
-          task.orderInLists[type][1] = Number(task.orderInLists[type][1]) - 1;
-          tasksAffected.add(task);
-        } else if (
-          task.orderInLists[type][0] == destinationDroppableId &&
-          task.orderInLists[type][1] >= destinationIndex &&
-          task.id !== movedTaskId
-        ) {
-          task.orderInLists[type][1] = Number(task.orderInLists[type][1]) + 1;
-          tasksAffected.add(task);
-        } else if (task.id === movedTaskId) {
-          switch (type) {
-            case "priority":
-              task.priority = destinationDroppableId;
-              break;
-            case "status":
-              task.status = destinationDroppableId;
-              break;
-            case "category":
-              task.category = destinationDroppableId;
-              break;
-          }
-
-          task.orderInLists[type][1] = destinationIndex;
-          task.orderInLists[type][0] = destinationDroppableId;
-          tasksAffected.add(task);
-          console.log("RETURN TASK 3", task);
-        }
-        return task;
-      });
-
-      // Optimistic Updates state first. Then updates the backend, reverting if there is an error
-      const tempProject = { ...projectData };
-      if (tempProject.listsNextAvailable[type][sourceDroppableId] > 0) {
-        tempProject.listsNextAvailable[type][sourceDroppableId]--;
-      }
-      tempProject.listsNextAvailable[type][destinationDroppableId]++;
-      setProjectData(tempProject);
-      setTasksList(updatedTasks);
+      newProjectData.tasksOrder[viewType][sourceDroppableId] = newTaskOrder;
+      console.log("newProjectData", newProjectData);
+      setProjectData(newProjectData);
 
       try {
         await updateProjectAction(projectData);
       } catch (error: any) {
+        setProjectData(existingProjectData);
+        console.log(
+          "error updating project, reverting to existing data for task and project"
+        );
+        console.error(error);
+      }
+    } else if (sourceDroppableId !== destinationDroppableId) {
+      // task moves column
+      const existingTasksData = [...tasksList];
+      updateTaskInArray(
+        tasksList,
+        draggableId,
+        destinationDroppableId,
+        viewType
+      );
+
+      const newSourceTaskOrder =
+        projectData.tasksOrder[viewType][sourceDroppableId];
+      console.log("newSourceTaskOrder", newSourceTaskOrder);
+      const newDestinationTaskOrder =
+        projectData.tasksOrder[viewType][destinationDroppableId];
+      console.log("newDestinationTaskOrder", newDestinationTaskOrder);
+      newSourceTaskOrder.splice(sourceIndex, 1);
+      console.log("newSourceTaskOrder2", newSourceTaskOrder);
+      newDestinationTaskOrder.splice(destinationIndex, 0, draggableId);
+      console.log("newDestinationTaskOrder2", newDestinationTaskOrder);
+      newProjectData.tasksOrder[viewType][sourceDroppableId] =
+        newSourceTaskOrder;
+      console.log("newProjectData", newProjectData);
+      newProjectData.tasksOrder[viewType][destinationDroppableId] =
+        newDestinationTaskOrder;
+      console.log("newProjectData2", newProjectData);
+
+      setProjectData(newProjectData);
+
+      // Optimistic Updates state first. Then updates the backend, reverting if there is an error
+
+      try {
+        await updateTasksAction(projectData.id, tasksList);
+      } catch (error: any) {
         setTasksList(existingTasksData);
+        console.log(
+          "error updating tasks , reverting to existing data for task "
+        );
+        console.error(error);
+      }
+
+      try {
+        await updateProjectAction(projectData);
+      } catch (error: any) {
         setProjectData(existingProjectData);
         console.log(
           "error updating project, reverting to existing data for task and project"
@@ -202,15 +221,16 @@ const CardView = ({
         console.error(error);
       }
     }
+
     //update DB
-    const affectedTasksArray = Array.from(tasksAffected);
-    try {
-      await updateTasksOrderInListsAction(project.id, affectedTasksArray);
-    } catch (error: any) {
-      setTasksList(existingTasksData);
-      console.log("error updating tasks, reverting to existing data");
-      console.error(error);
-    }
+    // const affectedTasksArray = Array.from(tasksAffected);
+    // try {
+    //   await updateTasksOrderInListsAction(project.id, affectedTasksArray);
+    // } catch (error: any) {
+    //   setTasksList(existingTasksData);
+    //   console.log("error updating tasks, reverting to existing data");
+    //   console.error(error);
+    // }
   };
   const onDragEnd = (result: any) => {
     // dropped outside the list
@@ -235,14 +255,11 @@ const CardView = ({
     // updateTaskByColumnChange(type, destination.droppableId, draggableId);
     if (type == "task") {
       return updateTasksOrderInLists(
-        projectData,
-        tasksList,
-        draggableId,
-        viewType,
         source.droppableId,
         destination.droppableId,
         sourceIndex,
-        destinationIndex
+        destinationIndex,
+        draggableId
       );
     }
     if (type == "column") {

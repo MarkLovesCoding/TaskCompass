@@ -9,7 +9,7 @@ export type TaskType = {
   startDate: number;
   project: string;
   label: string;
-  orderInLists: object;
+  // orderInLists: object;
   _id?: number | Object | string;
 };
 export type ProjectType = {
@@ -17,7 +17,8 @@ export type ProjectType = {
   description: string;
   users: string[];
   tasks: string[];
-  listsNextAvailable: object;
+  // listsNextAvailable: object;
+  tasksOrder: object;
   _id?: number | Object | string;
 };
 export type ParamsType = {

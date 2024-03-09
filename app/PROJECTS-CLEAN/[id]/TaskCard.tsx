@@ -58,6 +58,8 @@ import { updateTaskArchivedAction } from "../_actions/update-task-archived.actio
 import { updateTaskAction } from "../_actions/update-task.action";
 import { UserDto } from "@/use-cases/user/types";
 import { getInitials } from "@/app/utils/getInitials";
+import { updateProject } from "@/data-access/projects/update-project.persistence";
+import { updateProjectTasksOrderFromTaskCardAction } from "../_actions/update-project-tasks-order-from-task-card.action";
 const taskFormSchema = z.object({
   id: z.string(),
   name: z.string().min(4).max(25),
@@ -134,10 +136,69 @@ export const TaskCard = ({
       projectId: project.id,
     },
   });
+  function findChangedType(
+    existingPriority: string,
+    existingStatus: string,
+    existingCategory: string,
+    newPriority: string,
+    newStatus: string,
+    newCategory: string
+  ): Record<string, string> | null {
+    const changes = [];
+
+    if (existingPriority !== newPriority) {
+      changes.push({
+        type: "priority",
+        newSubType: newPriority,
+        existingSubType: existingPriority,
+      });
+    }
+
+    if (existingStatus !== newStatus) {
+      changes.push({
+        type: "status",
+        newSubType: newStatus,
+        existingSubType: existingStatus,
+      });
+    }
+
+    if (existingCategory !== newCategory) {
+      changes.push({
+        type: "category",
+        newSubType: newCategory,
+        existingSubType: existingCategory,
+      });
+    }
+
+    // if (changes.length === 1) {
+    return changes[0];
+    // } else {
+    //   return null; // No changes or multiple changes detected
+    // }
+  }
 
   const onSubmit = async (values: z.infer<typeof taskFormSchema>) => {
     // Handle form submission
-    console.log("Form values:", values);
+    const taskOrderChanges = findChangedType(
+      task.priority,
+      task.status,
+      task.category,
+      values.priority,
+      values.status,
+      values.category
+    );
+    if (taskOrderChanges !== null) {
+      console.log(
+        "**************************************taskOrderChanges",
+        taskOrderChanges
+      );
+
+      await updateProjectTasksOrderFromTaskCardAction(
+        values.projectId,
+        values.id,
+        taskOrderChanges
+      );
+    }
     await updateTaskAction(values, task.assignees);
   };
   const { field: archivedField, fieldState: archivedFieldState } =

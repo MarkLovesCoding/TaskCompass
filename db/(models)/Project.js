@@ -15,26 +15,7 @@ const ProjectSchema = new Schema(
     team: { type: Schema.Types.ObjectId, ref: "Team" },
     archived: { type: Boolean, default: false },
     createdBy: { type: Schema.Types.ObjectId, ref: "User" },
-    listsNextAvailable: {
-      priority: {
-        High: { type: Number, default: 0 },
-        Medium: { type: Number, default: 0 },
-        Low: { type: Number, default: 0 },
-      },
-      status: {
-        "Not Started": { type: Number, default: 0 },
-        "Up Next": { type: Number, default: 0 },
-        "In Progress": { type: Number, default: 0 },
-        Completed: { type: Number, default: 0 },
-      },
-      category: {
-        Household: { type: Number, default: 0 },
-        Personal: { type: Number, default: 0 },
-        Work: { type: Number, default: 0 },
-        School: { type: Number, default: 0 },
-        Other: { type: Number, default: 0 },
-      },
-    },
+
     columnOrder: {
       priority: { type: [String], default: ["High", "Medium", "Low"] },
       status: {
@@ -44,6 +25,26 @@ const ProjectSchema = new Schema(
       category: {
         type: [String],
         default: ["Household", "Personal", "Work", "School", "Other"],
+      },
+    },
+    tasksOrder: {
+      priority: {
+        High: [String],
+        Medium: [String],
+        Low: [String],
+      },
+      status: {
+        "Not Started": [String],
+        "Up Next": [String],
+        "In Progress": [String],
+        Completed: [String],
+      },
+      category: {
+        Household: [String],
+        Personal: [String],
+        Work: [String],
+        School: [String],
+        Other: [String],
       },
     },
   },

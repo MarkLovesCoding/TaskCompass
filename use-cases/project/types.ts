@@ -1,6 +1,6 @@
-export type ListsNextAvailable = Record<string, Record<string, number>>;
+// export type ListsNextAvailable = Record<string, Record<string, number>>;
 export type ColumnOrder = Record<string, string[]>;
-
+export type TasksOrder = Record<string, Record<string, string[]>>;
 export type ProjectDto = {
   id: string;
   name: string;
@@ -10,7 +10,8 @@ export type ProjectDto = {
   team: string;
   createdBy: string;
   archived: boolean;
-  listsNextAvailable: ListsNextAvailable;
+  // listsNextAvailable: ListsNextAvailable;
+  tasksOrder: TasksOrder;
   columnOrder: ColumnOrder;
 };
 export type CreateProjectDto = {
@@ -21,7 +22,8 @@ export type CreateProjectDto = {
   team: string;
   createdBy: string;
   archived: boolean;
-  listsNextAvailable: ListsNextAvailable;
+  // listsNextAvailable: ListsNextAvailable;
+  tasksOrder: TasksOrder;
   columnOrder: ColumnOrder;
 };
 export type UpdateProjectUsers = (
@@ -34,10 +36,21 @@ export type UpdateProjectColumnOrder = (
   type: string,
   columnOrder: string[]
 ) => Promise<void>;
+export type UpdateTasksOrder = (
+  projectId: string,
+  taskId: TasksOrder
+) => Promise<void>;
+export type UpdateTasksOrderFromTaskCard = (
+  projectId: string,
+  taskId: string,
+  priority: string,
+  category: string,
+  status: string
+) => Promise<void>;
 export type CreateNewProject = (
   project: CreateProjectDto,
   userId: string
 ) => Promise<void>;
-export type UpdateProject = (project: ProjectDto) => void;
-export type DeleteProject = (projectId: string) => void;
+export type UpdateProject = (project: ProjectDto) => Promise<void>;
+export type DeleteProject = (projectId: string) => Promise<void>;
 export type GetProject = (projectId: string) => Promise<ProjectDto>;

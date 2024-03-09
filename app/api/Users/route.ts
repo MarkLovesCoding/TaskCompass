@@ -48,15 +48,31 @@ export async function POST(req: Request, res: Response): Promise<any> {
         name: "My Personal Project",
         description: "This is your default project",
         archived: false,
-        listsNextAvailable: {
-          priority: { High: 0, Medium: 0, Low: 0 },
+        // listsNextAvailable: {
+        //   priority: { High: 0, Medium: 0, Low: 0 },
+        //   status: {
+        //     "Not Started": 0,
+        //     "Up Next": 0,
+        //     "In Progress": 0,
+        //     Completed: 0,
+        //   },
+        //   category: { Household: 0, Personal: 0, Work: 0, School: 0, Other: 0 },
+        // },
+        tasksOrder: {
+          priority: { High: [], Medium: [], Low: [] },
           status: {
-            "Not Started": 0,
-            "Up Next": 0,
-            "In Progress": 0,
-            Completed: 0,
+            "Not Started": [],
+            "Up Next": [],
+            "In Progress": [],
+            Completed: [],
           },
-          category: { Household: 0, Personal: 0, Work: 0, School: 0, Other: 0 },
+          category: {
+            Household: [],
+            Personal: [],
+            Work: [],
+            School: [],
+            Other: [],
+          },
         },
       };
       const newTeamData = {
@@ -68,7 +84,7 @@ export async function POST(req: Request, res: Response): Promise<any> {
         let initialProjectAssigned = await Project.create({
           name: newProjectData.name,
           description: newProjectData.description,
-          listsNextAvailable: newProjectData.listsNextAvailable,
+          tasksOrder: newProjectData.tasksOrder,
         });
 
         //CREATE NEW USER

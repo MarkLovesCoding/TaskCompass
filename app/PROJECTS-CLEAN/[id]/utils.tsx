@@ -1,5 +1,6 @@
 import type { TaskDto } from "@/use-cases/task/types";
 import type { SortType } from "./constants";
+import { ProjectDto } from "@/use-cases/project/types";
 
 // Type guard to check if 'key' is a valid key of type 'T'
 function isValidKey<T extends object>(obj: T, key: keyof any): key is keyof T {
@@ -34,7 +35,8 @@ function isValidKey<T extends object>(obj: T, key: keyof any): key is keyof T {
 export const sortByType = (
   type: string,
   sortType: SortType,
-  tasks: TaskDto[]
+  tasks: TaskDto[],
+  project: ProjectDto
 ): { [key: string]: TaskDto[] } => {
   if (!sortType[type]) {
     return {};
@@ -48,9 +50,9 @@ export const sortByType = (
       }
       return false;
     });
-    filteredTasks.sort(
-      (a, b) => a.orderInLists[type][1] - b.orderInLists[type][1]
-    );
+    // filteredTasks.sort(
+    //   (a, b) => a.orderInLists[type][1] - b.orderInLists[type][1]
+    // );
 
     // Add the filtered tasks to the result object
     return {

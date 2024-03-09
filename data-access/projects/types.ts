@@ -7,8 +7,10 @@ export type ProjectModelType = {
   team: string;
   createdBy: string;
   archived: boolean;
-  listsNextAvailable: ListsNextAvailable;
+  // listsNextAvailable: ListsNextAvailable;
+  tasksOrder: TasksOrder;
   columnOrder: ColumnOrder;
 };
-export type ListsNextAvailable = Record<string, Record<string, number>>;
+// export type ListsNextAvailable = Record<string, Record<string, number>>;
 export type ColumnOrder = Record<string, string[]>;
+export type TasksOrder = Record<string, Record<string, string[]>>;

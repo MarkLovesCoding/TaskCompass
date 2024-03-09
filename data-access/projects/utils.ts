@@ -1,4 +1,4 @@
-import type { ColumnOrder, ProjectModelType } from "./types";
+import type { ProjectModelType } from "./types";
 import type { ProjectDto } from "@/use-cases/project/types";
 //explicitly convert bson objects to strings for prop injection
 export function projectModelToProjectDto(
@@ -15,11 +15,12 @@ export function projectModelToProjectDto(
 
   const convertedId = project._id.toString();
   const convertedTeam = project.team ? project.team.toString() : "";
-  const plainifyListsNextAvailable = JSON.parse(
-    JSON.stringify(project.listsNextAvailable)
-  );
+  // const plainifyListsNextAvailable = JSON.parse(
+  //   JSON.stringify(project.listsNextAvailable)
+  // );
 
   const plainifyColumnOrder = JSON.parse(JSON.stringify(project.columnOrder));
+  const plainifyTasksOrder = JSON.parse(JSON.stringify(project.tasksOrder));
   return {
     id: convertedId,
     name: project.name,
@@ -29,7 +30,8 @@ export function projectModelToProjectDto(
     team: convertedTeam,
     createdBy: project.createdBy.toString(),
     archived: project.archived,
-    listsNextAvailable: plainifyListsNextAvailable,
+    // listsNextAvailable: plainifyListsNextAvailable,
+    tasksOrder: plainifyTasksOrder,
     columnOrder: plainifyColumnOrder,
   };
 }

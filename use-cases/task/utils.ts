@@ -16,7 +16,7 @@ export function taskToDto(task: TaskEntity): TaskDto {
     archived: task.getArchived(),
     priority: task.getPriority(),
     status: task.getStatus(),
-    orderInLists: task.getOrderInLists(),
+    // orderInLists: task.getOrderInLists(),
     // label: task.getLabel(),
   };
 }
@@ -32,7 +32,7 @@ export function taskToCreateTaskDto(task: TaskEntity): CreateTaskDto {
     archived: task.getArchived(),
     priority: task.getPriority(),
     status: task.getStatus(),
-    orderInLists: task.getOrderInLists(),
+    // orderInLists: task.getOrderInLists(),
     // label: task.getLabel(),
   };
 }
