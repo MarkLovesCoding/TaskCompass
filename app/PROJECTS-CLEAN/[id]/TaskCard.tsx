@@ -172,9 +172,6 @@ export const TaskCard = ({
 
     // if (changes.length === 1) {
     return changes[0];
-    // } else {
-    //   return null; // No changes or multiple changes detected
-    // }
   }
 
   const onSubmit = async (values: z.infer<typeof taskFormSchema>) => {
@@ -188,11 +185,6 @@ export const TaskCard = ({
       values.category
     );
     if (taskOrderChanges !== null) {
-      console.log(
-        "**************************************taskOrderChanges",
-        taskOrderChanges
-      );
-
       await updateProjectTasksOrderFromTaskCardAction(
         values.projectId,
         values.id,
@@ -445,7 +437,7 @@ export const TaskCard = ({
                           (selectedDueDate && date > selectedDueDate) ||
                           date < new Date("1947-01-01")
                         }
-                        initialFocus
+                        // initialFocus
                       />
                     </PopoverContent>
                   </Popover>
@@ -488,7 +480,7 @@ export const TaskCard = ({
                           date < selectedStartDate ||
                           date < new Date("1947-01-01")
                         }
-                        initialFocus
+                        // initialFocus
                       />
                     </PopoverContent>
                   </Popover>
