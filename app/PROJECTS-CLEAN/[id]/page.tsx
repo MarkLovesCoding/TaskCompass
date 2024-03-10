@@ -32,7 +32,7 @@ const Projects = async ({ params }: { params: ParamsType }) => {
   }
 
   return (
-    <div className=" flex align-baseline max-h-[calc(100vh-4rem)]">
+    <div className="absolute top-[4rem] left-0 flex align-baseline max-h-[calc(100vh-4rem)]">
       <ProjectPage
         user={user}
         userId={session?.user.id!}

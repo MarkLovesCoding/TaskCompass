@@ -22,7 +22,7 @@ const HomePageComponent = () => {
     return <div>Loading...</div>;
   } else
     return (
-      <div className="flex flex-col lg:flex-row h-screen">
+      <div className="absolute top-16 left-0 flex flex-col lg:flex-row h-screen">
         {/* Left side (announcement or other content) */}
         <div className=" lg:flex-1  flex flex-col text-center justify-center items-center min-h-[300px]">
           <h1 className=" max-w-[80%] sm:max-w-60% text-3xl  sm:text-2xl leading-tight tracking-lighter md:text-6xl lg:leading-[1.1] text-orange-500 font-bold mb-4">
