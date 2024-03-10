@@ -61,3 +61,19 @@ export const sortByType = (
     };
   }, {});
 };
+export function capitalizeEachWord(str: string) {
+  if (typeof str !== "string" || str.length === 0) {
+    return str;
+  }
+
+  return str
+    .split(" ")
+    .map((word) => {
+      const firstLetter = word.charAt(0).toUpperCase();
+      const restOfWord = word.slice(1).toLowerCase();
+      return firstLetter + restOfWord;
+    })
+    .join(" ");
+}
+
+// Example usage:

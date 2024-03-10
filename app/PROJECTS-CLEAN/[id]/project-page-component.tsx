@@ -9,6 +9,7 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
+import { capitalizeEachWord } from "./utils";
 import { Button } from "@/components/ui/button";
 import { TaskCard } from "./TaskCard";
 import { MemberCardWithPermissions } from "./member-card-with-permissions";
@@ -53,7 +54,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import getProject from "@/data-access/projects/get-project.persistence";
 import getProjectTasks from "@/data-access/tasks/get-project-tasks.persistence";
 import { ArrowDownCircle } from "lucide-react";
@@ -78,6 +79,7 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import Project from "@/db/(models)/Project";
+import { Label } from "@radix-ui/react-label";
 export function ProjectPage({
   // id,
   userId,
@@ -120,16 +122,11 @@ export function ProjectPage({
   if (!project || !tasks) return <div>Loading...</div>;
   return (
     <div className="flex flex-col justify-start items-center min-h-full ">
-      <div className="fixed top-[4rem] left-0 w-8 z-20 h-[calc(100%-4rem)] border-r-2 border-r-gray-700 bg-gray-900"></div>
       <div>
         <Drawer direction="left">
           <DrawerTrigger>
-            <div className="">
-              <div className="">
-                {project.name}
-                {/* <ProjectHeaderStatic project={project} /> */}
-              </div>
-              <ArrowRightCircle className="  fixed z-50 rounded-full fill-background text-slate-600 top-[calc(50%-1em)] left-6  w-8 h-8 self-center cursor-pointer" />
+            <div className="fixed top-[4rem] left-0 w-8 z-20 h-[calc(100%-4rem)] border-r-2 border-r-gray-700 bg-gray-900">
+              <ArrowRightCircle className="  fixed z-50 rounded-full fill-background text-slate-600 top-[calc(50%-1em)] left-4  w-8 h-8 self-center cursor-pointer" />
             </div>
           </DrawerTrigger>
 
@@ -250,22 +247,24 @@ export function ProjectPage({
           {/* <SideBar /> */}
         </Drawer>
       </div>
-      <div className="fixed h-32 top-16 left-8 flex-col border-b-slate-50 w-full bg-background ">
+      <div className="fixed h-16 top-16 left-8 flex-row flex p-2 border-b-slate-50 w-[calc(100vw-2rem)] bg-background ">
         <div className="">
           <Link href={`/TEAMS-CLEAN/${project.team}`}>
-            <h4 className="text-xs  underline cursor-pointer">
-              Back to Team Page
-            </h4>
+            <h4 className="text-xs  underline cursor-pointer">Back to Team</h4>
           </Link>
+          <h4>{project.name}</h4>
         </div>
-        <div>
+        <div className="flex flex-row p-2 justify-center align-middle w-100">
           <div className="p-2">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <FolderKanbanIcon className="w-8 h-8 self-center cursor-pointer" />
+                <Button variant="outline">
+                  <Label>{`View: ${capitalizeEachWord(sortBy)}  `}</Label>
+                  <FolderKanbanIcon className="w-8 h-8 ml-2 self-center cursor-pointer" />
+                </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56">
-                <DropdownMenuLabel>Sort by:</DropdownMenuLabel>
+                <DropdownMenuLabel>View</DropdownMenuLabel>
                 <Separator className="my-2" />
                 <DropdownMenuRadioGroup
                   value={sortBy}
@@ -288,8 +287,11 @@ export function ProjectPage({
             <div className="p-2">
               <Popover>
                 <PopoverTrigger>
-                  <PlusIcon className="w-8 h-8 self-center" />
-                  <span className="sr-only">New Task Button</span>
+                  <Button variant="outline">
+                    <Label>New Task</Label>
+                    <PlusIcon className="w-8 h-8 self-center" />
+                    <span className="sr-only">New Task Button</span>
+                  </Button>
                 </PopoverTrigger>
                 <PopoverContent>
                   <NewTaskCard project={project} />
@@ -299,16 +301,21 @@ export function ProjectPage({
           )}
         </div>
       </div>
-      <main className="absolute top-[8rem] left-[2rem] min-w-[100vw] border-t-2 border-t-gray-700">
-        <ScrollArea className=" flex-1  h-min-full ">
-          {/* <div className="flex-1  h-min-full "> */}
-          <CardView
-            viewType={sortBy}
-            tasks={tasks}
-            project={project}
-            projectUsers={uniqueProjectUsers}
-          />
-          {/* </div> */}
+      <main className="fixed top-[8rem] left-[2rem]   w-[calc(100vw-2rem)] h-[calc(100vh-8rem)] border">
+        <ScrollArea
+          type="always"
+          className=" w-[calc(100vw-2rem)] h-[calc(100vh-8rem)] "
+        >
+          <div className="">
+            <CardView
+              viewType={sortBy}
+              tasks={tasks}
+              project={project}
+              projectUsers={uniqueProjectUsers}
+            />
+          </div>
+          <ScrollBar orientation="horizontal" />
+          <ScrollBar />
         </ScrollArea>
       </main>
     </div>

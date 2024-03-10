@@ -112,7 +112,7 @@ export const NewTaskCard: React.FC<TaskFormProps> = ({ project }) => {
               <FormItem className="grid gap-2">
                 <FormControl>
                   <Input
-                    className={`header-input ${
+                    className={`header-input text-base ${
                       isHeaderEditing ? "editing" : ""
                     }`}
                     placeholder="Task Name"
