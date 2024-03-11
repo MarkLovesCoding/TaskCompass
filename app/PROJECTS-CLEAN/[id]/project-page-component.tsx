@@ -25,6 +25,9 @@ import {
   FolderKanbanIcon,
   ArrowBigLeftIcon,
   ArrowRightCircle,
+  XIcon,
+  ArrowLeftIcon,
+  ArrowLeftCircleIcon,
 } from "lucide-react";
 import Link from "next/link";
 import { PersonStanding } from "lucide-react";
@@ -130,9 +133,11 @@ export function ProjectPage({
             </div>
           </DrawerTrigger>
 
-          <DrawerContent className="h-[calc(100%-2em)] max-w-[650px] rounded-tl-none rounded-bl-none  fixed top-16 left-0">
+          <DrawerContent className="h-[calc(100%-2em)] max-w-[650px] rounded-tl-none rounded-bl-none p-4 fixed top-16 left-0">
             <DrawerClose className="absolute top-1 right-2">
-              <Button variant="outline">X</Button>
+              {/* <Button variant="outline"> */}
+              <ArrowLeftCircleIcon className="fixed right-[-1em] top-[calc(50%-4rem)] w-8 h-8 self-center bg-background" />
+              {/* </Button> */}
             </DrawerClose>
             <DrawerHeader></DrawerHeader>
 
@@ -248,13 +253,13 @@ export function ProjectPage({
         </Drawer>
       </div>
       <div className="fixed h-16 top-16 left-8 flex-row flex p-2 border-b-slate-50 w-[calc(100vw-2rem)] bg-background ">
-        <div className="">
+        <div className="min-w-fit max-h-16">
           <Link href={`/TEAMS-CLEAN/${project.team}`}>
             <h4 className="text-xs  underline cursor-pointer">Back to Team</h4>
           </Link>
           <h4>{project.name}</h4>
         </div>
-        <div className="flex flex-row p-2 justify-center align-middle w-100">
+        <div className="flex flex-row w-full   justify-center align-middle w-100">
           <div className="p-2">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
