@@ -96,7 +96,7 @@ export function ProjectHeader({ project }: { project: ProjectDto }) {
     rules: {
       // Optional rules for validation
       minLength: 4,
-      maxLength: 50,
+      maxLength: 75,
     },
   });
   const onNewProjectFormSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -106,14 +106,14 @@ export function ProjectHeader({ project }: { project: ProjectDto }) {
     router.refresh();
   };
   return (
-    <div className="flex items-center gap-4">
+    <div className="flex items-start lg:gap-4 lg:min-h-[200px]">
       <Form {...form}>
         <form
-          className="mt-4 mr-2 "
+          className="lg:mt-4 mr-2 w-full"
           onSubmit={form.handleSubmit(onNewProjectFormSubmit)}
         >
           <div className="flex flex-row justify-start align-middle">
-            <LayoutIcon className="w-8 h-8 self-center mr-5" />
+            <LayoutIcon className=" h-6 w-6 lg:w-8 lg:h-8 self-center mr-2 lg:mr-5" />
             <FormField
               control={form.control}
               name="name"
@@ -123,7 +123,7 @@ export function ProjectHeader({ project }: { project: ProjectDto }) {
                     <FormControl>
                       <Input
                         type="text"
-                        className={`header-input ${
+                        className={`header-input text-lg lg:text-3xl ${
                           isHeaderEditing ? "editing" : ""
                         }`}
                         placeholder="Task"
@@ -139,38 +139,50 @@ export function ProjectHeader({ project }: { project: ProjectDto }) {
               }}
             />{" "}
           </div>
-
-          <FormField
-            control={form.control}
-            name="description"
-            render={({ field }) => {
-              return (
-                <FormItem className="mt-2">
-                  <FormControl>
-                    <Textarea
-                      className={`description-input resize-none ${
-                        isDescriptionEditing ? "editing" : ""
-                      }`}
-                      placeholder="Description"
-                      {...field}
-                      onClick={handleDescriptionClick}
-                      onChange={handleDescriptionChange}
-                      onBlur={handleDescriptionBlur}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              );
-            }}
-          />
-          {buttonShow && (
-            <div>
-              <Button type="submit">Save Changes</Button>{" "}
-              <Button type="button" onClick={handleCancel}>
-                Cancel
-              </Button>
-            </div>
-          )}
+          <div className="flex lg:flex-col flex-row w-full">
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => {
+                return (
+                  <FormItem className="mt-2 mb-4 lg:mb-8 mr-2   min-w-[66%] max-h-16">
+                    <FormControl>
+                      <Textarea
+                        className={`description-input lg:text-lg max-h-16 overflow-hidden resize-none ${
+                          isDescriptionEditing ? "editing" : ""
+                        }`}
+                        spellCheck="false"
+                        maxLength={75}
+                        placeholder="Description"
+                        {...field}
+                        onClick={handleDescriptionClick}
+                        onChange={handleDescriptionChange}
+                        onBlur={handleDescriptionBlur}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
+            />
+            {buttonShow && (
+              <div className="flex ml-auto lg:flex-row flex-col justify-between">
+                <Button
+                  className="m-1  text-xs lg:text-md h-8 px-2 lg:h-10 lg:px-4 "
+                  type="submit"
+                >
+                  Save
+                </Button>{" "}
+                <Button
+                  className="m-1 text-xs lg:text-md h-8 px-2 lg:h-10 lg:px-4"
+                  type="button"
+                  onClick={handleCancel}
+                >
+                  Cancel
+                </Button>
+              </div>
+            )}
+          </div>
         </form>
       </Form>
     </div>

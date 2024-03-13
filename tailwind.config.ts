@@ -71,6 +71,16 @@ module.exports = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      screens: {
+        mobileLandscape: {
+          raw: "(max-width: 640px) and (orientation: landscape)",
+        },
+        mobilePortrait: {
+          raw: "(max-width: 640px) and (orientation: portrait)",
+        },
+        short: { raw: "(max-height: 640px)" },
+        tall: { raw: "(min-height: 640px)" },
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],

@@ -46,7 +46,7 @@ const ArchiveProjectPopover = ({ project }: { project: ProjectDto }) => {
             </CardDescription>
             <CardFooter className="w-full flex flex-row justify-evenly">
               <Button
-                variant="outline"
+                variant="destructive"
                 onClick={() => {
                   updateProjectArchivedAction(archiveProjectFormObject);
                   setIsOpen(false);
@@ -57,7 +57,7 @@ const ArchiveProjectPopover = ({ project }: { project: ProjectDto }) => {
                 Archive
               </Button>
               <Button
-                variant="outline"
+                variant="default"
                 onClick={() => {
                   // handleArchivedCancel();
                   setIsOpen(false);

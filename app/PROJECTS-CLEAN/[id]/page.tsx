@@ -30,6 +30,12 @@ const Projects = async ({ params }: { params: ParamsType }) => {
   if (!project) {
     return <p>No project found.</p>;
   }
+  console.log("Project: ", project);
+  console.log("Tasks: ", tasks);
+  console.log("Team: ", team);
+  console.log("User: ", user);
+  console.log("Team Users: ", teamUsers);
+  console.log("Project Users: ", projectUsers);
 
   return (
     <div className="absolute top-[4rem] left-0 flex align-baseline max-h-[calc(100vh-4rem)]">
@@ -40,6 +46,7 @@ const Projects = async ({ params }: { params: ParamsType }) => {
         teamUsers={teamUsers}
         projectUsers={projectUsers}
         tasks={tasks}
+        team={team}
       />
       <Toaster />
     </div>

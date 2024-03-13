@@ -17,17 +17,35 @@ import { MailIcon, KeyIcon, CheckIcon, ClockIcon } from "lucide-react";
 import { ProjectDto } from "@/use-cases/project/types";
 import { UserDto } from "@/use-cases/user/types";
 import { getInitials } from "@/app/utils/getInitials";
+import { TaskDto } from "@/use-cases/task/types";
+import MemberCardPermissionsSelect from "./MemberCardPermissionsSelect";
+import { TeamDto } from "@/use-cases/team/types";
 type MemberCardWithPermissionsProps = {
   user: UserDto;
   project: ProjectDto;
+  tasks: TaskDto[];
+  team: TeamDto;
 };
 export function MemberCardWithPermissions({
   user,
   project,
+  tasks,
+  team,
 }: MemberCardWithPermissionsProps) {
+  console.log("taskss: ", tasks);
+  const usersTasks = tasks.filter((task) => task.assignees.includes(user.id));
+  console.log("usersTasks", usersTasks);
+  console.log("user", user);
+  const tasksCompleted = usersTasks.filter(
+    (task) => task.status == "Completed"
+  ).length;
+  const tasksActive = usersTasks.filter(
+    (task) => task.status !== "Completed"
+  ).length;
+
   return (
-    <Card className="w-full max-w-sm mx-auto">
-      <CardHeader className="pb-0">
+    <Card className="max-w-[100%] mx-auto">
+      <CardHeader className="pb-6">
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-3">
             <Avatar className="w-10 h-10">
@@ -37,7 +55,9 @@ export function MemberCardWithPermissions({
             <div className="text-lg font-bold">{user.name}</div>
           </div>
           <div className="ml-auto flex items-center space-x-2">
-            <Badge variant="outline">{user.tasks.length} tasks</Badge>
+            <Badge variant="outline">{`${usersTasks.length} task${
+              usersTasks.length > 1 ? "s" : ""
+            }`}</Badge>
           </div>
         </div>
       </CardHeader>
@@ -48,8 +68,8 @@ export function MemberCardWithPermissions({
             <span className="text-sm font-medium">Email</span>
           </div>
           <div className="text-right">
-            <Link className="text-sm font-medium underline" href="#">
-              Change email
+            <Link className="text-sm font-light underline" href="#">
+              {user.email}
             </Link>
           </div>
         </div>
@@ -59,7 +79,14 @@ export function MemberCardWithPermissions({
             <span className="text-sm font-medium">Role</span>
           </div>
           <div className="text-right">
-            <Select>
+            {project.createdBy !== user.id ? (
+              <MemberCardPermissionsSelect user={user} project={project} />
+            ) : (
+              <Badge className="shrink-0" variant="secondary">
+                Admin
+              </Badge>
+            )}
+            {/* <Select>
               <SelectTrigger>
                 <SelectValue>Admin</SelectValue>
               </SelectTrigger>
@@ -67,7 +94,7 @@ export function MemberCardWithPermissions({
                 <SelectItem value="admin">Admin</SelectItem>
                 <SelectItem value="member">Member</SelectItem>
               </SelectContent>
-            </Select>
+            </Select> */}
           </div>
         </div>
         <div className="grid grid-cols-2 gap-4">
@@ -76,7 +103,7 @@ export function MemberCardWithPermissions({
             <span className="text-sm font-medium">Tasks Completed</span>
           </div>
           <div className="text-right">
-            <span className="text-sm font-medium">10</span>
+            <span className="text-sm font-medium">{tasksCompleted}</span>
           </div>
         </div>
         <div className="grid grid-cols-2 gap-4">
@@ -85,7 +112,7 @@ export function MemberCardWithPermissions({
             <span className="text-sm font-medium">Active Tasks</span>
           </div>
           <div className="text-right">
-            <span className="text-sm font-medium">2</span>
+            <span className="text-sm font-medium">{tasksActive}</span>
           </div>
         </div>
       </CardContent>
