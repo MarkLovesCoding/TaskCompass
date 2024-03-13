@@ -166,7 +166,7 @@ export function ProjectHeader({ project }: { project: ProjectDto }) {
               }}
             />
             {buttonShow && (
-              <div className="flex ml-auto lg:flex-row flex-col justify-between">
+              <div className="flex ml-4 lg:flex-row flex-col justify-between">
                 <Button
                   className="m-1  text-xs lg:text-md h-8 px-2 lg:h-10 lg:px-4 "
                   type="submit"
