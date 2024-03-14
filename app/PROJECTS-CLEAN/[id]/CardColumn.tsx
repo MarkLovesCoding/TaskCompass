@@ -28,7 +28,7 @@ const CardColumn = ({
           {...provided.dragHandleProps}
           className={cn(
             snapshot.isDragging ? "bg-gray-800" : "bg-gray-900",
-            "min-w-[325px] m-6  flex flex-col items-center align-top px-4"
+            "w-[250px] m-6  flex flex-col items-center align-top px-4"
           )}
         >
           <label className="text-2xl font-bold">{`${sorted_type}`}</label>
@@ -43,7 +43,7 @@ const CardColumn = ({
                   snapshot.isDraggingOver
                     ? "bg-gray-800   "
                     : "border-gray-500 border-1",
-                  ` min-w-[325px] m-6  flex flex-col items-center align-top px-4  `
+                  ` w-[250px] m-8  flex flex-col rounded-  items-center align-top px-2  `
                 )}
               >
                 {tasksList.length === 0
