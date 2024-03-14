@@ -106,14 +106,14 @@ export function ProjectHeader({ project }: { project: ProjectDto }) {
     router.refresh();
   };
   return (
-    <div className="flex items-start lg:gap-4 lg:min-h-[200px]">
+    <div className="flex items-start  lg:min-h-[200px] mobileLandscape:max-w-[50%]">
       <Form {...form}>
         <form
-          className="lg:mt-4 mr-2 w-full"
+          className=" mr-2 w-full"
           onSubmit={form.handleSubmit(onNewProjectFormSubmit)}
         >
           <div className="flex flex-row justify-start align-middle">
-            <LayoutIcon className=" h-6 w-6 lg:w-8 lg:h-8 self-center mr-2 lg:mr-5" />
+            <LayoutIcon className=" h-6 w-6   self-center mr-2" />
             <FormField
               control={form.control}
               name="name"
@@ -123,7 +123,7 @@ export function ProjectHeader({ project }: { project: ProjectDto }) {
                     <FormControl>
                       <Input
                         type="text"
-                        className={`header-input text-lg lg:text-3xl ${
+                        className={`header-input text-lg ${
                           isHeaderEditing ? "editing" : ""
                         }`}
                         placeholder="Task"
@@ -139,16 +139,16 @@ export function ProjectHeader({ project }: { project: ProjectDto }) {
               }}
             />{" "}
           </div>
-          <div className="flex lg:flex-col flex-row w-full">
+          <div className="flex flex-col mobileLandscape:flex-row w-full">
             <FormField
               control={form.control}
               name="description"
               render={({ field }) => {
                 return (
-                  <FormItem className="mt-2 mb-4 lg:mb-8 mr-2   min-w-[66%] max-h-16">
+                  <FormItem className="mt-2 mb-2  mr-2   min-w-[66%]  mobileLandscape:max-w-[66%] max-h-16">
                     <FormControl>
                       <Textarea
-                        className={`description-input lg:text-lg max-h-16 overflow-hidden resize-none ${
+                        className={`description-input max-h-16 overflow-hidden resize-none mobileLandscape:text-xs ${
                           isDescriptionEditing ? "editing" : ""
                         }`}
                         spellCheck="false"
@@ -166,7 +166,7 @@ export function ProjectHeader({ project }: { project: ProjectDto }) {
               }}
             />
             {buttonShow && (
-              <div className="flex ml-4 lg:flex-row flex-col justify-between">
+              <div className="flex ml-4 flex-row mobileLandscape:flex-col mt-2 mobileLandscape:mt-0 justify-space ">
                 <Button
                   className="m-1  text-xs lg:text-md h-8 px-2 lg:h-10 lg:px-4 "
                   type="submit"

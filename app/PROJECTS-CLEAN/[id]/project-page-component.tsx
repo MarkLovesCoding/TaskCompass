@@ -122,9 +122,6 @@ export function ProjectPage({
   const projectMembers = projectUsers.filter((user) =>
     user.projectsAsMember.includes(project.id)
   );
-  const screenSize = useScreenSize();
-  const isShort = screenSize.height < 640;
-  const isSkinny = screenSize.width < 550;
   if (!project || !tasks) return <div>Loading...</div>;
   console.log("Tasks", tasks);
   return (
@@ -138,38 +135,39 @@ export function ProjectPage({
               </div>
             </DrawerTrigger>
 
-            {isSkinny && isShort ? (
-              <DrawerContent className="group lg:h-[calc(100vh-2em)] flex justify-center items-center h-[calc(100vh-4em)] overflow-x-visible  max-w-[95vw] tall:max-w-[450px] rounded-tl-none rounded-bl-none p-4 fixed top-16 left-0 border-r-2 border-t-2 border-b-2 border-r-gray-700 hover:border-r-white  border-t-gray-700 hover:border-t-white border-b-gray-700 hover:border-b-white cursor-grab active:cursor-grabbing">
-                <DrawerClose className="absolute top-1 right-2">
-                  {/* <Button variant="outline"> */}
-                  <ArrowLeftCircleIcon className="fixed right-[-1em] top-[calc(50%-4rem)] w-8 h-8 self-center bg-background text-gray-700 group-hover:text-white" />
-                  {/* </Button> */}
-                </DrawerClose>{" "}
-                <DrawerHeader className="flex justify-center items-center">
-                  <Label>Window Too Small, please expand to view</Label>
-                </DrawerHeader>
-              </DrawerContent>
-            ) : (
-              <DrawerContent className="group lg:h-[calc(100vh-2em)] grid grid-cols-3 grid-rows-5  h-[calc(100vh-4em)] overflow-x-visible  max-w-[95vw] tall:max-w-[450px] rounded-tl-none rounded-bl-none p-4 fixed top-16 left-0 border-r-2 border-t-2 border-b-2 border-r-gray-700 hover:border-r-white  border-t-gray-700 hover:border-t-white border-b-gray-700 hover:border-b-white cursor-grab active:cursor-grabbing">
-                <DrawerClose className="absolute top-1 right-2">
-                  {/* <Button variant="outline"> */}
-                  <ArrowLeftCircleIcon className="fixed right-[-1em] top-[calc(50%-4rem)] w-8 h-8 self-center bg-background text-gray-700 group-hover:text-white" />
-                  {/* </Button> */}
-                </DrawerClose>
+            {/* <DrawerContent className=" hidden tooSmall:flex group z-100 justify-center items-center h-[calc(100vh-4em)] overflow-x-visible  max-w-[95vw]  rounded-tl-none rounded-bl-none p-4 fixed top-16 left-0 border-r-2 border-t-2 border-b-2 border-r-gray-700 hover:border-r-white  border-t-gray-700 hover:border-t-white border-b-gray-700 hover:border-b-white cursor-grab active:cursor-grabbing">
+              <DrawerClose className="absolute top-1 right-2">
+                <ArrowLeftCircleIcon className="fixed right-[-1em] top-[calc(50%-4rem)] w-8 h-8 self-center bg-background text-gray-700 group-hover:text-white" />
+              </DrawerClose>
+              <DrawerHeader className="flex justify-center items-center">
+                <Label>Window too small, please expand or rotate to view</Label>
+              </DrawerHeader>
+            </DrawerContent> */}
 
-                {/* <DrawerHeader className=" grid-"> */}
-                <div className="col-start-1 col-end-4 row-start-1 row-end-3 flex flex-col ">
+            <DrawerContent
+            // className={`group tooSmall:hidden p-8 fixed top-16 left-0 h-[calc(100vh-4em)]  grid lg:h-[calc(100vh-2em)] overflow-x-visible  max-w-[85vw] tall:max-w-[425px] rounded-tl-none rounded-bl-none  border-r-2 border-t-2 border-b-2 border-r-gray-700 hover:border-r-white  border-t-gray-700 hover:border-t-white border-b-gray-700 hover:border-b-white cursor-grab active:cursor-grabbing`}
+            >
+              <div
+                className={`group hidden bg-popover p-6 mobileLandscape:p-2  fixed top-16 left-0 h-[calc(100vh-4em)]  tooSmall:grid lg:h-[calc(100vh-2em)] overflow-x-visible  max-w-[425px] mobileLandscape:max-w-[90vw] rounded-tl-none rounded-bl-none  border-r-2 border-t-2 border-b-2 border-r-gray-700 hover:border-r-white  border-t-gray-700 hover:border-t-white border-b-gray-700 hover:border-b-white cursor-grab active:cursor-grabbing`}
+              >
+                <Label>
+                  Window too too small, please expand or rotate to view
+                </Label>
+              </div>
+              <div
+                className={`group tooSmall:hidden grid-rows-12 mobileLandscape:grid-rows-9 grid-cols-1 mobileLandscape:grid-cols-2 p-6 mobileLandscape:p-4 mobileLandscape:pt-1 mobileLandscape:gap-x-24 bg-background fixed top-16 left-0 h-[calc(100vh-4em)]  grid lg:h-[calc(100vh-2em)] overflow-x-visible mobileLandscape:max-w-[95vw] mobileLandscape:min-w-[90vw] max-w-[425px] rounded-tl-none rounded-bl-none  border-r-2 border-t-2 border-b-2 border-r-gray-700 hover:border-r-white  border-t-gray-700 hover:border-t-white border-b-gray-700 hover:border-b-white cursor-grab active:cursor-grabbing`}
+              >
+                <DrawerClose className="absolute top-1 right-2 ">
+                  <ArrowLeftCircleIcon className="fixed right-[-4] z-50 top-[calc(50%-4rem)] w-8 h-8 self-center bg-background text-gray-700 group-hover:text-white" />
+                </DrawerClose>
+                <div className="col-start-1 col-end-4 row-start-1 row-end-3  flex flex-col ">
                   <ProjectHeader project={project} />
                 </div>
-
-                {/* <Separator className="my-1 lg:my-4" orientation="horizontal" /> */}
-                {/* <div className="flex flex-col short:flex-row  "> */}
-                <div className=" row-start-3 row-end-5 col-start-1 col-end-3 flex-1 flex-col mobilePortrait:flex-col mr-2 py-2">
-                  {/* <div className="grid grid-cols-5 gap-4"> */}
-                  <div className="flex flex-row  lg:gap-4 justify-start align-middle lg:min-h-4">
-                    <h3 className="  lg:mb-2 mr-auto text-md lg:text-xl font-bold">
-                      Members
-                    </h3>
+                <div
+                  className={` row-start-4 row-end-8 col-start-1 col-end-2 mobileLandscape:row-start-1 mobileLandscape:row-end-5 mobileLandscape:col-start-2 mobileLandscape:col-end-3 flex-1 flex-col  mr-2 py-2`}
+                >
+                  <div className="flex flex-row   justify-start align-middle lg:min-h-4">
+                    <h3 className="   mr-auto text-md font-bold">Members</h3>
                     <MemberCardSearchTable
                       userId={userId}
                       project={project}
@@ -177,17 +175,15 @@ export function ProjectPage({
                       projectUsers={uniqueProjectUsers}
                     />
                   </div>
-                  {/* Admins Section */}
-                  <div className=" flex flex-col short:flex-row mobilePortrait:flex-col">
-                    {/* <div className=" flex flex-col"> */}
+                  <div className=" flex flex-col  ">
                     <div>
-                      <div className="flex flex-col w-[225px] mobilePortrait:w-[175px]">
-                        <Label className="flex flex-row p-2 lg:p-4 items-center space-x-2 text-popover-foreground text-md">
+                      <div className="flex flex-col  w-[225px] mobileLandscape:w-[175px]">
+                        <Label className="flex flex-row p-2 items-center space-x-2 text-popover-foreground ">
                           <div className="flex flex-row mr-auto items-center space-x-2 ">
-                            <UserCog className="w-4 h-4 opacity-60" />
-                            <p className="text-sm lg:text-md">
+                            <UserCog className="w-4 h-4 mr-1 opacity-60" />
+                            <p className=" text-sm mobileLandscape:text-xs">
                               Project Admins :
-                            </p>{" "}
+                            </p>
                           </div>
                           <p className="ml-auto font-bold">
                             {projectAdmins.length}
@@ -205,7 +201,6 @@ export function ProjectPage({
                                     key={index}
                                     className="w-8 h-8 lg:w-10 lg:h-10"
                                   >
-                                    {/* <AvatarImage src={member.avatar} /> */}
                                     <AvatarFallback
                                       className={` text-xs lg:text-sm bg-gray-500`}
                                     >
@@ -226,30 +221,20 @@ export function ProjectPage({
                             </div>
                           ))}
                         </>
-                        {/* </div> */}
                       </div>
                     </div>
-                    {/* <Separator
-                    className="my-4 w-[75%] mx-auto"
-                    orientation="horizontal"
-                  /> */}
-                    {/* {isShort && (
-                          <Separator
-                            className="my-10   mx-auto"
-                            orientation="vertical"
-                          />
-                        )} */}
-                    <div>
-                      <div className="flex flex-col  w-[225px] mobilePortrait:w-[175px]">
-                        <Label className="flex flex-row p-2 lg:p-4 items-center space-x-2 text-popover-foreground text-md">
-                          <div className="flex flex-row mr-auto items-center space-x-2 ">
-                            <UserIcon className="w-4 h-4 opacity-60" />
 
-                            <p className="text-sm lg:text-md">
+                    <div>
+                      <div className="flex flex-col  w-[225px] mobileLandscape:w-[175px] ">
+                        <Label className="flex flex-row p-2  items-center space-x-2 text-popover-foreground ">
+                          <div className="flex flex-row mr-auto items-center space-x-2 ">
+                            <UserIcon className="w-4 h-4 mr-1 opacity-60" />
+
+                            <p className=" text-sm mobileLandscape:text-xs">
                               Project Members :{" "}
                             </p>
                           </div>
-                          <p className="ml-auto font-bold">
+                          <p className="ml-auto font-bold mobileLandscape:text-sm">
                             {projectMembers.length}
                           </p>
                         </Label>
@@ -261,7 +246,6 @@ export function ProjectPage({
                               <Popover>
                                 <PopoverTrigger>
                                   <Avatar key={index} className=" w-10 h-10">
-                                    {/* <AvatarImage src={member.avatar} /> */}
                                     <AvatarFallback
                                       className={`text-sm bg-gray-500`}
                                     >
@@ -282,38 +266,29 @@ export function ProjectPage({
                             </div>
                           ))}
                         </>
-                        {/* </div> */}
                       </div>
                     </div>
-                    {/* </div> */}
                   </div>
-                  {/* {isShort && !isSkinny ? (
-                    <Separator
-                      className="my-1 lg:my-4  mx-auto"
-                      orientation="vertical"
-                    />
-                  ) : (
-                    <Separator
-                      className="mx-2 lg:mx-4  my-auto"
-                      orientation="horizontal"
-                    />
-                  )} */}
                 </div>
-                <div className="row-start-1 row-end-4 col-start-4 col-end-5">
-                  <div className=" flex small:flex-1 flex-col ml-2">
-                    <h3 className="mb-2 mr-auto text-md lg:text-xl font-bold">
+                <div
+                  className={`col-start-1 col-end-2 row-start-7 row-end-10 
+                      mobileLandscape:row-start-4 mobileLandscape:row-end-6 mobileLandscape:col-start-1 mobileLandscape:col-end-2
+                   `}
+                >
+                  <div className=" flex flex-col ml-2">
+                    <h3 className="mb-2 mobileLandscape:mb-1 mr-auto text-md lg:text-lg font-bold">
                       Tasks
                     </h3>
-                    <div className="flex flex:row flex-wrap short:flex-col">
-                      <div className="flex flex-col lg:w-[225px]  mobilePortrait:w-[175px]">
-                        <Label className="flex flex-row p-1 lg:p-4 items-center space-x-2 text-popover-foreground text-md">
+                    <div className="flex flex-col">
+                      <div className="flex flex-col w-[225px] mobileLandscape:w-[175px] ">
+                        <Label className="flex flex-row p-1  items-center space-x-2 text-popover-foreground">
                           <div className="flex flex-row mr-auto items-center space-x-2 ">
                             <ClockIcon className="w-4 h-4 mr-1  opacity-60" />
-                            <p className="text-sm lg:text-md">
-                              Active Tasks :{" "}
-                            </p>{" "}
+                            <p className=" mobileLandscape:text-xs text-sm">
+                              Active Tasks :
+                            </p>
                           </div>
-                          <p className="ml-auto font-bold">
+                          <p className="ml-auto font-bold mobileLandscape:text-sm">
                             {
                               tasks.filter(
                                 (task) => task.status !== "Completed"
@@ -321,17 +296,17 @@ export function ProjectPage({
                             }
                           </p>
                         </Label>
-                      </div>{" "}
-                      <div className="flex flex-col lg:w-[225px]  mobilePortrait:w-[175px] ">
-                        <Label className="flex flex-row p-1 lg:p-4 items-center space-x-2 text-popover-foreground text-md">
+                      </div>
+                      <div className="flex flex-col w-[225px] mobileLandscape:w-[175px] ">
+                        <Label className="flex flex-row p-1 items-center space-x-2 text-popover-foreground ">
                           <div className="flex flex-row mr-auto items-center space-x-2 ">
                             <CheckIcon className="w-4 h-4 mr-1 opacity-60" />
-                            <p className="text-sm lg:text-md">
-                              Completed Tasks :{" "}
-                            </p>{" "}
+                            <p className="text-sm mobileLandscape:text-xs">
+                              Completed Tasks :
+                            </p>
                           </div>
 
-                          <p className="ml-auto font-bold">
+                          <p className="ml-auto font-bold mobileLandscape:text-sm">
                             {
                               tasks.filter((task) => task.status == "Completed")
                                 .length
@@ -341,11 +316,11 @@ export function ProjectPage({
                       </div>
                       <div className="">
                         <Popover>
-                          <PopoverTrigger className=" flex flex-col lg:w-[225px]  mobilePortrait:w-[175px]">
-                            <div className="flex flex-row items-center space-x-2 p-1 lg:p-4 rounded hover:bg-primary-foreground">
+                          <PopoverTrigger className=" flex flex-col w-[225px] mobileLandscape:w-[175px]">
+                            <div className="flex flex-row items-center space-x-2 p-1  rounded hover:bg-primary-foreground">
                               <div className="flex flex-row mr-auto items-center space-x-2 ">
                                 <ArchiveIcon className="w-4 h-4 mr-1 opacity-60" />
-                                <p className="text-sm lg:text-md">
+                                <p className=" mobileLandscape:text-xs text-sm">
                                   Archived Tasks:
                                 </p>
                               </div>
@@ -353,9 +328,6 @@ export function ProjectPage({
                                 {tasks.filter((task) => task.archived).length}
                               </p>
                             </div>
-                            {/* <p className="text-sm ml-5 underline italic">
-                          {archivedTasks.length > 0 && `unarchive?`}
-                        </p> */}
                           </PopoverTrigger>
                           <PopoverContent>
                             <ScrollArea>
@@ -381,71 +353,25 @@ export function ProjectPage({
                             </ScrollArea>
                           </PopoverContent>
                         </Popover>
-                        {/* <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <ArchiveIcon className="w-8 h-8 self-center cursor-pointer" />
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent className="w-56">
-                        <DropdownMenuGroup>
-                          <DropdownMenuSub>
-                            <DropdownMenuSubTrigger>
-                              Archived Tasks
-                            </DropdownMenuSubTrigger>
-                            <DropdownMenuPortal>
-                              <DropdownMenuSubContent>
-                                <ScrollArea>
-                                  {archivedTasks.length === 0 ? (
-                                    <div className="p-2">No archived tasks</div>
-                                  ) : (
-                                    <div className="p-2 flex flex-col">
-                                      {tasks.map(
-                                        (task, task_idx) =>
-                                          task.archived && (
-                                            <div key={task_idx}>
-                                              <UnarchiveTaskPopover
-                                                task={task}
-                                              />
-                                              {task_idx !== 0 ||
-                                                (task_idx !==
-                                                  archivedTasks.length - 1 && (
-                                                  <Separator className="my-2" />
-                                                ))}
-                                            </div>
-                                          )
-                                      )}
-                                    </div>
-                                  )}
-                                </ScrollArea>
-                              </DropdownMenuSubContent>
-                            </DropdownMenuPortal>
-                          </DropdownMenuSub>
-                        </DropdownMenuGroup>
-                      </DropdownMenuContent>
-                    </DropdownMenu> */}
                       </div>
                     </div>
                   </div>
                 </div>
-                {/* </DrawerHeader> */}
-
-                <div className="flex row-start-5 row-end-5 col-start-4 col-end-5 align-bottom mb-4 lg:my-auto my-0">
-                  {/* <Separator
-                    className="my-1 lg:my-4 mx-auto"
-                    orientation="horizontal"
-                  /> */}
-
+                <div
+                  className={` absolute bottom-0 right-0
+                  flex align-bottom justify-end mb-2 my-0 row-start-11 row-end-13 col-start-1 col-end-2 mobileLandscape:row-start-5 mobileLandscape:row-end-6 mobileLandscape:col-start-2 mobileLandscape:col-end-3
+                  `}
+                >
                   <div className="flex justify-center my-auto">
-                    <Button variant="outline">
-                      {/* <Label>Archive Project</Label> */}
-                      <ArchiveIcon className="w-8 h-8 ml-3 self-center" />
+                    <Button variant="outline" className="h-fit w-fit py-0 px-1">
+                      <ArchiveIcon className="w-4 h-4 mr-1 self-center" />
                       <ArchiveProjectPopover project={project} />
                       <span className="sr-only">Archive Project Button</span>
                     </Button>
                   </div>
-                </div>
-              </DrawerContent>
-            )}
-            {/* <SideBar /> */}
+                </div>{" "}
+              </div>
+            </DrawerContent>
           </Drawer>
         )}
       </div>

@@ -28,7 +28,7 @@ const ArchiveProjectPopover = ({ project }: { project: ProjectDto }) => {
     <>
       <Popover open={isOpen} onOpenChange={setIsOpen}>
         <PopoverTrigger>
-          <div className="p-2">
+          <div className="py-1 px-1 text-xs">
             {/* {project.name} */}
             Archive Project
             <span className="sr-only">Archive Project Trigger</span>
@@ -37,15 +37,16 @@ const ArchiveProjectPopover = ({ project }: { project: ProjectDto }) => {
         <PopoverContent>
           <Card>
             <CardHeader>
-              <CardTitle className="p-2">Archive Project</CardTitle>
+              <CardTitle className="">Archive Project</CardTitle>
             </CardHeader>
-            <CardDescription className="p-4 mb-4 ">
+            <CardDescription className="p-4 mb-2 ">
               <p> Are you sure you want to archive this project? </p>
               <br />
-              <p className="text-xs"> (Can be unarchived later) </p>
+              <p className="text-xs text-center"> (Can be unarchived later) </p>
             </CardDescription>
             <CardFooter className="w-full flex flex-row justify-evenly">
               <Button
+                className="text-sm "
                 variant="destructive"
                 onClick={() => {
                   updateProjectArchivedAction(archiveProjectFormObject);
@@ -57,6 +58,7 @@ const ArchiveProjectPopover = ({ project }: { project: ProjectDto }) => {
                 Archive
               </Button>
               <Button
+                className="text-sm "
                 variant="default"
                 onClick={() => {
                   // handleArchivedCancel();

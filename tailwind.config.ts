@@ -73,13 +73,19 @@ module.exports = {
       },
       screens: {
         mobileLandscape: {
-          raw: "(max-width: 640px) and (orientation: landscape)",
+          raw: "(min-width: 515px) and (min-height:319px) and (max-height:567px)",
         },
-        mobilePortrait: {
-          raw: "(max-width: 640px) and (orientation: portrait)",
+        // mobilePortrait: {
+        //   raw: "(max-width: 640px) and (orientation: portrait)",
+        // },
+        // short: { raw: "(max-height: 768px)" },
+        // tall: { raw: "(min-height: 768px)" },
+        tooSmall: {
+          // raw: "(max-width: 325px)",
+          // raw: "(max-width: 325px), (max-height:325px)",
+          // raw: "(max-width:515px) and (min-height:325px) and (max-height:640px)",
+          raw: "(max-width: 319px), (max-height:319px), (max-width:515px) and (min-height:319px) and (max-height:567px)",
         },
-        short: { raw: "(max-height: 640px)" },
-        tall: { raw: "(min-height: 640px)" },
       },
     },
   },

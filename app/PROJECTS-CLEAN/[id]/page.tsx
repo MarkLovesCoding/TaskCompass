@@ -20,7 +20,11 @@ const Projects = async ({ params }: { params: ParamsType }) => {
   unstable_noStore();
   console.log("Params: ", params);
   const session = await sessionAuth(`PROJECTS-CLEAN/${params.id}`);
-  const project = await getProject(params.id);
+  let projectIdFromParams;
+  if (params.id.length === 24) {
+    projectIdFromParams = params.id;
+  } else projectIdFromParams = "";
+  const project = await getProject(projectIdFromParams);
   const tasks = await getProjectTasks(project);
   const team = await getTeam(project.team);
   const user = await getUserObject(session!.user.id);
