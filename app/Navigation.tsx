@@ -22,6 +22,7 @@ import { sessionAuth } from "@/lib/sessionAuth";
 import { ProjectDto } from "@/use-cases/project/types";
 import { TeamDto } from "@/use-cases/team/types";
 import { UserDto } from "@/use-cases/user/types";
+import { CompassIcon } from "lucide-react";
 
 const Navigation: React.FC = async () => {
   const session = await sessionAuth();
@@ -43,6 +44,7 @@ const Navigation: React.FC = async () => {
             className="flex items-center gap-2 text-lg font-semibold sm:text-base mr-4"
             href="#"
           >
+            <CompassIcon className="w-10 h-10 fill-primary" />
             <span className="font-bold">TaskCompass</span>
             <span className="sr-only">Task Compass Project Management App</span>
           </Link>
