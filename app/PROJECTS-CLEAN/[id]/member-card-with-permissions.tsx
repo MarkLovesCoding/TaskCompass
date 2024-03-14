@@ -44,7 +44,7 @@ export function MemberCardWithPermissions({
   ).length;
 
   return (
-    <Card className="max-w-[100%] mx-auto">
+    <Card className="max-w-[95vw] mx-auto">
       <CardHeader className="pb-6">
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-3">
@@ -61,22 +61,28 @@ export function MemberCardWithPermissions({
           </div>
         </div>
       </CardHeader>
-      <CardContent className="pt-0 space-y-4">
-        <div className="grid grid-cols-2 gap-4">
-          <div className="flex items-center space-x-2">
+      <CardContent className="pt-0 space-y-4 smallWidth:space-y-2">
+        <div className="grid grid-cols-2 gap-4 smallWidth:gap-2">
+          <div className="flex items-center space-x-2 smallWidth:space-x-1">
             <MailIcon className="w-4 h-4 opacity-60" />
-            <span className="text-sm font-medium">Email</span>
+            <span className="text-sm font-medium smallWidth:text-xs   ">
+              Email
+            </span>
           </div>
-          <div className="text-right">
-            <Link className="text-sm font-light underline" href="#">
+          <div className="text-right  truncate">
+            <Link
+              title={user.email}
+              className="text-xs smallWidth:text-xs font-light text-right underline"
+              href="#"
+            >
               {user.email}
             </Link>
           </div>
         </div>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="flex items-center space-x-2">
+        <div className="grid grid-cols-2 gap-4 smallWidth:gap-2">
+          <div className="flex items-center space-x-2 smallWidth:space-x-1">
             <KeyIcon className="w-4 h-4 opacity-60" />
-            <span className="text-sm font-medium">Role</span>
+            <span className="text-sm smallWidth:text-xs font-medium">Role</span>
           </div>
           <div className="text-right">
             {project.createdBy !== user.id ? (
@@ -97,22 +103,30 @@ export function MemberCardWithPermissions({
             </Select> */}
           </div>
         </div>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="flex items-center space-x-2">
+        <div className="grid grid-cols-2 gap-4 smallWidth:gap-2">
+          <div className="flex items-center space-x-2 smallWidth:space-x-1">
             <CheckIcon className="w-4 h-4 opacity-60" />
-            <span className="text-sm font-medium">Tasks Completed</span>
+            <span className="text-sm smallWidth:text-xs font-medium">
+              Tasks Completed
+            </span>
           </div>
           <div className="text-right">
-            <span className="text-sm font-medium">{tasksCompleted}</span>
+            <span className="text-sm  smallWidth:text-xs font-medium">
+              {tasksCompleted}
+            </span>
           </div>
         </div>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="flex items-center space-x-2">
+        <div className="grid grid-cols-2 gap-4 smallWidth:gap-">
+          <div className="flex items-center space-x-2 smallWidth:space-x-1">
             <ClockIcon className="w-4 h-4 opacity-60" />
-            <span className="text-sm font-medium">Active Tasks</span>
+            <span className="text-sm smallWidth:text-xs font-medium">
+              Active Tasks
+            </span>
           </div>
           <div className="text-right">
-            <span className="text-sm font-medium">{tasksActive}</span>
+            <span className="text-sm smallWidth:text-xs  font-medium">
+              {tasksActive}
+            </span>
           </div>
         </div>
       </CardContent>

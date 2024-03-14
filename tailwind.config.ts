@@ -78,7 +78,7 @@ module.exports = {
         // mobilePortrait: {
         //   raw: "(max-width: 640px) and (orientation: portrait)",
         // },
-        // short: { raw: "(max-height: 768px)" },
+        smallWidth: { raw: "(max-width: 414px)" },
         // tall: { raw: "(min-height: 768px)" },
         tooSmall: {
           // raw: "(max-width: 325px)",

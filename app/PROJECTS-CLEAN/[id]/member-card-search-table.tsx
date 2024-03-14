@@ -134,7 +134,7 @@ export function MemberCardSearchTable({
           <span className="sr-only">Edit Members</span>
         </div>
       </PopoverTrigger>
-      <PopoverContent className="w-fit">
+      <PopoverContent className="max-w-[95vw] mx-2 w-fit">
         <Command>
           <CommandInput className="h-9" placeholder="Search members..." />
           <CommandGroup>
