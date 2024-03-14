@@ -19,7 +19,7 @@ import { ProjectDto } from "@/use-cases/project/types";
 import { UserDto } from "@/use-cases/user/types";
 import { Draggable } from "@hello-pangea/dnd";
 import styled from "styled-components";
-import { Scroll } from "lucide-react";
+import { Clock2Icon, Scroll } from "lucide-react";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { ScrollBar } from "@/components/ui/scroll-area";
 import { format, formatDistanceStrict } from "date-fns";
@@ -144,7 +144,8 @@ const TaskCardSmallDialog = ({
                     </CardTitle>
                     <CardDescription className="text-start text-sm">
                       <p className="text-xs mb-2">{task.description}</p>
-                      <div>
+                      <div className="flex flex-row">
+                        <Clock2Icon className="w-4 h-4 mr-2 " />
                         <Label className="text-xs">
                           Due in :{" "}
                           {formatDistanceStrict(task.dueDate, task.startDate)}
