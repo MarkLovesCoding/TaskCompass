@@ -62,8 +62,8 @@ import { getInitials } from "@/app/utils/getInitials";
 import { updateProjectTasksOrderFromTaskCardAction } from "../_actions/update-project-tasks-order-from-task-card.action";
 const taskFormSchema = z.object({
   id: z.string(),
-  name: z.string().min(4).max(25),
-  description: z.string().min(5).max(50),
+  name: z.string().min(3).max(25),
+  description: z.string().min(3).max(50),
   priority: z.string().min(3),
   status: z.string().min(3),
   category: z.string().min(3),
@@ -291,6 +291,7 @@ export const TaskCard = ({
                     placeholder="Task Name"
                     type="text"
                     maxLength={25}
+                    minLength={3}
                     spellCheck="false"
                     {...field}
                     onClick={handleNameClick}
@@ -316,6 +317,7 @@ export const TaskCard = ({
                     spellCheck="false"
                     {...field}
                     maxLength={50}
+                    minLength={3}
                     onClick={handleDescriptionClick}
                     onChange={field.onChange}
                     onBlur={handleDescriptionBlur}
