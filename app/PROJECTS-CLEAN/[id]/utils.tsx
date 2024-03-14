@@ -75,5 +75,3 @@ export function capitalizeEachWord(str: string) {
     })
     .join(" ");
 }
-
-// Example usage:

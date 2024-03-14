@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { RadioGroupItem, RadioGroup } from "@/components/ui/radio-group";
 import toast from "react-hot-toast";
-
+import { Label } from "@/components/ui/label";
 import {
   SelectValue,
   SelectTrigger,
@@ -13,6 +13,7 @@ import {
   SelectContent,
   Select,
 } from "@/components/ui/select";
+import { ArchiveIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -269,155 +270,179 @@ export const TaskCard = ({
   const statusOptions = ["Not Started", "Up Next", "In Progress", "Completed"];
   renderCount++;
   return (
-    <>
-      <div className="w-[300px]">
-        <Form {...form}>
-          <form
-            ref={formRef}
-            onSubmit={form.handleSubmit(onSubmit)}
-            method="post"
-            className="grid gap-6 w-full max-w-md mr-auto  "
-          >
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem className="grid gap-2">
-                  <FormControl>
-                    <Input
-                      className={`header-input ${
-                        isNameEditing ? "editing" : ""
-                      }`}
-                      placeholder="Task Name"
-                      type="text"
-                      {...field}
-                      onClick={handleNameClick}
-                      onChange={field.onChange}
-                      onBlur={handleNameBlur}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem className="grid gap-2">
-                  <FormControl>
-                    <Textarea
-                      className={`description-input w-[300px] resize-none ${
-                        isDescriptionEditing ? "editing" : ""
-                      }`}
-                      placeholder="Description"
-                      {...field}
-                      onClick={handleDescriptionClick}
-                      onChange={field.onChange}
-                      onBlur={handleDescriptionBlur}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="priority"
-              render={({ field }) => (
-                <FormItem className="grid gap-2">
-                  <FormLabel>Priority</FormLabel>
-                  <FormControl>
-                    <RadioGroup
-                      name="priority"
-                      id="priority"
+    <div className="max-w-[95%]">
+      <Form {...form}>
+        <form
+          ref={formRef}
+          onSubmit={form.handleSubmit(onSubmit)}
+          method="post"
+          className="grid gap-4 w-full max-w-md mr-auto  "
+        >
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem className="grid gap-2">
+                <FormControl>
+                  <Input
+                    className={`header-input text-md max-w-[75%] ${
+                      isNameEditing ? "editing" : ""
+                    }`}
+                    placeholder="Task Name"
+                    type="text"
+                    maxLength={25}
+                    spellCheck="false"
+                    {...field}
+                    onClick={handleNameClick}
+                    onChange={field.onChange}
+                    onBlur={handleNameBlur}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem className="grid gap-2 mb-0">
+                <FormControl>
+                  <Textarea
+                    className={`description-input max-w-[95%] resize-none ${
+                      isDescriptionEditing ? "editing" : ""
+                    }`}
+                    placeholder="Description"
+                    spellCheck="false"
+                    {...field}
+                    maxLength={50}
+                    onClick={handleDescriptionClick}
+                    onChange={field.onChange}
+                    onBlur={handleDescriptionBlur}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <div className="flex flex-row ">
+            <div className="flex flex-1 px-2 items-start">
+              <FormField
+                control={form.control}
+                name="priority"
+                render={({ field }) => (
+                  <FormItem className="grid gap-1 pt-2 max-h-[200px]">
+                    <FormLabel className=" text-xs font-bold ">
+                      Priority
+                    </FormLabel>
+                    <FormControl>
+                      <RadioGroup
+                        name="priority"
+                        id="priority"
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                        // className="flex flex-col space-y-1"
+                      >
+                        {priorityOptions.map((priority, _index) => (
+                          <Fragment key={_index}>
+                            <FormItem
+                              className={
+                                "flex items-center justify-start space-x-3 "
+                              }
+                            >
+                              <FormControl>
+                                <RadioGroupItem
+                                  id={`priority-${priority.option}`}
+                                  value={priority.option}
+                                />
+                              </FormControl>{" "}
+                              <FormLabel className="font-normal text-xs pb-2">
+                                {priority.option}
+                              </FormLabel>
+                            </FormItem>
+                          </Fragment>
+                        ))}
+                      </RadioGroup>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="flex flex-1 px-2  flex-col">
+              <FormField
+                control={form.control}
+                name="status"
+                render={({ field }) => (
+                  <FormItem className="pb-2">
+                    <FormLabel className=" text-xs font-bold">Status</FormLabel>
+                    <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
-                      // className="flex flex-col space-y-1"
                     >
-                      {priorityOptions.map((priority, _index) => (
-                        <Fragment key={_index}>
-                          <FormItem
-                            className={"flex items-center space-x-3 space-y-0"}
+                      <FormControl>
+                        <SelectTrigger className="text-xs">
+                          <SelectValue placeholder="Select a status" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {statusOptions?.map((status, _index) => (
+                          <SelectItem
+                            className="text-xs "
+                            key={_index}
+                            value={status}
                           >
-                            <FormControl>
-                              <RadioGroupItem
-                                id={`priority-${priority.option}`}
-                                value={priority.option}
-                              />
-                            </FormControl>{" "}
-                            <FormLabel className={"font-normal"}>
-                              {priority.option}
-                            </FormLabel>
-                          </FormItem>
-                        </Fragment>
-                      ))}
-                    </RadioGroup>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />{" "}
-            <FormField
-              control={form.control}
-              name="status"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Status</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a status" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {statusOptions?.map((status, _index) => (
-                        <SelectItem key={_index} value={status}>
-                          {status}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="category"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Category</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a category" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {categories?.map((category, _index) => (
-                        <SelectItem key={_index} value={category}>
-                          {category}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                            {status}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="category"
+                render={({ field }) => (
+                  <FormItem className="pb-2">
+                    <FormLabel className=" text-xs font-bold ">
+                      Category
+                    </FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger className="text-xs ">
+                          <SelectValue placeholder="Select a category" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {categories?.map((category, _index) => (
+                          <SelectItem
+                            className="text-xs "
+                            key={_index}
+                            value={category}
+                          >
+                            {category}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
+          <div className="flex flex-row justify-between">
             <FormField
               control={form.control}
               name="startDate"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="flex align-middle">
+                <FormItem className="flex-1 px-2">
+                  <FormLabel className="flex  font-bold text-xs align-middle">
                     Start Date
                   </FormLabel>
                   <Popover
@@ -428,7 +453,7 @@ export const TaskCard = ({
                         <Button
                           variant={"outline"}
                           className={cn(
-                            "w-full pl-3 text-left font-normal",
+                            "w-full pl-3 text-left text-xs font-normal",
                             !field.value && "text-muted-foreground"
                           )}
                         >
@@ -461,8 +486,10 @@ export const TaskCard = ({
               control={form.control}
               name="dueDate"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="flex align-middle">Due Date</FormLabel>
+                <FormItem className="flex-1 px-2">
+                  <FormLabel className="flex font-bold text-xs  align-middle">
+                    Due Date
+                  </FormLabel>
                   <Popover
                   // onOpenChange={handleDueDateChange}
                   >
@@ -471,7 +498,7 @@ export const TaskCard = ({
                         <Button
                           variant={"outline"}
                           className={cn(
-                            "w-full pl-3 text-left font-normal",
+                            "w-full pl-3 text-left text-xs font-normal",
                             !field.value && "text-muted-foreground"
                           )}
                         >
@@ -501,141 +528,149 @@ export const TaskCard = ({
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="assignees"
-              render={({ field }) => (
-                <FormItem className="flex flex-col gap-3">
-                  <FormLabel>Users Assigned</FormLabel>
-                  <div className="flex flex-row w-full">
-                    {projectUsers
-                      .filter((user) => currentAssignees.includes(user.id))
-                      .map((user, index) => (
-                        <Avatar key={index} className=" w-12 h-12 m-2">
-                          {/* <AvatarImage src={user.avatar} /> */}
-                          <AvatarFallback className={`text-sm bg-gray-500`}>
-                            {getInitials(user.name)}
+          </div>
+          <FormField
+            control={form.control}
+            name="assignees"
+            render={({ field }) => (
+              <FormItem className="flex px-2 flex-col gap-3">
+                <FormLabel className="text-xs font-bold">
+                  Users Assigned
+                </FormLabel>
+                <div className="flex flex-row w-full">
+                  {projectUsers
+                    .filter((user) => currentAssignees.includes(user.id))
+                    .map((user, index) => (
+                      <Avatar key={index} className=" w-12 h-12 m-2">
+                        {/* <AvatarImage src={user.avatar} /> */}
+                        <AvatarFallback className={`text-sm bg-gray-500`}>
+                          {getInitials(user.name)}
+                        </AvatarFallback>
+                      </Avatar>
+                    ))}
+                  <FormControl>
+                    <DropdownMenu
+                    //  onOpenChange={handleAssigneesChange}
+                    >
+                      <DropdownMenuTrigger asChild>
+                        <Avatar className="cursor-pointer  w-12 h-12 m-2">
+                          <AvatarFallback
+                            className={`text-sm bg-gray-500 hover:bg-grey:700`}
+                          >
+                            +
                           </AvatarFallback>
                         </Avatar>
-                      ))}
-                    <FormControl>
-                      <DropdownMenu
-                      //  onOpenChange={handleAssigneesChange}
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent
+                        onFocusOutside={(e) => e.preventDefault()}
+                        className="w-56"
                       >
-                        <DropdownMenuTrigger asChild>
-                          <Avatar className="cursor-pointer  w-12 h-12 m-2">
-                            <AvatarFallback
-                              className={`text-sm bg-gray-500 hover:bg-grey:700`}
-                            >
-                              +
-                            </AvatarFallback>
-                          </Avatar>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent
-                          onFocusOutside={(e) => e.preventDefault()}
-                          className="w-56"
-                        >
-                          <DropdownMenuLabel>Project Users</DropdownMenuLabel>
-                          <DropdownMenuSeparator />
-                          {projectUsers?.map((user, index) => (
-                            <DropdownMenuCheckboxItem
-                              key={index}
-                              onSelect={(e) => {
-                                e.preventDefault();
-                              }}
-                              checked={field.value.includes(user.id)} // Check if user is already in assignees
-                              onCheckedChange={(checked) => {
-                                const updatedAssignees = checked
-                                  ? [...field.value, user.id] // Add user to assignees array
-                                  : field.value.filter(
-                                      (assignee) => assignee !== user.id
-                                    ); // Remove user from assignees array
-                                field.onChange(updatedAssignees); // Update assignees field value
-                              }}
-                            >
-                              {user.name}
-                            </DropdownMenuCheckboxItem>
-                          ))}
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </FormControl>
-                  </div>
+                        <DropdownMenuLabel>Project Users</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        {projectUsers?.map((user, index) => (
+                          <DropdownMenuCheckboxItem
+                            key={index}
+                            onSelect={(e) => {
+                              e.preventDefault();
+                            }}
+                            checked={field.value.includes(user.id)} // Check if user is already in assignees
+                            onCheckedChange={(checked) => {
+                              const updatedAssignees = checked
+                                ? [...field.value, user.id] // Add user to assignees array
+                                : field.value.filter(
+                                    (assignee) => assignee !== user.id
+                                  ); // Remove user from assignees array
+                              field.onChange(updatedAssignees); // Update assignees field value
+                            }}
+                          >
+                            {user.name}
+                          </DropdownMenuCheckboxItem>
+                        ))}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </FormControl>
+                </div>
 
-                  <FormMessage />
-                </FormItem>
-              )}
-            />{" "}
-          </form>
-        </Form>{" "}
-        <Form {...form}>
-          <form
-            ref={archivedFormRef}
-            onSubmit={archivedForm.handleSubmit(onArchivedFormSubmit)}
-            method="post"
-            className="grid gap-6 w-full max-w-md mr-auto  "
-          >
-            <FormField
-              control={archivedForm.control}
-              name="archived"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="flex align-middle">
-                    Archive Task
-                  </FormLabel>
-                  <Popover open={archivedOpen} onOpenChange={setArchivedOpen}>
-                    <PopoverTrigger asChild>
-                      <FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />{" "}
+        </form>
+      </Form>{" "}
+      <Form {...form}>
+        <form
+          ref={archivedFormRef}
+          onSubmit={archivedForm.handleSubmit(onArchivedFormSubmit)}
+          method="post"
+          className="grid gap-6 w-full max-w-md mr-auto  "
+        >
+          <FormField
+            control={archivedForm.control}
+            name="archived"
+            render={({ field }) => (
+              <FormItem>
+                <Popover open={archivedOpen} onOpenChange={setArchivedOpen}>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        title="Archive Task"
+                        variant="outline"
+                        className="h-fit w-fit py-2 px-2 absolute top-0 right-8"
+                      >
+                        <ArchiveIcon className="w-4 h-4  self-center" />
+                        <span className="sr-only">Archive Task Button</span>
+                        {/* <Label className="text-xs">Archive Task</Label> */}
+                      </Button>
+                      {/* <Button
+                        variant={"outline"}
+                        className={cn(
+                          "w-full pl-3 text-left font-normal",
+                          "text-muted-foreground"
+                        )}
+                      >
+                        Archive Task
+                      </Button> */}
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Card>
+                      <CardHeader>
+                        <CardTitle>Archive Task</CardTitle>
+                      </CardHeader>
+                      <CardDescription>
+                        Are you sure you want to archive this task? It can be
+                        retrieved from the archive later.
+                      </CardDescription>
+                      <CardFooter>
                         <Button
-                          variant={"outline"}
-                          className={cn(
-                            "w-full pl-3 text-left font-normal",
-                            "text-muted-foreground"
-                          )}
+                          variant="outline"
+                          onClick={() => {
+                            console.log("archived");
+                            handleArchivedSubmit();
+                          }}
                         >
                           Archive
                         </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Card>
-                        <CardHeader>
-                          <CardTitle>Archive Task</CardTitle>
-                        </CardHeader>
-                        <CardDescription>
-                          Are you sure you want to archive this task? It can be
-                          retrieved from the archive later.
-                        </CardDescription>
-                        <CardFooter>
-                          <Button
-                            variant="outline"
-                            onClick={() => {
-                              console.log("archived");
-                              handleArchivedSubmit();
-                            }}
-                          >
-                            Archive
-                          </Button>
-                          <Button
-                            variant="outline"
-                            onClick={() => {
-                              handleArchivedCancel();
-                              console.log("cancel");
-                            }}
-                          >
-                            Cancel
-                          </Button>
-                        </CardFooter>
-                      </Card>
-                    </PopoverContent>
-                  </Popover>
+                        <Button
+                          variant="outline"
+                          onClick={() => {
+                            handleArchivedCancel();
+                            console.log("cancel");
+                          }}
+                        >
+                          Cancel
+                        </Button>
+                      </CardFooter>
+                    </Card>
+                  </PopoverContent>
+                </Popover>
 
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </form>
-        </Form>
-      </div>
-    </>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </form>
+      </Form>
+    </div>
   );
 };

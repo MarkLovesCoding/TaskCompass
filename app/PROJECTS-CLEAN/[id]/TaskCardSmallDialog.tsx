@@ -6,7 +6,11 @@ import {
 } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { TaskDto } from "@/use-cases/task/types";
-import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+} from "@/components/ui/dialog-task-card";
 import { Badge } from "@/components/ui/badge";
 import React, { useState } from "react";
 import { TaskCard } from "./TaskCard";
@@ -14,6 +18,9 @@ import { ProjectDto } from "@/use-cases/project/types";
 import { UserDto } from "@/use-cases/user/types";
 import { Draggable } from "@hello-pangea/dnd";
 import styled from "styled-components";
+import { Scroll } from "lucide-react";
+import { ScrollArea } from "@radix-ui/react-scroll-area";
+import { ScrollBar } from "@/components/ui/scroll-area";
 
 const Container = styled.div``;
 const TaskCardSmallDialog = ({
@@ -115,14 +122,19 @@ const TaskCardSmallDialog = ({
       </DialogTrigger>
       <DialogContent
         onOpenAutoFocus={(event: Event) => event.preventDefault()}
-        className="p-6 w-max-[768px] bg-gray-800 rounded-lg border-2"
+        className=" p-6 w-max-[300px] h-max-[550px]  bg-gray-800 rounded-lg border-2"
       >
-        <TaskCard
-          task={task}
-          project={project}
-          projectUsers={projectUsers}
-          isTaskOpen={taskCardOpenStates[task.id]}
-        />
+        <ScrollArea className="  ">
+          <TaskCard
+            task={task}
+            project={project}
+            projectUsers={projectUsers}
+            isTaskOpen={taskCardOpenStates[task.id]}
+          />
+          <ScrollBar orientation="vertical" className="h-full">
+            {/* <ScrollBar orientation="horizontal" className="w-full "> */}
+          </ScrollBar>
+        </ScrollArea>
       </DialogContent>
     </Dialog>
   );
