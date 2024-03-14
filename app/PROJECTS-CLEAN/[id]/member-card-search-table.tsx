@@ -13,7 +13,13 @@ import {
 } from "@/components/ui/command";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { CircleEllipsis, PlusCircleIcon, PlusIcon, XIcon } from "lucide-react";
+import {
+  CircleEllipsis,
+  PlusCircleIcon,
+  PlusIcon,
+  XIcon,
+  UserSearchIcon,
+} from "lucide-react";
 import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
 import { getInitials } from "@/app/utils/getInitials";
 import { ProjectDto } from "@/use-cases/project/types";
@@ -125,9 +131,9 @@ export function MemberCardSearchTable({
           {/* <PlusCircleIcon className="w-10 h-10" /> */}
           <Button
             variant="outline"
-            className=" text-xs lg:text-md py-1 m-1 h-8 lg:h-10 lg:px-4 bg-primary-foreground"
+            className=" text-xs    py-1 m-1 h-8  bg-primary-foreground"
           >
-            Edit
+            <UserSearchIcon />
             {/* <PlusCircleIcon className="w-10 h-10" /> */}
           </Button>
           {/* <CircleEllipsis className="w-10 h-10" /> */}

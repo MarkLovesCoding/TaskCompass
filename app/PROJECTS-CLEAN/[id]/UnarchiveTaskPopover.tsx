@@ -28,20 +28,23 @@ const UnarchiveTaskPopover = ({ task }: { task: TaskDto }) => {
     <>
       <Popover open={isOpen} onOpenChange={setIsOpen}>
         <PopoverTrigger>
-          {task.name}
-          <span className="sr-only">Activate Task Menu Trigger</span>
+          <div className="py-1 px-1 text-xs">
+            {task.name}
+            <span className="sr-only">Activate Task Menu Trigger</span>
+          </div>
         </PopoverTrigger>{" "}
         <PopoverContent>
           <Card>
             <CardHeader>
-              <CardTitle>Activate Task</CardTitle>
+              <CardTitle className="text-center">Activate Task</CardTitle>
             </CardHeader>
-            <CardDescription>
-              Are you sure you want to activate this task?
+            <CardDescription className="p-4 mb-2 ">
+              <p> Are you sure you want to activate this task? </p>
             </CardDescription>
-            <CardFooter>
+            <CardFooter className="w-full flex flex-row justify-evenly">
               <Button
-                variant="outline"
+                className="text-sm "
+                variant="default"
                 onClick={() => {
                   updateTaskArchivedAction(unarchiveFormObject);
                   setIsOpen(false);
@@ -51,6 +54,7 @@ const UnarchiveTaskPopover = ({ task }: { task: TaskDto }) => {
                 Activate
               </Button>
               <Button
+                className="text-sm "
                 variant="outline"
                 onClick={() => {
                   // handleArchivedCancel();

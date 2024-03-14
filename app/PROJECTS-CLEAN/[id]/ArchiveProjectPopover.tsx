@@ -59,7 +59,7 @@ const ArchiveProjectPopover = ({ project }: { project: ProjectDto }) => {
               </Button>
               <Button
                 className="text-sm "
-                variant="default"
+                variant="outline"
                 onClick={() => {
                   // handleArchivedCancel();
                   setIsOpen(false);

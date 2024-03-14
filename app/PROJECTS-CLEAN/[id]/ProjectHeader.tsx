@@ -106,7 +106,7 @@ export function ProjectHeader({ project }: { project: ProjectDto }) {
     router.refresh();
   };
   return (
-    <div className="flex items-start  lg:min-h-[200px] mobileLandscape:max-w-[50%]">
+    <div className="flex items-start   mobileLandscape:max-w-[50%]">
       <Form {...form}>
         <form
           className=" mr-2 w-full"
@@ -167,14 +167,11 @@ export function ProjectHeader({ project }: { project: ProjectDto }) {
             />
             {buttonShow && (
               <div className="flex ml-4 flex-row mobileLandscape:flex-col mt-2 mobileLandscape:mt-0 justify-space ">
-                <Button
-                  className="m-1  text-xs lg:text-md h-8 px-2 lg:h-10 lg:px-4 "
-                  type="submit"
-                >
+                <Button className="m-1  text-xs  h-8 px-2 " type="submit">
                   Save
                 </Button>{" "}
                 <Button
-                  className="m-1 text-xs lg:text-md h-8 px-2 lg:h-10 lg:px-4"
+                  className="m-1 text-xs d h-8 px-2 "
                   type="button"
                   onClick={handleCancel}
                 >
