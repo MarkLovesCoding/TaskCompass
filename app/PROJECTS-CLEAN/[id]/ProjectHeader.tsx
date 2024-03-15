@@ -106,7 +106,7 @@ export function ProjectHeader({ project }: { project: ProjectDto }) {
     router.refresh();
   };
   return (
-    <div className="flex items-start   mobileLandscape:max-w-[50%]">
+    <div className="flex items-start   mobileLandscape:max-w-[50%] border-secondary border-solid border-[1px]  rounded-lg p-2">
       <Form {...form}>
         <form
           className=" mr-2 w-full"

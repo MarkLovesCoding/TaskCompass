@@ -155,16 +155,16 @@ export function ProjectPage({
                 </Label>
               </div>
               <div
-                className={`group tooSmall:hidden grid-rows-12 mobileLandscape:grid-rows-9 grid-cols-1 mobileLandscape:grid-cols-2 p-6 mobileLandscape:p-4 mobileLandscape:pt-1 mobileLandscape:gap-x-24 bg-background fixed top-16 left-0 h-[calc(100vh-4em)]  grid  overflow-x-visible mobileLandscape:max-w-[95vw] mobileLandscape:min-w-[90vw] max-w-[425px] rounded-tl-none rounded-bl-none  border-r-2 border-t-2 border-b-2 border-r-gray-700 hover:border-r-white  border-t-gray-700 hover:border-t-white border-b-gray-700 hover:border-b-white cursor-grab active:cursor-grabbing`}
+                className={`group tooSmall:hidden grid-rows-12 mobileLandscape:grid-rows-9 rounded grid-cols-1 mobileLandscape:grid-cols-2 p-6 mobileLandscape:p-4 mobileLandscape:pt-1 mobileLandscape:gap-x-24 bg-background fixed top-16 left-0 h-[calc(100vh-4em)]  grid  overflow-x-visible mobileLandscape:max-w-[95vw] mobileLandscape:min-w-[90vw] max-w-[425px] rounded-tl-none rounded-bl-none  border-r-2 border-t-2 border-b-2 border-r-gray-700 hover:border-r-white  border-t-gray-700 hover:border-t-white border-b-gray-700 hover:border-b-white cursor-grab active:cursor-grabbing`}
               >
-                <DrawerClose className="absolute top-1 right-2 ">
-                  <ArrowLeftCircleIcon className="fixed right-[-4] z-50 top-[calc(50%-4rem)] w-8 h-8 self-center bg-background text-gray-700 group-hover:text-white" />
+                <DrawerClose className="">
+                  <ArrowLeftCircleIcon className="absolute right-[-1em] z-50 top-[calc(50%-3rem)] rounded-tr-full rounded-br-full w-8 h-8 self-center bg-background text-gray-700 group-hover:text-white" />
                 </DrawerClose>
                 <div className="col-start-1 col-end-4 row-start-1 row-end-3  flex flex-col ">
                   <ProjectHeader project={project} />
                 </div>
                 <div
-                  className={` row-start-4 row-end-8 col-start-1 col-end-2 mobileLandscape:row-start-1 mobileLandscape:row-end-5 mobileLandscape:col-start-2 mobileLandscape:col-end-3 flex-1 flex-col  mr-2 py-2`}
+                  className={` row-start-4 border-secondary border-solid border-[1px]  rounded-lg p-2 row-end-8 col-start-1 col-end-2 mobileLandscape:row-start-1 mobileLandscape:row-end-5 mobileLandscape:col-start-2 mobileLandscape:col-end-3 flex-1 flex-col  mr-2 py-2`}
                 >
                   <div className="flex flex-row   justify-start align-middle ">
                     <h3 className="   mr-auto text-md font-bold">Members</h3>
@@ -269,7 +269,7 @@ export function ProjectPage({
                 </div>
                 <div
                   className={`col-start-1 col-end-2 row-start-7 row-end-10 
-                      mobileLandscape:row-start-4 mobileLandscape:row-end-6 mobileLandscape:col-start-1 mobileLandscape:col-end-2
+                      mobileLandscape:row-start-4 mobileLandscape:row-end-6 mobileLandscape:col-start-1 mobileLandscape:col-end-2 border-secondary border-solid border-[1px]  rounded-lg p-2
                    `}
                 >
                   <div className=" flex flex-col ml-2">
