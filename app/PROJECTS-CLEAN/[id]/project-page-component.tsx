@@ -148,225 +148,233 @@ export function ProjectPage({
             // className={`group tooSmall:hidden p-8 fixed top-16 left-0 h-[calc(100vh-4em)]  grid lg:h-[calc(100vh-2em)] overflow-x-visible  max-w-[85vw] tall:max-w-[425px] rounded-tl-none rounded-bl-none  border-r-2 border-t-2 border-b-2 border-r-gray-700 hover:border-r-white  border-t-gray-700 hover:border-t-white border-b-gray-700 hover:border-b-white cursor-grab active:cursor-grabbing`}
             >
               <div
-                className={`group hidden bg-popover p-6  fixed top-16 left-0 h-[calc(100vh-4em)]  tooSmall:grid overflow-x-visible  max-w-[450px]  rounded-tl-none rounded-bl-none  border-r-2 border-t-2 border-b-2 border-r-gray-700 hover:border-r-white  border-t-gray-700 hover:border-t-white border-b-gray-700 hover:border-b-white cursor-grab active:cursor-grabbing`}
+                className={`group hidden bg-popover p-6 fixed top-16 left-0 h-[calc(100vh-4em)]  tooSmall:grid   max-w-[450px]  rounded-tl-none rounded-bl-none  border-r-2 border-t-2 border-b-2 border-r-gray-700 hover:border-r-white  border-t-gray-700 hover:border-t-white border-b-gray-700 hover:border-b-white cursor-grab active:cursor-grabbing`}
               >
                 <Label>
                   Window too too small, please expand or rotate to view
                 </Label>
               </div>
-              <DrawerClose className="">
-                <ArrowLeftCircleIcon className="absolute right-[-1em] z-50 top-[calc(50%-3rem)] rounded-tr-full rounded-br-full w-8 h-8 self-center bg-background text-gray-700 group-hover:text-white" />
-              </DrawerClose>
+
               <div
-                className={`group tooSmall:hidden flex flex-col overflow-auto bg-background fixed top -16 left-0 h-[calc(100vh-4em)] max-w-[425px] rounded-tl-none rounded-bl-none border-r-2 border-t-2 border-b-2 border-r-gray-700 hover:border-r-white border-t-gray-700 hover:border-t-white border-b-gray-700 hover:border-b-white cursor-grab active:cursor-grabbing p-2 pt-3 `}
+                className={`group  tooSmall:hidden flex flex-col bg-background fixed top-16 left-0 h-[calc(100vh-4em)] w-[425px] max-w-[95vw] rounded-tl-none rounded-bl-none border-r-2 border-t-2 border-b-2 z-40 border-r-gray-700 hover:border-r-white border-t-gray-700 hover:border-t-white border-b-gray-700 hover:border-b-white cursor-grab active:cursor-grabbing p-2 pt-3 `}
               >
-                {/* <div className="flex-1 basis-1/2"> */}
-                <div className="  flex flex-col mb-2  order-1 border-secondary border-solid border-[1px]  rounded-lg p-2">
-                  <ProjectHeader project={project} />
-                </div>
-                <div
-                  className={`   order-2 mb-2
+                <DrawerClose className="">
+                  <ArrowLeftCircleIcon className="absolute right-[-1em] z-50 top-[calc(50%-3rem)]  rounded-full w-8 h-8 self-center bg-background text-gray-700 group-hover:text-white" />
+                </DrawerClose>
+                <ScrollArea className="p-3">
+                  <ScrollBar />
+                  {/* <div className="flex-1 basis-1/2"> */}
+                  <div className="  flex flex-col mb-2  order-1 border-secondary border-solid border-[1px]  rounded-lg p-2">
+                    <ProjectHeader project={project} />
+                  </div>
+                  <div
+                    className={`   order-2 mb-2
                        border-secondary border-solid border-[1px]  rounded-lg p-2
                    `}
-                >
-                  <div className=" flex flex-col ml-2">
-                    <h3 className="mb-2 mobileLandscape:mb-1 mr-auto text-md lg:text-lg font-bold">
-                      Tasks
-                    </h3>
-                    <div className="flex flex-col">
-                      <div className="flex flex-col w-[225px] mobileLandscape:w-[175px] ">
-                        <Label className="flex flex-row p-1  items-center space-x-2 text-popover-foreground">
-                          <div className="flex flex-row mr-auto items-center space-x-2 ">
-                            <ClockIcon className="w-4 h-4 mr-1  opacity-60" />
-                            <p className=" mobileLandscape:text-xs text-sm">
-                              Active Tasks :
-                            </p>
-                          </div>
-                          <p className="ml-auto font-bold mobileLandscape:text-sm">
-                            {
-                              tasks.filter(
-                                (task) => task.status !== "Completed"
-                              ).length
-                            }
-                          </p>
-                        </Label>
-                      </div>
-                      <div className="flex flex-col w-[225px] mobileLandscape:w-[175px] ">
-                        <Label className="flex flex-row p-1 items-center space-x-2 text-popover-foreground ">
-                          <div className="flex flex-row mr-auto items-center space-x-2 ">
-                            <CheckIcon className="w-4 h-4 mr-1 opacity-60" />
-                            <p className="text-sm mobileLandscape:text-xs">
-                              Completed Tasks :
-                            </p>
-                          </div>
-
-                          <p className="ml-auto font-bold mobileLandscape:text-sm">
-                            {
-                              tasks.filter((task) => task.status == "Completed")
-                                .length
-                            }
-                          </p>
-                        </Label>
-                      </div>
-                      <div className="">
-                        <Popover>
-                          <PopoverTrigger className=" flex flex-col w-[225px] mobileLandscape:w-[175px]">
-                            <div className="flex flex-row items-center space-x-2 p-1  rounded hover:bg-primary-foreground">
-                              <div className="flex flex-row mr-auto items-center space-x-2 ">
-                                <ArchiveIcon className="w-4 h-4 mr-1 opacity-60" />
-                                <p className=" mobileLandscape:text-xs text-sm">
-                                  Archived Tasks:
-                                </p>
-                              </div>
-                              <p className="ml-auto font-bold">
-                                {tasks.filter((task) => task.archived).length}
+                  >
+                    <div className=" flex flex-col ml-2">
+                      <h3 className="mb-2 mobileLandscape:mb-1 mr-auto text-md lg:text-lg font-bold">
+                        Tasks
+                      </h3>
+                      <div className="flex flex-col">
+                        <div className="flex flex-col w-[225px] mobileLandscape:w-[175px] ">
+                          <Label className="flex flex-row p-1  items-center space-x-2 text-popover-foreground">
+                            <div className="flex flex-row mr-auto items-center space-x-2 ">
+                              <ClockIcon className="w-4 h-4 mr-1  opacity-60" />
+                              <p className=" mobileLandscape:text-xs text-sm">
+                                Active Tasks :
                               </p>
                             </div>
-                          </PopoverTrigger>
-                          <PopoverContent>
-                            <ScrollArea>
-                              {archivedTasks.length === 0 ? (
-                                <div className="">No archived tasks</div>
-                              ) : (
-                                <div className=" flex flex-col">
-                                  {tasks.map(
-                                    (task, task_idx) =>
-                                      task.archived && (
-                                        <div key={task_idx}>
-                                          <UnarchiveTaskPopover task={task} />
-                                          {task_idx !== 0 ||
-                                            (task_idx !==
-                                              archivedTasks.length - 1 && (
-                                              <Separator className="my-2" />
-                                            ))}
-                                        </div>
-                                      )
-                                  )}
-                                </div>
-                              )}
-                            </ScrollArea>
-                          </PopoverContent>
-                        </Popover>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                {/* </div> */}
-                <div
-                  className={` border-secondary border-solid border-[1px] mb-2  order-3  rounded-lg p-2 flex  flex-col   py-2`}
-                >
-                  <div className="flex flex-row  justify-start align-middle ">
-                    <h3 className="   mr-auto text-md font-bold">Members</h3>
-                    <MemberCardSearchTable
-                      userId={userId}
-                      project={project}
-                      teamUsers={uniqueTeamUsers}
-                      projectUsers={uniqueProjectUsers}
-                    />
-                  </div>
-                  <div className=" flex flex-col  ">
-                    <div>
-                      <div className="flex flex-col  w-[225px] mobileLandscape:w-[175px]">
-                        <Label className="flex flex-row p-2 items-center space-x-2 text-popover-foreground ">
-                          <div className="flex flex-row mr-auto items-center space-x-2 ">
-                            <UserCog className="w-4 h-4 mr-1 opacity-60" />
-                            <p className=" text-sm mobileLandscape:text-xs">
-                              Project Admins :
+                            <p className="ml-auto font-bold mobileLandscape:text-sm">
+                              {
+                                tasks.filter(
+                                  (task) => task.status !== "Completed"
+                                ).length
+                              }
                             </p>
-                          </div>
-                          <p className="ml-auto font-bold">
-                            {projectAdmins.length}
-                          </p>
-                        </Label>
-                      </div>
-
-                      <div className=" mb-2 flex flex-row overflow-auto">
-                        <>
-                          {projectAdmins.map((member, index) => (
-                            <div key={index} className="p-2">
-                              <Popover>
-                                <PopoverTrigger>
-                                  <Avatar key={index} className="w-8 h-8 ">
-                                    <AvatarFallback
-                                      className={` text-xs  bg-gray-500`}
-                                    >
-                                      {getInitials(member.name)}
-                                    </AvatarFallback>
-                                  </Avatar>
-                                  <span className="sr-only">User Avatar</span>
-                                </PopoverTrigger>
-                                <PopoverContent className="w-[calc(100%-3em)] m-4 p-0 border-none">
-                                  <MemberCardWithPermissions
-                                    user={member}
-                                    project={project}
-                                    tasks={tasks}
-                                    team={team}
-                                  />
-                                </PopoverContent>
-                              </Popover>
+                          </Label>
+                        </div>
+                        <div className="flex flex-col w-[225px] mobileLandscape:w-[175px] ">
+                          <Label className="flex flex-row p-1 items-center space-x-2 text-popover-foreground ">
+                            <div className="flex flex-row mr-auto items-center space-x-2 ">
+                              <CheckIcon className="w-4 h-4 mr-1 opacity-60" />
+                              <p className="text-sm mobileLandscape:text-xs">
+                                Completed Tasks :
+                              </p>
                             </div>
-                          ))}
-                        </>
-                      </div>
-                    </div>
 
-                    <div>
-                      <div className="flex flex-col  w-[225px] mobileLandscape:w-[175px] ">
-                        <Label className="flex flex-row p-2  items-center space-x-2 text-popover-foreground ">
-                          <div className="flex flex-row mr-auto items-center space-x-2 ">
-                            <UserIcon className="w-4 h-4 mr-1 opacity-60" />
-
-                            <p className=" text-sm ">Project Members :</p>
-                          </div>
-                          <p className="ml-auto font-bold m">
-                            {projectMembers.length}
-                          </p>
-                        </Label>
-                      </div>
-                      <div className=" mb-2 flex flex-row">
-                        <>
-                          {projectMembers.map((member, index) => (
-                            <div key={index} className="p-2">
-                              <Popover>
-                                <PopoverTrigger>
-                                  <Avatar key={index} className=" w-10 h-10">
-                                    <AvatarFallback
-                                      className={`text-sm bg-gray-500`}
-                                    >
-                                      {getInitials(member.name)}
-                                    </AvatarFallback>
-                                  </Avatar>
-                                  <span className="sr-only">User Avatar</span>
-                                </PopoverTrigger>
-                                <PopoverContent>
-                                  <MemberCardWithPermissions
-                                    user={member}
-                                    project={project}
-                                    tasks={tasks}
-                                    team={team}
-                                  />
-                                </PopoverContent>
-                              </Popover>
-                            </div>
-                          ))}
-                        </>
+                            <p className="ml-auto font-bold mobileLandscape:text-sm">
+                              {
+                                tasks.filter(
+                                  (task) => task.status == "Completed"
+                                ).length
+                              }
+                            </p>
+                          </Label>
+                        </div>
+                        <div className="">
+                          <Popover>
+                            <PopoverTrigger className=" flex flex-col w-[225px] mobileLandscape:w-[175px]">
+                              <div className="flex flex-row items-center space-x-2 p-1  rounded hover:bg-primary-foreground">
+                                <div className="flex flex-row mr-auto items-center space-x-2 ">
+                                  <ArchiveIcon className="w-4 h-4 mr-1 opacity-60" />
+                                  <p className=" mobileLandscape:text-xs text-sm">
+                                    Archived Tasks:
+                                  </p>
+                                </div>
+                                <p className="ml-auto font-bold">
+                                  {tasks.filter((task) => task.archived).length}
+                                </p>
+                              </div>
+                            </PopoverTrigger>
+                            <PopoverContent>
+                              <ScrollArea>
+                                {archivedTasks.length === 0 ? (
+                                  <div className="">No archived tasks</div>
+                                ) : (
+                                  <div className=" flex flex-col">
+                                    {tasks.map(
+                                      (task, task_idx) =>
+                                        task.archived && (
+                                          <div key={task_idx}>
+                                            <UnarchiveTaskPopover task={task} />
+                                            {task_idx !== 0 ||
+                                              (task_idx !==
+                                                archivedTasks.length - 1 && (
+                                                <Separator className="my-2" />
+                                              ))}
+                                          </div>
+                                        )
+                                    )}
+                                  </div>
+                                )}
+                              </ScrollArea>
+                            </PopoverContent>
+                          </Popover>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div
-                  className={` 1/10
+                  {/* </div> */}
+                  <div
+                    className={` border-secondary border-solid border-[1px] mb-2  order-3  rounded-lg p-2 flex  flex-col   py-2`}
+                  >
+                    <div className="flex flex-row  justify-start align-middle ">
+                      <h3 className="   mr-auto text-md font-bold">Members</h3>
+                      <MemberCardSearchTable
+                        userId={userId}
+                        project={project}
+                        teamUsers={uniqueTeamUsers}
+                        projectUsers={uniqueProjectUsers}
+                      />
+                    </div>
+                    <div className=" flex flex-col  ">
+                      <div>
+                        <div className="flex flex-col  w-[225px] mobileLandscape:w-[175px]">
+                          <Label className="flex flex-row p-2 items-center space-x-2 text-popover-foreground ">
+                            <div className="flex flex-row mr-auto items-center space-x-2 ">
+                              <UserCog className="w-4 h-4 mr-1 opacity-60" />
+                              <p className=" text-sm mobileLandscape:text-xs">
+                                Project Admins :
+                              </p>
+                            </div>
+                            <p className="ml-auto font-bold">
+                              {projectAdmins.length}
+                            </p>
+                          </Label>
+                        </div>
+
+                        <div className=" mb-2 flex flex-row overflow-auto">
+                          <>
+                            {projectAdmins.map((member, index) => (
+                              <div key={index} className="p-2">
+                                <Popover>
+                                  <PopoverTrigger>
+                                    <Avatar key={index} className="w-8 h-8 ">
+                                      <AvatarFallback
+                                        className={` text-xs  bg-gray-500`}
+                                      >
+                                        {getInitials(member.name)}
+                                      </AvatarFallback>
+                                    </Avatar>
+                                    <span className="sr-only">User Avatar</span>
+                                  </PopoverTrigger>
+                                  <PopoverContent className="w-[calc(100%-3em)] m-4 p-0 border-none">
+                                    <MemberCardWithPermissions
+                                      user={member}
+                                      project={project}
+                                      tasks={tasks}
+                                      team={team}
+                                    />
+                                  </PopoverContent>
+                                </Popover>
+                              </div>
+                            ))}
+                          </>
+                        </div>
+                      </div>
+
+                      <div>
+                        <div className="flex flex-col  w-[225px] mobileLandscape:w-[175px] ">
+                          <Label className="flex flex-row p-2  items-center space-x-2 text-popover-foreground ">
+                            <div className="flex flex-row mr-auto items-center space-x-2 ">
+                              <UserIcon className="w-4 h-4 mr-1 opacity-60" />
+
+                              <p className=" text-sm ">Project Members :</p>
+                            </div>
+                            <p className="ml-auto font-bold m">
+                              {projectMembers.length}
+                            </p>
+                          </Label>
+                        </div>
+                        <div className=" mb-2 flex flex-row">
+                          <>
+                            {projectMembers.map((member, index) => (
+                              <div key={index} className="p-2">
+                                <Popover>
+                                  <PopoverTrigger>
+                                    <Avatar key={index} className=" w-10 h-10">
+                                      <AvatarFallback
+                                        className={`text-sm bg-gray-500`}
+                                      >
+                                        {getInitials(member.name)}
+                                      </AvatarFallback>
+                                    </Avatar>
+                                    <span className="sr-only">User Avatar</span>
+                                  </PopoverTrigger>
+                                  <PopoverContent>
+                                    <MemberCardWithPermissions
+                                      user={member}
+                                      project={project}
+                                      tasks={tasks}
+                                      team={team}
+                                    />
+                                  </PopoverContent>
+                                </Popover>
+                              </div>
+                            ))}
+                          </>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    className={` 1/10
                   flex align-bottom justify-end mb-2 my-0 order-4
                   `}
-                >
-                  <div className="flex justify-center my-auto">
-                    <Button variant="outline" className="h-fit w-fit py-0 px-1">
-                      <ArchiveIcon className="w-4 h-4 mr-1 self-center" />
-                      <ArchiveProjectPopover project={project} />
-                      <span className="sr-only">Archive Project Button</span>
-                    </Button>
-                  </div>
-                </div>{" "}
+                  >
+                    <div className="flex justify-center my-auto">
+                      <Button
+                        variant="outline"
+                        className="h-fit w-fit py-0 px-1"
+                      >
+                        <ArchiveIcon className="w-4 h-4 mr-1 self-center" />
+                        <ArchiveProjectPopover project={project} />
+                        <span className="sr-only">Archive Project Button</span>
+                      </Button>
+                    </div>
+                  </div>{" "}
+                </ScrollArea>
               </div>
             </DrawerContent>
           </Drawer>
