@@ -453,7 +453,7 @@ export function ProjectPage({
           type="always"
           className=" w-[calc(100vw-2rem)] h-[calc(100vh-8rem)] "
         >
-          <div className="">
+          <div className="flex justify-center md:justify-start">
             <CardView
               viewType={sortBy}
               tasks={tasks}
