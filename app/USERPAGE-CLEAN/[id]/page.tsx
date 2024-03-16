@@ -9,7 +9,7 @@ import getUserTeamsAsMember from "@/data-access/teams/get-user-teams-as-member";
 import getUserProjectsAsMember from "@/data-access/projects/get-user-projects-as-member";
 import getUserTeamsAsAdmin from "@/data-access/teams/get-user-teams-as-admin";
 import getUserProjectsAsAdmin from "@/data-access/projects/get-user-projects-as-admin";
-
+import getUserTasks from "@/data-access/tasks/get-user-tasks.persistence";
 type ParamsType = {
   id: string;
 };
@@ -37,6 +37,7 @@ const UserPage = async ({ params }: { params: ParamsType }) => {
   const usersProjectsAsMember = await getUserProjectsAsMember(user);
   const usersTeamsAsAdmin = await getUserTeamsAsAdmin(user);
   const usersProjectsAsAdmin = await getUserProjectsAsAdmin(user);
+  const userTasks = await getUserTasks(user);
   // add params
   // const userId = params.userData.id;
   return (
@@ -47,6 +48,7 @@ const UserPage = async ({ params }: { params: ParamsType }) => {
         usersTeamsAsAdmin={usersTeamsAsAdmin}
         usersProjectsAsAdmin={usersProjectsAsAdmin}
         usersProjectsAsMember={usersProjectsAsMember}
+        userTasks={userTasks}
       />
     </div>
   );

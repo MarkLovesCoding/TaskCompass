@@ -39,7 +39,7 @@ const Navigation: React.FC = async () => {
   return (
     <>
       {session && (
-        <header className=" fixed top-0 left-0 min-w-[100vw] flex items-center h-16 px-4 border-b shrink-0 md:px-6">
+        <header className=" fixed top-0 left-0 min-w-[100vw] flex items-center h-16 px-4 border-b shrink-0 md:px-6 bg-secondary z-50">
           <Link
             className="flex items-center gap-2 text-lg font-semibold sm:text-base mr-4"
             href="#"

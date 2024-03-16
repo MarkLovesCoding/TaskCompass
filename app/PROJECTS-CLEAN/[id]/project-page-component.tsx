@@ -47,7 +47,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { ScrollArea, ScrollBar } from "@/components/ui/card-scroll-area";
 import getProject from "@/data-access/projects/get-project.persistence";
 import getProjectTasks from "@/data-access/tasks/get-project-tasks.persistence";
 import { ArrowDownCircle } from "lucide-react";
@@ -164,7 +164,7 @@ export function ProjectPage({
                 <ScrollArea className="p-3">
                   <ScrollBar />
                   {/* <div className="flex-1 basis-1/2"> */}
-                  <div className="  flex flex-col mb-2  order-1 border-secondary border-solid border-[1px]  rounded-lg p-2">
+                  <div className="  flex flex-col mb-2  order-1  p-2">
                     <ProjectHeader project={project} />
                   </div>
                   <div
@@ -259,7 +259,7 @@ export function ProjectPage({
                   <div
                     className={` border-secondary border-solid border-[1px] mb-2  order-3  rounded-lg p-2 flex  flex-col   py-2`}
                   >
-                    <div className="flex flex-row  justify-start align-middle ">
+                    <div className="flex flex-row  justify-start align-middle ml-2">
                       <h3 className="   mr-auto text-md font-bold">Members</h3>
                       <MemberCardSearchTable
                         userId={userId}
@@ -451,9 +451,9 @@ export function ProjectPage({
       >
         <ScrollArea
           type="always"
-          className=" w-[calc(100vw-2rem)] h-[calc(100vh-8rem)] "
+          className=" w-[calc(100vw-2rem)] flex  h-[calc(100vh-8rem)] "
         >
-          <div className="flex justify-center md:justify-start">
+          <div className="flex justify-start align-top">
             <CardView
               viewType={sortBy}
               tasks={tasks}

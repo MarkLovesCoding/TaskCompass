@@ -19,8 +19,8 @@ import { updateProjectDetailsAction } from "@/app/PROJECTS-CLEAN/_actions/update
 import { useState } from "react";
 
 const formSchema = z.object({
-  name: z.string().min(4).max(20),
-  description: z.string().min(4).max(80),
+  name: z.string().min(3).max(25),
+  description: z.string().min(3).max(80),
 });
 
 export function ProjectHeader({ project }: { project: ProjectDto }) {
@@ -119,13 +119,14 @@ export function ProjectHeader({ project }: { project: ProjectDto }) {
               name="name"
               render={({ field }) => {
                 return (
-                  <FormItem className="self-center max-w-[75%] mb-2">
+                  <FormItem className="self-center max-w-[calc(270px-32px)] mb-2">
                     <FormControl>
                       <Input
                         type="text"
                         className={`header-input text-lg ${
                           isHeaderEditing ? "editing" : ""
                         }`}
+                        maxLength={25}
                         placeholder="Task"
                         {...field}
                         onClick={handleNameClick}
@@ -145,7 +146,7 @@ export function ProjectHeader({ project }: { project: ProjectDto }) {
               name="description"
               render={({ field }) => {
                 return (
-                  <FormItem className="mt-2   mr-2  max-w-[70%]  ">
+                  <FormItem className="mt-2   mr-2  w-[270px]  ">
                     <FormControl>
                       <Textarea
                         className={`description-input min-h-[80px]  overflow-hidden resize-none mobileLandscape:text-xs ${
