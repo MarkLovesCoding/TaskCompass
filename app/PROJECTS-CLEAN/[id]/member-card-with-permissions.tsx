@@ -44,12 +44,12 @@ export function MemberCardWithPermissions({
   ).length;
 
   return (
-    <Card className="max-w-[95vw] mx-auto">
+    <Card className="max-w-[95vw] mx-auto ">
       <CardHeader className="pb-6">
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-3">
             <Avatar className="w-10 h-10">
-              <AvatarImage alt={user.name} src="@/public/default-avatar.jpg" />
+              {/* <AvatarImage alt={user.name} src="@/public/default-avatar.jpg" /> */}
               <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
             </Avatar>
             <div className="text-lg font-bold">{user.name}</div>

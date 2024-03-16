@@ -106,20 +106,20 @@ export function ProjectHeader({ project }: { project: ProjectDto }) {
     router.refresh();
   };
   return (
-    <div className="flex items-start   mobileLandscape:max-w-[50%] border-secondary border-solid border-[1px]  rounded-lg p-2">
+    <div className="flex items-start    ">
       <Form {...form}>
         <form
-          className=" mr-2 w-full"
+          className=" mr-2 "
           onSubmit={form.handleSubmit(onNewProjectFormSubmit)}
         >
           <div className="flex flex-row justify-start align-middle">
-            <LayoutIcon className=" h-6 w-6   self-center mr-2" />
+            <LayoutIcon className=" h-6 w-6   self-center mr-2 mb-2" />
             <FormField
               control={form.control}
               name="name"
               render={({ field }) => {
                 return (
-                  <FormItem className="self-center">
+                  <FormItem className="self-center max-w-[75%] mb-2">
                     <FormControl>
                       <Input
                         type="text"
@@ -139,16 +139,16 @@ export function ProjectHeader({ project }: { project: ProjectDto }) {
               }}
             />{" "}
           </div>
-          <div className="flex flex-col mobileLandscape:flex-row w-full">
+          <div className="flex flex-row mobileLandscape:flex-row  mb-2">
             <FormField
               control={form.control}
               name="description"
               render={({ field }) => {
                 return (
-                  <FormItem className="mt-2 mb-2  mr-2   min-w-[66%]  mobileLandscape:max-w-[66%] max-h-16">
+                  <FormItem className="mt-2   mr-2  max-w-[70%]  ">
                     <FormControl>
                       <Textarea
-                        className={`description-input max-h-16 overflow-hidden resize-none mobileLandscape:text-xs ${
+                        className={`description-input min-h-[80px]  overflow-hidden resize-none mobileLandscape:text-xs ${
                           isDescriptionEditing ? "editing" : ""
                         }`}
                         spellCheck="false"
@@ -166,7 +166,7 @@ export function ProjectHeader({ project }: { project: ProjectDto }) {
               }}
             />
             {buttonShow && (
-              <div className="flex ml-4 flex-row mobileLandscape:flex-col mt-2 mobileLandscape:mt-0 justify-space ">
+              <div className="flex ml-4 flex-col mobileLandscape:flex-col mt-2 mobileLandscape:mt-0 justify-space ">
                 <Button className="m-1  text-xs  h-8 px-2 " type="submit">
                   Save
                 </Button>{" "}

@@ -73,7 +73,7 @@ module.exports = {
       },
       screens: {
         mobileLandscape: {
-          raw: "(min-width: 515px) and (min-height:319px) and (max-height:567px)",
+          raw: "(min-width: 544px) and (min-height:386px) and (max-height:480px)",
         },
         // mobilePortrait: {
         //   raw: "(max-width: 640px) and (orientation: portrait)",
