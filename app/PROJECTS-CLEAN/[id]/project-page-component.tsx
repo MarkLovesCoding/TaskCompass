@@ -158,7 +158,7 @@ export function ProjectPage({
                 <ArrowLeftCircleIcon className="absolute right-[-1em] z-50 top-[calc(50%-3rem)] rounded-tr-full rounded-br-full w-8 h-8 self-center bg-background text-gray-700 group-hover:text-white" />
               </DrawerClose>
               <div
-                className={`group tooSmall:hidden flex flex-col overflow-auto bg-background fixed top-16 left-0 h-[calc(100vh-4em)] max-w-[425px] rounded-tl-none rounded-bl-none border-r-2 border-t-2 border-b-2 border-r-gray-700 hover:border-r-white border-t-gray-700 hover:border-t-white border-b-gray-700 hover:border-b-white cursor-grab active:cursor-grabbing p-2 pt-3 `}
+                className={`group tooSmall:hidden flex flex-col overflow-auto bg-background fixed top -16 left-0 h-[calc(100vh-4em)] max-w-[425px] rounded-tl-none rounded-bl-none border-r-2 border-t-2 border-b-2 border-r-gray-700 hover:border-r-white border-t-gray-700 hover:border-t-white border-b-gray-700 hover:border-b-white cursor-grab active:cursor-grabbing p-2 pt-3 `}
               >
                 {/* <div className="flex-1 basis-1/2"> */}
                 <div className="  flex flex-col mb-2  order-1 border-secondary border-solid border-[1px]  rounded-lg p-2">
@@ -382,19 +382,23 @@ export function ProjectPage({
           <Link href={`/TEAMS-CLEAN/${project.team}`}>
             <h4 className="text-xs  underline cursor-pointer">Back to Team</h4>
           </Link>
-          <h4>{project.name}</h4>
+          <h4 className="text-sm md:text-md lg:text-lg">{project.name}</h4>
         </div>
         <div className="flex flex-row w-full   justify-center align-middle ">
           <div className="p-2">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline">
-                  <Label>{`View : ${capitalizeEachWord(sortBy)}  `}</Label>
-                  <FolderKanbanIcon className="w-8 h-8 ml-3 self-center cursor-pointer" />
+                  <Label className="hidden md:flex ">{`View : ${capitalizeEachWord(
+                    sortBy
+                  )}  `}</Label>
+                  <FolderKanbanIcon className="w-8 h-8 md:ml-3 self-center cursor-pointer" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56">
-                <DropdownMenuLabel>View</DropdownMenuLabel>
+                <DropdownMenuLabel className="text-center font-bold">
+                  View
+                </DropdownMenuLabel>
                 <Separator className="my-2" />
                 <DropdownMenuRadioGroup
                   value={sortBy}
@@ -418,8 +422,8 @@ export function ProjectPage({
             <Popover>
               <PopoverTrigger>
                 <Button variant="outline">
-                  <Label>New Task</Label>
-                  <PlusIcon className="w-8 h-8 ml-3 self-center" />
+                  <Label className="hidden md:flex ">New Task</Label>
+                  <PlusIcon className="w-8 h-8 md:ml-3 self-center" />
                   <span className="sr-only">New Task Button</span>
                 </Button>
               </PopoverTrigger>
