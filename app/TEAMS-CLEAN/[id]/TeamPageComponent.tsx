@@ -112,11 +112,49 @@ export async function TeamPageComponent({
                       </Label>
                       <div>
                         <Badge className="bg-green-500  min-w-fit text-xs px-2 py-[0.2em] m-1">{`Active: ${countProjects} `}</Badge>
-                        <Badge className="bg-gray-500  min-w-fit text-xs px-2 py-[0.2em] m-1">{`Archived: ${countArchivedProjects}`}</Badge>
+                        <Popover>
+                          <PopoverTrigger className=" flex flex-col w-[225px] mobileLandscape:w-[175px]">
+                            {/* <div className="flex flex-row items-center space-x-2 p-1  rounded hover:bg-primary-foreground"> */}
+                            {/* <div className="flex flex-row mr-auto items-center space-x-2 "> */}
+                            <Badge className="bg-gray-500  min-w-fit text-xs px-2 py-[0.2em] m-1">
+                              <ArchiveIcon className="w-4 h-4 mr-1 opacity-60" />
+                              <p className=" mobileLandscape:text-xs text-sm">
+                                {`Archived: ${countArchivedProjects}`}
+                              </p>
+                            </Badge>
+                            {/* </div> */}
+                            {/* </div> */}
+                          </PopoverTrigger>
+                          <PopoverContent>
+                            <ScrollArea>
+                              {archivedProjects.length === 0 ? (
+                                <div className="">No archived projects</div>
+                              ) : (
+                                <div className=" flex flex-col">
+                                  {projects.map(
+                                    (project, project_idx) =>
+                                      project.archived && (
+                                        <div key={project_idx}>
+                                          <UnarchiveProjectPopover
+                                            project={project}
+                                          />
+                                          {project_idx !== 0 ||
+                                            (project_idx !==
+                                              archivedProjects.length - 1 && (
+                                              <Separator className="my-2" />
+                                            ))}
+                                        </div>
+                                      )
+                                  )}
+                                </div>
+                              )}
+                            </ScrollArea>
+                          </PopoverContent>
+                        </Popover>
                       </div>
                     </div>
                   </div>
-                  <div className="mb-4 md:w-1/4">
+                  {/* <div className="mb-4 md:w-1/4">
                     <div className="ml-auto flex flex-wrap items-center space-x-2">
                       <Label className="font-bold text-sm md:text:sm">
                         Users:
@@ -127,7 +165,7 @@ export async function TeamPageComponent({
                         <Badge className=" min-w-fit text-xs px-2 py-[0.2em] m-1  bg-green-500 ">{` Members: ${teamUsersMembers.length}`}</Badge>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                   <div
                     className={` border-secondary border-solid border-[1px] mb-2  order-3  rounded-lg p-2 flex  flex-col   py-2`}
                   >
@@ -144,19 +182,13 @@ export async function TeamPageComponent({
                     <div className=" flex flex-col  ">
                       <div>
                         <div className="flex flex-col  w-[225px] mobileLandscape:w-[175px]">
-                          <Label className="flex flex-row p-2 items-center space-x-2 text-popover-foreground ">
-                            <div className="flex flex-row mr-auto items-center space-x-2 ">
-                              <UserCog className="w-4 h-4 mr-1 opacity-60" />
-                              <p className=" text-sm mobileLandscape:text-xs">
-                                Team Admins :
-                              </p>
-                            </div>
-                            <p className="ml-auto font-bold">
-                              {teamUsersAdmins.length}
-                            </p>
-                          </Label>
+                          <div className="flex flex-row mr-auto items-center space-x-2 ">
+                            <UserCog className="w-4 h-4 mr-1 opacity-60" />
+                            <Badge className=" min-w-fit text-xs px-2 py-[0.2em] m-1 bg-red-500 ">
+                              {` Admins: ${teamUsersAdmins.length}`}
+                            </Badge>
+                          </div>
                         </div>
-
                         <div className=" mb-2 flex flex-row overflow-auto">
                           <>
                             {teamUsersAdmins.map((member, index) => (
@@ -187,16 +219,12 @@ export async function TeamPageComponent({
 
                       <div>
                         <div className="flex flex-col  w-[225px] mobileLandscape:w-[175px] ">
-                          <Label className="flex flex-row p-2  items-center space-x-2 text-popover-foreground ">
-                            <div className="flex flex-row mr-auto items-center space-x-2 ">
-                              <UserIcon className="w-4 h-4 mr-1 opacity-60" />
-
-                              <p className=" text-sm ">Team Members :</p>
-                            </div>
-                            <p className="ml-auto font-bold m">
-                              {teamUsersMembers.length}
-                            </p>
-                          </Label>
+                          <div className="flex flex-row mr-auto items-center space-x-2 ">
+                            <UserIcon className="w-4 h-4 mr-1 opacity-60" />
+                            <Badge className=" min-w-fit text-xs px-2 py-[0.2em] m-1 bg-green-500 ">
+                              {` Members: ${teamUsersMembers.length}`}
+                            </Badge>
+                          </div>
                         </div>
                         <div className=" mb-2 flex flex-row">
                           <>
@@ -259,49 +287,6 @@ export async function TeamPageComponent({
                         </Dialog>
                       </div> */}
                       <div className="p-4">
-                        <Popover>
-                          <PopoverTrigger className=" flex flex-col w-[225px] mobileLandscape:w-[175px]">
-                            <div className="flex flex-row items-center space-x-2 p-1  rounded hover:bg-primary-foreground">
-                              <div className="flex flex-row mr-auto items-center space-x-2 ">
-                                <ArchiveIcon className="w-4 h-4 mr-1 opacity-60" />
-                                <p className=" mobileLandscape:text-xs text-sm">
-                                  Archived Projects:
-                                </p>
-                              </div>
-                              <p className="ml-auto font-bold">
-                                {
-                                  projects.filter((project) => project.archived)
-                                    .length
-                                }
-                              </p>
-                            </div>
-                          </PopoverTrigger>
-                          <PopoverContent>
-                            <ScrollArea>
-                              {archivedProjects.length === 0 ? (
-                                <div className="">No archived projects</div>
-                              ) : (
-                                <div className=" flex flex-col">
-                                  {projects.map(
-                                    (project, project_idx) =>
-                                      project.archived && (
-                                        <div key={project_idx}>
-                                          <UnarchiveProjectPopover
-                                            project={project}
-                                          />
-                                          {project_idx !== 0 ||
-                                            (project_idx !==
-                                              archivedProjects.length - 1 && (
-                                              <Separator className="my-2" />
-                                            ))}
-                                        </div>
-                                      )
-                                  )}
-                                </div>
-                              )}
-                            </ScrollArea>
-                          </PopoverContent>
-                        </Popover>
                         {/* <DropdownMenu>
                           <DropdownMenuTrigger asChild>
                             <ArchiveIcon className="w-8 h-8 self-center cursor-pointer" />
