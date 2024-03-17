@@ -76,21 +76,24 @@ export function TeamHeader({ team }: { team: TeamDto }) {
     router.refresh();
   };
   return (
-    <div className="flex w-full justify-start  my-4 gap-4">
+    <div className="flex w-full justify-start flex-row my-4 ">
       <Form {...form}>
-        <form className="" onSubmit={form.handleSubmit(onTeamHeaderFormSubmit)}>
-          <div className="flex flex-row justify-start align-middle">
-            <LayoutIcon className="w-8 h-8 self-center mr-5" />
+        <form
+          className="w-full flex items-start md:flex-row flex-col "
+          onSubmit={form.handleSubmit(onTeamHeaderFormSubmit)}
+        >
+          <div className="flex flex-row  w-full mb-2">
+            <LayoutIcon className="w-6 h-6 mr-2 md:w-8 md:h-8 self-center md:mr-5" />
             <FormField
               control={form.control}
               name="name"
               render={({ field }) => {
                 return (
-                  <FormItem className="self-center">
+                  <FormItem className="self-center min-w-[180px] max-w-[100%] w-[70%]">
                     <FormControl>
                       <Input
                         type="text"
-                        className={`header-input 
+                        className={`header-input w-full text-base md:text-lg
                         ${isHeaderEditing ? "editing" : ""}`}
                         maxLength={25}
                         placeholder="Team Name"
@@ -108,12 +111,18 @@ export function TeamHeader({ team }: { team: TeamDto }) {
           </div>
 
           {buttonShow && (
-            <>
-              <Button type="submit">Update Name</Button>
-              <Button type="button" onClick={handleCancel}>
+            <div className="flex ml-4 flex-row  mt-2 mobileLandscape:mt-0 justify-space ">
+              <Button className="m-1  text-xs  h-8 px-2 " type="submit">
+                Save
+              </Button>
+              <Button
+                className="m-1 text-xs d h-8 px-2 "
+                type="button"
+                onClick={handleCancel}
+              >
                 Cancel
               </Button>
-            </>
+            </div>
           )}
         </form>
         {/* <DevTool control={form.control} placement="top-left" /> */}

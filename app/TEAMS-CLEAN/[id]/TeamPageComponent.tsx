@@ -91,29 +91,30 @@ export async function TeamPageComponent({
       <main className="flex bg-background overflow-x-hidden flex-col gap-4 p-4 md:gap-8 md:p-10">
         <div className="w-full h-[15vh] bg-primary-foreground absolute top-0 left-0 "></div>
 
-        <div className="z-20   p-4 min-w-[75%] max-w-[75%] self-center bg-secondary rounded-lg border border-secondary-foreground ">
+        <div className="z-20   min-w-[80vw] px-4 md:min-w-[75%] max-w-[75%] self-center bg-secondary rounded-lg border border-secondary-foreground">
           {/* <div className="bg-gray-100 p-4 rounded-lg shadow-md"> */}
           <Accordion type="single" collapsible defaultValue="summary">
             <AccordionItem value="summary">
               <AccordionTrigger>
-                <div className="flex items-center space-x-3">
+                <div className="flex w-full">
                   <TeamHeader team={team} />
                 </div>
               </AccordionTrigger>
               <AccordionContent>
-                <div className="flex flex-col md:flex-row md:flex-wrap md:justify-evenly md:space-x-4  bg-transparent">
-                  {/* <div className="mb-4 md:w-1/4"> */}
-
-                  {/* </div> */}
-                  <div className="mb-4 md:w-1/4">
-                    <div className="ml-auto flex flex-wrap items-center space-x-2">
-                      <Label className="font-bold text-sm md:text:sm">
+                <Separator className="my-4 bg-gray-700 h-[1px] space-x-16 md:hidden" />
+                <div className="flex flex-col md:flex-row md:flex-wrap md:justify-evenly  bg-transparent">
+                  <div className="bg-muted  md:w-1/2 mb-2  rounded-lg p-2 f  py-2">
+                    <div className="ml-auto flex flex-start mdL flex-col flex-wrap space-x-2">
+                      <Label className="font-bold min-h-[40px] text-sm md:text:sm">
                         Projects:
                       </Label>
-                      <div>
-                        <Badge className="bg-green-500  min-w-fit text-xs px-2 py-[0.2em] m-1">{`Active: ${countProjects} `}</Badge>
+                      <div className="flex flex-wrap">
+                        <Badge className="bg-green-500  min-w-fit text-xs px-2  py-[0.2em] m-1">
+                          {" "}
+                          <p className=" mobileLandscape:text-xs text-sm">{`Active: ${countProjects} `}</p>
+                        </Badge>
                         <Popover>
-                          <PopoverTrigger className=" flex flex-col w-[225px] mobileLandscape:w-[175px]">
+                          <PopoverTrigger className=" ">
                             {/* <div className="flex flex-row items-center space-x-2 p-1  rounded hover:bg-primary-foreground"> */}
                             {/* <div className="flex flex-row mr-auto items-center space-x-2 "> */}
                             <Badge className="bg-gray-500  min-w-fit text-xs px-2 py-[0.2em] m-1">
@@ -154,23 +155,15 @@ export async function TeamPageComponent({
                       </div>
                     </div>
                   </div>
-                  {/* <div className="mb-4 md:w-1/4">
-                    <div className="ml-auto flex flex-wrap items-center space-x-2">
-                      <Label className="font-bold text-sm md:text:sm">
+                  <Separator className="my-4 bg-gray-700 h-[1px] space-x-16 md:hidden" />
+                  <div
+                    className={` bg-muted mb-2 md:w-1/2 rounded-lg p-2 flex  flex-col   py-2`}
+                  >
+                    <div className="flex flex-row  justify-between align-middle">
+                      <Label className="font-bold min-h-[40px] text-sm md:text:sm">
                         Users:
                       </Label>
-                      <div>
-                        <Badge className=" min-w-fit text-xs px-2 py-[0.2em] m-1 bg-red-500 ">{` Admins: ${teamUsersAdmins.length}`}</Badge>
 
-                        <Badge className=" min-w-fit text-xs px-2 py-[0.2em] m-1  bg-green-500 ">{` Members: ${teamUsersMembers.length}`}</Badge>
-                      </div>
-                    </div>
-                  </div> */}
-                  <div
-                    className={` border-secondary border-solid border-[1px] mb-2  order-3  rounded-lg p-2 flex  flex-col   py-2`}
-                  >
-                    <div className="flex flex-row  justify-start align-middle ml-2">
-                      <h3 className="   mr-auto text-md font-bold">Users</h3>
                       <TeamMemberTable
                         userId={userId}
                         team={team}
@@ -286,53 +279,6 @@ export async function TeamPageComponent({
                           </DialogContent>
                         </Dialog>
                       </div> */}
-                      <div className="p-4">
-                        {/* <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <ArchiveIcon className="w-8 h-8 self-center cursor-pointer" />
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent className="w-56">
-                            <DropdownMenuGroup>
-                              <DropdownMenuSub>
-                                <DropdownMenuSubTrigger>
-                                  Archived Projects
-                                </DropdownMenuSubTrigger>
-                                <DropdownMenuPortal>
-                                  <DropdownMenuSubContent>
-                                    <ScrollArea>
-                                      {archivedProjects.length === 0 ? (
-                                        <div className="p-4">
-                                          No archived projects
-                                        </div>
-                                      ) : (
-                                        <div className="p-4 flex flex-col">
-                                          {projects.map(
-                                            (project, project_idx) =>
-                                              project.archived && (
-                                                <div key={project_idx}>
-                                                  <UnarchiveProjectPopover
-                                                    project={project}
-                                                  />
-
-                                                  {project_idx !== 0 ||
-                                                    (project_idx !==
-                                                      archivedProjects.length -
-                                                        1 && (
-                                                      <Separator className="my-2" />
-                                                    ))}
-                                                </div>
-                                              )
-                                          )}
-                                        </div>
-                                      )}
-                                    </ScrollArea>
-                                  </DropdownMenuSubContent>
-                                </DropdownMenuPortal>
-                              </DropdownMenuSub>
-                            </DropdownMenuGroup>
-                          </DropdownMenuContent>
-                        </DropdownMenu> */}
-                      </div>
                     </div>
                   )}
                 </div>
