@@ -27,7 +27,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { getInitials } from "@/app/utils/getInitials";
 import { Badge } from "@/components/ui/badge";
 import { TaskDto } from "@/use-cases/task/types";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { ScrollArea, ScrollBar } from "@/components/ui/dashboard-scroll-area";
 
 import {
   Accordion,
@@ -61,14 +61,14 @@ export async function UserPageComponent({
   return (
     <div className="absolute flex flex-col top-[4em] w-full h-[calc(100vh-4em)]">
       <main className="flex bg-background overflow-x-hidden flex-col gap-4 p-4 md:gap-8 md:p-10">
-        <div className="w-full h-[30vh] bg-primary-foreground absolute top-0 left-0 z-10"></div>
-        <div className="z-20   p-4 ">
+        <div className="w-full h-[30vh] bg-primary-foreground absolute top-0 left-0 "></div>
+        <div className="z-20   p-4 min-w-[75%] max-w-[75%] self-center bg-secondary rounded-lg border border-secondary-foreground ">
           {/* <div className="bg-gray-100 p-4 rounded-lg shadow-md"> */}
           <Accordion type="single" collapsible>
             <AccordionItem value="summary">
               <AccordionTrigger>
                 <div className="flex items-center space-x-3">
-                  <Avatar className="w-10 h-10">
+                  <Avatar className="w-10 h-10 bg-background">
                     {/* <AvatarImage alt={user.name} src="@/public/default-avatar.jpg" /> */}
                     <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
                   </Avatar>

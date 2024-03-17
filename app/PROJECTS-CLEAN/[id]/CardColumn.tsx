@@ -43,7 +43,7 @@ const CardColumn = ({
                   snapshot.isDraggingOver
                     ? "bg-gray-800   "
                     : "border-gray-500 border-1",
-                  ` w-[250px] m-8  flex flex-col rounded-  items-center align-top px-2  `
+                  ` w-[250px] m-8  flex flex-col   items-center align-top px-2  `
                 )}
               >
                 {tasksList.length === 0

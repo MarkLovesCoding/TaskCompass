@@ -13,7 +13,13 @@ import {
 } from "@/components/ui/command";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { PlusCircleIcon, PlusIcon, XIcon } from "lucide-react";
+import {
+  PlusCircleIcon,
+  PlusIcon,
+  Search,
+  UserSearchIcon,
+  XIcon,
+} from "lucide-react";
 import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
 import { getInitials } from "@/app/utils/getInitials";
 import { ProjectDto } from "@/use-cases/project/types";
@@ -113,7 +119,7 @@ export function TeamMemberTable({
     <Popover onOpenChange={onUpdateTeamUserFormSubmit}>
       <PopoverTrigger asChild>
         <div>
-          <PlusCircleIcon className="w-10 h-10" />
+          <Search className="w-10 h-10 cursor-pointer hover:bg-primary p-2 rounded-full" />
 
           <span className="sr-only">Edit Members</span>
         </div>
