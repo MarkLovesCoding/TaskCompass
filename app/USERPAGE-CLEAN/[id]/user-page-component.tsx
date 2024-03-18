@@ -8,7 +8,7 @@ import {
   CardDescription,
   CardHeader,
   Card,
-} from "@/components/ui/card";
+} from "@/components/ui/dashboard-card";
 import {
   HoverCard,
   HoverCardContent,
@@ -61,13 +61,13 @@ export async function UserPageComponent({
   return (
     <div className="absolute flex flex-col top-[4em] w-full h-[calc(100vh-4em)]">
       <main className="flex bg-background overflow-x-hidden flex-col gap-4 p-4 md:gap-8 md:p-10">
-        <div className="w-full h-[30vh] bg-primary-foreground absolute top-0 left-0 "></div>
+        <div className="w-full h-[15vh] bg-primary-foreground absolute top-0 left-0 "></div>
         <div className="z-20   p-4 min-w-[75%] max-w-[75%] self-center bg-secondary rounded-lg border border-secondary-foreground ">
           {/* <div className="bg-gray-100 p-4 rounded-lg shadow-md"> */}
           <Accordion type="single" collapsible>
             <AccordionItem value="summary">
               <AccordionTrigger>
-                <div className="flex items-center space-x-3">
+                <div className="flex items-center space-x-3 my-2">
                   <Avatar className="w-10 h-10 bg-background">
                     {/* <AvatarImage alt={user.name} src="@/public/default-avatar.jpg" /> */}
                     <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
@@ -76,38 +76,41 @@ export async function UserPageComponent({
                 </div>
               </AccordionTrigger>
               <AccordionContent>
-                <div className="flex flex-col md:flex-row md:flex-wrap md:justify-between md:space-x-4  bg-transparent">
+                <div className="flex flex-col mt-4 pb-4 md:flex-row md:flex-wrap md:justify-between md:space-x-4  bg-transparent">
                   {/* <div className="mb-4 md:w-1/4"> */}
 
                   {/* </div> */}
                   <div className="mb-4 md:w-1/4">
-                    <div className="ml-auto flex flex-wrap items-center space-x-2">
-                      <Label className="font-bold text-sm md:text:sm">
+                    <div className="ml-auto flex flex-wrap items-center ">
+                      <Label className="font-bold text-sm md:text:sm pb-4">
                         Tasks:
                       </Label>
-
+                    </div>
+                    <div className="ml-auto flex flex-wrap items-center ">
                       <Badge className="bg-gray-500  min-w-fit text-xs px-2 py-[0.2em] m-1">{`${userTasks.length} assigned`}</Badge>
                       <Badge className="bg-yellow-500  min-w-fit text-xs px-2 py-[0.2em] m-1">{`${userTasksInProgress.length} in progress`}</Badge>
                       <Badge className="bg-green-500  min-w-fit text-xs px-2 py-[0.2em] m-1 ">{`${userTasksCompleted.length} completed`}</Badge>
                     </div>
                   </div>
                   <div className="mb-4 md:w-1/4">
-                    <div className="ml-auto flex flex-wrap items-center space-x-2">
-                      <Label className="font-bold text-sm md:text:sm">
+                    <div className="ml-auto flex flex-wrap items-center ">
+                      <Label className="font-bold text-sm md:text:sm pb-4">
                         Teams:
                       </Label>
-
+                    </div>
+                    <div className="ml-auto flex flex-wrap items-center ">
                       <Badge className=" min-w-fit text-xs px-2 py-[0.2em] m-1 bg-red-500 ">{` Admin: ${usersTeamsAsAdmin.length}`}</Badge>
 
                       <Badge className=" min-w-fit text-xs px-2 py-[0.2em] m-1  bg-green-500 ">{` Member: ${usersTeamsAsMember.length}`}</Badge>
                     </div>
                   </div>
                   <div className="mb-4 md:w-1/4">
-                    <div className="ml-auto flex flex-wrap items-center space-x-2">
-                      <Label className="font-bold text-sm md:text:sm">
+                    <div className="ml-auto flex flex-wrap items-center2">
+                      <Label className="font-bold text-sm md:text:sm pb-4">
                         Projects:
                       </Label>
-
+                    </div>
+                    <div className="ml-auto flex flex-wrap items-center ">
                       <Badge className=" min-w-fit text-xs px-2 py-[0.2em] m-1  bg-red-500 ">{` Admin: ${usersProjectsAsAdmin.length}`}</Badge>
 
                       <Badge className=" min-w-fit text-xs px-2 py-[0.2em] m-1  bg-green-500">{` Member: ${usersProjectsAsMember.length}`}</Badge>
@@ -163,8 +166,8 @@ export async function UserPageComponent({
         </div>
 
         <div className="flex flex-col md:flex-row max-w-[100vw] justify-evenly">
-          <div className="z-20  border-solid p-4 space-y-4 rounded-md md:w-[300px]  ">
-            <div className="flex flex-row p-2 justify-start align-middle h-fit ">
+          <div className="z-20  flex flex-col items-center border-solid p-4 bg-secondary border border-secondary-foreground space-y-4 rounded-md md:w-[300px]  ">
+            <div className="flex  p-2 justify-start align-top h-fit ">
               <h1 className="text-lg md:text-xl font-bold mr-6 self-center">
                 Your Teams
               </h1>
@@ -199,7 +202,7 @@ export async function UserPageComponent({
                 </DialogContent>
               </Dialog>
             </div>
-            <ScrollArea className=" h-[125px] flex flex-row md:justify-center align-middle md:flex-col space-x-4 md:space-y-4 md:space-x-0">
+            <ScrollArea className=" w-fit h-fit flex-grow">
               <ScrollBar
                 orientation="horizontal"
                 className="w-full "
@@ -210,15 +213,23 @@ export async function UserPageComponent({
                     return (
                       <Card
                         key={team_idx}
-                        className="border rounded-md flex items-center w-48 h-24 md:72 border-gray-500 bg-gray-800 shadow-lg hover:shadow-sm"
+                        className="border rounded-md mb-4 max-w-full p-1 flex items-center w-48 h-24 md:72 border-gray-500  bg-gray-800 shadow-lg hover:shadow-sm"
                       >
-                        <Link href={`/TEAMS-CLEAN/${team.id}`}>
-                          <Badge className=" min-w-fit text-xs px-1 py-[0.2em] m-1 bg-red-500 ">{` Admin`}</Badge>
-                          <CardHeader>
-                            <CardTitle className="text-md md:text-lg">
+                        <Link
+                          className="w-full"
+                          href={`/TEAMS-CLEAN/${team.id}`}
+                        >
+                          {/* <Badge className=" w-full text-xs m-0 px-[0.25em] py-[0.2em] text-center bg-red-500 ">{` Admin`}</Badge> */}
+                          <div className=" flex justify-end">
+                            <Badge className=" min-w-fit text-xs px-2 py-[0.2em] m-1 self-end bg-red-500 ">{`Admin`}</Badge>
+                          </div>
+
+                          <CardHeader className="p-0 pl-2">
+                            <CardTitle className="text-sm md:text-base">
                               {team.name}
                             </CardTitle>
-                            <CardDescription>
+                            <CardDescription className="text-xs text-ellipsis">
+                              <p>Projects: {team.projects.length}</p>
                               <p>Users: {team.users.length}</p>
                             </CardDescription>{" "}
                           </CardHeader>
@@ -226,21 +237,27 @@ export async function UserPageComponent({
                       </Card>
                     );
                   })}
-              </div>{" "}
-              <div className="flex flex-row md:justify-center md:flex-col">
+
                 {usersTeamsAsMember &&
                   usersTeamsAsMember.map((team, team_idx) => {
                     return (
                       <Card
                         key={team_idx}
-                        className="border rounded-lg flex items-center w-72 border-gray-500 bg-gray-800 shadow-lg hover:shadow-sm"
+                        className="border rounded-md mb-4 max-w-full p-1 flex items-center w-48 h-24 md:72 border-gray-500  bg-gray-800 shadow-lg hover:shadow-sm"
                       >
-                        <Link href={`/TEAMS-CLEAN/${team.id}`}>
-                          <CardHeader>
-                            <CardTitle className="text-md md:text-lg">
+                        <Link
+                          className="w-full"
+                          href={`/TEAMS-CLEAN/${team.id}`}
+                        >
+                          <div className=" flex justify-end">
+                            <Badge className=" min-w-fit text-xs px-2 py-[0.2em] m-1 self-end bg-green-500 ">{`Member`}</Badge>
+                          </div>
+                          <CardHeader className="p-0 pl-2">
+                            <CardTitle className="text-sm md:text-base">
                               {team.name}
                             </CardTitle>
-                            <CardDescription>
+                            <CardDescription className="text-xs text-ellipsis">
+                              <p>Projects: {team.projects.length}</p>
                               <p>Users: {team.users.length}</p>
                             </CardDescription>
                           </CardHeader>
@@ -253,53 +270,66 @@ export async function UserPageComponent({
           </div>
 
           <Separator className="my-10 md:hidden" />
-          <div className="z-20  border-solid border-slate-100 bg-slate-700 p-4 rounded-md md:w-[300px]  ">
-            <div className="flex flex-row p-2 justify-start align-middle">
+          <div className="z-20  flex flex-col items-center border-solid p-4 bg-secondary border border-secondary-foreground space-y-4 rounded-md md:w-[300px]  ">
+            <div className="flex  p-2 justify-start align-top h-fit ">
               <h1 className="text-lg md:text-xl  font-bold mr-6 self-center">
                 Your Projects
               </h1>
             </div>
-            <ScrollArea className="w-fit h-fit">
+            <ScrollArea className=" w-fit h-fit flex-grow">
               <ScrollBar
                 orientation="horizontal"
                 className="w-full"
               ></ScrollBar>
-              <div className="flex flex-row md:justify-center md:flex-col space-x-4 md:space-y-4 md:space-x-0">
+              <div className="flex flex-row md:justify-center md:flex-col pr-4 space-x-4 md:space-y-4 md:space-x-0">
                 {usersProjectsAsAdmin &&
                   usersProjectsAsAdmin.map((project, project_idx) => (
                     <Card
                       key={project_idx}
-                      className="border rounded-lg flex items-center w-72 border-gray-500 bg-gray-800 shadow-lg hover:shadow-sm"
+                      className="border rounded-md mb-4 max-w-full space-y-0 p-1 flex items-center w-48 h-24 md:72 border-gray-500  bg-gray-800 shadow-lg hover:shadow-sm"
                     >
-                      <Link href={`/PROJECTS-CLEAN/${project.id}`}>
-                        <CardHeader>
-                          <CardTitle className="text-md md:text-lg">
+                      <Link
+                        className="w-full"
+                        href={`/PROJECTS-CLEAN/${project.id}`}
+                      >
+                        <CardHeader className="p-0 pl-2">
+                          <div className=" flex justify-end">
+                            <Badge className=" min-w-fit text-xs px-1 py-[0.2em] m-1 self-end bg-red-500 ">{`Admin`}</Badge>
+                          </div>
+
+                          <CardTitle className="text-sm md:text-base">
                             {project.name}
                           </CardTitle>
-                          <CardDescription>
-                            {project.description}
-                            <p>members: {project.users.length}</p>
+                          <CardDescription className="text-xs text-ellipsis">
+                            <p>Tasks: {project.tasks.length}</p>
+                            <p>Users: {project.users.length}</p>
                           </CardDescription>
                         </CardHeader>
                       </Link>
                     </Card>
                   ))}
-              </div>{" "}
-              <div className="flex flex-row md:justify-center md:flex-col space-x-4 md:space-y-4 md:space-x-0">
+
                 {usersProjectsAsMember &&
                   usersProjectsAsMember.map((project, project_idx) => (
                     <Card
                       key={project_idx}
-                      className="border rounded-lg flex items-center w-72 border-gray-500 bg-gray-800 shadow-lg hover:shadow-sm"
+                      className="border rounded-md mb-4 max-w-full p-1 flex items-center w-48 h-24 md:72 border-gray-500  bg-gray-800 shadow-lg hover:shadow-sm"
                     >
-                      <Link href={`/PROJECTS-CLEAN/${project.id}`}>
-                        <CardHeader>
-                          <CardTitle className="text-md md:text-lg">
+                      <Link
+                        className="w-full"
+                        href={`/PROJECTS-CLEAN/${project.id}`}
+                      >
+                        <CardHeader className="p-0 pl-2">
+                          <div className=" flex justify-end">
+                            <Badge className=" min-w-fit text-xs px-1 py-[0.2em] m-1 self-end bg-green-500 ">{`Member`}</Badge>
+                          </div>
+                          <CardTitle className="text-sm  md:text-base">
                             {project.name}
                           </CardTitle>
-                          <CardDescription>
-                            {project.description}
-                            <p>members: {project.users.length}</p>
+                          <CardDescription className="text-xs text-ellipsis">
+                            {/* <p className="truncate">{project.description}</p> */}
+                            <p>Tasks: {project.tasks.length}</p>
+                            <p>Users: {project.users.length}</p>
                           </CardDescription>
                         </CardHeader>
                       </Link>

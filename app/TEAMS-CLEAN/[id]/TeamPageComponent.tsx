@@ -8,7 +8,7 @@ import UnarchiveProjectPopover from "./UnarchiveProjectPopover";
 import { TeamMemberCardWithPermissions } from "./team-member-card-with-permissions";
 import { getInitials } from "@/app/utils/getInitials";
 
-import { UserIcon, UserCog, ArchiveIcon } from "lucide-react";
+import { UserIcon, UserCog, ArchiveIcon, Scroll } from "lucide-react";
 import {
   CardTitle,
   CardDescription,
@@ -29,7 +29,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Popover,
@@ -91,7 +91,7 @@ export async function TeamPageComponent({
       <main className="flex bg-background overflow-x-hidden flex-col gap-4 p-4 md:gap-8 md:p-10">
         <div className="w-full h-[15vh] bg-primary-foreground absolute top-0 left-0 "></div>
 
-        <div className="z-20   min-w-[80vw] px-4 md:min-w-[75%] max-w-[75%] self-center bg-secondary rounded-lg border border-secondary-foreground">
+        <div className="z-20 overflow-x-clip  min-w-[80vw] px-4 md:min-w-[75%] max-w-[75%] self-center bg-secondary rounded-lg border border-secondary-foreground">
           {/* <div className="bg-gray-100 p-4 rounded-lg shadow-md"> */}
           <Accordion type="single" collapsible defaultValue="summary">
             <AccordionItem value="summary">
@@ -101,9 +101,9 @@ export async function TeamPageComponent({
                 </div>
               </AccordionTrigger>
               <AccordionContent>
-                <Separator className="my-4 bg-gray-700 h-[1px] space-x-16 md:hidden" />
-                <div className="flex flex-col md:flex-row md:flex-wrap md:justify-evenly  bg-transparent">
-                  <div className="bg-muted  md:w-1/2 mb-2  rounded-lg p-2 f  py-2">
+                <Separator className="mb-4 bg-gray-700 h-[1px] space-x-16 " />
+                <div className="flex flex-col md:flex-row md:flex-wrap md:justify-evenly  bg-transparent md:border-r-slate-600">
+                  <div className="bg-muted   md:flex-grow mb-2  rounded-lg p-2 f  py-2">
                     <div className="ml-auto flex flex-start mdL flex-col flex-wrap space-x-2">
                       <Label className="font-bold min-h-[40px] text-sm md:text:sm">
                         Projects:
@@ -111,7 +111,7 @@ export async function TeamPageComponent({
                       <div className="flex flex-wrap">
                         <Badge className="bg-green-500  min-w-fit text-xs px-2  py-[0.2em] m-1">
                           {" "}
-                          <p className=" mobileLandscape:text-xs text-sm">{`Active: ${countProjects} `}</p>
+                          {`Active: ${countProjects} `}
                         </Badge>
                         <Popover>
                           <PopoverTrigger className=" ">
@@ -119,9 +119,8 @@ export async function TeamPageComponent({
                             {/* <div className="flex flex-row mr-auto items-center space-x-2 "> */}
                             <Badge className="bg-gray-500  min-w-fit text-xs px-2 py-[0.2em] m-1">
                               <ArchiveIcon className="w-4 h-4 mr-1 opacity-60" />
-                              <p className=" mobileLandscape:text-xs text-sm">
-                                {`Archived: ${countArchivedProjects}`}
-                              </p>
+
+                              {`Archived: ${countArchivedProjects}`}
                             </Badge>
                             {/* </div> */}
                             {/* </div> */}
@@ -156,8 +155,12 @@ export async function TeamPageComponent({
                     </div>
                   </div>
                   <Separator className="my-4 bg-gray-700 h-[1px] space-x-16 md:hidden" />
+                  <Separator
+                    orientation="vertical"
+                    className="hidden my-4 bg-gray-700 md:w-[1px] h-auto mx-4 space-y-16 md:block"
+                  />
                   <div
-                    className={` bg-muted mb-2 md:w-1/2 rounded-lg p-2 flex  flex-col   py-2`}
+                    className={` bg-muted mb-2 md:flex-grow rounded-lg p-2 flex  flex-col   py-2`}
                   >
                     <div className="flex flex-row  justify-between align-middle">
                       <Label className="font-bold min-h-[40px] text-sm md:text:sm">
@@ -180,33 +183,38 @@ export async function TeamPageComponent({
                             <Badge className=" min-w-fit text-xs px-2 py-[0.2em] m-1 bg-red-500 ">
                               {` Admins: ${teamUsersAdmins.length}`}
                             </Badge>
+                            {/* </div>
+                        <div className=" mb-2 flex flex-row overflow-auto"> */}
+                            {/* <> */}
+                            <ScrollArea>
+                              {teamUsersAdmins.map((member, index) => (
+                                <div key={index} className="p-2">
+                                  <Popover>
+                                    <PopoverTrigger>
+                                      <Avatar key={index} className="w-8 h-8 ">
+                                        <AvatarFallback
+                                          className={` text-xs  bg-gray-500`}
+                                        >
+                                          {getInitials(member.name)}
+                                        </AvatarFallback>
+                                      </Avatar>
+                                      <span className="sr-only">
+                                        User Avatar
+                                      </span>
+                                    </PopoverTrigger>
+                                    <PopoverContent className="w-[calc(100%-3em)] m-4 p-0 border-none">
+                                      <TeamMemberCardWithPermissions
+                                        user={member}
+                                        team={team}
+                                      />
+                                    </PopoverContent>
+                                  </Popover>
+                                </div>
+                              ))}
+                              <ScrollBar orientation="horizontal" />
+                            </ScrollArea>
                           </div>
-                        </div>
-                        <div className=" mb-2 flex flex-row overflow-auto">
-                          <>
-                            {teamUsersAdmins.map((member, index) => (
-                              <div key={index} className="p-2">
-                                <Popover>
-                                  <PopoverTrigger>
-                                    <Avatar key={index} className="w-8 h-8 ">
-                                      <AvatarFallback
-                                        className={` text-xs  bg-gray-500`}
-                                      >
-                                        {getInitials(member.name)}
-                                      </AvatarFallback>
-                                    </Avatar>
-                                    <span className="sr-only">User Avatar</span>
-                                  </PopoverTrigger>
-                                  <PopoverContent className="w-[calc(100%-3em)] m-4 p-0 border-none">
-                                    <TeamMemberCardWithPermissions
-                                      user={member}
-                                      team={team}
-                                    />
-                                  </PopoverContent>
-                                </Popover>
-                              </div>
-                            ))}
-                          </>
+                          {/* </> */}
                         </div>
                       </div>
 
@@ -217,33 +225,37 @@ export async function TeamPageComponent({
                             <Badge className=" min-w-fit text-xs px-2 py-[0.2em] m-1 bg-green-500 ">
                               {` Members: ${teamUsersMembers.length}`}
                             </Badge>
-                          </div>
-                        </div>
-                        <div className=" mb-2 flex flex-row">
-                          <>
-                            {teamUsersMembers.map((member, index) => (
-                              <div key={index} className="p-2">
-                                <Popover>
-                                  <PopoverTrigger>
-                                    <Avatar key={index} className=" w-10 h-10">
-                                      <AvatarFallback
-                                        className={`text-sm bg-gray-500`}
+                            <ScrollArea>
+                              {teamUsersMembers.map((member, index) => (
+                                <div key={index} className="p-2">
+                                  <Popover>
+                                    <PopoverTrigger>
+                                      <Avatar
+                                        key={index}
+                                        className=" w-10 h-10"
                                       >
-                                        {getInitials(member.name)}
-                                      </AvatarFallback>
-                                    </Avatar>
-                                    <span className="sr-only">User Avatar</span>
-                                  </PopoverTrigger>
-                                  <PopoverContent>
-                                    <TeamMemberCardWithPermissions
-                                      user={member}
-                                      team={team}
-                                    />
-                                  </PopoverContent>
-                                </Popover>
-                              </div>
-                            ))}
-                          </>
+                                        <AvatarFallback
+                                          className={`text-sm bg-gray-500`}
+                                        >
+                                          {getInitials(member.name)}
+                                        </AvatarFallback>
+                                      </Avatar>
+                                      <span className="sr-only">
+                                        User Avatar
+                                      </span>
+                                    </PopoverTrigger>
+                                    <PopoverContent>
+                                      <TeamMemberCardWithPermissions
+                                        user={member}
+                                        team={team}
+                                      />
+                                    </PopoverContent>
+                                  </Popover>
+                                </div>
+                              ))}
+                              <ScrollBar orientation="horizontal" />
+                            </ScrollArea>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -308,12 +320,19 @@ export async function TeamPageComponent({
                 project.archived === false && (
                   <Card
                     key={project_idx}
-                    className="border rounded-lg flex items-center w-72 border-gray-500 bg-gray-800 shadow-lg hover:shadow-sm"
+                    className="border rounded-lg overflow-x-clip flex items-center  border-gray-500 bg-gray-800 shadow-lg w-full hover:shadow-sm"
                   >
                     <Link href={`/PROJECTS-CLEAN/${project.id}`}>
                       <CardHeader>
-                        <CardTitle>{project.name}</CardTitle>
-                        <CardDescription>{project.description}</CardDescription>
+                        <CardTitle className="text-md md:text-lg flex justify-between w-full ">
+                          {project.name}
+                          <Badge className=" min-w-fit text-xs px-1 py-[0.2em] m-1 bg-yellow-500 ">
+                            {`Users:  ${project.users.length}`}
+                          </Badge>
+                        </CardTitle>
+                        <CardDescription className="text-ellipsis">
+                          {project.description}
+                        </CardDescription>
                       </CardHeader>
                     </Link>
                   </Card>
