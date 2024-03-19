@@ -62,7 +62,7 @@ export async function UserPageComponent({
     <div className="absolute flex flex-col top-[4em] w-full h-[calc(100vh-4em)]">
       <main className="flex bg-background items-center overflow-x-hidden flex-col p-4 md:gap-8 md:p-10">
         <div className="w-full h-[15vh] bg-primary-foreground absolute top-0 left-0 "></div>
-        <div className="z-20   max-w-[90vw] w-[280px] md:w-[80%] md:max-w-[650px] flex flex-col items-center self-center border-solid p-4 bg-secondary border border-secondary-foreground space-y-4 rounded-md  ">
+        <div className="z-20   max-w-[90vw] w-[300px]  md:max-w-[650px]    px-4 md:w-[75%] flex flex-col items-center self-center border-solid p-4 bg-secondary border border-secondary-foreground space-y-4 rounded-md  ">
           {/* <div className="bg-gray-100 p-4 rounded-lg shadow-md"> */}
           <Accordion type="single" collapsible className="w-full">
             <AccordionItem value="summary">
@@ -120,62 +120,19 @@ export async function UserPageComponent({
               </AccordionContent>
             </AccordionItem>
           </Accordion>
-
-          {/* </div> */}
-
-          {/* <div className="flex flex-row space-x-4 ">
-            <p className="text-lg font-bold">Hey {user.name}!</p>
-            <p className="text-xs ">
-              {"Here's a summary of your teams and projects."}
-            </p>
-          </div>
-          <div className="flex flex-col">
-            <div className="flex flex-row space-x-4">
-              <Label>
-                <span className="text-sm ">Teams As Admin: </span>
-                <span className="text-sm font-bold">
-                  {usersTeamsAsAdmin.length}
-                </span>
-              </Label>
-              <Label>
-                <span className="text-sm">Teams As Member: </span>
-                <span className="text-sm font-bold">
-                  {usersTeamsAsMember.length}
-                </span>
-              </Label>
-            </div>
-            <div className="flex flex-row space-x-4 ">
-              <Label>
-                <span className="text-sm ">Projects As Admin: </span>
-                <span className="text-sm font-bold">
-                  {usersProjectsAsAdmin.length}
-                </span>
-              </Label>
-              <Label>
-                <span className="text-sm ">Projects As Member: </span>
-                <span className="text-sm font-bold">
-                  {usersProjectsAsMember.length}
-                </span>
-              </Label>
-              <Label>
-                <span className="text-sm ">Assigned Tasks: </span>
-                <span className="text-sm font-bold">{user.tasks.length}</span>
-              </Label>
-            </div>
-          </div> */}
         </div>
 
-        <div className="flex flex-col w-[650px] md:max-w-[650px] justify-between md:flex-row  ">
-          <div className="z-20 mt-16 md:mt-0 min-h-[240px] max-w-[280px] w-[280px] md:w-[280px] self-center  flex flex-col items-center border-solid p-4 bg-secondary border border-secondary-foreground space-y-4 rounded-md   ">
-            <div className="flex  p-2 justify-start align-top h-fit ">
+        <div className="z-20 flex justify-center  self-center flex-col lg:flex-row  w-full">
+          <div className="z-20 flex-grow mt-8 flex w-full  lg:mr-4 flex-col justify-center md:justify-start">
+            <div className="flex min-h-[75px]  p-2 justify-center  md:justify-start align-top h-fit ">
               <h1 className="text-lg md:text-xl font-bold mr-6 self-center">
                 Your Teams
               </h1>
               <Dialog>
-                <DialogTrigger>
+                <DialogTrigger className="h-fit flex self-center">
                   <Button
                     title="Add New Team"
-                    className="rounded-full ml-auto"
+                    className="rounded-full  ml-auto"
                     size="icon"
                   >
                     <PlusIcon className="w-4 h-4" />
@@ -194,18 +151,18 @@ export async function UserPageComponent({
                 </DialogContent>
               </Dialog>
             </div>
-            <ScrollArea className=" w-fit h-fit flex-grow">
+            <ScrollArea className=" flex max-w-[90vw] w-[90vw] lg:w-auto pb-2 self-center lg:self-start justify-center lg:justify-start flex-row flex-wrap">
               <ScrollBar
                 orientation="horizontal"
                 className="w-full "
               ></ScrollBar>
-              <div className=" flex flex-row md:justify-center md:flex-col">
+              <div className=" flex flex-col max-h-[32vh] lg:max-h-[75vh] md:h-fit md:flex-row  justify-start  flex-wrap">
                 {usersTeamsAsAdmin &&
                   usersTeamsAsAdmin.map((team, team_idx) => {
                     return (
                       <Card
                         key={team_idx}
-                        className="border rounded-md mb-4 max-w-full p-1 flex items-center w-56 h-28 border-gray-500  bg-gray-800 shadow-lg hover:shadow-sm"
+                        className="border rounded-md mb-4 max-w-full p-1 mr-4 md:mb-4 flex items-center w-56 h-28 border-gray-500  bg-gray-800 shadow-lg hover:shadow-sm"
                       >
                         <Link
                           className="w-full"
@@ -261,24 +218,23 @@ export async function UserPageComponent({
             </ScrollArea>
           </div>
 
-          <Separator className="my-10 w-[75%] max-w-[320px]  self-center md:hidden" />
-          <div className="z-20    min-h-[240px] max-w-[280px]  w-[280px] self-center  flex flex-col items-center border-solid p-4 bg-secondary border border-secondary-foreground space-y-4 rounded-md md:w-[300px]  ">
-            <div className="flex  p-2 justify-start align-top h-fit ">
+          <div className=" z-20 flex w-full flex-col lg:ml-4 flex-grow justify-center md:justify-start mt-4 md:mt-8">
+            <div className="flex  min-h-[75px] p-2 justify-center md:justify-start align-top h-fit  ">
               <h1 className="text-lg md:text-xl font-bold mr-6 self-center">
                 Your Projects
               </h1>
             </div>
-            <ScrollArea className=" w-fit h-fit flex-grow">
+            <ScrollArea className=" flex max-w-[90vw]  w-[90vw] lg:w-auto pb-2 self-center lg:self-start justify-center lg:justify-start flex-row flex-wrap">
               <ScrollBar
                 orientation="horizontal"
                 className="w-full"
               ></ScrollBar>
-              <div className=" flex flex-row md:justify-center md:flex-col">
+              <div className="flex flex-col max-h-[32vh] lg:max-h-[75vh] md:h-fit md:flex-row  justify-start  flex-wrap ">
                 {usersProjectsAsAdmin &&
                   usersProjectsAsAdmin.map((project, project_idx) => (
                     <Card
                       key={project_idx}
-                      className="border rounded-md mb-4 max-w-full p-1 flex items-center w-56 h-28 border-gray-500  bg-gray-800 shadow-lg hover:shadow-sm"
+                      className="border rounded-md mb-4 max-w-full p-1 mr-4 md:mb-4 flex items-center w-56 h-28 border-gray-500  bg-gray-800 shadow-lg hover:shadow-sm"
                     >
                       <Link
                         className="w-full"

@@ -104,7 +104,7 @@ export async function TeamPageComponent({
                 <Separator className="mb-4 bg-gray-700 h-[1px] space-x-16 " />
                 <div className="flex flex-col md:flex-row md:flex-wrap md:justify-evenly  bg-transparent md:border-r-slate-600">
                   <div className="bg-muted   md:flex-grow mb-2  rounded-lg p-2 f  py-2">
-                    <div className="ml-auto flex flex-start mdL flex-col flex-wrap space-x-2">
+                    <div className="ml-auto flex flex-start flex-col flex-wrap space-x-2">
                       <Label className="font-bold min-h-[40px] text-sm md:text:sm">
                         Projects:
                       </Label>
