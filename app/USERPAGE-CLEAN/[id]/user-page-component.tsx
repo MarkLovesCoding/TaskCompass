@@ -60,11 +60,11 @@ export async function UserPageComponent({
   );
   return (
     <div className="absolute flex flex-col top-[4em] w-full h-[calc(100vh-4em)]">
-      <main className="flex bg-background overflow-x-hidden flex-col gap-4 p-4 md:gap-8 md:p-10">
+      <main className="flex bg-background items-center overflow-x-hidden flex-col p-4 md:gap-8 md:p-10">
         <div className="w-full h-[15vh] bg-primary-foreground absolute top-0 left-0 "></div>
-        <div className="z-20   p-4 min-w-[75%] max-w-[75%] self-center bg-secondary rounded-lg border border-secondary-foreground ">
+        <div className="z-20   max-w-[90vw] w-[280px] md:w-[80%] md:max-w-[650px] flex flex-col items-center self-center border-solid p-4 bg-secondary border border-secondary-foreground space-y-4 rounded-md  ">
           {/* <div className="bg-gray-100 p-4 rounded-lg shadow-md"> */}
-          <Accordion type="single" collapsible>
+          <Accordion type="single" collapsible className="w-full">
             <AccordionItem value="summary">
               <AccordionTrigger>
                 <div className="flex items-center space-x-3 my-2">
@@ -165,32 +165,24 @@ export async function UserPageComponent({
           </div> */}
         </div>
 
-        <div className="flex flex-col md:flex-row max-w-[100vw] justify-evenly">
-          <div className="z-20  flex flex-col items-center border-solid p-4 bg-secondary border border-secondary-foreground space-y-4 rounded-md md:w-[300px]  ">
+        <div className="flex flex-col w-[650px] md:max-w-[650px] justify-between md:flex-row  ">
+          <div className="z-20 mt-16 md:mt-0 min-h-[240px] max-w-[280px] w-[280px] md:w-[280px] self-center  flex flex-col items-center border-solid p-4 bg-secondary border border-secondary-foreground space-y-4 rounded-md   ">
             <div className="flex  p-2 justify-start align-top h-fit ">
               <h1 className="text-lg md:text-xl font-bold mr-6 self-center">
                 Your Teams
               </h1>
               <Dialog>
                 <DialogTrigger>
-                  <HoverCard>
-                    <HoverCardTrigger>
-                      <Button className="rounded-full ml-auto" size="icon">
-                        <PlusIcon className="w-4 h-4" />
-                        <span className="sr-only">New Team Button</span>
-                      </Button>
-                    </HoverCardTrigger>
-                    <HoverCardContent
-                      side="right"
-                      //@ts-expect-error //bug in radix code
-                      sideOffset="2"
-                      className="max-w-fit"
-                    >
-                      Add New Team
-                    </HoverCardContent>
-                  </HoverCard>
+                  <Button
+                    title="Add New Team"
+                    className="rounded-full ml-auto"
+                    size="icon"
+                  >
+                    <PlusIcon className="w-4 h-4" />
+                    <span className="sr-only">New Team Button</span>
+                  </Button>
                 </DialogTrigger>
-                <DialogContent className="max-w-[300px]">
+                <DialogContent className="max-w-[280px]">
                   <AddTeamCard />
                   {/* <DialogFooter className="sm:justify-end">
                   <DialogClose asChild>
@@ -213,7 +205,7 @@ export async function UserPageComponent({
                     return (
                       <Card
                         key={team_idx}
-                        className="border rounded-md mb-4 max-w-full p-1 flex items-center w-48 h-24 md:72 border-gray-500  bg-gray-800 shadow-lg hover:shadow-sm"
+                        className="border rounded-md mb-4 max-w-full p-1 flex items-center w-56 h-28 border-gray-500  bg-gray-800 shadow-lg hover:shadow-sm"
                       >
                         <Link
                           className="w-full"
@@ -243,7 +235,7 @@ export async function UserPageComponent({
                     return (
                       <Card
                         key={team_idx}
-                        className="border rounded-md mb-4 max-w-full p-1 flex items-center w-48 h-24 md:72 border-gray-500  bg-gray-800 shadow-lg hover:shadow-sm"
+                        className="border rounded-md mb-4 max-w-full p-1 flex items-center w-56 h-28 border-gray-500  bg-gray-800 shadow-lg hover:shadow-sm"
                       >
                         <Link
                           className="w-full"
@@ -269,10 +261,10 @@ export async function UserPageComponent({
             </ScrollArea>
           </div>
 
-          <Separator className="my-10 md:hidden" />
-          <div className="z-20  flex flex-col items-center border-solid p-4 bg-secondary border border-secondary-foreground space-y-4 rounded-md md:w-[300px]  ">
+          <Separator className="my-10 w-[75%] max-w-[320px]  self-center md:hidden" />
+          <div className="z-20    min-h-[240px] max-w-[280px]  w-[280px] self-center  flex flex-col items-center border-solid p-4 bg-secondary border border-secondary-foreground space-y-4 rounded-md md:w-[300px]  ">
             <div className="flex  p-2 justify-start align-top h-fit ">
-              <h1 className="text-lg md:text-xl  font-bold mr-6 self-center">
+              <h1 className="text-lg md:text-xl font-bold mr-6 self-center">
                 Your Projects
               </h1>
             </div>
@@ -281,12 +273,12 @@ export async function UserPageComponent({
                 orientation="horizontal"
                 className="w-full"
               ></ScrollBar>
-              <div className="flex flex-row md:justify-center md:flex-col pr-4 space-x-4 md:space-y-4 md:space-x-0">
+              <div className=" flex flex-row md:justify-center md:flex-col">
                 {usersProjectsAsAdmin &&
                   usersProjectsAsAdmin.map((project, project_idx) => (
                     <Card
                       key={project_idx}
-                      className="border rounded-md mb-4 max-w-full space-y-0 p-1 flex items-center w-48 h-24 md:72 border-gray-500  bg-gray-800 shadow-lg hover:shadow-sm"
+                      className="border rounded-md mb-4 max-w-full p-1 flex items-center w-56 h-28 border-gray-500  bg-gray-800 shadow-lg hover:shadow-sm"
                     >
                       <Link
                         className="w-full"
@@ -313,7 +305,7 @@ export async function UserPageComponent({
                   usersProjectsAsMember.map((project, project_idx) => (
                     <Card
                       key={project_idx}
-                      className="border rounded-md mb-4 max-w-full p-1 flex items-center w-48 h-24 md:72 border-gray-500  bg-gray-800 shadow-lg hover:shadow-sm"
+                      className="border rounded-md mb-4 max-w-full p-2 flex items-center  w-56 h-28  border-gray-500  bg-gray-800 shadow-lg hover:shadow-sm"
                     >
                       <Link
                         className="w-full"
@@ -321,7 +313,7 @@ export async function UserPageComponent({
                       >
                         <CardHeader className="p-0 pl-2">
                           <div className=" flex justify-end">
-                            <Badge className=" min-w-fit text-xs px-1 py-[0.2em] m-1 self-end bg-green-500 ">{`Member`}</Badge>
+                            <Badge className=" min-w-fit text-xs px-2 py-[0.2em] m-1 self-end bg-green-500 ">{`Member`}</Badge>
                           </div>
                           <CardTitle className="text-sm  md:text-base">
                             {project.name}

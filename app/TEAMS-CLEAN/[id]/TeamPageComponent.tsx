@@ -15,7 +15,7 @@ import {
   CardHeader,
   Card,
 } from "@/components/ui/card";
-
+import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 import {
@@ -89,7 +89,7 @@ export async function TeamPageComponent({
   return (
     <div className=" absolute flex flex-col w-full  items-center top-[4em] min-h-[calc(100vh-4rem)">
       <main className="flex bg-background overflow-x-hidden flex-col gap-4 p-4 md:gap-8 md:p-10">
-        <div className="w-full h-[15vh] bg-primary-foreground absolute top-0 left-0 "></div>
+        <div className="w-full h-[15vh] bg-primary-foreground fixed top-[4em] left-0 "></div>
 
         <div className="z-20 overflow-x-clip  min-w-[80vw] px-4 md:min-w-[75%] max-w-[75%] self-center bg-secondary rounded-lg border border-secondary-foreground">
           {/* <div className="bg-gray-100 p-4 rounded-lg shadow-md"> */}
@@ -298,46 +298,60 @@ export async function TeamPageComponent({
             </AccordionItem>
           </Accordion>
         </div>
-        <div className="flex flex-row align-middle">
-          <h3 className="text-lg font-bold z-10">Team Projects</h3>
-          <div className="p-4">
-            <Dialog>
-              <DialogTrigger>
-                <PlusIcon className="w-8 h-8 p-2 self-center cursor-pointer bg-primary rounded-full" />
-                <span className="sr-only">New Project Button</span>
-              </DialogTrigger>
-              <DialogContent className="max-w-[300px]">
-                <AddProjectCard teamId={teamId} />
-              </DialogContent>
-            </Dialog>
+
+        <div className=" z-20 flex justify-center self-center flex-col mt-4 w-full">
+          <div className=" flex w-full flex-col justify-center">
+            <div className="flex  p-2 justify-center md:justify-start align-top h-fit ">
+              <h1 className="text-lg md:text-xl font-bold mr-6 self-center">
+                Projects
+              </h1>
+              <div className="p-4">
+                <Dialog>
+                  <DialogTrigger>
+                    <Button
+                      title="Add New Project"
+                      className="rounded-full ml-auto"
+                      size="icon"
+                    >
+                      <PlusIcon className="w-4 h-4" />
+                      <span className="sr-only">New Project Button</span>
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-[300px]">
+                    <AddProjectCard teamId={teamId} />
+                  </DialogContent>
+                </Dialog>
+              </div>
+            </div>
+            <div className=" flex max-w-[90vw] justify-center md:justify-start flex-row flex-wrap">
+              {projects &&
+                projects.map(
+                  (project, project_idx) =>
+                    project.archived === false && (
+                      <Card
+                        key={project_idx}
+                        className="border rounded-md mb-4 max-w-full p-1 flex items-center w-56 h-28 border-gray-500 mr-4   bg-gray-800 shadow-lg hover:shadow-sm"
+                      >
+                        <Link href={`/PROJECTS-CLEAN/${project.id}`}>
+                          <CardHeader className="p-0 pl-2">
+                            <CardTitle className="text-sm md:text-base">
+                              {project.name}
+                              <div className=" flex justify-end">
+                                <Badge className="  min-w-fit text-xs px-2 py-[0.2em] m-1 self-end bg-yellow-500 ">
+                                  {`Users:  ${project.users.length}`}
+                                </Badge>
+                              </div>
+                            </CardTitle>
+                            <CardDescription className="text-xs text-ellipsis">
+                              {project.description}
+                            </CardDescription>
+                          </CardHeader>
+                        </Link>
+                      </Card>
+                    )
+                )}
+            </div>
           </div>
-        </div>
-        <Separator className="mb-4" />
-        <div className="grid gap-4 md:grid-cols-3 z-10">
-          {projects &&
-            projects.map(
-              (project, project_idx) =>
-                project.archived === false && (
-                  <Card
-                    key={project_idx}
-                    className="border rounded-lg overflow-x-clip flex items-center  border-gray-500 bg-gray-800 shadow-lg w-full hover:shadow-sm"
-                  >
-                    <Link href={`/PROJECTS-CLEAN/${project.id}`}>
-                      <CardHeader>
-                        <CardTitle className="text-md md:text-lg flex justify-between w-full ">
-                          {project.name}
-                          <Badge className=" min-w-fit text-xs px-1 py-[0.2em] m-1 bg-yellow-500 ">
-                            {`Users:  ${project.users.length}`}
-                          </Badge>
-                        </CardTitle>
-                        <CardDescription className="text-ellipsis">
-                          {project.description}
-                        </CardDescription>
-                      </CardHeader>
-                    </Link>
-                  </Card>
-                )
-            )}
         </div>
       </main>
     </div>
