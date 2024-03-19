@@ -22,7 +22,13 @@ import { sessionAuth } from "@/lib/sessionAuth";
 import { ProjectDto } from "@/use-cases/project/types";
 import { TeamDto } from "@/use-cases/team/types";
 import { UserDto } from "@/use-cases/user/types";
-import { CompassIcon } from "lucide-react";
+import {
+  CompassIcon,
+  KanbanIcon,
+  LayoutDashboard,
+  Menu,
+  UsersIcon,
+} from "lucide-react";
 
 const Navigation: React.FC = async () => {
   const session = await sessionAuth();
@@ -49,98 +55,14 @@ const Navigation: React.FC = async () => {
             <span className="sr-only">Task Compass Project Management App</span>
           </Link>
           <nav className="font-medium flex flex-row items-center gap-5 text-sm lg:gap-6 ml-auto">
-            {
-              <div className=" sm:hidden">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost">...</Button>
-                  </DropdownMenuTrigger>
-                  {/* </DropdownMenuTrigger> */}
-                  <DropdownMenuContent>
-                    <DropdownMenuSub>
-                      <DropdownMenuSubTrigger>Teams</DropdownMenuSubTrigger>
-                      <DropdownMenuPortal>
-                        <DropdownMenuSubContent>
-                          {teams.map((team, team_idx) => (
-                            <DropdownMenuItem key={team_idx}>
-                              <Link href={`/TEAMS-CLEAN/${team.id}`}>
-                                {team.name}
-                              </Link>
-                            </DropdownMenuItem>
-                          ))}
-                        </DropdownMenuSubContent>
-                      </DropdownMenuPortal>
-                    </DropdownMenuSub>
-                    <DropdownMenuSeparator />
-
-                    <DropdownMenuSub>
-                      <DropdownMenuSubTrigger>Projects</DropdownMenuSubTrigger>
-                      <DropdownMenuPortal>
-                        <DropdownMenuSubContent>
-                          {/* <DropdownMenuContent align="start"> */}
-                          {projects.map((project, project_idx) => (
-                            <DropdownMenuItem key={project_idx}>
-                              <Link href={`/PROJECTS-CLEAN/${project.id}`}>
-                                {project.name}
-                              </Link>
-                            </DropdownMenuItem>
-                          ))}
-                        </DropdownMenuSubContent>
-                      </DropdownMenuPortal>
-                    </DropdownMenuSub>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-            }
-            {
-              <div className="hidden sm:block">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Link
-                      className="m-4 font-bold bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 py-2 px-4 rounded-lg"
-                      href="#"
-                    >
-                      Projects
-                    </Link>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="start">
-                    {projects.map((project, project_idx) => (
-                      <DropdownMenuItem key={project_idx}>
-                        <Link href={`/PROJECTS-CLEAN/${project.id}`}>
-                          {project.name}
-                        </Link>
-                      </DropdownMenuItem>
-                    ))}
-                  </DropdownMenuContent>
-                </DropdownMenu>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Link
-                      className="text-gray-500 dark:text-gray-400 bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 py-2 px-4 rounded-lg"
-                      href="#"
-                    >
-                      Teams
-                    </Link>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="start">
-                    {teams.map((team, team_idx) => (
-                      <DropdownMenuItem key={team_idx}>
-                        <Link href={`/TEAMS-CLEAN/${team.id}`}>
-                          {team.name}
-                        </Link>
-                      </DropdownMenuItem>
-                    ))}
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-            }
-
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
-                  className="relative h-8 w-8 rounded-full"
+                  className="relative group  p-4 rounded-full flex flex-row justify-around items-center gap-2 text-sm font-medium text-muted-foreground border-solid border-[1px] border-white hover:bg-secondary-foreground hover:text-primary focus:bg-primary focus:text-primary transition-colors duration-200 ease-in-out"
                 >
+                  <Menu className="w-6 h-6 text-white fill-white group-hover:fill-background group-hover:text-background" />
+
                   <Avatar className="ml-auto h-8 w-8">
                     <AvatarImage
                       src="/avatars/01.png"
@@ -165,11 +87,60 @@ const Navigation: React.FC = async () => {
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <Link
+                  href={`/TEAMS-CLEAN/${sessionUserId}`}
+                  title="Your Profile"
+                >
+                  <DropdownMenuSub>
+                    <DropdownMenuSubTrigger className="flex flex-row space-x-2">
+                      <UsersIcon className="w-6 h-6 mr-2" />
+                      Teams
+                    </DropdownMenuSubTrigger>
+                    <DropdownMenuPortal>
+                      <DropdownMenuSubContent>
+                        {teams.map((team, team_idx) => (
+                          <DropdownMenuItem key={team_idx}>
+                            <Link href={`/TEAMS-CLEAN/${team.id}`}>
+                              {team.name}
+                            </Link>
+                          </DropdownMenuItem>
+                        ))}
+                      </DropdownMenuSubContent>
+                    </DropdownMenuPortal>
+                  </DropdownMenuSub>
+                </Link>
+
+                <DropdownMenuSeparator />
+                <Link
                   href={`/USERPAGE-CLEAN/${sessionUserId}`}
                   title="Your Profile"
                 >
-                  <DropdownMenuItem className="cursor-pointer ">
-                    Profile
+                  <DropdownMenuSub>
+                    <DropdownMenuSubTrigger className="flex flex-row space-x-2">
+                      <KanbanIcon className="w-6 h-6 mr-2" />
+                      Projects
+                    </DropdownMenuSubTrigger>
+                    <DropdownMenuPortal>
+                      <DropdownMenuSubContent>
+                        {projects.map((project, project_idx) => (
+                          <DropdownMenuItem key={project_idx}>
+                            <Link href={`/PROJECTS-CLEAN/${project.id}`}>
+                              {project.name}
+                            </Link>
+                          </DropdownMenuItem>
+                        ))}
+                      </DropdownMenuSubContent>
+                    </DropdownMenuPortal>
+                  </DropdownMenuSub>
+                </Link>
+
+                <DropdownMenuSeparator />
+                <Link
+                  href={`/USERPAGE-CLEAN/${sessionUserId}`}
+                  title="Your Profile"
+                >
+                  <DropdownMenuItem className="cursor-pointer flex flex-row space-x-2">
+                    <LayoutDashboard className="w-6 h-6 mr-2" />
+                    Dashboard
                   </DropdownMenuItem>
                 </Link>
 
