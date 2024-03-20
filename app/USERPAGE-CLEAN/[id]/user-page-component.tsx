@@ -77,7 +77,7 @@ export async function UserPageComponent({
                 </div>
               </AccordionTrigger>
               <AccordionContent>
-                <div className="flex flex-col mt-4 pb-4 md:flex-row md:flex-wrap md:justify-between md:space-x-4  bg-transparent">
+                <div className="flex flex-col mt-4 md:flex-row md:flex-wrap md:justify-between md:space-x-4  bg-transparent">
                   {/* <div className="mb-4 md:w-1/4"> */}
 
                   {/* </div> */}

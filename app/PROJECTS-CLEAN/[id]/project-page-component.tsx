@@ -214,8 +214,8 @@ export function ProjectPage({
                         </div>
                         <div className="">
                           <Popover>
-                            <PopoverTrigger className=" flex flex-col w-[225px] mobileLandscape:w-[175px]">
-                              <div className="flex flex-row items-center space-x-2 p-1  rounded hover:bg-primary-foreground">
+                            <PopoverTrigger className=" flex flex-col w-[225px]  mobileLandscape:w-[175px]">
+                              <div className="flex flex-row items-center space-x-2 p-1 pr-2  rounded hover:bg-primary-foreground">
                                 <div className="flex flex-row mr-auto items-center space-x-2 ">
                                   <ArchiveIcon className="w-4 h-4 mr-1 opacity-60" />
                                   <p className=" mobileLandscape:text-xs text-sm">

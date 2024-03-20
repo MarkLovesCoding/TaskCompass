@@ -259,7 +259,7 @@ const CardView = ({
           <div
             {...provided.droppableProps}
             ref={provided.innerRef}
-            className="flex flex-row justify-start w-min-full "
+            className="flex flex-row ml-[1em] justify-start w-min-full "
           >
             <>
               {sortedTasksArray.map((column, sorted_idx) => (
