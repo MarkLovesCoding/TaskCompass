@@ -27,11 +27,11 @@ const CardColumn = ({
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           className={cn(
-            snapshot.isDragging ? "bg-gray-800" : "bg-gray-900",
-            "w-[250px] m-6  flex flex-col items-center align-top px-4"
+            snapshot.isDragging ? "bg-gray-800 opacity-95 " : "bg-background  ",
+            "w-[250px] m-4 md:m-6  rounded-lg  flex flex-col items-center align-top px-4"
           )}
         >
-          <label className="text-2xl font-bold">{`${sorted_type}`}</label>
+          <label className="text-lg pt-2 md:text-xl lg:text-2xl font-bold">{`${sorted_type}`}</label>
 
           <Droppable droppableId={sorted_type} key={sorted_idx} type="task">
             {(provided, snapshot) => (
@@ -42,8 +42,8 @@ const CardColumn = ({
                 className={cn(
                   snapshot.isDraggingOver
                     ? "bg-gray-800   "
-                    : "border-gray-500 border-1",
-                  ` w-[250px] m-8  flex flex-col   items-center align-top px-2  `
+                    : "border-gray-500 ",
+                  ` w-[250px] m-4 md:mx-8  flex flex-col  mb-0 rounded-lg md:py-6 items-center align-top px-2  `
                 )}
               >
                 {tasksList.length === 0

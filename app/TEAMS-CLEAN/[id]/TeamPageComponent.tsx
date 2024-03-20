@@ -154,15 +154,15 @@ export async function TeamPageComponent({
                       </div>
                     </div>
                   </div>
-                  <Separator className="my-4 bg-gray-700 h-[1px] space-x-16 md:hidden" />
+                  {/* <Separator className="my-4 bg-gray-700 h-[1px] space-x-16 md:hidden" />
                   <Separator
                     orientation="vertical"
                     className="hidden my-4 bg-gray-700 md:w-[1px] h-auto mx-4 space-y-16 md:block"
-                  />
+                  /> */}
                   <div
                     className={` bg-muted mb-2 md:flex-grow rounded-lg p-2 flex  flex-col   py-2`}
                   >
-                    <div className="flex flex-row  justify-between align-middle">
+                    <div className="flex flex-row  justify-between ">
                       <Label className="font-bold min-h-[40px] text-sm md:text:sm">
                         Users:
                       </Label>
@@ -301,7 +301,7 @@ export async function TeamPageComponent({
 
         <div className=" z-20 flex justify-center self-center flex-col mt-4 w-full">
           <div className=" flex w-full flex-col justify-center">
-            <div className="flex  p-2 justify-center md:justify-start align-top h-fit ">
+            <div className="flex ml-[12%] md:ml-0 p-2 justify-start align-top h-fit ">
               <h1 className="text-lg md:text-xl font-bold mr-6 self-center">
                 Projects
               </h1>
@@ -330,20 +330,28 @@ export async function TeamPageComponent({
                     project.archived === false && (
                       <Card
                         key={project_idx}
-                        className="border rounded-md mb-4 max-w-full p-1 flex items-center w-56 h-28 border-gray-500 mr-4   bg-gray-800 shadow-lg hover:shadow-sm"
+                        className="border rounded-md mb-4 p-1 flex items-center w-56 h-28 border-gray-500 mr-4   bg-gray-800 shadow-lg hover:shadow-sm "
                       >
-                        <Link href={`/PROJECTS-CLEAN/${project.id}`}>
+                        <Link
+                          className="truncate "
+                          href={`/PROJECTS-CLEAN/${project.id}`}
+                        >
                           <CardHeader className="p-0 pl-2">
                             <CardTitle className="text-sm md:text-base">
                               {project.name}
-                              <div className=" flex justify-end">
+                            </CardTitle>
+                            <CardDescription className="text-xs w-full  flex flex-col justify-start">
+                              <div className="truncate max-w-full text-ellipsis ">
+                                {project.description}
+                              </div>
+                              <div className=" flex justify-start pt-2">
                                 <Badge className="  min-w-fit text-xs px-2 py-[0.2em] m-1 self-end bg-yellow-500 ">
                                   {`Users:  ${project.users.length}`}
                                 </Badge>
+                                <Badge className="  min-w-fit text-xs px-2 py-[0.2em] m-1 self-end bg-sky-500 ">
+                                  {`Tasks:  ${project.tasks.length}`}
+                                </Badge>
                               </div>
-                            </CardTitle>
-                            <CardDescription className="text-xs text-ellipsis">
-                              {project.description}
                             </CardDescription>
                           </CardHeader>
                         </Link>

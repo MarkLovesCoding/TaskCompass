@@ -50,13 +50,15 @@ export function MemberCardWithPermissions({
           <div className="flex items-center space-x-3">
             <Avatar className="w-10 h-10">
               {/* <AvatarImage alt={user.name} src="@/public/default-avatar.jpg" /> */}
-              <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
+              <AvatarFallback className="bg-primary">
+                {getInitials(user.name)}
+              </AvatarFallback>
             </Avatar>
             <div className="text-lg font-bold">{user.name}</div>
           </div>
           <div className="ml-auto flex items-center space-x-2">
             <Badge variant="outline">{`${usersTasks.length} task${
-              usersTasks.length > 1 ? "s" : ""
+              usersTasks.length != 1 ? "s" : ""
             }`}</Badge>
           </div>
         </div>

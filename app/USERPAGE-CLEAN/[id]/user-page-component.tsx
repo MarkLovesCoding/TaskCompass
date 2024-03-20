@@ -123,18 +123,18 @@ export async function UserPageComponent({
           </Accordion>
         </div>
 
-        <div className="z-20 flex justify-center  self-center flex-col lg:flex-row  w-full">
+        <div className="z-20 flex justify-center  self-center  w-full">
           <Tabs
             defaultValue="teams"
-            className="flex justify-center w-full flex-col "
+            className="flex mt-8 justify-center self-center w-fit   flex-col "
           >
             <TabsList className="self-center">
               <TabsTrigger value="teams">Teams</TabsTrigger>
               <TabsTrigger value="projects">Projects</TabsTrigger>
             </TabsList>
             <TabsContent value="teams">
-              <div className="z-20 flex-grow mt-8 flex w-full  lg:mr-4 flex-col justify-center md:justify-start">
-                <div className="flex min-h-[75px]  p-2 justify-center  md:justify-start align-top h-fit ">
+              <div className="z-20 flex-grow mt-2 flex w-full lg:mr-4 lg:max-w-[60vw] lg:self-center flex-col md:justify-start">
+                <div className="flex  max-w-[90vw] justify-start p-2  ml-[10%] md:ml-0  my-4  align-top h-[40px] ">
                   <h1 className="text-lg md:text-xl font-bold mr-6 self-center">
                     Your Teams
                   </h1>
@@ -162,7 +162,7 @@ export async function UserPageComponent({
                   </Dialog>
                 </div>
 
-                <div className=" flex flex-col max-h-[32vh] lg:max-h-[75vh] md:h-fit md:flex-row  justify-start  flex-wrap">
+                <div className=" flex max-w-[90vw] justify-center md:justify-start flex-row flex-wrap">
                   {usersTeamsAsAdmin &&
                     usersTeamsAsAdmin.map((team, team_idx) => {
                       return (
@@ -224,14 +224,14 @@ export async function UserPageComponent({
               </div>
             </TabsContent>
             <TabsContent value="projects">
-              <div className=" z-20 flex w-full flex-col lg:ml-4 flex-grow justify-center md:justify-start mt-4 md:mt-8">
-                <div className="flex  min-h-[75px] p-2 justify-center md:justify-start align-top h-fit  ">
+              <div className=" z-20 flex-grow mt-2 flex w-full lg:max-w-[60vw] lg:mr-4 flex-col md:justify-start">
+                <div className="flex  max-w-[90vw] p-2 justify-start ml-[10%] md:ml-0 my-4 h-[40px] align-top  ">
                   <h1 className="text-lg md:text-xl font-bold mr-6 self-center">
                     Your Projects
                   </h1>
                 </div>
 
-                <div className="flex flex-col max-h-[32vh] lg:max-h-[75vh] md:h-fit md:flex-row  justify-start  flex-wrap ">
+                <div className="flex max-w-[90vw] justify-center md:justify-start flex-row flex-wrap ">
                   {usersProjectsAsAdmin &&
                     usersProjectsAsAdmin.map((project, project_idx) => (
                       <Card

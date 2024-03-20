@@ -18,7 +18,7 @@ import { useForm, useController } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { updateTeamDetailsAction } from "../_actions/update-team-details.action";
 import { useState } from "react";
-
+import { Label } from "@/components/ui/label";
 const formSchema = z.object({
   name: z.string().min(4).max(25),
 });
@@ -83,31 +83,38 @@ export function TeamHeader({ team }: { team: TeamDto }) {
           onSubmit={form.handleSubmit(onTeamHeaderFormSubmit)}
         >
           <div className="flex flex-row  w-full mb-2">
-            <LayoutIcon className="w-6 h-6 mr-2 md:w-8 md:h-8 self-center md:mr-5" />
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => {
-                return (
-                  <FormItem className="self-center min-w-[180px] max-w-[100%] w-[70%]">
-                    <FormControl>
-                      <Input
-                        type="text"
-                        className={`header-input w-full text-base md:text-lg
+            <div className="flex flex-col justify-start ">
+              <div className="flex  pb-4 items-center">
+                <LayoutIcon className="w-6 h-6 mr-2 md:w-8 md:h-8 self-center md:mr-4" />
+                <Label className="text-base font-bold text-left">Team</Label>
+              </div>
+              <div>
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => {
+                    return (
+                      <FormItem className="self-center min-w-[180px] border-solid rounded-lg hover:border-gray-700 border-2 max-w-[100%] w-[70%]">
+                        <FormControl>
+                          <Input
+                            type="text"
+                            className={`header-input w-full  text-base md:text-lg
                         ${isHeaderEditing ? "editing" : ""}`}
-                        maxLength={25}
-                        placeholder="Team Name"
-                        {...field}
-                        onClick={handleInputClick}
-                        onChange={handleInputChange}
-                        onBlur={handleInputBlur}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                );
-              }}
-            />{" "}
+                            maxLength={25}
+                            placeholder="Team Name"
+                            {...field}
+                            onClick={handleInputClick}
+                            onChange={handleInputChange}
+                            onBlur={handleInputBlur}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    );
+                  }}
+                />{" "}
+              </div>
+            </div>
           </div>
 
           {buttonShow && (

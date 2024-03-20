@@ -292,7 +292,7 @@ export function ProjectPage({
                                   <PopoverTrigger>
                                     <Avatar key={index} className="w-8 h-8 ">
                                       <AvatarFallback
-                                        className={` text-xs  bg-gray-500`}
+                                        className={` text-xs hover:bg-primary bg-secondary`}
                                       >
                                         {getInitials(member.name)}
                                       </AvatarFallback>

@@ -168,12 +168,17 @@ export function ProjectHeader({ project }: { project: ProjectDto }) {
             />
             {buttonShow && (
               <div className="flex ml-4 flex-col mobileLandscape:flex-col mt-2 mobileLandscape:mt-0 justify-space ">
-                <Button className="m-1  text-xs  h-8 px-2 " type="submit">
+                <Button
+                  className="m-1  text-xs  h-8 px-2 "
+                  variant="default"
+                  type="submit"
+                >
                   Save
                 </Button>{" "}
                 <Button
                   className="m-1 text-xs d h-8 px-2 "
-                  type="button"
+                  // type="button"
+                  variant="outline"
                   onClick={handleCancel}
                 >
                   Cancel

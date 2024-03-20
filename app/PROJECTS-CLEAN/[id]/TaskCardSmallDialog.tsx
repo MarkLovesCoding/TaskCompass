@@ -3,7 +3,7 @@ import {
   CardHeader,
   CardTitle,
   CardDescription,
-} from "@/components/ui/card";
+} from "@/components/ui/small-task-card";
 import { cn } from "@/lib/utils";
 import { TaskDto } from "@/use-cases/task/types";
 import {
@@ -19,7 +19,7 @@ import { ProjectDto } from "@/use-cases/project/types";
 import { UserDto } from "@/use-cases/user/types";
 import { Draggable } from "@hello-pangea/dnd";
 import styled from "styled-components";
-import { Clock2Icon, Scroll } from "lucide-react";
+import { Clock2Icon, Scroll, UsersIcon } from "lucide-react";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { ScrollBar } from "@/components/ui/scroll-area";
 import { format, formatDistanceStrict } from "date-fns";
@@ -112,44 +112,56 @@ const TaskCardSmallDialog = ({
                 // key={task.id}
                 className={`${
                   snapshot.isDragging
-                    ? "bg-primary-foreground  border-primary "
-                    : "bg-secondary  border-background "
-                } border rounded-lg flex w-[225px] shadow-lg hover:shadow-sm`}
+                    ? "bg-primary-foreground  border-primary opacity-95 rotate-6"
+                    : "bg-primary-foreground border-background "
+                } border rounded-lg flex w-[225px] my-2 shadow-lg hover:shadow-sm`}
               >
-                <div className="flex flex-col overflow-hidden p-2 ">
+                <div className="flex flex-col overflow-hidden p-1 w-full">
                   <CardHeader className="flex justify-center">
-                    <div className="flex-row space-x-2">
-                      <Badge
-                        className={cn(
-                          colorByPriority(task.priority),
-                          "w-fit m-1"
-                        )}
-                      >
-                        {task.priority}
-                      </Badge>
-                      <Badge
-                        className={cn(
-                          colorByStatus(task.status),
-                          "w-fit text-xs px-1 py-[0.2em] m-1"
-                        )}
-                      >
-                        {task.status}
-                      </Badge>
-                      <Badge className={"w-fit bg-gray-600 m-1"}>
-                        {task.category}
-                      </Badge>
-                    </div>
-                    <CardTitle className="text-start text-md">
+                    <CardTitle className="text-start text-md truncate">
                       {task.name}
                     </CardTitle>
-                    <CardDescription className="text-start text-sm">
-                      <p className="text-xs mb-2">{task.description}</p>
+                    <CardDescription className="text-start text-sm space-y-2">
+                      <p className="text-xs  truncate">{task.description}</p>
                       <div className="flex flex-row">
                         <Clock2Icon className="w-4 h-4 mr-2 " />
                         <Label className="text-xs">
                           Due in :{" "}
-                          {formatDistanceStrict(task.dueDate, task.startDate)}
+                          {formatDistanceStrict(task.dueDate, new Date())}
                         </Label>
+                      </div>
+                      <div className="flex flex-row">
+                        <UsersIcon className="w-4 h-4 mr-2 " />
+                        <Label className="text-xs">
+                          {task.assignees.length > 0
+                            ? "Assigned Users :  " + task.assignees.length
+                            : "Unassigned"}
+                        </Label>
+                      </div>
+                      <div className="flex-row flex-wrap space-x-1">
+                        <Badge
+                          className={cn(
+                            colorByPriority(task.priority),
+                            "w-fit  text-xs text-center px-1.5 py-[0.25em] m-1"
+                          )}
+                        >
+                          {task.priority}
+                        </Badge>
+                        <Badge
+                          className={cn(
+                            colorByStatus(task.status),
+                            "w-fit text-xs   text-center  px-1.5 py-[0.25em] m-1"
+                          )}
+                        >
+                          {task.status}
+                        </Badge>
+                        <Badge
+                          className={
+                            "w-fit  text-center text-xs px-1.5 py-[0.25em] m-1"
+                          }
+                        >
+                          {task.category}
+                        </Badge>
                       </div>
                       {/* <div>
                         <Label className="text-xs">

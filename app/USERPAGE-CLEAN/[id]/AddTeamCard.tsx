@@ -79,10 +79,6 @@ const AddTeamCard = () => {
             >
               Save
             </Button>
-            {/*           
-            <Button type="button" variant="secondary">
-              Close
-            </Button> */}
           </DialogClose>
         </DialogFooter>
       </form>
