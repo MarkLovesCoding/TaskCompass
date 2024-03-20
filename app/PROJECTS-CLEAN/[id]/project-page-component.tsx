@@ -386,14 +386,19 @@ export function ProjectPage({
           `fixed h-16 top-16 flex-row flex p-2 border-b-slate-50 w-[calc(100vw-2rem)] bg-background `
         )}
       >
-        <div className="min-w-fit p-2 max-h-16">
+        <div className="min-w-fit p-1 max-h-16">
           <Link href={`/TEAMS-CLEAN/${project.team}`}>
             <h4 className="text-xs  underline cursor-pointer">Back to Team</h4>
           </Link>
-          <h4 className="text-sm md:text-md lg:text-lg">{project.name}</h4>
+          <div className="flex items-center m-2 ">
+            <h4 className=" text-sm md:text-md lg:text-lg pr-3">Project:</h4>
+            <h4 className="text-sm md:text-md font-bold lg:text-lg">
+              {project.name}
+            </h4>
+          </div>
         </div>
         <div className="flex flex-row w-full   justify-center align-middle ">
-          <div className="p-2">
+          <div title="Change View" className="p-2 ">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline">
@@ -426,7 +431,7 @@ export function ProjectPage({
             </DropdownMenu>
           </div>
           {/* {isUserAdmin && ( */}
-          <div className="p-2">
+          <div title="Create New Task" className="p-2">
             <Popover>
               <PopoverTrigger>
                 <Button variant="outline">

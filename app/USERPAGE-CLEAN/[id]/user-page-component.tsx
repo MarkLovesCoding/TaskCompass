@@ -184,8 +184,12 @@ export async function UserPageComponent({
                                 {team.name}
                               </CardTitle>
                               <CardDescription className="text-xs text-ellipsis">
-                                <p>Projects: {team.projects.length}</p>
-                                <p>Users: {team.users.length}</p>
+                                <Badge className="  min-w-fit text-xs px-2 py-[0.2em] m-1 self-end bg-yellow-500 ">
+                                  {`Users:  ${team.users.length}`}
+                                </Badge>
+                                <Badge className="  min-w-fit text-xs px-2 py-[0.2em] m-1 self-end bg-sky-500 ">
+                                  {`Projects:  ${team.projects.length}`}
+                                </Badge>
                               </CardDescription>{" "}
                             </CardHeader>
                           </Link>
@@ -212,8 +216,12 @@ export async function UserPageComponent({
                                 {team.name}
                               </CardTitle>
                               <CardDescription className="text-xs text-ellipsis">
-                                <p>Projects: {team.projects.length}</p>
-                                <p>Users: {team.users.length}</p>
+                                <Badge className="  min-w-fit text-xs px-2 py-[0.2em] m-1 self-end bg-yellow-500 ">
+                                  {`Users:  ${team.users.length}`}
+                                </Badge>
+                                <Badge className="  min-w-fit text-xs px-2 py-[0.2em] m-1 self-end bg-sky-500 ">
+                                  {`Projects:  ${team.projects.length}`}
+                                </Badge>
                               </CardDescription>
                             </CardHeader>
                           </Link>
@@ -251,8 +259,12 @@ export async function UserPageComponent({
                               {project.name}
                             </CardTitle>
                             <CardDescription className="text-xs text-ellipsis">
-                              <p>Tasks: {project.tasks.length}</p>
-                              <p>Users: {project.users.length}</p>
+                              <Badge className="  min-w-fit text-xs px-2 py-[0.2em] m-1 self-end bg-yellow-500 ">
+                                {`Users:  ${project.users.length}`}
+                              </Badge>
+                              <Badge className="  min-w-fit text-xs px-2 py-[0.2em] m-1 self-end bg-sky-500 ">
+                                {`Tasks:  ${project.tasks.length}`}
+                              </Badge>
                             </CardDescription>
                           </CardHeader>
                         </Link>
@@ -278,8 +290,12 @@ export async function UserPageComponent({
                             </CardTitle>
                             <CardDescription className="text-xs text-ellipsis">
                               {/* <p className="truncate">{project.description}</p> */}
-                              <p>Tasks: {project.tasks.length}</p>
-                              <p>Users: {project.users.length}</p>
+                              <Badge className="  min-w-fit text-xs px-2 py-[0.2em] m-1 self-end bg-yellow-500 ">
+                                {`Users:  ${project.users.length}`}
+                              </Badge>
+                              <Badge className="  min-w-fit text-xs px-2 py-[0.2em] m-1 self-end bg-sky-500 ">
+                                {`Tasks:  ${project.tasks.length}`}
+                              </Badge>
                             </CardDescription>
                           </CardHeader>
                         </Link>
