@@ -35,6 +35,7 @@ import {
   AccordionContent,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 // get teams
 // get projects
 export async function UserPageComponent({
@@ -123,169 +124,171 @@ export async function UserPageComponent({
         </div>
 
         <div className="z-20 flex justify-center  self-center flex-col lg:flex-row  w-full">
-          <div className="z-20 flex-grow mt-8 flex w-full  lg:mr-4 flex-col justify-center md:justify-start">
-            <div className="flex min-h-[75px]  p-2 justify-center  md:justify-start align-top h-fit ">
-              <h1 className="text-lg md:text-xl font-bold mr-6 self-center">
-                Your Teams
-              </h1>
-              <Dialog>
-                <DialogTrigger className="h-fit flex self-center">
-                  <Button
-                    title="Add New Team"
-                    className="rounded-full  ml-auto"
-                    size="icon"
-                  >
-                    <PlusIcon className="w-4 h-4" />
-                    <span className="sr-only">New Team Button</span>
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="max-w-[280px]">
-                  <AddTeamCard />
-                  {/* <DialogFooter className="sm:justify-end">
+          <Tabs
+            defaultValue="teams"
+            className="flex justify-center w-full flex-col "
+          >
+            <TabsList className="self-center">
+              <TabsTrigger value="teams">Teams</TabsTrigger>
+              <TabsTrigger value="projects">Projects</TabsTrigger>
+            </TabsList>
+            <TabsContent value="teams">
+              <div className="z-20 flex-grow mt-8 flex w-full  lg:mr-4 flex-col justify-center md:justify-start">
+                <div className="flex min-h-[75px]  p-2 justify-center  md:justify-start align-top h-fit ">
+                  <h1 className="text-lg md:text-xl font-bold mr-6 self-center">
+                    Your Teams
+                  </h1>
+                  <Dialog>
+                    <DialogTrigger className="h-fit flex self-center">
+                      <Button
+                        title="Add New Team"
+                        className="rounded-full  ml-auto"
+                        size="icon"
+                      >
+                        <PlusIcon className="w-4 h-4" />
+                        <span className="sr-only">New Team Button</span>
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-[280px]">
+                      <AddTeamCard />
+                      {/* <DialogFooter className="sm:justify-end">
                   <DialogClose asChild>
                     <Button type="button" variant="secondary">
                       Close
                     </Button>
                   </DialogClose>
                 </DialogFooter> */}
-                </DialogContent>
-              </Dialog>
-            </div>
-            <ScrollArea className=" flex max-w-[90vw] w-[90vw] lg:w-auto pb-2 self-center lg:self-start justify-center lg:justify-start flex-row flex-wrap">
-              <ScrollBar
-                orientation="horizontal"
-                className="w-full "
-              ></ScrollBar>
-              <div className=" flex flex-col max-h-[32vh] lg:max-h-[75vh] md:h-fit md:flex-row  justify-start  flex-wrap">
-                {usersTeamsAsAdmin &&
-                  usersTeamsAsAdmin.map((team, team_idx) => {
-                    return (
+                    </DialogContent>
+                  </Dialog>
+                </div>
+
+                <div className=" flex flex-col max-h-[32vh] lg:max-h-[75vh] md:h-fit md:flex-row  justify-start  flex-wrap">
+                  {usersTeamsAsAdmin &&
+                    usersTeamsAsAdmin.map((team, team_idx) => {
+                      return (
+                        <Card
+                          key={team_idx}
+                          className="border rounded-md mb-4 max-w-full p-1 mr-4 md:mb-4 flex items-center w-56 h-28 border-gray-500  bg-gray-800 shadow-lg hover:shadow-sm"
+                        >
+                          <Link
+                            className="w-full"
+                            href={`/TEAMS-CLEAN/${team.id}`}
+                          >
+                            {/* <Badge className=" w-full text-xs m-0 px-[0.25em] py-[0.2em] text-center bg-red-500 ">{` Admin`}</Badge> */}
+                            <div className=" flex justify-end">
+                              <Badge className=" min-w-fit text-xs px-2 py-[0.2em] m-1 self-end bg-red-500 ">{`Admin`}</Badge>
+                            </div>
+
+                            <CardHeader className="p-0 pl-2">
+                              <CardTitle className="text-sm md:text-base">
+                                {team.name}
+                              </CardTitle>
+                              <CardDescription className="text-xs text-ellipsis">
+                                <p>Projects: {team.projects.length}</p>
+                                <p>Users: {team.users.length}</p>
+                              </CardDescription>{" "}
+                            </CardHeader>
+                          </Link>
+                        </Card>
+                      );
+                    })}
+
+                  {usersTeamsAsMember &&
+                    usersTeamsAsMember.map((team, team_idx) => {
+                      return (
+                        <Card
+                          key={team_idx}
+                          className="border rounded-md mb-4 max-w-full p-1 flex items-center w-56 h-28 border-gray-500  bg-gray-800 shadow-lg hover:shadow-sm"
+                        >
+                          <Link
+                            className="w-full"
+                            href={`/TEAMS-CLEAN/${team.id}`}
+                          >
+                            <div className=" flex justify-end">
+                              <Badge className=" min-w-fit text-xs px-2 py-[0.2em] m-1 self-end bg-green-500 ">{`Member`}</Badge>
+                            </div>
+                            <CardHeader className="p-0 pl-2">
+                              <CardTitle className="text-sm md:text-base">
+                                {team.name}
+                              </CardTitle>
+                              <CardDescription className="text-xs text-ellipsis">
+                                <p>Projects: {team.projects.length}</p>
+                                <p>Users: {team.users.length}</p>
+                              </CardDescription>
+                            </CardHeader>
+                          </Link>
+                        </Card>
+                      );
+                    })}
+                </div>
+              </div>
+            </TabsContent>
+            <TabsContent value="projects">
+              <div className=" z-20 flex w-full flex-col lg:ml-4 flex-grow justify-center md:justify-start mt-4 md:mt-8">
+                <div className="flex  min-h-[75px] p-2 justify-center md:justify-start align-top h-fit  ">
+                  <h1 className="text-lg md:text-xl font-bold mr-6 self-center">
+                    Your Projects
+                  </h1>
+                </div>
+
+                <div className="flex flex-col max-h-[32vh] lg:max-h-[75vh] md:h-fit md:flex-row  justify-start  flex-wrap ">
+                  {usersProjectsAsAdmin &&
+                    usersProjectsAsAdmin.map((project, project_idx) => (
                       <Card
-                        key={team_idx}
+                        key={project_idx}
                         className="border rounded-md mb-4 max-w-full p-1 mr-4 md:mb-4 flex items-center w-56 h-28 border-gray-500  bg-gray-800 shadow-lg hover:shadow-sm"
                       >
                         <Link
                           className="w-full"
-                          href={`/TEAMS-CLEAN/${team.id}`}
+                          href={`/PROJECTS-CLEAN/${project.id}`}
                         >
-                          {/* <Badge className=" w-full text-xs m-0 px-[0.25em] py-[0.2em] text-center bg-red-500 ">{` Admin`}</Badge> */}
-                          <div className=" flex justify-end">
-                            <Badge className=" min-w-fit text-xs px-2 py-[0.2em] m-1 self-end bg-red-500 ">{`Admin`}</Badge>
-                          </div>
-
                           <CardHeader className="p-0 pl-2">
+                            <div className=" flex justify-end">
+                              <Badge className=" min-w-fit text-xs px-1 py-[0.2em] m-1 self-end bg-red-500 ">{`Admin`}</Badge>
+                            </div>
+
                             <CardTitle className="text-sm md:text-base">
-                              {team.name}
+                              {project.name}
                             </CardTitle>
                             <CardDescription className="text-xs text-ellipsis">
-                              <p>Projects: {team.projects.length}</p>
-                              <p>Users: {team.users.length}</p>
-                            </CardDescription>{" "}
-                          </CardHeader>
-                        </Link>
-                      </Card>
-                    );
-                  })}
-
-                {usersTeamsAsMember &&
-                  usersTeamsAsMember.map((team, team_idx) => {
-                    return (
-                      <Card
-                        key={team_idx}
-                        className="border rounded-md mb-4 max-w-full p-1 flex items-center w-56 h-28 border-gray-500  bg-gray-800 shadow-lg hover:shadow-sm"
-                      >
-                        <Link
-                          className="w-full"
-                          href={`/TEAMS-CLEAN/${team.id}`}
-                        >
-                          <div className=" flex justify-end">
-                            <Badge className=" min-w-fit text-xs px-2 py-[0.2em] m-1 self-end bg-green-500 ">{`Member`}</Badge>
-                          </div>
-                          <CardHeader className="p-0 pl-2">
-                            <CardTitle className="text-sm md:text-base">
-                              {team.name}
-                            </CardTitle>
-                            <CardDescription className="text-xs text-ellipsis">
-                              <p>Projects: {team.projects.length}</p>
-                              <p>Users: {team.users.length}</p>
+                              <p>Tasks: {project.tasks.length}</p>
+                              <p>Users: {project.users.length}</p>
                             </CardDescription>
                           </CardHeader>
                         </Link>
                       </Card>
-                    );
-                  })}
-              </div>
-            </ScrollArea>
-          </div>
+                    ))}
 
-          <div className=" z-20 flex w-full flex-col lg:ml-4 flex-grow justify-center md:justify-start mt-4 md:mt-8">
-            <div className="flex  min-h-[75px] p-2 justify-center md:justify-start align-top h-fit  ">
-              <h1 className="text-lg md:text-xl font-bold mr-6 self-center">
-                Your Projects
-              </h1>
-            </div>
-            <ScrollArea className=" flex max-w-[90vw]  w-[90vw] lg:w-auto pb-2 self-center lg:self-start justify-center lg:justify-start flex-row flex-wrap">
-              <ScrollBar
-                orientation="horizontal"
-                className="w-full"
-              ></ScrollBar>
-              <div className="flex flex-col max-h-[32vh] lg:max-h-[75vh] md:h-fit md:flex-row  justify-start  flex-wrap ">
-                {usersProjectsAsAdmin &&
-                  usersProjectsAsAdmin.map((project, project_idx) => (
-                    <Card
-                      key={project_idx}
-                      className="border rounded-md mb-4 max-w-full p-1 mr-4 md:mb-4 flex items-center w-56 h-28 border-gray-500  bg-gray-800 shadow-lg hover:shadow-sm"
-                    >
-                      <Link
-                        className="w-full"
-                        href={`/PROJECTS-CLEAN/${project.id}`}
+                  {usersProjectsAsMember &&
+                    usersProjectsAsMember.map((project, project_idx) => (
+                      <Card
+                        key={project_idx}
+                        className="border rounded-md mb-4 max-w-full p-2 flex items-center  w-56 h-28  border-gray-500  bg-gray-800 shadow-lg hover:shadow-sm"
                       >
-                        <CardHeader className="p-0 pl-2">
-                          <div className=" flex justify-end">
-                            <Badge className=" min-w-fit text-xs px-1 py-[0.2em] m-1 self-end bg-red-500 ">{`Admin`}</Badge>
-                          </div>
-
-                          <CardTitle className="text-sm md:text-base">
-                            {project.name}
-                          </CardTitle>
-                          <CardDescription className="text-xs text-ellipsis">
-                            <p>Tasks: {project.tasks.length}</p>
-                            <p>Users: {project.users.length}</p>
-                          </CardDescription>
-                        </CardHeader>
-                      </Link>
-                    </Card>
-                  ))}
-
-                {usersProjectsAsMember &&
-                  usersProjectsAsMember.map((project, project_idx) => (
-                    <Card
-                      key={project_idx}
-                      className="border rounded-md mb-4 max-w-full p-2 flex items-center  w-56 h-28  border-gray-500  bg-gray-800 shadow-lg hover:shadow-sm"
-                    >
-                      <Link
-                        className="w-full"
-                        href={`/PROJECTS-CLEAN/${project.id}`}
-                      >
-                        <CardHeader className="p-0 pl-2">
-                          <div className=" flex justify-end">
-                            <Badge className=" min-w-fit text-xs px-2 py-[0.2em] m-1 self-end bg-green-500 ">{`Member`}</Badge>
-                          </div>
-                          <CardTitle className="text-sm  md:text-base">
-                            {project.name}
-                          </CardTitle>
-                          <CardDescription className="text-xs text-ellipsis">
-                            {/* <p className="truncate">{project.description}</p> */}
-                            <p>Tasks: {project.tasks.length}</p>
-                            <p>Users: {project.users.length}</p>
-                          </CardDescription>
-                        </CardHeader>
-                      </Link>
-                    </Card>
-                  ))}
+                        <Link
+                          className="w-full"
+                          href={`/PROJECTS-CLEAN/${project.id}`}
+                        >
+                          <CardHeader className="p-0 pl-2">
+                            <div className=" flex justify-end">
+                              <Badge className=" min-w-fit text-xs px-2 py-[0.2em] m-1 self-end bg-green-500 ">{`Member`}</Badge>
+                            </div>
+                            <CardTitle className="text-sm  md:text-base">
+                              {project.name}
+                            </CardTitle>
+                            <CardDescription className="text-xs text-ellipsis">
+                              {/* <p className="truncate">{project.description}</p> */}
+                              <p>Tasks: {project.tasks.length}</p>
+                              <p>Users: {project.users.length}</p>
+                            </CardDescription>
+                          </CardHeader>
+                        </Link>
+                      </Card>
+                    ))}
+                </div>
               </div>
-            </ScrollArea>
-          </div>
+            </TabsContent>
+          </Tabs>
         </div>
       </main>
     </div>

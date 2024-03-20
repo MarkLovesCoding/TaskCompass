@@ -27,21 +27,22 @@ const UnarchiveProjectPopover = ({ project }: { project: ProjectDto }) => {
   return (
     <>
       <Popover open={isOpen} onOpenChange={setIsOpen}>
-        <PopoverTrigger>
+        <PopoverTrigger className="hover:bg-secondary p-2 rounded-lg">
           {project.name}
           <span className="sr-only">Activate Project Trigger</span>
         </PopoverTrigger>{" "}
         <PopoverContent>
           <Card>
             <CardHeader>
-              <CardTitle>Activate Project</CardTitle>
+              <CardTitle className="text-center">Activate Project</CardTitle>
             </CardHeader>
-            <CardDescription>
+            <CardDescription className="p-4 mb-2 ">
               Are you sure you want to activate this project?
             </CardDescription>
-            <CardFooter>
+            <CardFooter className="w-full flex flex-row justify-evenly">
               <Button
-                variant="outline"
+                className="text-sm "
+                variant="default"
                 onClick={() => {
                   updateProjectArchivedAction(archiveProjectFormObject);
                   setIsOpen(false);
@@ -51,6 +52,7 @@ const UnarchiveProjectPopover = ({ project }: { project: ProjectDto }) => {
                 Activate
               </Button>
               <Button
+                className="text-sm "
                 variant="outline"
                 onClick={() => {
                   // handleArchivedCancel();
