@@ -27,8 +27,8 @@ const UnarchiveTaskPopover = ({ task }: { task: TaskDto }) => {
   return (
     <>
       <Popover open={isOpen} onOpenChange={setIsOpen}>
-        <PopoverTrigger>
-          <div className="py-1 px-1 text-xs">
+        <PopoverTrigger className="w-full hover:bg-secondary p-2 rounded-md">
+          <div className="py-1 px-1 text-xs text-left ">
             {task.name}
             <span className="sr-only">Activate Task Menu Trigger</span>
           </div>

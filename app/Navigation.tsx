@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-
+import { ModeToggle } from "./themeToggler";
 import getUserProjectsAndTeams from "@/data-access/users/get-user-full-nav.persistence";
 import { sessionAuth } from "@/lib/sessionAuth";
 import { ProjectDto } from "@/use-cases/project/types";
@@ -85,6 +85,8 @@ const Navigation: React.FC = async () => {
                     </p>
                   </div>
                 </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <ModeToggle />
                 <DropdownMenuSeparator />
                 <Link
                   href={`/TEAMS-CLEAN/${sessionUserId}`}

@@ -178,7 +178,7 @@ export function ProjectPage({
                       </h3>
                       <div className="flex flex-col">
                         <div className="flex flex-col w-[225px] mobileLandscape:w-[175px] ">
-                          <Label className="flex flex-row p-1  items-center space-x-2 text-popover-foreground">
+                          <Label className="flex flex-row p-1 pr-2  items-center space-x-2 text-popover-foreground">
                             <div className="flex flex-row mr-auto items-center space-x-2 ">
                               <ClockIcon className="w-4 h-4 mr-1  opacity-60" />
                               <p className=" mobileLandscape:text-xs text-sm">
@@ -195,7 +195,7 @@ export function ProjectPage({
                           </Label>
                         </div>
                         <div className="flex flex-col w-[225px] mobileLandscape:w-[175px] ">
-                          <Label className="flex flex-row p-1 items-center space-x-2 text-popover-foreground ">
+                          <Label className="flex flex-row p-1 items-center pr-2 space-x-2 text-popover-foreground ">
                             <div className="flex flex-row mr-auto items-center space-x-2 ">
                               <CheckIcon className="w-4 h-4 mr-1 opacity-60" />
                               <p className="text-sm mobileLandscape:text-xs">
