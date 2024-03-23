@@ -2,7 +2,10 @@
 import mongoose from "mongoose";
 
 const connectDB = async () => {
+  console.log("start connectDB");
   if (process.env.ENVIRONMENT == "production") {
+    console.log("start connectDB in prod");
+
     try {
       //@ts-expect-error
       await mongoose.connect(process.env.MONGODB_PROD_URI, {
