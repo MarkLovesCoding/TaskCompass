@@ -17,6 +17,7 @@ const connectDB = async () => {
       console.error("Error connecting to MongoDB:", error.message);
     }
   } else if (process.env.ENVIRONMENT == "development") {
+    console.log("start connectDB in dev");
     try {
       //@ts-expect-error
 
