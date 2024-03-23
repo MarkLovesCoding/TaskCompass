@@ -12,7 +12,7 @@ import Task from "@/db/(models)/Task";
 
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
-import { createDecipheriv } from "crypto";
+
 // let newUser;
 
 export const options = {
