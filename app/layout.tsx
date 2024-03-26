@@ -26,7 +26,7 @@ export default function RootLayout({
   return (
     <html suppressHydrationWarning lang="en">
       <Provider>
-        <body className="bg-background">
+        <body className="bg-gradient-to-r from-sky-500 to-indigo-500">
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"

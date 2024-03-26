@@ -210,40 +210,127 @@
 } */
 @layer base {
   :root {
-    /* Name: custom color palette
-     Author: Ilias Ism
-     URL: https://gradient.page */
+    /* --background: 0 0% 98%; */
+    --background: rgb(239, 241, 242);
+    /* --background: rgba(228, 228, 228, 1); */
+    --main-background: rgba(228, 228, 228, 1);
+    --nav-background: rgb(180, 180, 180);
+    --drawer-background: rgba(255, 255, 255, 0.4);
+    --accordian-background: rgba(205, 204, 204, 0.4);
+    --card: rgba(55, 66, 87, 1);
+    --card-foreground: rgb(236, 236, 236);
 
-    /* CSS: .bg-gradient { background: var(--gradient) } */
-    --gradient: linear-gradient(to top left, #000428, #004e92);
-    --background: 249 100% 98.16%;
-    --foreground: 249 10% 0.32%;
+    --foreground: rgb(12, 12, 12);
 
-    --muted: 249 10% 90.8%;
-    --muted-foreground: 249 5% 40.8%;
+    --popover: rgb(239, 239, 239);
+    --popover-foreground: rgb(12, 12, 12);
+    --primary: rgb(98, 151, 151);
+    --primary-foreground: rgb(250, 250, 250);
+    --secondary: rgb(240, 240, 240);
+    --secondary-foreground: rgb(12, 12, 12);
+    --muted: rgb(240, 240, 240);
+    --muted-foreground: rgb(155, 155, 155);
+    --accent: rgb(240, 240, 240);
+    --accent-foreground: rgb(12, 12, 12);
+    --destructive: rgb(153, 0, 0);
+    --destructive-foreground: rgb(250, 250, 250);
+    --border: rgb(229, 229, 229);
+    --input: rgb(204, 204, 204);
+    --ring: rgb(171, 171, 171);
+    --radius: 1rem;
+  }
 
-    --popover: 249 15% 89.88%;
-    --popover-foreground: 249 10% 0.4%;
+  .dark {
+    --background: rgb(45, 75, 110);
+    --drawer-background: rgba(20, 20, 20, 0.5);
+    --accordian-background: rgba(50, 50, 50, 0.5);
+    --main-background: rgb(54, 67, 86);
+    --nav-background: rgb(31, 40, 53);
+    --foreground: rgb(236, 236, 236);
+    --card: rgb(228, 228, 228);
+    --card-foreground: rgb(42, 37, 37);
+    --popover: rgb(25, 25, 25);
+    --popover-foreground: rgb(250, 250, 250);
+    --secondary: rgb(50, 55, 63);
+    --secondary-foreground: rgb(250, 250, 250);
+    --muted: rgb(68, 79, 92);
+    --muted-foreground: rgb(120, 125, 135);
+    --accent: rgb(29, 14, 14);
+    --accent-foreground: rgb(250, 250, 250);
+    --destructive: rgb(153, 0, 0);
+    --destructive-foreground: rgb(250, 250, 250);
+    --border: rgb(31, 31, 31);
+    --input: rgb(45, 45, 45);
+    --ring: rgb(92, 92, 92);
+  }
+}
 
-    --card: 249 15% 89.88%;
-    --card-foreground: 249 10% 0.4%;
+/* @layer base { */
+/* :root {
 
-    --border: 249 15% 89.32%;
-    --input: 249 15% 89.32%;
+    --gradient: #134e5e;
+    --background: 205 98.3% 98.44%;
+    --foreground: 205 6.6000000000000005% 0.88%;
 
-    --primary: 249 100% 8%;
-    --primary-foreground: 249 2% 90.8%;
+    --muted: 205 6.6000000000000005% 92.2%;
+    --muted-foreground: 205 3.3000000000000003% 42.2%;
 
-    --secondary: 249 5% 95.4%;
-    --secondary-foreground: 249 7% 10.8%;
+    --popover: 205 37.199999999999996% 92.2%;
+    --popover-foreground: 205 6.6000000000000005% 1.1%;
 
-    --accent: 249 5% 95.4%;
-    --accent-foreground: 249 7% 10.8%;
+    --card: 205 37.199999999999996% 92.2%;
+    --card-foreground: 205 6.6000000000000005% 1.1%;
+
+    --border: 205 11.600000000000001% 89.88%;
+    --input: 205 11.600000000000001% 89.88%;
+
+    --primary: 205 66% 22%;
+    --primary-foreground: 205 1.32% 92.2%;
+
+    --secondary: 205 3.3000000000000003% 100%;
+    --secondary-foreground: 205 4.96% 12.2%;
+
+    --accent: 205 3.3000000000000003% 100%;
+    --accent-foreground: 205 4.96% 12.2%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
 
-    --ring: 249 100% 8%;
+    --ring: 205 66% 22%;
+
+    --radius: 0.5rem;
+  } */
+/* :root {
+  
+    --gradient: #134e5e;
+    --background: 205 98.3% 98.44%;
+    --foreground: 205 6.6000000000000005% 0.88%;
+
+    --muted: 205 6.6000000000000005% 92.2%;
+    --muted-foreground: 205 3.3000000000000003% 42.2%;
+
+    --popover: 205 81.42% 89.86%;
+    --popover-foreground: 205 6.6000000000000005% 1.1%;
+
+    --card: 205 81.42% 89.86%;
+    --card-foreground: 205 6.6000000000000005% 1.1%;
+
+    --border: 205 11.600000000000001% 89.88%;
+    --input: 205 11.600000000000001% 89.88%;
+
+    --primary: 205 66% 22%;
+    --primary-foreground: 205 1.32% 92.2%;
+
+    --secondary: 205 16.5% 61.78%;
+    --secondary-foreground: 205 4.96% 12.2%;
+
+    --accent: 205 16.5% 61.78%;
+    --accent-foreground: 205 4.96% 12.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --ring: 205 66% 22%;
 
     --radius: 0.5rem;
   }
@@ -278,8 +365,9 @@
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
     --radius: 0.5rem;
-  }
-}
+  } */
+
+/* } */
 @layer base {
   * {
     @apply border-border;

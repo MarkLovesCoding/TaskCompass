@@ -63,7 +63,7 @@ export async function UserPageComponent({
     <div className="absolute flex flex-col top-[4em] w-full h-[calc(100vh-4em)]">
       <main className="flex  items-center bg-main-background overflow-x-hidden flex-col  md:gap-8 ">
         {/* <div className="w-full h-[15vh] bg-card-background absolute top-0 left-0 "></div> */}
-        <div className="z-20   w-full flex flex-col items-center self-center  pl-8 p-1 bg-accordian-background  border-b border-secondary-foreground space-y-4  ">
+        <div className="z-20   w-full flex flex-col items-center self-center  pl-8 p-1 bg-drawer-background  border-b border-secondary-foreground space-y-4  ">
           {/* <div className="bg-gray-100 p-4 rounded-lg shadow-md"> */}
           <Accordion type="single" collapsible className="w-full">
             <AccordionItem value="summary">
@@ -73,16 +73,11 @@ export async function UserPageComponent({
                     {/* <AvatarImage alt={user.name} src="@/public/default-avatar.jpg" /> */}
                     <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
                   </Avatar>
-                  <p className="text-lg font-bold">
-                    {" "}
-                    {user.name}
-                    {`'s Dashboard`}
-                  </p>
+                  <p className="text-lg font-bold">Hey {user.name}!</p>
                 </div>
               </AccordionTrigger>
               <AccordionContent>
-                {/* <div className="flex flex-col  md:flex-row md:flex-wrap md:justify-between md:space-x-4  "> */}
-                <div className="flex flex-col md:flex-row md:flex-wrap md:justify-between md:mx-[12%] bg-transparent md:border-r-slate-600">
+                <div className="flex flex-col  md:flex-row md:flex-wrap md:justify-between md:space-x-4  ">
                   {/* <div className="mb-4 md:w-1/4"> */}
 
                   {/* </div> */}
@@ -138,8 +133,8 @@ export async function UserPageComponent({
               <TabsTrigger value="projects">Projects</TabsTrigger>
             </TabsList>
             <TabsContent value="teams">
-              <div className=" z-20 flex-grow mt-2 flex w-full lg:max-w-[60vw] lg:mr-4 flex-col md:justify-start">
-                <div className="flex  max-w-[90vw] p-2 justify-start ml-[10%] md:ml-0 my-4 h-[40px] align-top ">
+              <div className="z-20 flex-grow mt-2 flex w-full lg:mr-4 lg:max-w-[60vw] lg:self-center flex-col md:justify-start">
+                <div className="flex  max-w-[90vw] justify-start p-2  ml-[10%] md:ml-0  my-4  align-top h-[40px] ">
                   <h1 className="text-lg md:text-xl font-bold mr-6 self-center">
                     Your Teams
                   </h1>
@@ -150,7 +145,6 @@ export async function UserPageComponent({
                         className="rounded-full  ml-auto"
                         size="icon"
                       >
-                        {/* <p>Add Team</p> */}
                         <PlusIcon className="w-4 h-4" />
                         <span className="sr-only">New Team Button</span>
                       </Button>
@@ -174,10 +168,10 @@ export async function UserPageComponent({
                       return (
                         <Card
                           key={team_idx}
-                          className="border  mb-4 max-w-full mr-4 md:mb-4 flex items-center w-72 h-28 bg-card shadow-lg hover:shadow-sm"
+                          className="border  mb-4 max-w-full p-1 mr-4 md:mb-4 flex items-center w-72 h-28 bg-card shadow-lg hover:shadow-sm"
                         >
                           <Link
-                            className="w-full h-full p-2"
+                            className="w-full"
                             href={`/TEAMS-CLEAN/${team.id}`}
                           >
                             {/* <Badge className=" w-full text-xs m-0 px-[0.25em] py-[0.2em] text-center bg-red-500 ">{` Admin`}</Badge> */}
@@ -208,10 +202,10 @@ export async function UserPageComponent({
                       return (
                         <Card
                           key={team_idx}
-                          className="border mb-4 max-w-full flex items-center w-72 h-28 bg-card shadow-lg hover:shadow-sm"
+                          className="border mb-4 max-w-full p-1 flex items-center w-72 h-28 bg-card shadow-lg hover:shadow-sm"
                         >
                           <Link
-                            className="w-full h-full p-2"
+                            className="w-full"
                             href={`/TEAMS-CLEAN/${team.id}`}
                           >
                             <div className=" flex justify-end">
@@ -250,10 +244,10 @@ export async function UserPageComponent({
                     usersProjectsAsAdmin.map((project, project_idx) => (
                       <Card
                         key={project_idx}
-                        className="border  mb-4 max-w-full  mr-4 md:mb-4 flex items-center w-72 h-28 bg-card shadow-lg hover:shadow-sm"
+                        className="border  mb-4 max-w-full p-1 mr-4 md:mb-4 flex items-center w-72 h-28 bg-card shadow-lg hover:shadow-sm"
                       >
                         <Link
-                          className="w-full h-full p-2"
+                          className="w-full"
                           href={`/PROJECTS-CLEAN/${project.id}`}
                         >
                           <CardHeader className="p-0 pl-2">
@@ -281,10 +275,10 @@ export async function UserPageComponent({
                     usersProjectsAsMember.map((project, project_idx) => (
                       <Card
                         key={project_idx}
-                        className="border  mb-4 max-w-full mr-4 flex items-center w-72 h-28 bg-card hover:border-2 hover:border-slate-500 shadow-lg hover:shadow-sm"
+                        className="border  mb-4 max-w-full m-2 flex items-center w-72 h-28 bg-card hover:border-2 hover:border-slate-500 shadow-lg hover:shadow-sm"
                       >
                         <Link
-                          className="w-full h-full p-2"
+                          className="w-full"
                           href={`/PROJECTS-CLEAN/${project.id}`}
                         >
                           <CardHeader className="p-0 pl-2">

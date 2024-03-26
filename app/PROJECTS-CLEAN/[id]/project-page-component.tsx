@@ -147,8 +147,26 @@ export function ProjectPage({
             <DrawerContent
             // className={`group tooSmall:hidden p-8 fixed top-16 left-0 h-[calc(100vh-4em)]  grid lg:h-[calc(100vh-2em)] overflow-x-visible  max-w-[85vw] tall:max-w-[425px] rounded-tl-none rounded-bl-none  border-r-2 border-t-2 border-b-2 border-r-gray-700 hover:border-r-white  border-t-gray-700 hover:border-t-white border-b-gray-700 hover:border-b-white cursor-grab active:cursor-grabbing`}
             >
+              {/* 
+              
+                  border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(7.8px);
+    -webkit-backdrop-filter: blur(7.8px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+
+
+
+  
+background: rgba(0, 0, 0, 0.14);
+border-radius: 16px;
+box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+backdrop-filter: blur(7.8px);
+-webkit-backdrop-filter: blur(7.8px);
+border: 1px solid rgba(0, 0, 0, 0.3);
+              */}
               <div
-                className={`group hidden bg-popover p-6 fixed top-16 left-0 h-[calc(100vh-4em)]  tooSmall:grid   max-w-[450px]  rounded-tl-none rounded-bl-none  border-r-2 border-t-2 border-b-2 border-r-gray-700 hover:border-r-white  border-t-gray-700 hover:border-t-white border-b-gray-700 hover:border-b-white cursor-grab active:cursor-grabbing`}
+                className={`group hidden bg-drawer-background backdrop-filter backdrop-blur  p-6 fixed top-16 left-0 h-[calc(100vh-4em)]  tooSmall:grid   max-w-[450px]  rounded-tl-none rounded-bl-none  border-r-2 border-t-2 border-b-2 border-r-gray-700 hover:border-r-white  border-t-gray-700 hover:border-t-white border-b-gray-700 hover:border-b-white cursor-grab active:cursor-grabbing`}
               >
                 <Label>
                   Window too too small, please expand or rotate to view
@@ -156,11 +174,12 @@ export function ProjectPage({
               </div>
 
               <div
-                className={`group  tooSmall:hidden flex flex-col bg-background fixed top-16 left-0 h-[calc(100vh-4em)] w-[425px] max-w-[95vw] rounded-tl-none rounded-bl-none border-r-2 border-t-2 border-b-2 z-40 border-r-gray-700 hover:border-r-white border-t-gray-700 hover:border-t-white border-b-gray-700 hover:border-b-white cursor-grab active:cursor-grabbing p-2 pt-3 `}
+                className={`group  tooSmall:hidden flex flex-col bg-drawer-background backdrop-filter backdrop-blur-lg   fixed top-16 left-0 h-[calc(100vh-4em)] w-[425px] max-w-[95vw] rounded-tl-none rounded-bl-none border-r-2 border-t-2 border-b-2 z-40 border-r-gray-700 hover:border-r-white border-t-gray-700 hover:border-t-white border-b-gray-700 hover:border-b-white cursor-grab active:cursor-grabbing p-2 pt-3 `}
               >
                 <DrawerClose className="">
                   <ArrowLeftCircleIcon className="absolute right-[-1em] z-50 top-[calc(50%-3rem)]  rounded-full w-8 h-8 self-center bg-background text-gray-700 group-hover:text-white" />
                 </DrawerClose>
+
                 <ScrollArea className="p-3">
                   <ScrollBar />
                   {/* <div className="flex-1 basis-1/2"> */}

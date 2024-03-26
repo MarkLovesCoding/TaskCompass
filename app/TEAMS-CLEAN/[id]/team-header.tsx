@@ -76,15 +76,15 @@ export function TeamHeader({ team }: { team: TeamDto }) {
     router.refresh();
   };
   return (
-    <div className="flex w-full justify-start flex-row my-4 ">
+    <div className="flex w-full justify-start flex-row my-2 space-x-3 ">
       <Form {...form}>
         <form
-          className="w-full flex items-start md:flex-row flex-col "
+          className="w-full flex items-center md:w-[500px] md:flex-row flex-col "
           onSubmit={form.handleSubmit(onTeamHeaderFormSubmit)}
         >
           <div className="flex flex-row  w-full mb-2">
-            <div className="flex flex-col justify-start ">
-              <div className="flex  pb-4 items-center">
+            <div className="flex flex-row items-center justify-start ">
+              <div className="flex  pr-4 items-center">
                 <LayoutIcon className="w-6 h-6 mr-2 md:w-8 md:h-8 self-center md:mr-4" />
                 <Label className="text-base font-bold text-left">Team</Label>
               </div>
@@ -94,7 +94,7 @@ export function TeamHeader({ team }: { team: TeamDto }) {
                   name="name"
                   render={({ field }) => {
                     return (
-                      <FormItem className="self-center min-w-[180px] border-solid rounded-lg hover:border-gray-700 border-2 max-w-[100%] w-[70%]">
+                      <FormItem className="self-center min-w-[180px] border-solid rounded-lg hover:border-gray-700 border-2 max-w-[100%]">
                         <FormControl>
                           <Input
                             type="text"
@@ -118,13 +118,18 @@ export function TeamHeader({ team }: { team: TeamDto }) {
           </div>
 
           {buttonShow && (
-            <div className="flex ml-4 flex-row  mt-2 mobileLandscape:mt-0 justify-space ">
-              <Button className="m-1  text-xs  h-8 px-2 " type="submit">
+            <div className="flex ml-4 md:mt-0 flex-row  mt-2 mobileLandscape:mt-0 justify-space ">
+              <Button
+                className="m-1  text-xs  h-8 px-4 "
+                type="submit"
+                variant="default"
+              >
                 Save
               </Button>
               <Button
-                className="m-1 text-xs d h-8 px-2 "
+                className="m-1 text-xs d h-8 px-4 "
                 type="button"
+                variant="ghost"
                 onClick={handleCancel}
               >
                 Cancel

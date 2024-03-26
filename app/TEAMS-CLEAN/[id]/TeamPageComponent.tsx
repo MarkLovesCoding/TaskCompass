@@ -29,7 +29,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { ScrollArea, ScrollBar } from "@/components/ui/avatar-scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Popover,
@@ -88,10 +88,10 @@ export async function TeamPageComponent({
   );
   return (
     <div className=" absolute flex flex-col w-full  items-center top-[4em] min-h-[calc(100vh-4rem)">
-      <main className="flex bg-background overflow-x-hidden flex-col gap-4 p-4 md:gap-8 md:p-10">
-        <div className="w-full h-[15vh] bg-primary-foreground fixed top-[4em] left-0 "></div>
+      <main className="flex bg-background overflow-x-hidden w-full flex-col gap-4 md:gap-8">
+        {/* <div className="w-full h-[15vh] bg-primary-foreground fixed top-[4em] left-0 "></div> */}
 
-        <div className="z-20 overflow-x-clip  min-w-[80vw] px-4 md:min-w-[75%] max-w-[75%] self-center bg-secondary rounded-lg border border-secondary-foreground">
+        <div className="z-20 overflow-x-clip  w-full px-4  self-center bg-accordian-background  border-b border-secondary-foreground">
           {/* <div className="bg-gray-100 p-4 rounded-lg shadow-md"> */}
           <Accordion type="single" collapsible defaultValue="summary">
             <AccordionItem value="summary">
@@ -101,13 +101,18 @@ export async function TeamPageComponent({
                 </div>
               </AccordionTrigger>
               <AccordionContent>
-                <Separator className="mb-4 bg-gray-700 h-[1px] space-x-16 " />
-                <div className="flex flex-col md:flex-row md:flex-wrap md:justify-evenly  bg-transparent md:border-r-slate-600">
-                  <div className="bg-muted   md:flex-grow mb-2  rounded-lg p-2 f  py-2">
-                    <div className="ml-auto flex flex-start flex-col flex-wrap space-x-2">
-                      <Label className="font-bold min-h-[40px] text-sm md:text:sm">
+                {/* <Separator className="mb-2 bg-gray-500 h-[1px] mr-16 ml-16 " /> */}
+                <div className="flex flex-col md:flex-row md:flex-wrap md:justify-between md:mx-[12%] bg-transparent md:border-r-slate-600">
+                  {/* <div className="flex flex-col  justify-between md:flex-row md:flex-wrap md:justify-between md:space-x-4  "> */}
+                  {/* <div className="bg-muted mx-2 shadow-sm pl-4 md:flex-grow mb-2  md:max-w-[360px] lg:max-w-[400px] rounded-lg p-3  "> */}
+                  <div className="mb-4 md:w-1/4">
+                    {/* <div className="ml-auto flex flex-start flex-col flex-wrap space-x-2"> */}
+                    <div className="ml-auto flex flex-wrap items-center ">
+                      <Label className="font-bold text-sm md:text:sm pb-4">
                         Projects:
                       </Label>
+                    </div>
+                    <div className="ml-auto flex flex-wrap items-center ">
                       <div className="flex flex-wrap">
                         <Badge className="bg-green-500  min-w-fit text-xs px-2  py-[0.2em] m-1">
                           {" "}
@@ -159,14 +164,17 @@ export async function TeamPageComponent({
                     orientation="vertical"
                     className="hidden my-4 bg-gray-700 md:w-[1px] h-auto mx-4 space-y-16 md:block"
                   /> */}
-                  <div
-                    className={` bg-muted mb-2 md:flex-grow rounded-lg p-2 flex  flex-col   py-2`}
-                  >
-                    <div className="flex flex-row  justify-between ">
-                      <Label className="font-bold min-h-[40px] text-sm md:text:sm">
+                  {/* <div
+                    className={` bg-muted mb-2 mx-2 shadow-sm pl-4 md:flex-grow rounded-lg p-3 flex md:max-w-[360px] lg:max-w-[400px]  flex-col   `}
+                  > */}
+                  <div className="mb-4 md:w-1/4">
+                    {/* <div className="flex flex-row  justify-between "> */}
+                    <div className="ml-auto flex flex-wrap items-center ">
+                      <Label className="font-bold mr-16 text-sm md:text:sm pb-">
                         Users:
                       </Label>
-
+                      {/* </div>
+                    <div className="ml-auto flex flex-wrap items-center "> */}
                       <TeamMemberTable
                         userId={userId}
                         team={team}
@@ -186,14 +194,14 @@ export async function TeamPageComponent({
                             {/* </div>
                         <div className=" mb-2 flex flex-row overflow-auto"> */}
                             {/* <> */}
-                            <ScrollArea>
+                            <div className="flex flex-row">
                               {teamUsersAdmins.map((member, index) => (
-                                <div key={index} className="p-2">
+                                <div key={index} className="p-1 py-2 ">
                                   <Popover>
                                     <PopoverTrigger>
                                       <Avatar key={index} className="w-8 h-8 ">
                                         <AvatarFallback
-                                          className={` text-xs  bg-gray-500`}
+                                          className={` text-xs  rounded-full bg-primary border-2 border-black text-white`}
                                         >
                                           {getInitials(member.name)}
                                         </AvatarFallback>
@@ -211,8 +219,8 @@ export async function TeamPageComponent({
                                   </Popover>
                                 </div>
                               ))}
-                              <ScrollBar orientation="horizontal" />
-                            </ScrollArea>
+                              {/* <ScrollBar orientation="horizontal" /> */}
+                            </div>
                           </div>
                           {/* </> */}
                         </div>
@@ -299,7 +307,7 @@ export async function TeamPageComponent({
           </Accordion>
         </div>
 
-        <div className=" z-20 flex justify-center self-center flex-col mt-4 w-full">
+        <div className=" z-20 flex p-4 md:p-10 justify-center self-center flex-col mt-4 w-full">
           <div className=" flex w-full flex-col justify-center">
             <div className="flex ml-[12%] md:ml-0 p-2 justify-start align-top h-fit ">
               <h1 className="text-lg md:text-xl font-bold mr-6 self-center">
@@ -328,20 +336,18 @@ export async function TeamPageComponent({
                 projects.map(
                   (project, project_idx) =>
                     project.archived === false && (
-                      <Card
+                      <Link
                         key={project_idx}
-                        className="border rounded-md mb-4 p-1 flex items-center w-56 h-28 border-gray-500 mr-4   bg-gray-800 shadow-lg hover:shadow-sm "
+                        className="truncate m-2 shadow-lg hover:shadow-sm bg-card"
+                        href={`/PROJECTS-CLEAN/${project.id}`}
                       >
-                        <Link
-                          className="truncate "
-                          href={`/PROJECTS-CLEAN/${project.id}`}
-                        >
+                        <Card className="border   p-1 flex items-center w-72 h-28     ">
                           <CardHeader className="p-0 pl-2">
-                            <CardTitle className="text-sm md:text-base">
+                            <CardTitle className="text-sm md:text-base ">
                               {project.name}
                             </CardTitle>
                             <CardDescription className="text-xs w-full  flex flex-col justify-start">
-                              <div className="truncate max-w-full text-ellipsis ">
+                              <div className="truncate max-w-full  text-ellipsis ">
                                 {project.description}
                               </div>
                               <div className=" flex justify-start pt-2">
@@ -354,8 +360,8 @@ export async function TeamPageComponent({
                               </div>
                             </CardDescription>
                           </CardHeader>
-                        </Link>
-                      </Card>
+                        </Card>
+                      </Link>
                     )
                 )}
             </div>
