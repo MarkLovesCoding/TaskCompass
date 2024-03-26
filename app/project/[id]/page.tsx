@@ -7,7 +7,7 @@ import getTeamUsers from "@/data-access/users/get-team-users.persistence";
 import getProjectTasks from "@/data-access/tasks/get-project-tasks.persistence";
 import getProjectUsers from "@/data-access/users/get-project-users.persistence";
 import getProjectAdmins from "@/data-access/users/get-project-admins.persistence";
-import { ProjectPage } from "@/app/PROJECTS-CLEAN/[id]/project-page-component";
+import { ProjectPage } from "@/app/project/[id]/project-page-component";
 import toast, { Toaster } from "react-hot-toast";
 import { sessionAuth } from "@/lib/sessionAuth";
 import getUserObject from "@/data-access/users/get-user.persistence";
@@ -19,7 +19,7 @@ type ParamsType = {
 const Projects = async ({ params }: { params: ParamsType }) => {
   unstable_noStore();
   console.log("Params: ", params);
-  const session = await sessionAuth(`PROJECTS-CLEAN/${params.id}`);
+  const session = await sessionAuth(`project/${params.id}`);
   let projectIdFromParams;
   if (params.id.length === 24) {
     projectIdFromParams = params.id;

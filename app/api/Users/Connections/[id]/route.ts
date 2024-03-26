@@ -1,7 +1,7 @@
 import connectDB from "@/db/connectDB";
 import User from "@/db/(models)/User";
 import Project from "@/db/(models)/Project";
-import { UserType, ProjectType } from "@/app/types/types";
+import { UserType, ProjectType } from "@/lib/types/types";
 import { NextResponse, NextRequest } from "next/server";
 // import { NextApiRequest } from "next";
 

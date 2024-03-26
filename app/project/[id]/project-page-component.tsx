@@ -56,7 +56,7 @@ import UnarchiveTaskPopover from "./UnarchiveTaskPopover";
 import ArchiveProjectPopover from "./ArchiveProjectPopover";
 
 import { ProjectHeaderStatic } from "./ProjectHeaderStatic";
-import { getInitials } from "@/app/utils/getInitials";
+import { getInitials } from "@/lib/utils/getInitials";
 
 import { useState, useEffect } from "react";
 import CardView from "./CardView";
@@ -73,7 +73,7 @@ import {
 } from "@/components/ui/drawer";
 import Project from "@/db/(models)/Project";
 import { Label } from "@/components/ui/label";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/utils";
 import { TeamDto } from "@/use-cases/team/types";
 export function ProjectPage({
   // id,
@@ -406,7 +406,7 @@ border: 1px solid rgba(0, 0, 0, 0.3);
         )}
       >
         <div className="min-w-fit p-1 max-h-16">
-          <Link href={`/TEAMS-CLEAN/${project.team}`}>
+          <Link href={`/team/${project.team}`}>
             <h4 className="text-xs  underline cursor-pointer">Back to Team</h4>
           </Link>
           <div className="flex items-center m-2 ">

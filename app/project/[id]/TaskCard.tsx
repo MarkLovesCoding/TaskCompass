@@ -44,7 +44,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/utils";
 import { Calendar } from "@/components/ui/calendar";
 import * as z from "zod";
 import { useController, useWatch } from "react-hook-form";
@@ -58,7 +58,7 @@ import { useRouter } from "next/navigation";
 import { updateTaskArchivedAction } from "../_actions/update-task-archived.action";
 import { updateTaskAction } from "../_actions/update-task.action";
 import { UserDto } from "@/use-cases/user/types";
-import { getInitials } from "@/app/utils/getInitials";
+import { getInitials } from "@/lib/utils/getInitials";
 import { updateProjectTasksOrderFromTaskCardAction } from "../_actions/update-project-tasks-order-from-task-card.action";
 const taskFormSchema = z.object({
   id: z.string(),

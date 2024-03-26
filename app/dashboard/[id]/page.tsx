@@ -1,5 +1,5 @@
 import React from "react";
-import { UserPageComponent } from "@/app/USERPAGE-CLEAN/[id]/user-page-component";
+import { UserPageComponent } from "@/app/dashboard/[id]/user-page-component";
 import getUser from "@/data-access/users/get-user.persistence";
 import type { UserDto } from "@/use-cases/user/types";
 import { unstable_noStore } from "next/cache";

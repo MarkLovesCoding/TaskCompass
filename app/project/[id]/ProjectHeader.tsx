@@ -15,7 +15,7 @@ import { LayoutIcon } from "lucide-react";
 import * as z from "zod";
 import { useForm, useController } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { updateProjectDetailsAction } from "@/app/PROJECTS-CLEAN/_actions/update-project-details.action.";
+import { updateProjectDetailsAction } from "@/app/project/_actions/update-project-details.action.";
 import { useState } from "react";
 
 const formSchema = z.object({

@@ -3,10 +3,10 @@ import { unstable_noStore } from "next/cache";
 import { useQuery } from "@tanstack/react-query";
 import AddProjectCard from "./AddProjectCard";
 import { TeamMemberTable } from "./TeamMemberTable";
-import { TeamHeader } from "@/app/TEAMS-CLEAN/[id]/team-header";
+import { TeamHeader } from "@/app/team/[id]/team-header";
 import UnarchiveProjectPopover from "./UnarchiveProjectPopover";
 import { TeamMemberCardWithPermissions } from "./team-member-card-with-permissions";
-import { getInitials } from "@/app/utils/getInitials";
+import { getInitials } from "@/lib/utils/getInitials";
 
 import { UserIcon, UserCog, ArchiveIcon, Scroll } from "lucide-react";
 import {

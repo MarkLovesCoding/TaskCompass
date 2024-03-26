@@ -2,7 +2,7 @@ import { NextResponse, NextRequest } from "next/server";
 import connectDB from "@/db/connectDB";
 import User from "@/db/(models)/User";
 import Project from "@/db/(models)/Project";
-import { UserType } from "@/app/types/types";
+import { UserType } from "@/lib/types/types";
 import bcrypt from "bcrypt";
 import Team from "@/db/(models)/Team";
 export async function POST(req: Request, res: Response): Promise<any> {

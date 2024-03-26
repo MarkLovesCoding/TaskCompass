@@ -14,63 +14,54 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import {
+  CircleEllipsis,
   PlusCircleIcon,
   PlusIcon,
-  Search,
-  UserSearchIcon,
   XIcon,
+  UserSearchIcon,
 } from "lucide-react";
 import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
-import { getInitials } from "@/app/utils/getInitials";
+import { getInitials } from "@/lib/utils/getInitials";
 import { ProjectDto } from "@/use-cases/project/types";
 import { UserDto } from "@/use-cases/user/types";
-import { updateTeamUsersAction } from "@/app/TEAMS-CLEAN/_actions/update-team-users.action";
-// import { updateProjectAdminsAction } from "@/app/PROJECTS-CLEAN/_actions/update-project-admins.action";
+import { updateProjectUsersAction } from "@/app/project/_actions/update-project-users.action";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+import { z } from "zod";
 import { Label } from "@/components/ui/label";
+
 import toast from "react-hot-toast";
+import MemberCardPermissionsSelect from "./MemberCardPermissionsSelect";
+const formSchema = z.object({
+  users: z.array(z.string()).min(1),
+});
 
-import TeamMemberCardPermissionsSelect from "./TeamMemberCardPermissionsSelect";
-import { TeamDto } from "@/use-cases/team/types";
-
-export function TeamMemberTable({
+export function MemberCardSearchTable({
   userId,
-  team,
+  project,
   teamUsers,
-  globalUsers,
-  projects,
+  projectUsers,
 }: {
   userId: string;
-  team: TeamDto;
+  project: ProjectDto;
   teamUsers: UserDto[];
-  globalUsers: UserDto[];
-  projects: ProjectDto[];
+  projectUsers: UserDto[];
 }) {
   const router = useRouter();
-
-  const filteredGlobalUsers = globalUsers.filter(
-    (user) => !teamUsers.some((tUser) => tUser.id === user.id)
-  );
-
-  const [projectTasksInTeam, setProjectTasksInTeam] = useState<string[]>(
-    projects.map((project) => project.tasks).flat()
+  const filteredTeamUsers = teamUsers.filter(
+    (user) => !projectUsers.some((pUser) => pUser.id === user.id)
   );
   const [selectedUser, setSelectedUser] = useState<UserDto | null>(
-    globalUsers[0]
+    teamUsers[0]
   );
-  const [isOpen, setIsOpen] = useState(false);
-
-  const [globalUsersList, setGlobalUsersList] =
-    useState<UserDto[]>(filteredGlobalUsers);
-  const [teamUsersList, setTeamUsersList] = useState<UserDto[]>(teamUsers);
-  const [teamUsersIdLists, setTeamUsersIdLists] = useState<string[]>(
-    teamUsersList.map((user) => user.id)
-  );
-  console.log("teamUsersIdLists", teamUsersIdLists);
+  const [teamUsersList, setTeamUsersList] =
+    useState<UserDto[]>(filteredTeamUsers);
   console.log("teamUsersList", teamUsersList);
-  // const teamUsersIdLists = teamUsersList.map((user) => user.id);
+  const [projectUsersList, setProjectUsersList] =
+    useState<UserDto[]>(projectUsers);
+  console.log("projectUsersList", projectUsersList);
+  const projectUsersIdLists = projectUsersList.map((user) => user.id);
 
   const getUserType = (user: UserDto, projectId: string) => {
     if (user.projectsAsAdmin.includes(projectId)) {
@@ -79,32 +70,29 @@ export function TeamMemberTable({
       return "member";
     }
   };
-  const userHasTasksInTeamProjects = (user: UserDto): boolean => {
-    return user.tasks.some((task) => projectTasksInTeam.includes(task));
+  const userHasTasksInProject = (user: UserDto, projectId: string): boolean => {
+    return user.tasks.some((task) => project.tasks.includes(task));
   };
-  const usersTasksInProjectCount = (user: UserDto): number => {
-    return user.tasks.filter((task) => projectTasksInTeam.includes(task))
-      .length;
+  const usersTasksInProjectCount = (
+    user: UserDto,
+    projectId: string
+  ): number => {
+    return user.tasks.filter((task) => project.tasks.includes(task)).length;
   };
-  const onUpdateTeamUserFormSubmit = async (isOpen: boolean) => {
-    console.log("onUpdateTeamUserFormSubmit", isOpen);
-    console.log("teamUsersIdLists", teamUsersIdLists);
-    console.log("team.id", team.id);
-    await updateTeamUsersAction(
-      team.id,
-      teamUsersList.map((user) => user.id)
-    );
+  const onUpdateProjectUserFormSubmit = async (isOpen: boolean) => {
+    await updateProjectUsersAction(project.id, projectUsersIdLists);
+    router.refresh();
   };
   const getUserTypes = (projectUsers: UserDto[]) => {
     const userTypes: Record<string, string> = {}; // Define userTypes as an object with string index signature
     projectUsers.forEach((user) => {
-      userTypes[user.id as string] = getUserType(user, team.id) as string; // Make sure project.id is defined and correct
+      userTypes[user.id as string] = getUserType(user, project.id) as string; // Make sure project.id is defined and correct
     });
     return userTypes;
   };
 
   const [userTypes, setUserTypes] = useState({
-    ...getUserTypes(teamUsersList),
+    ...getUserTypes(projectUsersList),
   });
 
   // Function to handle the change in user type
@@ -114,30 +102,58 @@ export function TeamMemberTable({
       [userId]: userType, // Update the userType for the specific userId
     }));
   };
+  const toastOptions = {
+    duration: 3000,
+    position: "top-center",
 
+    // Styling
+    style: {},
+    className: "",
+
+    // Custom Icon
+    icon: "🧐",
+    // Change colors of success/error/loading icon
+    // iconTheme: {
+    //   primary: "#000",
+    //   secondary: "#fff",
+    // },
+
+    // Aria
+    ariaProps: {
+      role: "status",
+      "aria-live": "polite",
+    },
+  };
   return (
-    <Popover onOpenChange={onUpdateTeamUserFormSubmit}>
+    <Popover onOpenChange={onUpdateProjectUserFormSubmit}>
       <PopoverTrigger asChild>
         <div>
-          <Search className="w-10 h-10 cursor-pointer hover:bg-primary p-2 rounded-full" />
-
+          {/* <PlusCircleIcon className="w-10 h-10" /> */}
+          <Button
+            variant="outline"
+            className=" text-xs    py-1 m-1 h-8  bg-primary-foreground"
+          >
+            <UserSearchIcon />
+            {/* <PlusCircleIcon className="w-10 h-10" /> */}
+          </Button>
+          {/* <CircleEllipsis className="w-10 h-10" /> */}
           <span className="sr-only">Edit Members</span>
         </div>
       </PopoverTrigger>
-      <PopoverContent className="w-fit">
+      <PopoverContent className="max-w-[95vw] mx-2 w-fit">
         <Command>
           <CommandInput className="h-9" placeholder="Search members..." />
           <CommandGroup>
             <Label className="m-4">
-              <div className="font-semibold">Team Members</div>
+              <div className="font-semibold">Project Members</div>
             </Label>
-            {teamUsersList?.map((user, index) => (
+            {projectUsersList?.map((user, index) => (
               <CommandItem className=" group" value={user.name} key={index}>
                 <div className="flex items-center h-14 gap-2">
                   <div className="flex w-full items-center gap-2">
                     <Avatar className=" w-10 h-10">
                       {/* <AvatarImage src={user.avatar} /> */}
-                      <AvatarFallback className={`text-sm bg-orange-500`}>
+                      <AvatarFallback className={`text-sm bg-gray-500`}>
                         {getInitials(user.name)}
                       </AvatarFallback>
                     </Avatar>
@@ -154,10 +170,10 @@ export function TeamMemberTable({
                         <div className="flex items-center gap-1"></div>
                       </div>
                     </div>
-                    {team.createdBy !== user.id ? (
-                      <TeamMemberCardPermissionsSelect
+                    {project.createdBy !== user.id ? (
+                      <MemberCardPermissionsSelect
                         user={user}
-                        team={team}
+                        project={project}
                       />
                     ) : (
                       <Badge className="shrink-0" variant="secondary">
@@ -171,13 +187,15 @@ export function TeamMemberTable({
                           onClick={() => {
                             if (user.id !== userId) {
                               setSelectedUser(user);
-                              if (userHasTasksInTeamProjects(user)) {
+                              if (userHasTasksInProject(user, project.id)) {
                                 // if (user.tasks.length > 0) {
                                 toast.error(
-                                  `User cannot be removed from Team.\n User still has  ${usersTasksInProjectCount(
-                                    user
+                                  `User cannot be removed from Project.\n User still has  ${usersTasksInProjectCount(
+                                    user,
+                                    project.id
                                   )}  task${
-                                    usersTasksInProjectCount(user) > 1
+                                    usersTasksInProjectCount(user, project.id) >
+                                    1
                                       ? "s"
                                       : ""
                                   } assigned to them.`
@@ -186,16 +204,16 @@ export function TeamMemberTable({
                                 // handleUserHasTasks(user);
                                 return;
                               }
-                              setTeamUsersList((prev) =>
+                              setProjectUsersList((prev) =>
                                 prev.filter((u) => u.id !== user.id)
                               );
-                              setGlobalUsersList((prev) => {
+                              setTeamUsersList((prev) => {
                                 if (!prev.some((u) => u.id === user.id)) {
                                   return [...prev, user];
                                 }
                                 return prev;
                               });
-                              toast.success("User removed from Team");
+                              toast.success("User removed from Project");
                             }
                           }}
                         >
@@ -209,12 +227,12 @@ export function TeamMemberTable({
             ))}
           </CommandGroup>
           <Separator />
-          {globalUsersList.length > 0 && (
+          {teamUsersList.length > 0 && (
             <CommandGroup>
               <Label className="m-4">
-                <div className="font-semibold">Global Users</div>
+                <div className="font-semibold">Team Members</div>
               </Label>
-              {globalUsersList?.map((user, index) => (
+              {teamUsersList?.map((user, index) => (
                 <CommandItem className=" group" value={user.name} key={index}>
                   <div className="flex items-center gap-2">
                     <div className="flex items-center gap-2">
@@ -237,16 +255,16 @@ export function TeamMemberTable({
                           variant={"ghost"}
                           className="bg-transparent "
                           onClick={() => {
-                            setTeamUsersList((prev) => {
+                            setProjectUsersList((prev) => {
                               if (!prev.some((u) => u.id === user.id)) {
                                 return [...prev, user];
                               }
                               return prev;
                             });
-                            setGlobalUsersList((prev) =>
+                            setTeamUsersList((prev) =>
                               prev.filter((u) => u.id !== user.id)
                             );
-                            toast.success("User added to Team");
+                            toast.success("User added to Project");
                           }}
                         >
                           <PlusIcon className=" opacity-0 group-hover:opacity-100 text-green-400"></PlusIcon>

@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/popover";
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { updateProjectArchivedAction } from "../../TEAMS-CLEAN/_actions/update-project-archived.action";
+import { updateProjectArchivedAction } from "../../team/_actions/update-project-archived.action";
 import { ProjectDto } from "@/use-cases/project/types";
 import { useRouter } from "next/navigation";
 const ArchiveProjectPopover = ({ project }: { project: ProjectDto }) => {

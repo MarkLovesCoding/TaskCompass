@@ -88,58 +88,45 @@ const Navigation: React.FC = async () => {
                 <DropdownMenuSeparator />
                 <ModeToggle />
                 <DropdownMenuSeparator />
-                <Link
-                  href={`/TEAMS-CLEAN/${sessionUserId}`}
-                  title="Your Profile"
-                >
-                  <DropdownMenuSub>
-                    <DropdownMenuSubTrigger className="flex flex-row space-x-2">
-                      <UsersIcon className="w-6 h-6 mr-2" />
-                      Teams
-                    </DropdownMenuSubTrigger>
-                    <DropdownMenuPortal>
-                      <DropdownMenuSubContent>
-                        {teams.map((team, team_idx) => (
-                          <DropdownMenuItem key={team_idx}>
-                            <Link href={`/TEAMS-CLEAN/${team.id}`}>
-                              {team.name}
-                            </Link>
-                          </DropdownMenuItem>
-                        ))}
-                      </DropdownMenuSubContent>
-                    </DropdownMenuPortal>
-                  </DropdownMenuSub>
-                </Link>
+
+                <DropdownMenuSub>
+                  <DropdownMenuSubTrigger className="flex flex-row space-x-2">
+                    <UsersIcon className="w-6 h-6 mr-2" />
+                    Teams
+                  </DropdownMenuSubTrigger>
+                  <DropdownMenuPortal>
+                    <DropdownMenuSubContent>
+                      {teams.map((team, team_idx) => (
+                        <DropdownMenuItem key={team_idx}>
+                          <Link href={`/team/${team.id}`}>{team.name}</Link>
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuSubContent>
+                  </DropdownMenuPortal>
+                </DropdownMenuSub>
 
                 <DropdownMenuSeparator />
-                <Link
-                  href={`/USERPAGE-CLEAN/${sessionUserId}`}
-                  title="Your Profile"
-                >
-                  <DropdownMenuSub>
-                    <DropdownMenuSubTrigger className="flex flex-row space-x-2">
-                      <KanbanIcon className="w-6 h-6 mr-2" />
-                      Projects
-                    </DropdownMenuSubTrigger>
-                    <DropdownMenuPortal>
-                      <DropdownMenuSubContent>
-                        {projects.map((project, project_idx) => (
-                          <DropdownMenuItem key={project_idx}>
-                            <Link href={`/PROJECTS-CLEAN/${project.id}`}>
-                              {project.name}
-                            </Link>
-                          </DropdownMenuItem>
-                        ))}
-                      </DropdownMenuSubContent>
-                    </DropdownMenuPortal>
-                  </DropdownMenuSub>
-                </Link>
+
+                <DropdownMenuSub>
+                  <DropdownMenuSubTrigger className="flex flex-row space-x-2">
+                    <KanbanIcon className="w-6 h-6 mr-2" />
+                    Projects
+                  </DropdownMenuSubTrigger>
+                  <DropdownMenuPortal>
+                    <DropdownMenuSubContent>
+                      {projects.map((project, project_idx) => (
+                        <DropdownMenuItem key={project_idx}>
+                          <Link href={`/project/${project.id}`}>
+                            {project.name}
+                          </Link>
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuSubContent>
+                  </DropdownMenuPortal>
+                </DropdownMenuSub>
 
                 <DropdownMenuSeparator />
-                <Link
-                  href={`/USERPAGE-CLEAN/${sessionUserId}`}
-                  title="Your Profile"
-                >
+                <Link href={`/dashboard/${sessionUserId}`} title="Your Profile">
                   <DropdownMenuItem className="cursor-pointer flex flex-row space-x-2">
                     <LayoutDashboard className="w-6 h-6 mr-2" />
                     Dashboard

@@ -1,6 +1,6 @@
 import connectDB from "@/db/connectDB";
 import User from "@/db/(models)/User";
-import { UserType } from "@/app/types/types";
+import { UserType } from "@/lib/types/types";
 import { NextResponse, NextRequest } from "next/server";
 
 export async function POST(request: Request, response: Response) {

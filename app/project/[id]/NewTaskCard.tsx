@@ -35,7 +35,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/utils";
 import { CardHeader, CardContent, Card } from "@/components/ui/card";
 import { Calendar } from "@/components/ui/calendar";
 import * as z from "zod";

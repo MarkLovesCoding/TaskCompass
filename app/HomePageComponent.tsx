@@ -13,7 +13,7 @@ const HomePageComponent = () => {
     // Redirect to home if the user is already signed in
     if (session) {
       //@ts-expect-error
-      router.push(`/USERPAGE-CLEAN/${session!.user.id}`);
+      router.push(`/dashboard/${session!.user.id}`);
     }
   }, [session, router]);
   const [toRegister, setToRegister] = useState(false);

@@ -13,7 +13,7 @@ import { updateTaskAction } from "../_actions/update-task.action";
 import { Droppable, DragDropContext } from "@hello-pangea/dnd";
 import CardColumn from "./CardColumn";
 import { TasksOrder } from "@/data-access/projects/types";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/utils";
 import { set } from "mongoose";
 import toast from "react-hot-toast";
 interface Columns {

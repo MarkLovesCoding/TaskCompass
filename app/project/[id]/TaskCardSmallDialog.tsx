@@ -4,7 +4,7 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/small-task-card";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/utils";
 import { TaskDto } from "@/use-cases/task/types";
 import {
   Dialog,

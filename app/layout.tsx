@@ -5,7 +5,7 @@ import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import Navigation from "./Navigation";
 import { ThemeProvider } from "@/components/ui/theme-provider";
-import Provider from "./utils/Providers";
+import Provider from "./(providers)/Providers";
 config.autoAddCss = false;
 
 export const metadata: Metadata = {
@@ -26,7 +26,7 @@ export default function RootLayout({
   return (
     <html suppressHydrationWarning lang="en">
       <Provider>
-        <body className="bg-gradient-to-r from-sky-500 to-indigo-500">
+        <body className="bg-background">
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"

@@ -16,20 +16,33 @@ import {
 import { MailIcon, KeyIcon, CheckIcon, ClockIcon } from "lucide-react";
 import { ProjectDto } from "@/use-cases/project/types";
 import { UserDto } from "@/use-cases/user/types";
-import { getInitials } from "@/app/utils/getInitials";
+import { getInitials } from "@/lib/utils/getInitials";
 import { TaskDto } from "@/use-cases/task/types";
-import MemberCardPermissionsSelect from "./TeamMemberCardPermissionsSelect";
+import MemberCardPermissionsSelect from "./MemberCardPermissionsSelect";
 import { TeamDto } from "@/use-cases/team/types";
 type MemberCardWithPermissionsProps = {
   user: UserDto;
-
+  project: ProjectDto;
+  tasks: TaskDto[];
   team: TeamDto;
 };
-export function TeamMemberCardWithPermissions({
+export function MemberCardWithPermissions({
   user,
-
+  project,
+  tasks,
   team,
 }: MemberCardWithPermissionsProps) {
+  console.log("taskss: ", tasks);
+  const usersTasks = tasks.filter((task) => task.assignees.includes(user.id));
+  console.log("usersTasks", usersTasks);
+  console.log("user", user);
+  const tasksCompleted = usersTasks.filter(
+    (task) => task.status == "Completed"
+  ).length;
+  const tasksActive = usersTasks.filter(
+    (task) => task.status !== "Completed"
+  ).length;
+
   return (
     <Card className="max-w-[95vw] mx-auto ">
       <CardHeader className="pb-6">
@@ -37,14 +50,16 @@ export function TeamMemberCardWithPermissions({
           <div className="flex items-center space-x-3">
             <Avatar className="w-10 h-10">
               {/* <AvatarImage alt={user.name} src="@/public/default-avatar.jpg" /> */}
-              <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
+              <AvatarFallback className="bg-primary">
+                {getInitials(user.name)}
+              </AvatarFallback>
             </Avatar>
             <div className="text-lg font-bold">{user.name}</div>
           </div>
           <div className="ml-auto flex items-center space-x-2">
-            {/* <Badge variant="outline">{`${usersTasks.length} task${
-              usersTasks.length > 1 ? "s" : ""
-            }`}</Badge> */}
+            <Badge variant="outline">{`${usersTasks.length} task${
+              usersTasks.length != 1 ? "s" : ""
+            }`}</Badge>
           </div>
         </div>
       </CardHeader>
@@ -72,16 +87,25 @@ export function TeamMemberCardWithPermissions({
             <span className="text-sm smallWidth:text-xs font-medium">Role</span>
           </div>
           <div className="text-right">
-            {team.createdBy !== user.id ? (
-              <MemberCardPermissionsSelect user={user} team={team} />
+            {project.createdBy !== user.id ? (
+              <MemberCardPermissionsSelect user={user} project={project} />
             ) : (
-              <Badge className="shrink-0" variant="destructive">
+              <Badge className="shrink-0" variant="secondary">
                 Admin
               </Badge>
             )}
+            {/* <Select>
+              <SelectTrigger>
+                <SelectValue>Admin</SelectValue>
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="admin">Admin</SelectItem>
+                <SelectItem value="member">Member</SelectItem>
+              </SelectContent>
+            </Select> */}
           </div>
         </div>
-        {/* <div className="grid grid-cols-2 gap-4 smallWidth:gap-2">
+        <div className="grid grid-cols-2 gap-4 smallWidth:gap-2">
           <div className="flex items-center space-x-2 smallWidth:space-x-1">
             <CheckIcon className="w-4 h-4 opacity-60" />
             <span className="text-sm smallWidth:text-xs font-medium">
@@ -93,8 +117,8 @@ export function TeamMemberCardWithPermissions({
               {tasksCompleted}
             </span>
           </div>
-        </div> */}
-        {/* <div className="grid grid-cols-2 gap-4 smallWidth:gap-">
+        </div>
+        <div className="grid grid-cols-2 gap-4 smallWidth:gap-">
           <div className="flex items-center space-x-2 smallWidth:space-x-1">
             <ClockIcon className="w-4 h-4 opacity-60" />
             <span className="text-sm smallWidth:text-xs font-medium">
@@ -106,7 +130,7 @@ export function TeamMemberCardWithPermissions({
               {tasksActive}
             </span>
           </div>
-        </div> */}
+        </div>
       </CardContent>
     </Card>
   );
