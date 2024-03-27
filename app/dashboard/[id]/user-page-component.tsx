@@ -203,7 +203,7 @@ export async function UserPageComponent({
                       return (
                         <Card
                           key={team_idx}
-                          className=" mb-4 hover:border-orange-300  border-2  max-w-full flex hover:border-orange hover:border-2 items-center w-72 h-28 bg-card shadow-lg hover:shadow-sm"
+                          className=" mb-4 hover:border-orange-300  border-2  max-w-full flex   items-center w-72 h-28 bg-card shadow-lg hover:shadow-sm"
                         >
                           <Link
                             className="w-full h-full p-2"

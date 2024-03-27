@@ -35,13 +35,14 @@ export function ModeToggle() {
 
   const handleCheckedChange = () => {
     const newValue = !checked; // Calculate the new value before setting it
-    setChecked(newValue); // Set the state with the new value
 
     if (newValue) {
       setTheme("light"); // If the new value is false, set the theme to "light"
     } else {
       setTheme("dark"); // If the new value is true, set the theme to "dark"
     }
+    // setChecked(newValue)
+    setTimeout(() => setChecked(newValue), 10); // Set the state with the new value
   };
   return (
     <>
