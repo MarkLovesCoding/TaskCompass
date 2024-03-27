@@ -238,12 +238,9 @@ export async function TeamPageComponent({
                                 <div key={index} className="p-2">
                                   <Popover>
                                     <PopoverTrigger>
-                                      <Avatar
-                                        key={index}
-                                        className=" w-10 h-10"
-                                      >
+                                      <Avatar key={index} className=" w-8 h-8">
                                         <AvatarFallback
-                                          className={`text-sm bg-gray-500`}
+                                          className={` text-xs  rounded-full bg-primary border-2 border-black text-white`}
                                         >
                                           {getInitials(member.name)}
                                         </AvatarFallback>

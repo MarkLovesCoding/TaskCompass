@@ -1,20 +1,14 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { ColumnOrder, ProjectDto } from "@/use-cases/project/types";
+import { useState, useEffect } from "react";
+import { ProjectDto } from "@/use-cases/project/types";
 import { TaskDto } from "@/use-cases/task/types";
 import { UserDto } from "@/use-cases/user/types";
-import { sortByType } from "./utils";
-import { SORT_TYPES } from "./constants";
 // import { PRIORITY_COLORS } from "./constants";
 import { updateProjectAction } from "../_actions/update-project.action";
 import { updateTasksAction } from "../_actions/update-tasks.action";
 // import { updateProjectColumnOrderAction } from "../_actions/update-project-column-order.action";
-import { updateTaskAction } from "../_actions/update-task.action";
 import { Droppable, DragDropContext } from "@hello-pangea/dnd";
 import CardColumn from "./CardColumn";
-import { TasksOrder } from "@/data-access/projects/types";
-import { cn } from "@/lib/utils/utils";
-import { set } from "mongoose";
 import toast from "react-hot-toast";
 interface Columns {
   [key: string]: {

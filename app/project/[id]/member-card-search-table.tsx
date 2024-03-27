@@ -134,15 +134,12 @@ export function MemberCardSearchTable({
       <Dialog onOpenChange={onUpdateProjectUserFormSubmit}>
         <DialogTrigger asChild>
           <div>
-            {/* <PlusCircleIcon className="w-10 h-10" /> */}
             <Button
               variant="outline"
               className=" text-xs    py-1 m-1 h-8  hover:bg-primary bg-secondary"
             >
               <UserSearchIcon />
-              {/* <PlusCircleIcon className="w-10 h-10" /> */}
             </Button>
-            {/* <CircleEllipsis className="w-10 h-10" /> */}
             <span className="sr-only">Edit Members</span>
           </div>
         </DialogTrigger>

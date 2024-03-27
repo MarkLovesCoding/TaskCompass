@@ -267,6 +267,11 @@ export const TaskCard = ({
     { option: "Medium", color: "yellow" },
     { option: "Low", color: "green" },
   ];
+  const priorityOptionsForRadio = [
+    { option: "High", color: "text-badgeRed" },
+    { option: "Medium", color: "text-badgeYellow" },
+    { option: "Low", color: "text-badgeGreen" },
+  ];
   const statusOptions = ["Not Started", "Up Next", "In Progress", "Completed"];
   renderCount++;
   return (
@@ -356,6 +361,12 @@ export const TaskCard = ({
                                 <RadioGroupItem
                                   id={`priority-${priority.option}`}
                                   value={priority.option}
+                                  className={cn(
+                                    priorityOptionsForRadio.find(
+                                      (p) => p.option == priority.option
+                                    )?.color,
+                                    `scale-150`
+                                  )}
                                 />
                               </FormControl>{" "}
                               <FormLabel className="font-normal text-xs pb-2">
@@ -617,9 +628,9 @@ export const TaskCard = ({
                       <Button
                         title="Archive Task"
                         variant="outline"
-                        className="h-fit w-fit py-2 px-2 absolute top-0 right-8"
+                        className="h-fit w-fit py-2 px-2 absolute top-0 right-8  border:nav-background hover:border-destructive hover:bg-destructive group"
                       >
-                        <ArchiveIcon className="w-4 h-4  self-center" />
+                        <ArchiveIcon className="w-4 h-4  group-hover:text-white self-center" />
                         <span className="sr-only">Archive Task Button</span>
                         {/* <Label className="text-xs">Archive Task</Label> */}
                       </Button>

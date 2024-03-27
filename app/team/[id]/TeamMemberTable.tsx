@@ -224,8 +224,8 @@ export function TeamMemberTable({
                   {/* <div className="flex items-center gap-2"> */}
                   <div className="flex items-center justify-between w-full gap-2">
                     <div className="flex flex-row gap-2">
-                      <Avatar className=" w-12 h-12">
-                        <AvatarImage src={user.avatar} />
+                      <Avatar className=" w-10 h-10">
+                        {/* <AvatarImage src={user.avatar} /> */}
                         <AvatarFallback className={`text-sm bg-gray-500`}>
                           {getInitials(user.name)}
                         </AvatarFallback>

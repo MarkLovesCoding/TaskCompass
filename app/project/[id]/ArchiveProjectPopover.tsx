@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { updateProjectArchivedAction } from "../../team/_actions/update-project-archived.action";
 import { ProjectDto } from "@/use-cases/project/types";
 import { useRouter } from "next/navigation";
+import { ArchiveIcon } from "lucide-react";
 const ArchiveProjectPopover = ({ project }: { project: ProjectDto }) => {
   const archiveProjectFormObject = {
     archived: true,
@@ -28,11 +29,14 @@ const ArchiveProjectPopover = ({ project }: { project: ProjectDto }) => {
   return (
     <>
       <Popover open={isOpen} onOpenChange={setIsOpen}>
-        <PopoverTrigger>
-          <div className="py-1 px-1 text-xs">
-            {/* {project.name} */}
-            Archive Project
-            <span className="sr-only">Archive Project Trigger</span>
+        <PopoverTrigger className="group/archive ">
+          <div className="flex flex-row">
+            <ArchiveIcon className="w-4 h-4 mr-1 self-center   group-hover/archive:text-white" />
+            <div className="py-1 px-1 text-xs group-hover/archive:text-white">
+              {/* {project.name} */}
+              Archive Project
+              <span className="sr-only">Archive Project Trigger</span>
+            </div>
           </div>
         </PopoverTrigger>{" "}
         <PopoverContent>

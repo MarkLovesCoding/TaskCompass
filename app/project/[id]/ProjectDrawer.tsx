@@ -84,20 +84,20 @@ const ProjectDrawer = ({
   return (
     <Drawer direction="left">
       <DrawerTrigger>
-        <div className="fixed group top-[2rem] md:top-[3rem] left-0 w-6 md:w-8 z-20 h-[calc(100vh-2rem)] md:h-[calc(100vh-3rem)] bg-nav-background hover:bg-card  border-r-2 border-t-2 rounded-tr rounded-br border-b-2 border-nav-background hover:border-r-primary  hover:border-t-primary hover:border-b-primary ">
+        <div className="fixed group top-[2rem] md:top-[3rem] left-0 w-6 md:w-8 z-20 h-[calc(100vh-2rem)] md:h-[calc(100vh-3rem)] bg-nav-background hover:bg-card  border-r-2 border-t-2 rounded-tr-lg rounded-br-lg border-b-2 border-nav-background hover:border-r-primary  hover:border-t-primary hover:border-b-primary ">
           <ArrowRightCircle className="  fixed z-50 rounded-full fill-background group-hover:text-primary text-nav-background top-[calc(50%-1em)] left-3 md:left-4 w-6 h-6 md:w-8 md:h-8 self-center cursor-pointer" />
         </div>
       </DrawerTrigger>
 
       <DrawerContent>
         <div
-          className={`group hidden bg-drawer-background backdrop-filter backdrop-blur  p-6 fixed top-12 left-0 h-[calc(100vh-3rem)]  tooSmall:grid   max-w-[450px]  rounded-tl-none rounded-bl-none  border-r-2 border-t-2 border-b-2 border-r-primary hover:border-r-primary  border-t-primary hover:border-t-primary border-b-primary hover:border-b-primary cursor-grab active:cursor-grabbing`}
+          className={`group hidden bg-drawer-background backdrop-filter backdrop-blur  p-6 fixed top-12 left-0 h-[calc(100vh-3rem)]  tooSmall:grid   max-w-[450px]  rounded-tr-lg rounded-br-lg  border-r-2 border-t-2 border-b-2 border-r-primary hover:border-r-primary  border-t-primary hover:border-t-primary border-b-primary hover:border-b-primary cursor-grab active:cursor-grabbing`}
         >
           <Label>Window too too small, please expand or rotate to view</Label>
         </div>
 
         <div
-          className={`group  tooSmall:hidden flex flex-col bg-drawer-background backdrop-filter backdrop-blur-lg   fixed top-12 left-0 h-[calc(100vh-3rem)] w-[425px] max-w-[95vw] rounded-tl-none rounded-bl-none border-r-2 border-t-2 border-b-2 z-40 border-r-card hover:border-r-primary border-t-card hover:border-t-primary border-b-card hover:border-b-primary cursor-grab active:cursor-grabbing p-2 pt-3 `}
+          className={`group  tooSmall:hidden flex flex-col bg-drawer-background backdrop-filter backdrop-blur-lg   fixed top-12 left-0 h-[calc(100vh-3rem)] w-[425px] max-w-[95vw] rounded-tr-lg rounded-br-lg border-r-2 border-t-2 border-b-2 z-40 border-r-card hover:border-r-primary border-t-card hover:border-t-primary border-b-card hover:border-b-primary cursor-grab active:cursor-grabbing p-2 pt-3 `}
         >
           <DrawerClose className="">
             <ArrowLeftCircleIcon className="absolute right-[-1em] z-50 top-[calc(50%-3rem)]  rounded-full w-8 h-8 self-center bg-background text-card group-hover:text-primary" />
@@ -200,7 +200,7 @@ const ProjectDrawer = ({
               className={` border-secondary border-solid border-[1px] mb-2  order-3  rounded-lg p-2 flex  flex-col   py-2`}
             >
               <div className="flex flex-row  justify-start align-middle ml-2">
-                <h3 className="   mr-auto text-md font-bold">Members</h3>
+                <h3 className="   mr-auto text-md font-bold">Users</h3>
                 <MemberCardSearchTable
                   userId={userId}
                   project={project}
@@ -306,9 +306,8 @@ const ProjectDrawer = ({
               <div className="flex justify-center my-auto">
                 <Button
                   variant="outline"
-                  className="h-fit w-fit py-1 px-2 border-destructive"
+                  className="h-fit w-fit py-1 px-2 group border:nav-background hover:border-destructive hover:bg-destructive"
                 >
-                  <ArchiveIcon className="w-4 h-4 mr-1 self-center" />
                   <ArchiveProjectPopover project={project} />
                   <span className="sr-only">Archive Project Button</span>
                 </Button>

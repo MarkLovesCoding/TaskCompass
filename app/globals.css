@@ -224,7 +224,7 @@
 
     /* --card-foreground: rgb(236, 236, 236); */
     --taskcard-foreground: rgb(22, 22, 22);
-    --taskcard-background: rgba(220, 220, 220, 0.7);
+    --taskcard-background: rgba(225, 225, 225, 0.7);
     --taskcardsmall-background: rgba(250, 250, 250, 1);
 
     --foreground: rgb(12, 12, 12);
@@ -279,7 +279,7 @@
     /* --card-foreground: rgb(37, 38, 42); */
     /* --card-foreground: rgb(37, 38, 42); */
     --taskcard-foreground: rgb(222, 219, 219);
-    --taskcard-background: rgba(80, 80, 80, 0.85);
+    --taskcard-background: rgba(22, 46, 68, 0.6);
     --cardcolumn-background: rgb(56, 69, 75);
     --taskcardsmall-background: rgb(48, 49, 50);
     --primary: rgb(60, 108, 136);
