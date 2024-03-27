@@ -87,7 +87,7 @@ export async function TeamPageComponent({
     user.teamsAsMember.includes(teamId)
   );
   return (
-    <div className=" absolute flex flex-col w-full  items-center top-[4em] min-h-[calc(100vh-4rem)">
+    <div className=" absolute flex flex-col w-full  items-center top-[3em] min-h-[calc(100vh-3rem)">
       <main className="flex bg-background overflow-x-hidden w-full flex-col gap-4 md:gap-8">
         {/* <div className="w-full h-[15vh] bg-primary-foreground fixed top-[4em] left-0 "></div> */}
 
@@ -308,7 +308,7 @@ export async function TeamPageComponent({
         </div>
 
         <div className=" z-20 flex p-4 md:p-10 justify-center self-center flex-col mt-4 w-full">
-          <div className=" flex w-full flex-col justify-center">
+          <div className=" flex w-full flex-col lg:max-w-[60vw] justify-center">
             <div className="flex ml-[12%] md:ml-0 p-2 justify-start align-top h-fit ">
               <h1 className="text-lg md:text-xl font-bold mr-6 self-center">
                 Projects
@@ -339,7 +339,7 @@ export async function TeamPageComponent({
                       <Link
                         key={project_idx}
                         className="truncate m-2 shadow-lg hover:shadow-sm bg-card"
-                        href={`/PROJECTS-CLEAN/${project.id}`}
+                        href={`/project/${project.id}`}
                       >
                         <Card className="border   p-1 flex items-center w-72 h-28     ">
                           <CardHeader className="p-0 pl-2">

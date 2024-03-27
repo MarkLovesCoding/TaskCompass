@@ -112,8 +112,8 @@ const TaskCardSmallDialog = ({
                 // key={task.id}
                 className={`${
                   snapshot.isDragging
-                    ? "bg-primary-foreground  border-primary opacity-95 rotate-6"
-                    : "bg-primary-foreground border-background "
+                    ? "bg-taskcardsmall-background   border-primary opacity-95 rotate-6"
+                    : "bg-taskcardsmall-background border-background "
                 } border rounded-lg flex w-[225px] my-2 shadow-lg hover:shadow-sm`}
               >
                 <div className="flex flex-col overflow-hidden p-1 w-full">
@@ -183,9 +183,9 @@ const TaskCardSmallDialog = ({
       </DialogTrigger>
       <DialogContent
         onOpenAutoFocus={(event: Event) => event.preventDefault()}
-        className=" p-6 w-max-[300px] h-max-[550px]  bg-gray-800 rounded-lg border-2"
+        className=" p-6 w-max-[300px] overflow-auto h-max-[550px] backdrop-filter backdrop-blur bg-taskcard-background rounded-lg border-2"
       >
-        <ScrollArea className="  ">
+        <ScrollArea className="">
           <TaskCard
             task={task}
             project={project}

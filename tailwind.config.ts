@@ -35,6 +35,14 @@ module.exports = {
           background: "var(--accordian-background)",
         },
         foreground: "var(--foreground)",
+        taskcard: {
+          foreground: "var(--taskcard-foreground)",
+          background: "var(--taskcard-background)",
+        },
+        taskcardsmall: {
+          // foreground: "var(--taskcard-foreground)",
+          background: "var(--taskcardsmall-background)",
+        },
         primary: {
           DEFAULT: "var(--primary)",
           foreground: "var(--primary-foreground)",

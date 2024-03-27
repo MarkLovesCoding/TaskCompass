@@ -2,15 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+
 import {
   Form,
   FormControl,
@@ -24,7 +16,6 @@ import { DialogFooter, DialogClose } from "@/components/ui/dialog";
 import * as z from "zod";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { createNewTeamAction } from "./_actions/create-new-team.action";
 
 const formSchema = z.object({

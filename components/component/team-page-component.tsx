@@ -10,7 +10,7 @@ import {
   DropdownMenu,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { TeamHeader } from "@/app/TEAMS-CLEAN/[id]/team-header";
+import { TeamHeader } from "@/app/team/[id]/team-header";
 import {
   CardTitle,
   CardDescription,

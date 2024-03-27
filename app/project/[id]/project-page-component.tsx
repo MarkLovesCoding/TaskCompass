@@ -130,43 +130,14 @@ export function ProjectPage({
         {isUserAdmin && (
           <Drawer direction="left">
             <DrawerTrigger>
-              <div className="fixed group top-[4rem] left-0 w-8 z-20 h-[calc(100vh-4rem)] border-r-2 border-t-2 rounded-tr rounded-br border-b-2 border-r-gray-700 hover:border-r-white  border-t-gray-700 hover:border-t-white border-b-gray-700 hover:border-b-white bg-gray-900 hover:bg-gray-800">
-                <ArrowRightCircle className="  fixed z-50 rounded-full fill-background group-hover:text-white text-slate-600 top-[calc(50%-1em)] left-4  w-8 h-8 self-center cursor-pointer" />
+              <div className="fixed group top-[3rem] left-0 w-8 z-20 h-[calc(100vh-3rem)] bg-nav-background hover:bg-primary  border-r-2 border-t-2 rounded-tr rounded-br border-b-2 border-nav-background hover:border-r-card  hover:border-t-card hover:border-b-card ">
+                <ArrowRightCircle className="  fixed z-50 rounded-full fill-background group-hover:text-primary text-card top-[calc(50%-1em)] left-4  w-8 h-8 self-center cursor-pointer" />
               </div>
             </DrawerTrigger>
 
-            {/* <DrawerContent className=" hidden tooSmall:flex group z-100 justify-center items-center h-[calc(100vh-4em)] overflow-x-visible  max-w-[95vw]  rounded-tl-none rounded-bl-none p-4 fixed top-16 left-0 border-r-2 border-t-2 border-b-2 border-r-gray-700 hover:border-r-white  border-t-gray-700 hover:border-t-white border-b-gray-700 hover:border-b-white cursor-grab active:cursor-grabbing">
-              <DrawerClose className="absolute top-1 right-2">
-                <ArrowLeftCircleIcon className="fixed right-[-1em] top-[calc(50%-4rem)] w-8 h-8 self-center bg-background text-gray-700 group-hover:text-white" />
-              </DrawerClose>
-              <DrawerHeader className="flex justify-center items-center">
-                <Label>Window too small, please expand or rotate to view</Label>
-              </DrawerHeader>
-            </DrawerContent> */}
-
-            <DrawerContent
-            // className={`group tooSmall:hidden p-8 fixed top-16 left-0 h-[calc(100vh-4em)]  grid lg:h-[calc(100vh-2em)] overflow-x-visible  max-w-[85vw] tall:max-w-[425px] rounded-tl-none rounded-bl-none  border-r-2 border-t-2 border-b-2 border-r-gray-700 hover:border-r-white  border-t-gray-700 hover:border-t-white border-b-gray-700 hover:border-b-white cursor-grab active:cursor-grabbing`}
-            >
-              {/* 
-              
-                  border-radius: 16px;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(7.8px);
-    -webkit-backdrop-filter: blur(7.8px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-
-
-
-  
-background: rgba(0, 0, 0, 0.14);
-border-radius: 16px;
-box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-backdrop-filter: blur(7.8px);
--webkit-backdrop-filter: blur(7.8px);
-border: 1px solid rgba(0, 0, 0, 0.3);
-              */}
+            <DrawerContent>
               <div
-                className={`group hidden bg-drawer-background backdrop-filter backdrop-blur  p-6 fixed top-16 left-0 h-[calc(100vh-4em)]  tooSmall:grid   max-w-[450px]  rounded-tl-none rounded-bl-none  border-r-2 border-t-2 border-b-2 border-r-gray-700 hover:border-r-white  border-t-gray-700 hover:border-t-white border-b-gray-700 hover:border-b-white cursor-grab active:cursor-grabbing`}
+                className={`group hidden bg-drawer-background backdrop-filter backdrop-blur  p-6 fixed top-12 left-0 h-[calc(100vh-3rem)]  tooSmall:grid   max-w-[450px]  rounded-tl-none rounded-bl-none  border-r-2 border-t-2 border-b-2 border-r-primary hover:border-r-primary  border-t-primary hover:border-t-primary border-b-primary hover:border-b-primary cursor-grab active:cursor-grabbing`}
               >
                 <Label>
                   Window too too small, please expand or rotate to view
@@ -174,10 +145,10 @@ border: 1px solid rgba(0, 0, 0, 0.3);
               </div>
 
               <div
-                className={`group  tooSmall:hidden flex flex-col bg-drawer-background backdrop-filter backdrop-blur-lg   fixed top-16 left-0 h-[calc(100vh-4em)] w-[425px] max-w-[95vw] rounded-tl-none rounded-bl-none border-r-2 border-t-2 border-b-2 z-40 border-r-gray-700 hover:border-r-white border-t-gray-700 hover:border-t-white border-b-gray-700 hover:border-b-white cursor-grab active:cursor-grabbing p-2 pt-3 `}
+                className={`group  tooSmall:hidden flex flex-col bg-drawer-background backdrop-filter backdrop-blur-lg   fixed top-12 left-0 h-[calc(100vh-3rem)] w-[425px] max-w-[95vw] rounded-tl-none rounded-bl-none border-r-2 border-t-2 border-b-2 z-40 border-r-card hover:border-r-primary border-t-card hover:border-t-primary border-b-card hover:border-b-primary cursor-grab active:cursor-grabbing p-2 pt-3 `}
               >
                 <DrawerClose className="">
-                  <ArrowLeftCircleIcon className="absolute right-[-1em] z-50 top-[calc(50%-3rem)]  rounded-full w-8 h-8 self-center bg-background text-gray-700 group-hover:text-white" />
+                  <ArrowLeftCircleIcon className="absolute right-[-1em] z-50 top-[calc(50%-3rem)]  rounded-full w-8 h-8 self-center bg-background text-card group-hover:text-primary" />
                 </DrawerClose>
 
                 <ScrollArea className="p-3">
@@ -231,20 +202,20 @@ border: 1px solid rgba(0, 0, 0, 0.3);
                             </p>
                           </Label>
                         </div>
-                        <div className="">
+                        <div className=" w-[225px] mobileLandscape:w-[175px]">
                           <Popover>
-                            <PopoverTrigger className=" flex flex-col w-[225px]  mobileLandscape:w-[175px]">
-                              <div className="flex flex-row items-center space-x-2 p-1 pr-2  rounded hover:bg-primary-foreground">
-                                <div className="flex flex-row mr-auto items-center space-x-2 ">
+                            <PopoverTrigger className=" flex flex-col w-full  mobileLandscape:w-[175px]">
+                              <Label className="flex flex-row items-center space-x-2 p-1 pr-2  w-full rounded hover:bg-primary-foreground">
+                                <div className="flex flex-row mr-auto items-center space-x-2  ">
                                   <ArchiveIcon className="w-4 h-4 mr-1 opacity-60" />
-                                  <p className=" mobileLandscape:text-xs text-sm">
+                                  <p className=" mobileLandscape:text-xs text-sm italic">
                                     Archived Tasks:
                                   </p>
                                 </div>
-                                <p className="ml-auto font-bold">
+                                <p className="ml-auto font-bold text-sm mobileLandscape:text-sm">
                                   {tasks.filter((task) => task.archived).length}
                                 </p>
-                              </div>
+                              </Label>
                             </PopoverTrigger>
                             <PopoverContent>
                               <ScrollArea>
@@ -385,7 +356,7 @@ border: 1px solid rgba(0, 0, 0, 0.3);
                     <div className="flex justify-center my-auto">
                       <Button
                         variant="outline"
-                        className="h-fit w-fit py-0 px-1"
+                        className="h-fit w-fit py-1 px-2 border-destructive"
                       >
                         <ArchiveIcon className="w-4 h-4 mr-1 self-center" />
                         <ArchiveProjectPopover project={project} />

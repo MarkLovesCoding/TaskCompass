@@ -270,7 +270,7 @@ export const TaskCard = ({
   const statusOptions = ["Not Started", "Up Next", "In Progress", "Completed"];
   renderCount++;
   return (
-    <div className="max-w-[95%]">
+    <div className="max-w-[95%] ">
       <Form {...form}>
         <form
           ref={formRef}
@@ -635,44 +635,42 @@ export const TaskCard = ({
                     </FormControl>
                   </PopoverTrigger>
                   <PopoverContent className="">
-                    <Card>
-                      <CardHeader>
-                        <CardTitle className="text-center">
-                          Archive Task
-                        </CardTitle>
-                      </CardHeader>
-                      <CardDescription className="p-4 mb-2 ">
-                        <p className="text-center">
-                          {" "}
-                          Are you sure you want to archive this task?{" "}
-                        </p>
-                        <p className="text-center text-xs">
-                          It can be retrieved from the archive later.{" "}
-                        </p>
-                      </CardDescription>
-                      <CardFooter className="w-full flex flex-row justify-evenly">
-                        <Button
-                          className="text-sm "
-                          variant="destructive"
-                          onClick={() => {
-                            console.log("archived");
-                            handleArchivedSubmit();
-                          }}
-                        >
-                          Archive
-                        </Button>
-                        <Button
-                          className="text-sm "
-                          variant="outline"
-                          onClick={() => {
-                            handleArchivedCancel();
-                            console.log("cancel");
-                          }}
-                        >
-                          Cancel
-                        </Button>
-                      </CardFooter>
-                    </Card>
+                    {/* <Card> */}
+                    {/* <CardHeader> */}
+                    <Label className="text-center">Archive Task</Label>
+                    {/* </CardHeader> */}
+                    <div className="p-4 mb-2 ">
+                      <p className="text-center">
+                        {" "}
+                        Are you sure you want to archive this task?{" "}
+                      </p>
+                      <p className="text-center text-xs">
+                        It can be retrieved from the archive later.{" "}
+                      </p>
+                    </div>
+                    <div className="w-full flex flex-row justify-evenly">
+                      <Button
+                        className="text-sm "
+                        variant="destructive"
+                        onClick={() => {
+                          console.log("archived");
+                          handleArchivedSubmit();
+                        }}
+                      >
+                        Archive
+                      </Button>
+                      <Button
+                        className="text-sm "
+                        variant="outline"
+                        onClick={() => {
+                          handleArchivedCancel();
+                          console.log("cancel");
+                        }}
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                    {/* </Card> */}
                   </PopoverContent>
                 </Popover>
 

@@ -27,8 +27,8 @@ const CardColumn = ({
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           className={cn(
-            snapshot.isDragging ? "bg-gray-800 opacity-95 " : "bg-background  ",
-            "w-[250px] m-2 md:m-4  rounded-lg  flex flex-col items-center align-top p-4"
+            snapshot.isDragging ? "bg-drawer-background" : "bg-primary  ",
+            "w-[250px] m-2 md:m-4  rounded-lg  flex flex-col items-center align-top p-4 shadow-md"
           )}
         >
           <label className="text-lg pt-2 md:text-xl lg:text-2xl font-bold">{`${sorted_type}`}</label>
@@ -41,8 +41,8 @@ const CardColumn = ({
                 // key={sorted_idx}
                 className={cn(
                   snapshot.isDraggingOver
-                    ? "bg-gray-800   "
-                    : "border-gray-500 ",
+                    ? "bg-drawer-background  "
+                    : "bg-according-background",
                   ` w-[250px] m-4 md:mx-8  flex flex-col  mb-0 rounded-lg md:py-6 items-center align-top px-2  `
                 )}
               >
