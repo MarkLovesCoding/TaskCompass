@@ -78,7 +78,7 @@ const MemberCardPermissionsSelect = ({
       </Select>
       {showSubmitButton && (
         <Button
-          type="button"
+          type="submit"
           className="ml-4"
           onClick={(e) => {
             e.preventDefault();

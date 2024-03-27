@@ -11,6 +11,7 @@ import {
   PopoverTrigger,
   PopoverContent,
 } from "@/components/ui/popover";
+import { Label } from "@/components/ui/label";
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { updateProjectArchivedAction } from "../../team/_actions/update-project-archived.action";
@@ -35,40 +36,40 @@ const ArchiveProjectPopover = ({ project }: { project: ProjectDto }) => {
           </div>
         </PopoverTrigger>{" "}
         <PopoverContent>
-          <Card>
-            <CardHeader>
-              <CardTitle className="">Archive Project</CardTitle>
-            </CardHeader>
-            <CardDescription className="p-4 mb-2 ">
-              <p> Are you sure you want to archive this project? </p>
-              <br />
-              <p className="text-xs text-center"> (Can be unarchived later) </p>
-            </CardDescription>
-            <CardFooter className="w-full flex flex-row justify-evenly">
-              <Button
-                className="text-sm "
-                variant="destructive"
-                onClick={() => {
-                  updateProjectArchivedAction(archiveProjectFormObject);
-                  setIsOpen(false);
-                  router.push(`/TEAMS-CLEAN/${project.team}`);
-                  // handleArchivedSubmit();
-                }}
-              >
-                Archive
-              </Button>
-              <Button
-                className="text-sm "
-                variant="outline"
-                onClick={() => {
-                  // handleArchivedCancel();
-                  setIsOpen(false);
-                }}
-              >
-                Cancel
-              </Button>
-            </CardFooter>
-          </Card>
+          {/* <Card>
+            <CardHeader> */}
+          <Label className="">Archive Project</Label>
+          {/* </CardHeader> */}
+          <div className="p-4 mb-2 ">
+            <p> Are you sure you want to archive this project? </p>
+            <br />
+            <p className="text-xs text-center"> (Can be unarchived later) </p>
+          </div>
+          <div className="w-full flex flex-row justify-evenly">
+            <Button
+              className="text-sm "
+              variant="destructive"
+              onClick={() => {
+                updateProjectArchivedAction(archiveProjectFormObject);
+                setIsOpen(false);
+                router.push(`/TEAMS-CLEAN/${project.team}`);
+                // handleArchivedSubmit();
+              }}
+            >
+              Archive
+            </Button>
+            <Button
+              className="text-sm "
+              variant="outline"
+              onClick={() => {
+                // handleArchivedCancel();
+                setIsOpen(false);
+              }}
+            >
+              Cancel
+            </Button>
+          </div>
+          {/* </Card> */}
         </PopoverContent>
       </Popover>
     </>
