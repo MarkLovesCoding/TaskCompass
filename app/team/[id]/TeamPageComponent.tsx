@@ -114,7 +114,7 @@ export async function TeamPageComponent({
                     </div>
                     <div className="ml-auto flex flex-wrap items-center ">
                       <div className="flex flex-wrap">
-                        <Badge className="bg-green-500  min-w-fit text-xs px-2  py-[0.2em] m-1">
+                        <Badge className="bg-badgeGreen  min-w-fit text-xs px-2  py-[0.2em] m-1">
                           {" "}
                           {`Active: ${countProjects} `}
                         </Badge>
@@ -122,7 +122,7 @@ export async function TeamPageComponent({
                           <PopoverTrigger className=" ">
                             {/* <div className="flex flex-row items-center space-x-2 p-1  rounded hover:bg-primary-foreground"> */}
                             {/* <div className="flex flex-row mr-auto items-center space-x-2 "> */}
-                            <Badge className="bg-gray-500  min-w-fit text-xs px-2 py-[0.2em] m-1">
+                            <Badge className="bg-badgeGray min-w-fit text-xs px-2 py-[0.2em] m-1">
                               <ArchiveIcon className="w-4 h-4 mr-1 opacity-60" />
 
                               {`Archived: ${countArchivedProjects}`}
@@ -188,7 +188,7 @@ export async function TeamPageComponent({
                         <div className="flex flex-col  w-[225px] mobileLandscape:w-[175px]">
                           <div className="flex flex-row mr-auto items-center space-x-2 ">
                             <UserCog className="w-4 h-4 mr-1 opacity-60" />
-                            <Badge className=" min-w-fit text-xs px-2 py-[0.2em] m-1 bg-red-500 ">
+                            <Badge className=" min-w-fit text-xs px-2 py-[0.2em] m-1 bg-badgeRed ">
                               {` Admins: ${teamUsersAdmins.length}`}
                             </Badge>
                             {/* </div>
@@ -210,7 +210,7 @@ export async function TeamPageComponent({
                                         User Avatar
                                       </span>
                                     </PopoverTrigger>
-                                    <PopoverContent className="w-[calc(100%-3em)] m-4 p-0 border-none">
+                                    <PopoverContent className="w-[calc(100%-3em)] m-4 p-0 border-2 rounded-lg border-card-foreground shadow-lg">
                                       <TeamMemberCardWithPermissions
                                         user={member}
                                         team={team}
@@ -230,7 +230,7 @@ export async function TeamPageComponent({
                         <div className="flex flex-col  w-[225px] mobileLandscape:w-[175px] ">
                           <div className="flex flex-row mr-auto items-center space-x-2 ">
                             <UserIcon className="w-4 h-4 mr-1 opacity-60" />
-                            <Badge className=" min-w-fit text-xs px-2 py-[0.2em] m-1 bg-green-500 ">
+                            <Badge className=" min-w-fit text-xs px-2 py-[0.2em] m-1 bg-badgeBlue">
                               {` Members: ${teamUsersMembers.length}`}
                             </Badge>
                             <ScrollArea>
@@ -351,10 +351,10 @@ export async function TeamPageComponent({
                                 {project.description}
                               </div>
                               <div className=" flex justify-start pt-2">
-                                <Badge className="  min-w-fit text-xs px-2 py-[0.2em] m-1 self-end bg-yellow-500 ">
+                                <Badge className="  min-w-fit text-xs px-2 py-[0.2em] m-1 self-end bg-badgeYellow ">
                                   {`Users:  ${project.users.length}`}
                                 </Badge>
-                                <Badge className="  min-w-fit text-xs px-2 py-[0.2em] m-1 self-end bg-sky-500 ">
+                                <Badge className="  min-w-fit text-xs px-2 py-[0.2em] m-1 self-end bg-badgePurple">
                                   {`Tasks:  ${project.tasks.length}`}
                                 </Badge>
                               </div>

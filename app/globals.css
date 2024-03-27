@@ -217,22 +217,27 @@
     --nav-background: rgb(180, 180, 180);
     --drawer-background: rgba(255, 255, 255, 0.55);
     --accordian-background: rgba(205, 204, 204, 0.4);
-    --card: rgba(55, 66, 87, 1);
-    --card-foreground: rgb(236, 236, 236);
+    /* --card: rgba(55, 66, 87, 1); */
+    --card: rgb(228, 228, 228);
+    --card-foreground: rgb(22, 22, 22);
+
+    /* --card-foreground: rgb(236, 236, 236); */
     --taskcard-foreground: rgb(22, 22, 22);
     --taskcard-background: rgba(220, 220, 220, 0.7);
     --taskcardsmall-background: rgba(250, 250, 250, 1);
 
     --foreground: rgb(12, 12, 12);
 
-    --popover: rgb(239, 239, 239);
+    --popover: rgb(213, 213, 213);
     --popover-foreground: rgb(12, 12, 12);
     --primary: rgb(114, 166, 196);
-    --primary-foreground: rgb(250, 250, 250);
+    --primary-foreground: rgb(10, 10, 10);
+    /* --primary-foreground: rgb(250, 250, 250); */
     --secondary: rgb(240, 240, 240);
     --secondary-foreground: rgb(12, 12, 12);
-    --muted: rgb(240, 240, 240);
-    --muted-foreground: rgb(155, 155, 155);
+    --muted: rgb(225, 225, 225);
+    /* --muted: rgb(240, 240, 240); */
+    --muted-foreground: rgb(120, 120, 120);
     --accent: rgb(192, 191, 191);
     --accent-foreground: rgb(12, 12, 12);
     --destructive: rgb(153, 0, 0);
@@ -240,31 +245,50 @@
     --border: rgb(229, 229, 229);
     --input: rgb(204, 204, 204);
     --ring: rgb(171, 171, 171);
+
+    --badgeYellow: rgb(253 224 71);
+    --badgeOrange: rgb(253 186 116);
+    --badgePurple: rgb(196 181 253);
+    --badgeGreen: rgb(74 222 128);
+    --badgeBlue: rgb(147 197 253);
+    --badgeRed: rgb(252 165 165);
+    --badgeGray: rgb(178, 178, 178);
+
     --radius: 1rem;
   }
 
   .dark {
-    --background: rgb(22, 46, 73);
+    /* --background: rgb(22, 46, 73); */
+    --background: rgb(22, 46, 68);
+
     --drawer-background: rgba(20, 20, 20, 0.5);
-    --accordian-background: rgba(50, 50, 50, 0.5);
+    --accordian-background: rgba(22, 36, 52, 0.7);
     --main-background: rgb(54, 67, 86);
-    --nav-background: rgb(31, 40, 53);
+    --nav-background: rgb(23, 32, 44);
+    /* --nav-background: rgb(31, 40, 53); */
     --foreground: rgb(236, 236, 236);
-    --card: rgb(228, 228, 228);
-    --card-foreground: rgb(37, 38, 42);
+    /* --card: rgb(228, 228, 228); */
+    /* --card: rgba(55, 66, 87, 1); */
+    /* --card: rgb(22, 46, 73);
+    */
+    --card: rgb(31, 40, 53);
+    --card-foreground: rgb(233, 230, 230);
+
+    /* --card-foreground: rgb(37, 38, 42); */
+    /* --card-foreground: rgb(37, 38, 42); */
     --taskcard-foreground: rgb(222, 219, 219);
     --taskcard-background: rgba(80, 80, 80, 0.85);
     --taskcardsmall-background: rgb(48, 49, 50);
     --primary: rgb(114, 166, 196);
 
     /* --primary: rgb(98, 151, 151); */
-    --primary-foreground: rgb(112, 112, 112);
+    --primary-foreground: rgb(213, 212, 212);
     --popover: rgb(25, 25, 25);
     --popover-foreground: rgb(250, 250, 250);
     --secondary: rgb(50, 55, 63);
     --secondary-foreground: rgb(250, 250, 250);
-    --muted: rgb(68, 79, 92);
-    --muted-foreground: rgb(120, 125, 135);
+    --muted: rgb(73, 85, 100);
+    --muted-foreground: rgb(155, 160, 171);
     --accent: rgb(51, 57, 71);
     --accent-foreground: rgb(250, 250, 250);
     --destructive: rgb(153, 0, 0);
@@ -272,6 +296,13 @@
     --border: rgb(31, 31, 31);
     --input: rgb(45, 45, 45);
     --ring: rgb(92, 92, 92);
+    --badgeYellow: rgb(161 98 7);
+    --badgeOrange: rgb(180 83 9);
+    --badgePurple: rgb(88 28 135);
+    --badgeGreen: rgb(21 128 61);
+    --badgeRed: rgb(127 29 29);
+    --badgeBlue: rgb(29 78 216);
+    --badgeGray: rgb(77, 77, 77);
   }
 }
 

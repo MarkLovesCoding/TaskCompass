@@ -27,7 +27,7 @@ export function TeamMemberCardWithPermissions({
   team,
 }: MemberCardWithPermissionsProps) {
   return (
-    <Card className="max-w-[95vw] mx-auto ">
+    <Card className="max-w-[95vw] mx-auto rounded-lg">
       <CardHeader className="pb-6">
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-3">
@@ -67,7 +67,7 @@ export function TeamMemberCardWithPermissions({
             <KeyIcon className="w-4 h-4 opacity-60" />
             <span className="text-sm smallWidth:text-xs font-medium">Role</span>
           </div>
-          <div className="text-right">
+          <div className="text-right space-x-4 flex flex-row">
             {team.createdBy !== user.id ? (
               <MemberCardPermissionsSelect user={user} team={team} />
             ) : (

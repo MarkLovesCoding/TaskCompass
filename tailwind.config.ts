@@ -72,6 +72,13 @@ module.exports = {
           foreground: "var(--card-foreground)",
           hover: "var(--card-forefround)",
         },
+        badgeYellow: "var(--badgeYellow)",
+        badgeGreen: "var(--badgeGreen)",
+        badgePurple: "var(--badgePurple)",
+        badgeRed: "var(--badgeRed)",
+        badgeBlue: "var(--badgeBlue)",
+        badgeOrange: "var(--badgeOrange)",
+        badgeGray: "var(--badgeGray)",
       },
       borderRadius: {
         lg: "var(--radius)",

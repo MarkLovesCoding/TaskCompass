@@ -133,11 +133,11 @@ export function TeamMemberTable({
             </Label>
             {teamUsersList?.map((user, index) => (
               <CommandItem className=" group" value={user.name} key={index}>
-                <div className="flex items-center h-14 gap-2">
-                  <div className="flex w-full items-center gap-2">
+                <div className="flex items-center w-full h-14 gap-2">
+                  <div className="flex w-full items-center justify-start gap-2">
                     <Avatar className=" w-10 h-10">
                       {/* <AvatarImage src={user.avatar} /> */}
-                      <AvatarFallback className={`text-sm bg-orange-500`}>
+                      <AvatarFallback className={`text-sm bg-badgeRed`}>
                         {getInitials(user.name)}
                       </AvatarFallback>
                     </Avatar>
@@ -154,54 +154,59 @@ export function TeamMemberTable({
                         <div className="flex items-center gap-1"></div>
                       </div>
                     </div>
-                    {team.createdBy !== user.id ? (
-                      <TeamMemberCardPermissionsSelect
-                        user={user}
-                        team={team}
-                      />
-                    ) : (
-                      <Badge className="shrink-0" variant="secondary">
-                        Admin
-                      </Badge>
-                    )}
-
-                    <div className=" opacity-0 group-hover:opacity-100">
-                      {user.id !== userId && (
-                        <Button
-                          onClick={() => {
-                            if (user.id !== userId) {
-                              setSelectedUser(user);
-                              if (userHasTasksInTeamProjects(user)) {
-                                // if (user.tasks.length > 0) {
-                                toast.error(
-                                  `User cannot be removed from Team.\n User still has  ${usersTasksInProjectCount(
-                                    user
-                                  )}  task${
-                                    usersTasksInProjectCount(user) > 1
-                                      ? "s"
-                                      : ""
-                                  } assigned to them.`
-                                  // @ts-ignore
-                                );
-                                // handleUserHasTasks(user);
-                                return;
-                              }
-                              setTeamUsersList((prev) =>
-                                prev.filter((u) => u.id !== user.id)
-                              );
-                              setGlobalUsersList((prev) => {
-                                if (!prev.some((u) => u.id === user.id)) {
-                                  return [...prev, user];
-                                }
-                                return prev;
-                              });
-                              toast.success("User removed from Team");
-                            }
-                          }}
-                        >
-                          <XIcon className="mr-auto text-red-400"></XIcon>
-                        </Button>
+                    <div className="flex flex-row mr-auto ">
+                      {team.createdBy !== user.id ? (
+                        <TeamMemberCardPermissionsSelect
+                          user={user}
+                          team={team}
+                        />
+                      ) : (
+                        <Badge className="shrink-0" variant="secondary">
+                          Admin
+                        </Badge>
                       )}
+                    </div>
+                    <div className=" ml-auto">
+                      <div className=" opacity-0 group-hover:opacity-100">
+                        {user.id !== userId && (
+                          <Button
+                            className="mx-2 hover:bg-red-200"
+                            variant="ghost"
+                            onClick={() => {
+                              if (user.id !== userId) {
+                                setSelectedUser(user);
+                                if (userHasTasksInTeamProjects(user)) {
+                                  // if (user.tasks.length > 0) {
+                                  toast.error(
+                                    `User cannot be removed from Team.\n User still has  ${usersTasksInProjectCount(
+                                      user
+                                    )}  task${
+                                      usersTasksInProjectCount(user) > 1
+                                        ? "s"
+                                        : ""
+                                    } assigned to them.`
+                                    // @ts-ignore
+                                  );
+                                  // handleUserHasTasks(user);
+                                  return;
+                                }
+                                setTeamUsersList((prev) =>
+                                  prev.filter((u) => u.id !== user.id)
+                                );
+                                setGlobalUsersList((prev) => {
+                                  if (!prev.some((u) => u.id === user.id)) {
+                                    return [...prev, user];
+                                  }
+                                  return prev;
+                                });
+                                toast.success("User removed from Team");
+                              }
+                            }}
+                          >
+                            <XIcon className="mr-auto  text-red-400"></XIcon>
+                          </Button>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -216,8 +221,9 @@ export function TeamMemberTable({
               </Label>
               {globalUsersList?.map((user, index) => (
                 <CommandItem className=" group" value={user.name} key={index}>
-                  <div className="flex items-center gap-2">
-                    <div className="flex items-center gap-2">
+                  {/* <div className="flex items-center gap-2"> */}
+                  <div className="flex items-center justify-between w-full gap-2">
+                    <div className="flex flex-row gap-2">
                       <Avatar className=" w-12 h-12">
                         <AvatarImage src={user.avatar} />
                         <AvatarFallback className={`text-sm bg-gray-500`}>
@@ -231,29 +237,30 @@ export function TeamMemberTable({
                           {user.email}
                         </span>
                       </div>
+                    </div>
 
-                      <div>
-                        <Button
-                          variant={"ghost"}
-                          className="bg-transparent "
-                          onClick={() => {
-                            setTeamUsersList((prev) => {
-                              if (!prev.some((u) => u.id === user.id)) {
-                                return [...prev, user];
-                              }
-                              return prev;
-                            });
-                            setGlobalUsersList((prev) =>
-                              prev.filter((u) => u.id !== user.id)
-                            );
-                            toast.success("User added to Team");
-                          }}
-                        >
-                          <PlusIcon className=" opacity-0 group-hover:opacity-100 text-green-400"></PlusIcon>
-                        </Button>
-                      </div>
+                    <div className="ml-auto">
+                      <Button
+                        variant={"ghost"}
+                        className="mx-2 hover:bg-green-200"
+                        onClick={() => {
+                          setTeamUsersList((prev) => {
+                            if (!prev.some((u) => u.id === user.id)) {
+                              return [...prev, user];
+                            }
+                            return prev;
+                          });
+                          setGlobalUsersList((prev) =>
+                            prev.filter((u) => u.id !== user.id)
+                          );
+                          toast.success("User added to Team");
+                        }}
+                      >
+                        <PlusIcon className=" opacity-0 group-hover:opacity-100 text-green-600"></PlusIcon>
+                      </Button>
                     </div>
                   </div>
+                  {/* </div> */}
                 </CommandItem>
               ))}
             </CommandGroup>

@@ -51,7 +51,7 @@ const AddTeamCard = () => {
           render={({ field }) => {
             return (
               <FormItem className="mt-2">
-                <FormLabel>Name</FormLabel>
+                <FormLabel>Create New Team</FormLabel>
                 <FormControl>
                   <Input placeholder="New team name" type="text" {...field} />
                 </FormControl>
