@@ -74,10 +74,10 @@ export function ProjectPage({
       <div
         className={cn(
           isUserAdmin ? "left-8 " : "left-0",
-          `fixed h-16 top-16 flex-row flex p-2 border-b-slate-50 w-[calc(100vw-2rem)] bg-background `
+          `fixed h-12 top-8 md:top-12 flex-row flex p-2 border-b-slate-50 w-[calc(100vw-1.5rem)] md:w-[calc(100vw-2rem)] bg-background `
         )}
       >
-        <div className="min-w-fit p-1 max-h-16">
+        <div className="min-w-fit p-1 max-h-12 md:max-h-16">
           <Link href={`/team/${project.team}`}>
             <h4 className="text-xs  underline cursor-pointer">Back to Team</h4>
           </Link>
@@ -142,8 +142,8 @@ export function ProjectPage({
       </div>
       <main
         className={cn(
-          isUserAdmin ? "left-8 " : "left-0",
-          `fixed top-[8rem] w-[calc(100vw-2rem)] h-[calc(100vh-8rem)] border`
+          isUserAdmin ? "left-6 md:left-8 " : "left-0",
+          `fixed top-[8rem] w-[calc(100vw-1.5rem)] md:w-[calc(100vw-2rem)] h-[calc(100vh-5rem)] md:h-[calc(100vh-8rem)] border border-l-0`
         )}
       >
         <ScrollArea

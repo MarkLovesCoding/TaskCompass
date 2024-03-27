@@ -45,13 +45,13 @@ const Navigation: React.FC = async () => {
   return (
     <>
       {session && (
-        <header className=" fixed top-0 left-0 min-w-[100vw] flex items-center h-12 px-4 border-b shrink-0 md:px-6 bg-nav-background z-50">
+        <header className=" fixed top-0 left-0 min-w-[100vw] flex items-center h-8 md:h-12 px-4 shrink-0 md:px-6 bg-nav-background z-50">
           <Link
             className="flex items-center gap-2 text-lg font-semibold sm:text-base mr-4"
             href="#"
           >
-            <CompassIcon className="w-10 h-10 fill-primary" />
-            <span className="font-bold">TaskCompass</span>
+            <CompassIcon className="w-6 h-6 md:w-10 md:h-10 fill-primary" />
+            <span className="text-sm md:text-base font-bold">TaskCompass</span>
             <span className="sr-only">Task Compass Project Management App</span>
           </Link>
           <nav className="font-medium flex flex-row items-center gap-5 text-sm lg:gap-6 ml-auto">
@@ -59,11 +59,11 @@ const Navigation: React.FC = async () => {
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
-                  className="relative group  p-4 rounded-full flex flex-row justify-around items-center gap-2 text-sm font-medium text-muted-foreground border-solid border-[1px] border-white hover:bg-primary hover:text-primary focus:bg-primary focus:text-primary transition-colors duration-200 ease-in-out"
+                  className="relative group p-1 h-7 md:p-4 md:h-10 border-none md:border-solid rounded-full flex flex-row justify-around items-center gap-3 md:gap-2 text-sm font-medium text-muted-foreground border-[1px] border-white hover:bg-primary hover:text-primary focus:bg-primary focus:text-primary transition-colors duration-200 ease-in-out"
                 >
-                  <Menu className="w-6 h-6 text-white fill-white group-hover:fill-background group-hover:text-background" />
+                  <Menu className="w-5 h-5 md:w-6 md:h-6 my-0 text-white fill-white group-hover:fill-background group-hover:text-background" />
 
-                  <Avatar className="ml-auto h-8 w-8">
+                  <Avatar className="ml-auto h-6 w-6 md:h-8 md:w-8">
                     <AvatarImage
                       src="/avatars/01.png"
                       alt={session.user.email}

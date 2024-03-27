@@ -84,8 +84,8 @@ const ProjectDrawer = ({
   return (
     <Drawer direction="left">
       <DrawerTrigger>
-        <div className="fixed group top-[3rem] left-0 w-8 z-20 h-[calc(100vh-3rem)] bg-nav-background hover:bg-card  border-r-2 border-t-2 rounded-tr rounded-br border-b-2 border-nav-background hover:border-r-primary  hover:border-t-primary hover:border-b-primary ">
-          <ArrowRightCircle className="  fixed z-50 rounded-full fill-background group-hover:text-primary text-nav-background top-[calc(50%-1em)] left-4  w-8 h-8 self-center cursor-pointer" />
+        <div className="fixed group top-[2rem] md:top-[3rem] left-0 w-6 md:w-8 z-20 h-[calc(100vh-2rem)] md:h-[calc(100vh-3rem)] bg-nav-background hover:bg-card  border-r-2 border-t-2 rounded-tr rounded-br border-b-2 border-nav-background hover:border-r-primary  hover:border-t-primary hover:border-b-primary ">
+          <ArrowRightCircle className="  fixed z-50 rounded-full fill-background group-hover:text-primary text-nav-background top-[calc(50%-1em)] left-3 md:left-4 w-6 h-6 md:w-8 md:h-8 self-center cursor-pointer" />
         </div>
       </DrawerTrigger>
 
