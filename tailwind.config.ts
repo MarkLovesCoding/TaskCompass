@@ -43,6 +43,10 @@ module.exports = {
           // foreground: "var(--taskcard-foreground)",
           background: "var(--taskcardsmall-background)",
         },
+        cardcolumn: {
+          // foreground: "var(--taskcard-foreground)",
+          background: "var(--cardcolumn-background)",
+        },
         primary: {
           DEFAULT: "var(--primary)",
           foreground: "var(--primary-foreground)",

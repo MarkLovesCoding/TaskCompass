@@ -220,6 +220,7 @@
     /* --card: rgba(55, 66, 87, 1); */
     --card: rgb(228, 228, 228);
     --card-foreground: rgb(22, 22, 22);
+    --cardcolumn-background: rgb(166, 202, 222);
 
     /* --card-foreground: rgb(236, 236, 236); */
     --taskcard-foreground: rgb(22, 22, 22);
@@ -228,7 +229,7 @@
 
     --foreground: rgb(12, 12, 12);
 
-    --popover: rgb(213, 213, 213);
+    --popover: rgb(224, 222, 222);
     --popover-foreground: rgb(12, 12, 12);
     --primary: rgb(131, 179, 207);
     /* --primary: rgb(114, 166, 196); */
@@ -279,6 +280,7 @@
     /* --card-foreground: rgb(37, 38, 42); */
     --taskcard-foreground: rgb(222, 219, 219);
     --taskcard-background: rgba(80, 80, 80, 0.85);
+    --cardcolumn-background: rgb(166, 202, 222);
     --taskcardsmall-background: rgb(48, 49, 50);
     --primary: rgb(114, 166, 196);
 
@@ -437,4 +439,7 @@
   .description-input.editing {
     @apply border-2 border-black rounded-lg  bg-card text-card-foreground;
   }
+  /* .popoverCenter {
+    @apply fixed top-1/2 left-0 translate-x-1/2 translate-y-1/2;
+  } */
 }
