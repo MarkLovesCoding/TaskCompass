@@ -215,7 +215,7 @@
     /* --background: rgba(228, 228, 228, 1); */
     --main-background: rgb(245, 245, 245);
     --nav-background: rgb(180, 180, 180);
-    --drawer-background: rgba(255, 255, 255, 0.55);
+    --drawer-background: rgba(255, 255, 255, 0.7);
     --accordian-background: rgba(205, 204, 204, 0.4);
     /* --card: rgba(55, 66, 87, 1); */
     --card: rgb(228, 228, 228);
@@ -263,7 +263,7 @@
     /* --background: rgb(22, 46, 73); */
     --background: rgb(22, 46, 68);
 
-    --drawer-background: rgba(20, 20, 20, 0.5);
+    --drawer-background: rgba(22, 46, 68, 0.6);
     --accordian-background: rgba(22, 36, 52, 0.7);
     --main-background: rgb(54, 67, 86);
     --nav-background: rgb(23, 32, 44);
@@ -280,9 +280,9 @@
     /* --card-foreground: rgb(37, 38, 42); */
     --taskcard-foreground: rgb(222, 219, 219);
     --taskcard-background: rgba(80, 80, 80, 0.85);
-    --cardcolumn-background: rgb(166, 202, 222);
+    --cardcolumn-background: rgb(56, 69, 75);
     --taskcardsmall-background: rgb(48, 49, 50);
-    --primary: rgb(114, 166, 196);
+    --primary: rgb(60, 108, 136);
 
     /* --primary: rgb(98, 151, 151); */
     --primary-foreground: rgb(213, 212, 212);

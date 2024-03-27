@@ -44,11 +44,14 @@ const TaskCardSmallDialog = ({
   const colorByPriority = (priority: string) => {
     switch (priority) {
       case "High":
-        return "bg-red-500";
+        return "bg-badgeRed";
+      // return "bg-red-500";
       case "Medium":
-        return "bg-yellow-500";
+        return "bg-badgeYellow";
+      // return "bg-yellow-500";
       case "Low":
-        return "bg-green-500";
+        return "bg-badgeGreen";
+      // return "bg-green-500";
       default:
         return "bg-gray-500";
     }
@@ -56,13 +59,25 @@ const TaskCardSmallDialog = ({
   const colorByStatus = (priority: string) => {
     switch (priority) {
       case "Not Started":
-        return "bg-red-500";
+        // return "bg-red-500";
+        return "bg-badgeRed";
+
+      // return "bg-red-500";
       case "Up Next":
-        return "bg-yellow-500";
+        // return "bg-yellow-500";
+        return "bg-badgeYellow";
+
+      // return "bg-yellow-500";
       case "In Progress":
-        return "bg-orange-500";
+        // return "bg-orange-500";
+        return "bg-badgeOrange";
+
+      // return "bg-orange-500";
       case "Completed":
-        return "bg-green-500";
+        // return "bg-green-500";
+        return "bg-badgeGreen";
+
+      // return "bg-green-500";
       default:
     }
   };

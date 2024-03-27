@@ -101,7 +101,7 @@ export const NewTaskCard: React.FC<TaskFormProps> = ({ project }) => {
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           method="post"
-          className="grid gap-6 w-full max-w-md mx-auto p-6 bg-white rounded-lg shadow-md dark:bg-gray-800"
+          className="grid gap-6 w-full max-w-md mx-auto bg-transparent p-6"
         >
           {/* <Card className="w-full max-w-md p-4 md:p-8 grid gap-4">
             <CardHeader> */}
@@ -146,6 +146,7 @@ export const NewTaskCard: React.FC<TaskFormProps> = ({ project }) => {
             <PopoverClose asChild>
               <Button
                 type="button"
+                variant="ghost"
                 className="m-auto flex justify-center align-middle w-fit"
               >
                 Close

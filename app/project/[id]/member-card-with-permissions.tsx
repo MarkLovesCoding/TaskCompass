@@ -44,7 +44,7 @@ export function MemberCardWithPermissions({
   ).length;
 
   return (
-    <Card className="max-w-[95vw] mx-auto ">
+    <Card className="max-w-[95vw] mx-auto  border-2 border-nav-background  ">
       <CardHeader className="pb-6">
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-3">

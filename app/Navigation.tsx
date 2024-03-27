@@ -59,7 +59,7 @@ const Navigation: React.FC = async () => {
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
-                  className="relative group  p-4 rounded-full flex flex-row justify-around items-center gap-2 text-sm font-medium text-muted-foreground border-solid border-[1px] border-white hover:bg-secondary-foreground hover:text-primary focus:bg-primary focus:text-primary transition-colors duration-200 ease-in-out"
+                  className="relative group  p-4 rounded-full flex flex-row justify-around items-center gap-2 text-sm font-medium text-muted-foreground border-solid border-[1px] border-white hover:bg-primary hover:text-primary focus:bg-primary focus:text-primary transition-colors duration-200 ease-in-out"
                 >
                   <Menu className="w-6 h-6 text-white fill-white group-hover:fill-background group-hover:text-background" />
 
