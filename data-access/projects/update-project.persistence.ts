@@ -16,8 +16,6 @@ export async function updateProject(project: ProjectDto): Promise<void> {
   }
 
   const projectId = project.id;
-  console.log("-------------------------------project", project);
-  console.log("-------------------------------projectId", projectId);
 
   try {
     const updatedProject = await Project.findByIdAndUpdate(
@@ -27,7 +25,6 @@ export async function updateProject(project: ProjectDto): Promise<void> {
       { ...project },
       { new: true }
     );
-    console.log("Project Updated", updatedProject);
   } catch (error) {
     throw new Error("Errorudpating project :" + error);
   }

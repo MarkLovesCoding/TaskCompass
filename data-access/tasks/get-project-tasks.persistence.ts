@@ -7,7 +7,7 @@ import Task from "@/db/(models)/Task";
 import type { ProjectDto } from "@/use-cases/project/types";
 import type { TaskDto } from "@/use-cases/task/types";
 import { taskModelToTaskDto } from "./utils";
-// May require refactpr to get by ID
+// May require refactor to get by ID
 async function getProjectTasks(project: ProjectDto): Promise<TaskDto[]> {
   try {
     await connectDB();

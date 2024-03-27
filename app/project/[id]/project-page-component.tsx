@@ -6,7 +6,6 @@ import { PlusIcon, FolderKanbanIcon } from "lucide-react";
 import Link from "next/link";
 import type { ProjectDto } from "@/use-cases/project/types";
 import type { TaskDto } from "@/use-cases/task/types";
-// import UpdateProjectUsersCard from "./UpdateProjectUsersCard";
 import {
   Popover,
   PopoverContent,
@@ -55,7 +54,6 @@ export function ProjectPage({
     project && user.projectsAsAdmin.some((id) => id === project.id);
   const uniqueProjectUsers = [...projectUsers];
   if (!project || !tasks) return <div>Loading...</div>;
-  console.log("Tasks", tasks);
 
   return (
     <div className="flex flex-col justify-start items-center min-h-full ">

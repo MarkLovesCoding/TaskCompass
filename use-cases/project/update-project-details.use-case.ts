@@ -1,6 +1,5 @@
 import { ProjectEntity } from "@/entities/Project";
 import { UpdateProject, GetProject } from "@/use-cases/project/types";
-
 import { GetUserSession } from "@/use-cases/user/types";
 import { projectToDto } from "@/use-cases/project/utils";
 
@@ -27,6 +26,6 @@ export async function updateProjectDetailsUseCase(
 
   validatedProject.updateName(data.name);
   validatedProject.updateDescription(data.description);
-  console.log("validatedProject", validatedProject);
+
   await context.updateProject(projectToDto(validatedProject));
 }

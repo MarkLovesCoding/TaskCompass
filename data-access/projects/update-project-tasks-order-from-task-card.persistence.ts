@@ -3,16 +3,9 @@ import connectDB from "@/db/connectDB";
 
 import Project from "@/db/(models)/Project";
 
-import { ProjectDto } from "@/use-cases/project/types";
-import { TasksOrder } from "./types";
-
 // May require refactpr to get by ID
 export async function updateProjectTasksOrder(
-  projectId: string,
-  taskId: string,
-  priority: string,
-  category: string,
-  status: string
+  projectId: string
 ): Promise<void> {
   try {
     await connectDB();
@@ -23,18 +16,6 @@ export async function updateProjectTasksOrder(
 
   try {
     const project = await Project.findById(projectId);
-    // const updatedProject = await Project.findByIdAndUpdate(
-    //   {
-    //     _id: projectId,
-    //   },
-    //   {
-    //     tasksOrder: tasksOrder,
-    //   },
-    //   {
-    //     new: true,
-    //   }
-    // );
-    // console.log("Project Updated", updatedProject);
   } catch (error) {
     throw new Error("Error udpating project :" + error);
   }

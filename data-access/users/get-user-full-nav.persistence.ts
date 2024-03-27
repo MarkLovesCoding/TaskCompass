@@ -1,14 +1,12 @@
 "use server";
 
 import connectDB from "@/db/connectDB";
-
 import User from "@/db/(models)/User";
 import Project from "@/db/(models)/Project";
 import Team from "@/db/(models)/Team";
 import { UserDto } from "@/use-cases/user/types";
 import { ProjectDto } from "@/use-cases/project/types";
 import { userModelToUserDto } from "./utils";
-
 import { projectModelToProjectDto } from "../projects/utils";
 import { teamModelToTeamDto } from "../teams/utils";
 import { TeamDto } from "@/use-cases/team/types";
@@ -21,7 +19,6 @@ type UserDataForNavType = {
 async function getUserProjectsAndTeams(
   userId: string
 ): Promise<UserDataForNavType> {
-  // console.log("asdfasdfasfdasdf>>>>>>>>>>>>getUserObject userId", userId);
   try {
     await connectDB();
   } catch (error) {
@@ -29,9 +26,7 @@ async function getUserProjectsAndTeams(
     throw new Error("Error connecting to the database:" + error);
   }
 
-  // const userId = user.id;
   try {
-    // Find the user by ID
     const userData = await User.findById(userId);
     const validatedUserData = userModelToUserDto(userData);
     const projects = [

@@ -21,15 +21,7 @@ export async function updateProjectUsersUseCase(
 
   const project = await context.getProject(data.projectId);
   const validatedProject = new ProjectEntity(project);
-  // validatedProject.addMembers(data.addedMembers);
-  // validatedProject.removeMembers(data.removedMembers);
   validatedProject.updateUsers(data.updatedUsers);
 
-  console.log("updatedProject", validatedProject);
   await context.updateProject(projectToDto(validatedProject));
-  // await context.updateManyProjectUsers(
-  //   data.projectId,
-  //   initialUsers,
-  //   data.updatedUsers
-  // );
 }

@@ -13,8 +13,6 @@ export type TaskDto = {
   category: string;
   priority: string;
   status: string;
-  // orderInLists: OrderInLists;
-  // label?: string;
 };
 export type CreateTaskDto = {
   name: string;
@@ -27,8 +25,6 @@ export type CreateTaskDto = {
   archived: boolean;
   priority: string;
   status: string;
-  // orderInLists: OrderInLists;
-  // label?: string | undefined;
 };
 export type CreateTask = (task: CreateTaskDto) => Promise<void>;
 export type GetTask = (id: string) => Promise<TaskDto>;
@@ -42,11 +38,6 @@ export type UpdateTaskFullCard = (
 ) => Promise<void>;
 export type UpdateTaskOrderInLists = (task: TaskDto) => Promise<void>;
 export type UpdateTasksOrderInLists = (tasks: TaskDto[]) => Promise<void>;
-// export type UpdateTaskUsers = (
-//   taskId: string,
-//   addedAssignees: string[],
-//   removedAssignees: string[]
-// ) => Promise<void>;
 export type UpdateTaskUsers = (
   taskId: string,
   addedAssignees: string[],

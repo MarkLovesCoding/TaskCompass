@@ -15,7 +15,6 @@ async function getAllUsers(): Promise<UserDto[]> {
     throw new Error("Error connecting to the database:" + error);
   }
 
-  // const userId = user.id;
   try {
     // Find the user by ID
     const users = await User.find();

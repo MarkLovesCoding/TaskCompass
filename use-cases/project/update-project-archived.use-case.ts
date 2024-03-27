@@ -1,6 +1,5 @@
 import { ProjectEntity } from "@/entities/Project";
 import { UpdateProject, GetProject } from "@/use-cases/project/types";
-
 import { GetUserSession } from "@/use-cases/user/types";
 import { projectToDto } from "@/use-cases/project/utils";
 
@@ -25,9 +24,5 @@ export async function updateProjectArchivedUseCase(
   });
 
   validatedProject.updateArchived(data.archived);
-  console.log(
-    "-----------------------------validatedProject",
-    validatedProject
-  );
   await context.updateProject(projectToDto(validatedProject));
 }

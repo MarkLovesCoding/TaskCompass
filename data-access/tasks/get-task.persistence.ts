@@ -7,7 +7,6 @@ import Task from "@/db/(models)/Task";
 import { TaskDto } from "@/use-cases/task/types";
 import { taskModelToTaskDto } from "./utils";
 
-// May require refactpr to get by ID
 async function getTask(taskId: string): Promise<TaskDto> {
   try {
     await connectDB();

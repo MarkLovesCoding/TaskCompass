@@ -48,7 +48,6 @@ const UnarchiveTaskPopover = ({ task }: { task: TaskDto }) => {
                 onClick={() => {
                   updateTaskArchivedAction(unarchiveFormObject);
                   setIsOpen(false);
-                  // handleArchivedSubmit();
                 }}
               >
                 Activate
@@ -57,7 +56,6 @@ const UnarchiveTaskPopover = ({ task }: { task: TaskDto }) => {
                 className="text-sm "
                 variant="outline"
                 onClick={() => {
-                  // handleArchivedCancel();
                   setIsOpen(false);
                 }}
               >

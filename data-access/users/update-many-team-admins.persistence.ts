@@ -1,7 +1,6 @@
 import "server-only";
 
 import connectDB from "@/db/connectDB";
-
 import User from "@/db/(models)/User";
 
 async function updateManyTeamAdmins(

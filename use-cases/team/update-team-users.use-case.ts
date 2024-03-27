@@ -22,11 +22,5 @@ export async function updateTeamUsersUseCase(
   const validatedTeam = new TeamEntity(team);
   validatedTeam.updateUsers(data.updatedUsers);
 
-  console.log("updatedTeam", validatedTeam);
   await context.updateTeam(teamToDto(validatedTeam));
-  // await context.updateManyTeamUserss(
-  //   data.teamId,
-  //   initialUserss,
-  //   data.updatedUserss
-  // );
 }

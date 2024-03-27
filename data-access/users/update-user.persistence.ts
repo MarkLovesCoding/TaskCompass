@@ -3,8 +3,8 @@ import "server-only";
 import connectDB from "@/db/connectDB";
 import User from "@/db/(models)/User";
 import { UserDto } from "@/use-cases/user/types";
+
 export async function updateUser(user: UserDto): Promise<void> {
-  console.log("UPDATING User", user.name);
   try {
     await connectDB();
   } catch (error) {

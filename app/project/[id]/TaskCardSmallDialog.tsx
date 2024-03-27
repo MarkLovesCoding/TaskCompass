@@ -13,16 +13,16 @@ import {
 } from "@/components/ui/dialog-task-card";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
-import React, { useState } from "react";
+import { useState } from "react";
 import { TaskCard } from "./TaskCard";
 import { ProjectDto } from "@/use-cases/project/types";
 import { UserDto } from "@/use-cases/user/types";
 import { Draggable } from "@hello-pangea/dnd";
 import styled from "styled-components";
-import { Clock2Icon, Scroll, UsersIcon } from "lucide-react";
+import { Clock2Icon, UsersIcon } from "lucide-react";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { ScrollBar } from "@/components/ui/scroll-area";
-import { format, formatDistanceStrict } from "date-fns";
+import { formatDistanceStrict } from "date-fns";
 const Container = styled.div``;
 const TaskCardSmallDialog = ({
   isDraggingOver,
@@ -45,13 +45,10 @@ const TaskCardSmallDialog = ({
     switch (priority) {
       case "High":
         return "bg-badgeRed";
-      // return "bg-red-500";
       case "Medium":
         return "bg-badgeYellow";
-      // return "bg-yellow-500";
       case "Low":
         return "bg-badgeGreen";
-      // return "bg-green-500";
       default:
         return "bg-gray-500";
     }
@@ -59,25 +56,17 @@ const TaskCardSmallDialog = ({
   const colorByStatus = (priority: string) => {
     switch (priority) {
       case "Not Started":
-        // return "bg-red-500";
         return "bg-badgeRed";
 
-      // return "bg-red-500";
       case "Up Next":
-        // return "bg-yellow-500";
         return "bg-badgeYellow";
 
-      // return "bg-yellow-500";
       case "In Progress":
-        // return "bg-orange-500";
         return "bg-badgeOrange";
 
-      // return "bg-orange-500";
       case "Completed":
-        // return "bg-green-500";
         return "bg-badgeGreen";
 
-      // return "bg-green-500";
       default:
     }
   };
@@ -88,10 +77,7 @@ const TaskCardSmallDialog = ({
   taskIds.forEach((id) => {
     initialTaskCardOpenStates[id] = false;
   });
-  // const [isTaskOpen, setIsTaskOpen] = useState<boolean>(false);
-  // const handleTaskOpen = () => {
-  //   setIsTaskOpen(!isTaskOpen);
-  // };
+
   const [taskCardOpenStates, setTaskCardOpenStates] = useState<
     Record<string, boolean>
   >(initialTaskCardOpenStates);
@@ -117,14 +103,8 @@ const TaskCardSmallDialog = ({
               {...provided.draggableProps}
               {...provided.dragHandleProps}
               ref={provided.innerRef}
-              // className={`${
-              //   snapshot.isDragging
-              //     ? "bg-blue-300  border-green-500 "
-              //     : "bg-gray-800  border-gray-500 "
-              // } border rounded-lg flex w-72 shadow-lg hover:shadow-sm`}
             >
               <Card
-                // key={task.id}
                 className={`${
                   snapshot.isDragging
                     ? "bg-taskcardsmall-background   border-primary opacity-95 rotate-6"
@@ -178,16 +158,6 @@ const TaskCardSmallDialog = ({
                           {task.category}
                         </Badge>
                       </div>
-                      {/* <div>
-                        <Label className="text-xs">
-                          Start Date: {format(task.startDate, "P")}
-                        </Label>
-                      </div>
-                      <div>
-                        <Label className="text-xs">
-                          Due Date: {format(task.dueDate, "P")}{" "}
-                        </Label>
-                      </div> */}
                     </CardDescription>
                   </CardHeader>
                 </div>

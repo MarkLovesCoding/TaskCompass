@@ -20,8 +20,6 @@ export async function updateTaskFullCard(
   try {
     const taskToBeUpdated = await Task.findByIdAndUpdate(task.id, task);
 
-    console.log(" Task Updated", taskToBeUpdated);
-
     if (addedAssignees.length > 0) {
       addedAssignees.forEach(async (userId) => {
         await User.findByIdAndUpdate(userId, { $push: { tasks: task.id } });

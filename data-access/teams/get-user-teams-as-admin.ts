@@ -7,7 +7,7 @@ import Team from "@/db/(models)/Team";
 import type { TeamDto } from "@/use-cases/team/types";
 import type { UserDto } from "@/use-cases/user/types";
 import { teamModelToTeamDto } from "./utils";
-// May require refactpr to get by ID
+
 export async function getUserTeamsAsAdmin(user: UserDto): Promise<TeamDto[]> {
   try {
     await connectDB();
@@ -16,7 +16,6 @@ export async function getUserTeamsAsAdmin(user: UserDto): Promise<TeamDto[]> {
     throw new Error("Error connecting to the database:" + error);
   }
 
-  // const teamId = team.id;
   const teamIds = user.teamsAsAdmin;
 
   const teams: TeamDto[] = [];

@@ -6,13 +6,7 @@ import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { CardHeader, CardContent, Card } from "@/components/ui/card";
 import Link from "next/link";
-import {
-  SelectValue,
-  SelectTrigger,
-  SelectItem,
-  SelectContent,
-  Select,
-} from "@/components/ui/select";
+
 import { MailIcon, KeyIcon, CheckIcon, ClockIcon } from "lucide-react";
 import { ProjectDto } from "@/use-cases/project/types";
 import { UserDto } from "@/use-cases/user/types";
@@ -94,15 +88,6 @@ export function MemberCardWithPermissions({
                 Admin
               </Badge>
             )}
-            {/* <Select>
-              <SelectTrigger>
-                <SelectValue>Admin</SelectValue>
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="admin">Admin</SelectItem>
-                <SelectItem value="member">Member</SelectItem>
-              </SelectContent>
-            </Select> */}
           </div>
         </div>
         <div className="grid grid-cols-2 gap-4 smallWidth:gap-2">

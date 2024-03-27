@@ -1,9 +1,6 @@
 "use server";
 import connectDB from "@/db/connectDB";
-
 import Project from "@/db/(models)/Project";
-
-import { ProjectDto } from "@/use-cases/project/types";
 import { TasksOrder } from "./types";
 
 // May require refactpr to get by ID
@@ -30,7 +27,6 @@ export async function updateProjectTasksOrder(
         new: true,
       }
     );
-    console.log("Project Updated", updatedProject);
   } catch (error) {
     throw new Error("Error udpating project :" + error);
   }

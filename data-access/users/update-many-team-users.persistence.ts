@@ -1,7 +1,6 @@
 import "server-only";
 
 import connectDB from "@/db/connectDB";
-
 import User from "@/db/(models)/User";
 
 async function updateManyTeamUsers(
@@ -16,9 +15,7 @@ async function updateManyTeamUsers(
     throw new Error("Error connecting to the database:" + error);
   }
 
-  // const userId = user.id;
   try {
-    // Find the user by ID
     const addedUsers = updatedUsers.filter(
       (member) => !initialUsers.includes(member)
     );

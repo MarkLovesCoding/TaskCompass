@@ -1,7 +1,6 @@
 import "server-only";
 
 import connectDB from "@/db/connectDB";
-
 import User from "@/db/(models)/User";
 
 async function updateManyProjectAdmins(
@@ -16,9 +15,7 @@ async function updateManyProjectAdmins(
     throw new Error("Error connecting to the database:" + error);
   }
 
-  // const userId = user.id;
   try {
-    // Find the user by ID
     const addedAdmins = updatedAdmins.filter(
       (member) => !initialAdmins.includes(member)
     );

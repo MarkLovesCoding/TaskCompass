@@ -16,9 +16,7 @@ async function updateManyProjectMembers(
     throw new Error("Error connecting to the database:" + error);
   }
 
-  // const userId = user.id;
   try {
-    // Find the user by ID
     const addedMembers = updatedMembers.filter(
       (member) => !initialMembers.includes(member)
     );

@@ -24,7 +24,6 @@ export async function createNewTeam(
     await User.findByIdAndUpdate(userId, {
       $push: { teamsAsAdmin: newTeamId },
     });
-    console.log("New Team Created", newTeam);
   } catch (error) {
     throw new Error(
       "Error creating team or Updating User with new team.:" + error

@@ -1,10 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import {
-  PopoverTrigger,
-  PopoverContent,
-  Popover,
-} from "@/components/ui/popover";
+
 import {
   CommandInput,
   CommandItem,
@@ -13,13 +9,7 @@ import {
 } from "@/components/ui/command-user-search";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import {
-  CircleEllipsis,
-  PlusCircleIcon,
-  PlusIcon,
-  XIcon,
-  UserSearchIcon,
-} from "lucide-react";
+import { PlusIcon, XIcon, UserSearchIcon } from "lucide-react";
 import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
 import { getInitials } from "@/lib/utils/getInitials";
 import { ProjectDto } from "@/use-cases/project/types";
@@ -101,12 +91,12 @@ export function MemberCardSearchTable({
   });
 
   // Function to handle the change in user type
-  const handleChange = (userId: string, userType: string) => {
-    setUserTypes((prevUserTypes) => ({
-      ...prevUserTypes,
-      [userId]: userType, // Update the userType for the specific userId
-    }));
-  };
+  // const handleChange = (userId: string, userType: string) => {
+  //   setUserTypes((prevUserTypes) => ({
+  //     ...prevUserTypes,
+  //     [userId]: userType, // Update the userType for the specific userId
+  //   }));
+  // };
   const toastOptions = {
     duration: 3000,
     position: "top-center",

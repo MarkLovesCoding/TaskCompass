@@ -16,7 +16,6 @@ async function getUserProjectsAsMember(user: UserDto): Promise<ProjectDto[]> {
     throw new Error("Error connecting to the database:" + error);
   }
 
-  // const teamId = team.id;
   const projectIds = user.projectsAsMember;
   const projects: ProjectDto[] = [];
   try {

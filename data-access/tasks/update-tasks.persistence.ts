@@ -26,8 +26,6 @@ export async function updateTasks(tasks: TaskDto[]): Promise<void> {
     validatedTasks.forEach(async (task) => {
       await Task.findByIdAndUpdate(task.id, task);
     });
-
-    console.log("Tasks lists updated");
   } catch (error) {
     throw new Error("Error updating task lists orders:" + error);
   }

@@ -16,18 +16,11 @@ async function updateManyTaskUsers(
     throw new Error("Error connecting to the database:" + error);
   }
 
-  // const userId = user.id;
   try {
-    // Find the user by ID
     for (const user of removedAssignees) {
-      console.log("user removed", user);
-      console.log("task id", taskId);
-      // const userData = await User.findById(user);
       await User.findByIdAndUpdate(user, { $pull: { tasks: taskId } });
     }
     for (const user of addedAssignees) {
-      console.log("user added", user);
-      console.log("task id", taskId);
       await User.findByIdAndUpdate(user, { $push: { tasks: taskId } });
     }
   } catch (error) {

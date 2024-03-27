@@ -1,4 +1,3 @@
-// export type ListsNextAvailable = Record<string, Record<string, number>>;
 export type ColumnOrder = Record<string, string[]>;
 export type TasksOrder = Record<string, Record<string, string[]>>;
 export type ProjectDto = {
@@ -10,7 +9,6 @@ export type ProjectDto = {
   team: string;
   createdBy: string;
   archived: boolean;
-  // listsNextAvailable: ListsNextAvailable;
   tasksOrder: TasksOrder;
   columnOrder: ColumnOrder;
 };
@@ -22,7 +20,6 @@ export type CreateProjectDto = {
   team: string;
   createdBy: string;
   archived: boolean;
-  // listsNextAvailable: ListsNextAvailable;
   tasksOrder: TasksOrder;
   columnOrder: ColumnOrder;
 };

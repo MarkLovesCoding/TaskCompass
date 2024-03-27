@@ -15,8 +15,6 @@ export async function updateTaskUsers(
     // Handle connectDB error
     throw new Error("Error connecting to the database:" + error);
   }
-  console.log("<<<<<<<<<<<<<Added Assignees", addedAssignees);
-  console.log(">>>>>>>>>>>>>Removed Assignees", removedAssignees);
   try {
     if (addedAssignees.length > 0) {
       addedAssignees.forEach(async (userId) => {
@@ -28,16 +26,6 @@ export async function updateTaskUsers(
         await User.findByIdAndUpdate(userId, { $pull: { tasks: taskId } });
       });
     }
-
-    // const updateProject = await Project.findByIdAndUpdate(newTask.project, {
-    //   $push: { tasks: newTask._id },
-    // });
-    // console.log("updateProject", updateProject);
-    // const users = task.assignees;
-    // users.length > 0 &&
-    //   users.forEach(async (userId) => {
-    //     await User.findByIdAndUpdate(userId, { $push: { tasks: newTask._id } });
-    //   });
 
     console.log("Users tasks lists updated");
   } catch (error) {

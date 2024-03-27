@@ -17,11 +17,8 @@ export async function updateTaskDescriptionUseCase(
   const user = context.getUser();
   if (!user) throw new Error("User not found");
   const retrievedTask = await context.getTask(data.id);
-  console.log("retrieved task old desc", retrievedTask);
-  console.log("data description", data.description);
 
   const taskAsEntity = new TaskEntity({ ...retrievedTask });
   taskAsEntity.updateDescription(data.description);
-  console.log("updatedTaskEntity w description", taskAsEntity);
   await context.updateTask(taskToDto(taskAsEntity));
 }

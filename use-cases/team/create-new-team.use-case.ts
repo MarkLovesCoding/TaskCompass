@@ -21,6 +21,5 @@ export async function createNewTeamUseCase(
     projects: [],
     createdBy: userId,
   });
-  console.log("newTeam", newTeam);
   await context.createNewTeam(teamToCreateTeamDto(newTeam), userId);
 }

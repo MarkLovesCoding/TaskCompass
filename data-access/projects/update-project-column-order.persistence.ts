@@ -4,8 +4,6 @@ import connectDB from "@/db/connectDB";
 
 import Project from "@/db/(models)/Project";
 
-import { ProjectDto } from "@/use-cases/project/types";
-
 // May require refactpr to get by ID
 export async function updateProjectColumnOrder(
   projectId: string,
@@ -18,8 +16,6 @@ export async function updateProjectColumnOrder(
     // Handle connectDB error
     throw new Error("Error connecting to the database:" + error);
   }
-
-  console.log("-------------------------------projectId", projectId);
 
   try {
     const updatedProject = await Project.findByIdAndUpdate(
@@ -36,7 +32,6 @@ export async function updateProjectColumnOrder(
         new: true,
       }
     );
-    console.log("Project Updated", updatedProject);
   } catch (error) {
     throw new Error("Errorudpating project :" + error);
   }

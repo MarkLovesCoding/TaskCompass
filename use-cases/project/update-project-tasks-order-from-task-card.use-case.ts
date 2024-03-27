@@ -1,21 +1,6 @@
-import { TaskEntity } from "@/entities/Task";
-import {
-  GetTask,
-  TaskDto,
-  UpdateTasksOrderInLists,
-} from "@/use-cases/task/types";
-import {
-  GetProject,
-  ProjectDto,
-  UpdateProject,
-  UpdateTasksOrderFromTaskCard,
-} from "@/use-cases/project/types";
+import { GetProject, UpdateProject } from "@/use-cases/project/types";
 import { GetUserSession } from "@/use-cases/user/types";
-import { taskToDto } from "@/use-cases/task/utils";
-import { OrderInLists } from "@/use-cases/task/types";
-import { TasksOrder } from "@/use-cases/project/types";
 import { ProjectEntity } from "@/entities/Project";
-import { projectModelToProjectDto } from "@/data-access/projects/utils";
 import { projectToDto } from "./utils";
 export async function updateProjectTasksOrderFromTaskCardUseCase(
   context: {
@@ -39,7 +24,6 @@ export async function updateProjectTasksOrderFromTaskCardUseCase(
   //perform validation on data access layer to prevent many db calls
   const project = await context.getProject(data.projectId);
   const projectAsEntity = new ProjectEntity({ ...project });
-  console.log("data.taskOrderChanges", data.taskOrderChanges);
   const { type, newSubType, existingSubType } = data.taskOrderChanges;
   projectAsEntity.updateTasksOrder(
     data.taskId,

@@ -1,9 +1,8 @@
 "use client";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
-import type { ChangeEvent, FormEvent } from "react";
+import { useState } from "react";
+import type { FormEvent } from "react";
 import { signIn } from "next-auth/react";
-// import {fa-google} from "@fortawesome/free-solid-svg-icons";
 import { faGoogle, faGithub } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Input } from "@/components/ui/input";
@@ -11,14 +10,13 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import * as z from "zod";
-import { useForm, useWatch } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 const formSchema = z.object({
   email: z.string().email().min(5),

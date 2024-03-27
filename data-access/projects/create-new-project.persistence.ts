@@ -19,7 +19,6 @@ export async function createNewProject(
   }
   try {
     const newProject = await Project.create(project);
-    console.log("New Project Created", newProject);
     await Team.findByIdAndUpdate(project.team, {
       $push: { projects: newProject.id },
     });
@@ -27,7 +26,6 @@ export async function createNewProject(
       $push: { projectsAsAdmin: newProject.id },
     });
 
-    console.log("New Project Created", newProject);
   } catch (error) {
     throw new Error("Error creating project:" + error);
   }

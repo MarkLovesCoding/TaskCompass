@@ -8,7 +8,6 @@ import { UserDto } from "@/use-cases/user/types";
 import { userModelToUserDto } from "./utils";
 import { UserModelType } from "./types";
 
-// May require refactpr to get by ID
 async function getProjectAdmins(adminIds: string[]): Promise<UserDto[]> {
   try {
     await connectDB();
@@ -17,9 +16,7 @@ async function getProjectAdmins(adminIds: string[]): Promise<UserDto[]> {
     throw new Error("Error connecting to the database:" + error);
   }
 
-  // const userId = user.id;
   try {
-    // Find the user by ID
     const admins: UserModelType[] = await User.find({
       _id: { $in: adminIds },
     });

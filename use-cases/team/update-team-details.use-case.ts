@@ -24,10 +24,7 @@ export async function updateTeamDetailsUseCase(
   if (!team) throw new Error("Team not found");
   if (team) console.log("team found", team);
   const validatedTeam = new TeamEntity(team);
-  console.log("validatedTeam", validatedTeam);
-  console.log("data.name", data.name);
   validatedTeam.updateName(data.name);
-  console.log("validatedTeam2", validatedTeam);
 
   await context.updateTeam(teamToDto(validatedTeam));
 }

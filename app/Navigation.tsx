@@ -17,7 +17,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ModeToggle } from "./themeTogglerSwitch";
-// import { ModeToggle } from "./themeToggler";
 import getUserProjectsAndTeams from "@/data-access/users/get-user-full-nav.persistence";
 import { sessionAuth } from "@/lib/sessionAuth";
 import { ProjectDto } from "@/use-cases/project/types";

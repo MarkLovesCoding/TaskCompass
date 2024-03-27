@@ -15,9 +15,6 @@ export function projectModelToProjectDto(
 
   const convertedId = project._id.toString();
   const convertedTeam = project.team ? project.team.toString() : "";
-  // const plainifyListsNextAvailable = JSON.parse(
-  //   JSON.stringify(project.listsNextAvailable)
-  // );
 
   const plainifyColumnOrder = JSON.parse(JSON.stringify(project.columnOrder));
   const plainifyTasksOrder = JSON.parse(JSON.stringify(project.tasksOrder));
@@ -30,7 +27,6 @@ export function projectModelToProjectDto(
     team: convertedTeam,
     createdBy: project.createdBy.toString(),
     archived: project.archived,
-    // listsNextAvailable: plainifyListsNextAvailable,
     tasksOrder: plainifyTasksOrder,
     columnOrder: plainifyColumnOrder,
   };

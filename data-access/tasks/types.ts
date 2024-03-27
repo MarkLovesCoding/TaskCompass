@@ -10,8 +10,6 @@ export type TaskModelType = {
   priority: string;
   status: string;
   archived: boolean;
-  // orderInLists: OrderInLists;
-  // label: string;
   createdBy: string;
 };
 export type OrderInLists = Record<string, [string, number]>;

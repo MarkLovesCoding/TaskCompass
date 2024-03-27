@@ -19,12 +19,9 @@ export async function updateTaskUseCase(
     dueDate: Date;
     startDate: Date;
     category: string;
-    // archived: boolean;
     priority: string;
     status: string;
-    // orderInLists: { string: [string, number] };
     originalAssignees: string[];
-    // label?: string | undefined;
   }
 ) {
   const user = context.getUser();
@@ -39,14 +36,10 @@ export async function updateTaskUseCase(
     assignees: data.assignees,
     dueDate: data.dueDate,
     startDate: data.startDate,
-    // archived: data.archived,
     category: data.category,
     priority: data.priority,
     status: data.status,
-    // label: data.label,
   });
-  // if(data.originalAssignees.length >0){
 
-  console.log("updatedTaskEntity", taskAsEntity);
   await context.updateTask(taskToDto(taskAsEntity));
 }

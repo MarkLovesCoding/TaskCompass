@@ -2,8 +2,7 @@ import { ProjectDto } from "@/use-cases/project/types";
 import { TaskDto } from "@/use-cases/task/types";
 import { UserDto } from "@/use-cases/user/types";
 
-import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import { AvatarFallback, Avatar } from "@/components/ui/avatar";
 import { MemberCardWithPermissions } from "./member-card-with-permissions";
 import { ProjectHeader } from "./ProjectHeader";
 import {
@@ -21,22 +20,6 @@ import {
 } from "@/components/ui/popover";
 import { UserIcon, UserCog, CheckIcon, ClockIcon } from "lucide-react";
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuPortal,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea, ScrollBar } from "@/components/ui/card-scroll-area";
 import UnarchiveTaskPopover from "./UnarchiveTaskPopover";
@@ -44,7 +27,6 @@ import ArchiveProjectPopover from "./ArchiveProjectPopover";
 
 import { getInitials } from "@/lib/utils/getInitials";
 
-import { useState, useEffect } from "react";
 import {
   Drawer,
   DrawerClose,
@@ -53,7 +35,6 @@ import {
 } from "@/components/ui/drawer";
 import { Label } from "@/components/ui/label";
 import { TeamDto } from "@/use-cases/team/types";
-import React from "react";
 type ProjectDrawerProps = {
   userId: string;
   team: TeamDto;
@@ -304,13 +285,13 @@ const ProjectDrawer = ({
           `}
             >
               <div className="flex justify-center my-auto">
-                <Button
+                {/* <Button
                   variant="outline"
-                  className="h-fit w-fit py-1 px-2 group border:nav-background hover:border-destructive hover:bg-destructive"
-                >
-                  <ArchiveProjectPopover project={project} />
-                  <span className="sr-only">Archive Project Button</span>
-                </Button>
+                  className="h-fit w-fit group/hover hover:border-destructive hover:bg-destructive"
+                > */}
+                <ArchiveProjectPopover project={project} />
+                {/* <span className="sr-only">Archive Project Button</span>
+                </Button> */}
               </div>
             </div>{" "}
           </ScrollArea>

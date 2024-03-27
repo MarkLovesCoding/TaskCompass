@@ -3,10 +3,8 @@ import { useState, useEffect } from "react";
 import { ProjectDto } from "@/use-cases/project/types";
 import { TaskDto } from "@/use-cases/task/types";
 import { UserDto } from "@/use-cases/user/types";
-// import { PRIORITY_COLORS } from "./constants";
 import { updateProjectAction } from "../_actions/update-project.action";
 import { updateTasksAction } from "../_actions/update-tasks.action";
-// import { updateProjectColumnOrderAction } from "../_actions/update-project-column-order.action";
 import { Droppable, DragDropContext } from "@hello-pangea/dnd";
 import CardColumn from "./CardColumn";
 import toast from "react-hot-toast";
@@ -36,27 +34,20 @@ const CardView = ({
     type: string
   ): TaskDto[] {
     const updatedTasks = [...tasksToUpdate]; // Create a copy of the original array
-    console.log("updatedTasksExisting", updatedTasks);
     const index = updatedTasks.findIndex((task) => task.id === taskIdToUpdate); // Find the index of the task with the specified ID
     // const existingTasksData = { ...tasksList };
-    console.log("index", index);
     if (index !== -1) {
       const updatedTask = updatedTasks.find(
         (task) => task.id === taskIdToUpdate
       ) as TaskDto;
       // const newTaskData = { ...existingTask };
-      console.log("updatedTask", updatedTask);
       if (type == "status" || type == "priority" || type == "category") {
-        console.log("type", type);
         updatedTask[type] = columnTypeToUpdate;
-        console.log("columnTypeToUpdate", columnTypeToUpdate);
-        console.log("updatedTask in IF", updatedTask);
       }
 
       // If the task with the specified ID is found
       updatedTasks[index] = updatedTask; // Replace the task at that index with the new task
     }
-    console.log("updatedTasksFinal", updatedTasks);
     return updatedTasks; // Return the updated array
   }
 
@@ -78,13 +69,8 @@ const CardView = ({
     return projectTasksOrder;
   }
   const sortByObject = mapIdsToTasks(projectTasksIdsOrder, tasks);
-  // const sortByObject = sortByType(viewType, SORT_TYPES, tasks);
-  // Initialize state variables
-  // const [columnObject, setColumnObject] = useState(sortByObject);
-  // const [sortedColumns, setSortedColumns] = useState<any[]>([]);
 
   const [tasksList, setTasksList] = useState<TaskDto[]>([]);
-  console.log("projectData.columnOrder", project.columnOrder);
 
   const [projectData, setProjectData] = useState<ProjectDto>(project);
   const sortedTasksArray = projectData.columnOrder[viewType].map(
@@ -96,10 +82,6 @@ const CardView = ({
     setProjectData(project);
   }, [tasks, project]);
 
-  // Update columnObject when viewType or tasks change
-  // useEffect(() => {
-  //   setColumnObject(sortByType(viewType, SORT_TYPES, tasks));
-  // }, [viewType, tasks]);
   // Initialize task card open states with all tasks initially closed
   const initialTaskCardOpenStates: Record<string, boolean> = {};
   taskIds.forEach((id) => {
@@ -130,9 +112,6 @@ const CardView = ({
   };
 
   const updateTasksOrderInLists = async (
-    // tasks: TaskDto[],
-    // movedTaskId: string,
-    // type: string,
     sourceDroppableId: string,
     destinationDroppableId: string,
     sourceIndex: number,

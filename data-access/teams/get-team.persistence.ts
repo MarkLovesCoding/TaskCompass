@@ -16,11 +16,9 @@ async function getTeam(teamId: string): Promise<TeamDto> {
     throw new Error("Error connecting to the database:" + error);
   }
 
-  // const teamId = team.id;
   try {
     // Find the user by ID
     const team = await Team.findById(teamId);
-    console.log("TEAM RETRIEVED: ", teamModelToTeamDto(team));
     return teamModelToTeamDto(team);
   } catch (error) {
     throw new Error("Error retrieving team:" + error);

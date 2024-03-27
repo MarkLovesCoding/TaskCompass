@@ -1,7 +1,6 @@
 import React from "react";
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuItem,
   DropdownMenuContent,
   DropdownMenuLabel,

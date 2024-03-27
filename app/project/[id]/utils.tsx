@@ -25,9 +25,6 @@ export const sortByType = (
       }
       return false;
     });
-    // filteredTasks.sort(
-    //   (a, b) => a.orderInLists[type][1] - b.orderInLists[type][1]
-    // );
 
     // Add the filtered tasks to the result object
     return {

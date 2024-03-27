@@ -18,7 +18,6 @@ async function getProjectArchivedTasks(
     throw new Error("Error connecting to the database:" + error);
   }
 
-  // const teamId = team.id;
   const taskIds = project.tasks;
 
   const archivedtasks: TaskDto[] = [];

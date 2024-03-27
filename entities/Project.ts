@@ -7,25 +7,21 @@ export class ProjectEntity {
   private name: string;
   private description: string;
   private users: string[];
-  // private members: string[];
   private tasks: string[];
   private team: string;
   private createdBy: string;
   private archived: boolean;
   private columnOrder: ColumnOrder;
-  // private listsNextAvailable: ListsNextAvailable;
   private tasksOrder: TasksOrder;
   constructor({
     id,
     name,
     description,
     users,
-    // members,
     tasks,
     team,
     createdBy,
     archived = false,
-    // listsNextAvailable,
     columnOrder,
     tasksOrder,
   }: {
@@ -33,12 +29,10 @@ export class ProjectEntity {
     name: string;
     description: string;
     users: string[];
-    // admins: string[];
     tasks: string[];
     team: string;
     createdBy: string;
     archived: boolean;
-    // listsNextAvailable: ListsNextAvailable;
     columnOrder: ColumnOrder;
     tasksOrder: TasksOrder;
   }) {
@@ -46,12 +40,10 @@ export class ProjectEntity {
     this.name = name;
     this.description = description;
     this.users = users;
-    // this.admins = admins;
     this.tasks = tasks;
     this.team = team;
     this.createdBy = createdBy;
     this.archived = archived;
-    // this.listsNextAvailable = listsNextAvailable;
     this.columnOrder = columnOrder;
     this.tasksOrder = tasksOrder;
     this.validate();
@@ -81,9 +73,7 @@ export class ProjectEntity {
   getCreatedBy() {
     return this.createdBy;
   }
-  // getListsNextAvailable() {
-  //   return this.listsNextAvailable;
-  // }
+
   getColumnOrder() {
     return this.columnOrder;
   }
@@ -127,9 +117,7 @@ export class ProjectEntity {
   updateDescription(description: string) {
     this.description = description;
   }
-  // updateListsNextAvailable(listsNextAvailable: ListsNextAvailable) {
-  //   this.listsNextAvailable = listsNextAvailable;
-  // }
+
   updateColumnOrder(columnOrder: ColumnOrder) {
     this.columnOrder = columnOrder;
   }
@@ -161,30 +149,10 @@ export class ProjectEntity {
       name: z.string().min(3).max(30),
       description: z.string().min(3).max(50),
       users: z.array(z.string()).optional(),
-      // admins: z.array(z.string()).optional(),
       tasks: z.array(z.string()).optional(),
       createdBy: z.string(),
       archived: z.boolean(),
-      // listsNextAvailable: z.object({
-      //   priority: z.object({
-      //     High: z.number(),
-      //     Medium: z.number(),
-      //     Low: z.number(),
-      //   }),
-      //   status: z.object({
-      //     "Not Started": z.number(),
-      //     "Up Next": z.number(),
-      //     "In Progress": z.number(),
-      //     Completed: z.number(),
-      //   }),
-      //   category: z.object({
-      //     Household: z.number(),
-      //     Personal: z.number(),
-      //     Work: z.number(),
-      //     School: z.number(),
-      //     Other: z.number(),
-      //   }),
-      // }),
+
       tasksOrder: z.object({
         priority: z.object({
           High: z.array(z.string()),
