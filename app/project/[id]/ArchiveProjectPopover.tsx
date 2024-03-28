@@ -1,12 +1,4 @@
 import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardFooter,
-} from "@/components/ui/card";
-
-import {
   Popover,
   PopoverTrigger,
   PopoverContent,
@@ -61,7 +53,7 @@ const ArchiveProjectPopover = ({ project }: { project: ProjectDto }) => {
                 onClick={() => {
                   updateProjectArchivedAction(archiveProjectFormObject);
                   setIsOpen(false);
-                  router.push(`/TEAMS-CLEAN/${project.team}`);
+                  router.push(`/team/${project.team}`);
                   // handleArchivedSubmit();
                 }}
               >
