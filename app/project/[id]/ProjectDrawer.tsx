@@ -110,8 +110,10 @@ const ProjectDrawer = ({
                       </div>
                       <p className="ml-auto font-bold mobileLandscape:text-sm">
                         {
-                          tasks.filter((task) => task.status !== "Completed")
-                            .length
+                          tasks.filter(
+                            (task) =>
+                              task.status !== "Completed" && !task.archived
+                          ).length
                         }
                       </p>
                     </Label>
@@ -127,8 +129,10 @@ const ProjectDrawer = ({
 
                       <p className="ml-auto font-bold mobileLandscape:text-sm">
                         {
-                          tasks.filter((task) => task.status == "Completed")
-                            .length
+                          tasks.filter(
+                            (task) =>
+                              task.status == "Completed" && !task.archived
+                          ).length
                         }
                       </p>
                     </Label>
