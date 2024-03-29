@@ -46,6 +46,7 @@ const ArchiveProjectPopover = ({ project }: { project: ProjectDto }) => {
               <br />
               <p className="text-xs text-center"> (Can be unarchived later) </p>
             </div>
+
             <div className="w-full flex flex-row justify-evenly">
               <Button
                 className="text-sm "
