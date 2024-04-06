@@ -57,7 +57,7 @@ export function ProjectPage({
 
   return (
     <div className="flex flex-col justify-start items-center min-h-full ">
-      <div>
+      <div className="z-50">
         {isUserAdmin && (
           <ProjectDrawer
             userId={userId}
@@ -71,7 +71,7 @@ export function ProjectPage({
       </div>
       <div
         className={cn(
-          `fixed h-16 z-50 left-0 top-8 md:top-12 flex-row flex p-2 border-b-slate-50 w-full bg-drawer-background backdrop-filter backdrop-blur  `
+          `fixed h-16 z-40 left-0 top-8 md:top-12 flex-row flex p-2 border-b-slate-50 w-full bg-accordion-background backdrop-filter backdrop-blur  `
         )}
       >
         <div className="min-w-fit p-1 pl-8 h-full justify-evenly flex flex-col">

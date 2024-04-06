@@ -91,7 +91,7 @@ export async function TeamPageComponent({
       <main className="flex bg-background overflow-x-hidden w-full flex-col gap-4 min-h-[calc(100vh-2rem)] md:min-h-[calc(100vh-3rem)] md:gap-8">
         {/* <div className="w-full h-[15vh] bg-primary-foreground fixed top-[4em] left-0 "></div> */}
 
-        <div className="z-20 overflow-x-clip  w-full px-4  self-center bg-accordian-background  border-b border-secondary-foreground">
+        <div className="z-20 overflow-x-clip  w-full px-4  self-center   border-b border-secondary-foreground bg-accordion-background">
           {/* <div className="bg-gray-100 p-4 rounded-lg shadow-md"> */}
           <Accordion type="single" collapsible defaultValue="summary">
             <AccordionItem value="summary">
@@ -339,7 +339,7 @@ export async function TeamPageComponent({
                         className="truncate m-2 shadow-lg hover:shadow-sm bg-card"
                         href={`/project/${project.id}`}
                       >
-                        <Card className="border   p-1 flex items-center w-72 h-28     ">
+                        <Card className="hover:border-orange-300  border-2   p-1 flex items-center w-72 h-28     ">
                           <CardHeader className="p-0 pl-2">
                             <CardTitle className="text-sm md:text-base ">
                               {project.name}

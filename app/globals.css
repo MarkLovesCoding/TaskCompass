@@ -211,12 +211,13 @@
 @layer base {
   :root {
     /* --background: 0 0% 98%; */
-    --background: rgb(243, 243, 243);
+    --background: rgb(253, 253, 253);
     /* --background: rgba(228, 228, 228, 1); */
     --main-background: rgb(245, 245, 245);
-    --nav-background: rgb(180, 180, 180);
+    --nav-background: rgb(174, 175, 182);
     --drawer-background: rgba(255, 255, 255, 0.7);
-    --accordian-background: rgba(205, 204, 204, 0.4);
+    /* --accordion-background: rgba(205, 204, 204, 0.7); */
+    --accordion-background: rgba(204, 203, 208, 0.7);
     /* --card: rgba(55, 66, 87, 1); */
     --card: rgb(228, 228, 228);
     --card-foreground: rgb(22, 22, 22);
@@ -261,28 +262,36 @@
 
   .dark {
     /* --background: rgb(22, 46, 73); */
-    --background: rgb(22, 46, 68);
-
+    /* --background: rgb(22, 46, 68); */
+    /* --background: rgb(16 18 20); */
+    --background: rgb(26 40 45);
     --drawer-background: rgba(22, 46, 68, 0.6);
-    --accordian-background: rgba(22, 36, 52, 0.7);
+    /* --accordian-background: rgba(22, 36, 52, 0.7); */
+    --accordion-background: rgba(16, 18, 20, 0.7);
     --main-background: rgb(54, 67, 86);
-    --nav-background: rgb(23, 32, 44);
+    /* --nav-background: rgb(23, 32, 44); */
+    /* --nav-background: #0b1416; */
+    --nav-background: rgb(11 20 22);
+
     /* --nav-background: rgb(31, 40, 53); */
     --foreground: rgb(236, 236, 236);
     /* --card: rgb(228, 228, 228); */
     /* --card: rgba(55, 66, 87, 1); */
     /* --card: rgb(22, 46, 73);
     */
-    --card: rgb(31, 40, 53);
-    --card-foreground: rgb(233, 230, 230);
+    /* --card: rgb(31, 40, 53); */
+    /* --card: rgb(31, 40, 53); */
+    --card: rgb(60, 108, 136);
+    --card-foreground: rgb(250, 250, 250);
 
     /* --card-foreground: rgb(37, 38, 42); */
     /* --card-foreground: rgb(37, 38, 42); */
     --taskcard-foreground: rgb(222, 219, 219);
     --taskcard-background: rgba(22, 46, 68, 0.6);
     --cardcolumn-background: rgb(56, 69, 75);
-    --taskcardsmall-background: rgb(48, 49, 50);
-    --primary: rgb(60, 108, 136);
+    /* --taskcardsmall-background: rgb(48, 49, 50); */
+    --taskcardsmall-background: rgb(37, 40, 44);
+    --primary: rgb(43, 90, 118);
 
     /* --primary: rgb(98, 151, 151); */
     --primary-foreground: rgb(213, 212, 212);

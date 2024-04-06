@@ -31,8 +31,8 @@ module.exports = {
         nav: {
           background: "var(--nav-background)",
         },
-        accordian: {
-          background: "var(--accordian-background)",
+        accordion: {
+          background: "var(--accordion-background)",
         },
         foreground: "var(--foreground)",
         taskcard: {

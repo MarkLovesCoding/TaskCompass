@@ -65,7 +65,7 @@ const ProjectDrawer = ({
   return (
     <Drawer direction="left">
       <DrawerTrigger>
-        <div className="fixed z-60 group top-[2rem] md:top-[3rem] left-0 w-6 md:w-8 z-20 h-[calc(100vh-2rem)] md:h-[calc(100vh-3rem)] bg-nav-background hover:bg-card  border-r-2 border-t-2 rounded-tr-lg rounded-br-lg border-b-2 border-nav-background hover:border-r-primary  hover:border-t-primary hover:border-b-primary ">
+        <div className="fixed z-60 group top-[2rem] md:top-[3rem] left-0 w-6 md:w-8 z-20 h-[calc(100vh-2rem)] md:h-[calc(100vh-3rem)] bg-nav-background backdrop-filter backdrop-blur  hover:bg-card  border-r-2 border-t-2 rounded-tr-lg rounded-br-lg border-b-2 border-nav-background hover:border-r-primary  hover:border-t-primary hover:border-b-primary ">
           <ArrowRightCircle className="  fixed z-70 rounded-full fill-background group-hover:text-primary text-nav-background top-[calc(50%-1em)] left-3 md:left-4 w-6 h-6 md:w-8 md:h-8 self-center cursor-pointer" />
         </div>
       </DrawerTrigger>
@@ -78,7 +78,7 @@ const ProjectDrawer = ({
         </div>
 
         <div
-          className={`group  tooSmall:hidden flex flex-col bg-drawer-background backdrop-filter backdrop-blur-lg   fixed top-12 left-0 h-[calc(100vh-3rem)] w-[425px] max-w-[95vw] rounded-tr-lg rounded-br-lg border-r-2 border-t-2 border-b-2 z-40 border-r-card hover:border-r-primary border-t-card hover:border-t-primary border-b-card hover:border-b-primary cursor-grab active:cursor-grabbing p-2 pt-3 `}
+          className={`group  tooSmall:hidden flex flex-col bg-accordion-background backdrop-filter backdrop-blur-lg   fixed top-12 left-0 h-[calc(100vh-3rem)] w-[425px] max-w-[95vw] rounded-tr-lg rounded-br-lg border-r-2 border-t-2 border-b-2 z-40 border-r-card hover:border-r-primary border-t-card hover:border-t-primary border-b-card hover:border-b-primary cursor-grab active:cursor-grabbing p-2 pt-3 `}
         >
           <DrawerClose className="">
             <ArrowLeftCircleIcon className="absolute right-[-1em] z-50 top-[calc(50%-3rem)]  rounded-full w-8 h-8 self-center bg-background text-card group-hover:text-primary" />

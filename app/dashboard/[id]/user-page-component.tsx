@@ -58,7 +58,7 @@ export async function UserPageComponent({
     <div className="absolute flex flex-col top-[2em] md:top-[3em] w-full h-[calc(100vh-2em)] md:h-[calc(100vh-3em)]">
       <main className="flex  items-center bg-background overflow-x-hidden flex-col  h-[calc(100vh-2em)] md:h-[calc(100vh-3em)]  md:gap-8 ">
         {/* <div className="w-full h-[15vh] bg-card-background absolute top-0 left-0 "></div> */}
-        <div className="z-20   w-full flex flex-col items-center self-center  pl-8 p-1 bg-accordian-background  border-b border-nav-background space-y-4  ">
+        <div className="z-20   w-full flex flex-col items-center self-center  pl-8 p-1 bg-accordion-background  border-b border-nav-background space-y-4  ">
           {/* <div className="bg-gray-100 p-4 rounded-lg shadow-md"> */}
           <Accordion type="single" collapsible className="w-full">
             <AccordionItem value="summary">
@@ -203,7 +203,7 @@ export async function UserPageComponent({
                       return (
                         <Card
                           key={team_idx}
-                          className=" mb-4 hover:border-orange-300  border-2  max-w-full flex   items-center w-72 h-28 bg-card shadow-lg hover:shadow-sm"
+                          className=" mb-4 hover:border-orange-300  border-2  max-w-full flex  mr-4 items-center w-72 h-28 bg-card shadow-lg hover:shadow-sm"
                         >
                           <Link
                             className="w-full h-full p-2"
