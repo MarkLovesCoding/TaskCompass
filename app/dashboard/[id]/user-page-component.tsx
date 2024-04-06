@@ -55,8 +55,8 @@ export async function UserPageComponent({
     (task) => task.status !== "completed"
   );
   return (
-    <div className="absolute flex flex-col top-[3em] w-full h-[calc(100vh-3em)]">
-      <main className="flex  items-center bg-background overflow-x-hidden flex-col  md:gap-8 ">
+    <div className="absolute flex flex-col top-[2em] md:top-[3em] w-full h-[calc(100vh-2em)] md:h-[calc(100vh-3em)]">
+      <main className="flex  items-center bg-background overflow-x-hidden flex-col  h-[calc(100vh-2em)] md:h-[calc(100vh-3em)]  md:gap-8 ">
         {/* <div className="w-full h-[15vh] bg-card-background absolute top-0 left-0 "></div> */}
         <div className="z-20   w-full flex flex-col items-center self-center  pl-8 p-1 bg-accordian-background  border-b border-nav-background space-y-4  ">
           {/* <div className="bg-gray-100 p-4 rounded-lg shadow-md"> */}
@@ -68,7 +68,7 @@ export async function UserPageComponent({
                     {/* <AvatarImage alt={user.name} src="@/public/default-avatar.jpg" /> */}
                     <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
                   </Avatar>
-                  <p className="text-lg font-bold">
+                  <p className="text-base md:text-lg font-bold">
                     {" "}
                     {user.name}
                     {`'s Dashboard`}

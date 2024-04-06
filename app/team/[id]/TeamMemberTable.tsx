@@ -37,12 +37,14 @@ import { TeamDto } from "@/use-cases/team/types";
 
 export function TeamMemberTable({
   userId,
+  userData,
   team,
   teamUsers,
   globalUsers,
   projects,
 }: {
   userId: string;
+  userData: UserDto;
   team: TeamDto;
   teamUsers: UserDto[];
   globalUsers: UserDto[];
@@ -51,7 +53,8 @@ export function TeamMemberTable({
   const router = useRouter();
 
   const filteredGlobalUsers = globalUsers.filter(
-    (user) => !teamUsers.some((tUser) => tUser.id === user.id)
+    (user) =>
+      !teamUsers.some((tUser) => tUser.id === user.id || tUser.id === userId)
   );
 
   const [projectTasksInTeam, setProjectTasksInTeam] = useState<string[]>(
@@ -64,10 +67,14 @@ export function TeamMemberTable({
 
   const [globalUsersList, setGlobalUsersList] =
     useState<UserDto[]>(filteredGlobalUsers);
-  const [teamUsersList, setTeamUsersList] = useState<UserDto[]>(teamUsers);
-  const [teamUsersIdLists, setTeamUsersIdLists] = useState<string[]>(
-    teamUsersList.map((user) => user.id)
+  const [teamUsersList, setTeamUsersList] = useState<UserDto[]>(
+    teamUsers.filter((user) => user.id !== userId)
   );
+  const [teamUsersIdLists, setTeamUsersIdLists] = useState<string[]>(
+    // teamUsersList.map((user) => user.id)
+    teamUsersList.filter((user) => user.id !== userId).map((user) => user.id)
+  );
+
   console.log("teamUsersIdLists", teamUsersIdLists);
   console.log("teamUsersList", teamUsersList);
   // const teamUsersIdLists = teamUsersList.map((user) => user.id);
@@ -121,7 +128,7 @@ export function TeamMemberTable({
         <div>
           <Search className="w-10 h-10 cursor-pointer hover:bg-primary p-2 rounded-full" />
 
-          <span className="sr-only">Edit Members</span>
+          <span className="sr-only">Edit Team Users</span>
         </div>
       </PopoverTrigger>
       <PopoverContent className="w-fit">
@@ -129,8 +136,39 @@ export function TeamMemberTable({
           <CommandInput className="h-9" placeholder="Search members..." />
           <CommandGroup>
             <Label className="m-4">
-              <div className="font-semibold">Team Members</div>
+              <div className="font-semibold">Team Users</div>
             </Label>
+            <CommandItem className=" group" value={userData.name}>
+              <div className="flex items-center w-full h-14 gap-2">
+                <div className="flex w-full items-center justify-start gap-2">
+                  <Avatar className=" w-10 h-10">
+                    {/* <AvatarImage src={userData.avatar} /> */}
+                    <AvatarFallback className={`text-sm bg-badgeRed`}>
+                      {getInitials(userData.name)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className=" gap-4">
+                    <div>
+                      <div className="flex flex-col justify-start mr-4">
+                        <span className="font-medium">{userData.name}</span>{" "}
+                      </div>
+                      <span className="text-xs text-gray-500 dark:text-gray-400">
+                        {userData.email}
+                      </span>{" "}
+                    </div>
+                    <div className="col-span-2 flex flex-col justify-center items-end gap-1">
+                      <div className="flex items-center gap-1"></div>
+                    </div>
+                  </div>
+                  <div className="flex flex-row mr-auto ">
+                    <Badge className="shrink-0" variant="secondary">
+                      Admin
+                    </Badge>
+                  </div>
+                </div>
+              </div>
+            </CommandItem>
+            <Separator />
             {teamUsersList?.map((user, index) => (
               <CommandItem className=" group" value={user.name} key={index}>
                 <div className="flex items-center w-full h-14 gap-2">

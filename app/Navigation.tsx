@@ -50,7 +50,7 @@ const Navigation: React.FC = async () => {
             className="flex items-center gap-2 text-lg font-semibold sm:text-base mr-4"
             href="#"
           >
-            <CompassIcon className="w-6 h-6 md:w-10 md:h-10 fill-primary" />
+            <CompassIcon className="w-6 h-6 md:w-10 md:h-10  fill-orange" />
             <span className="text-sm md:text-base font-bold">TaskCompass</span>
             <span className="sr-only">Task Compass Project Management App</span>
           </Link>

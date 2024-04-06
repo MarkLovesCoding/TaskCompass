@@ -2,7 +2,7 @@
 import { capitalizeEachWord } from "./utils";
 import { Button } from "@/components/ui/button";
 import { NewTaskCard } from "./NewTaskCard";
-import { PlusIcon, FolderKanbanIcon } from "lucide-react";
+import { PlusIcon, FolderKanbanIcon, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import type { ProjectDto } from "@/use-cases/project/types";
 import type { TaskDto } from "@/use-cases/task/types";
@@ -71,17 +71,24 @@ export function ProjectPage({
       </div>
       <div
         className={cn(
-          isUserAdmin ? "left-8 " : "left-0",
-          `fixed h-12 top-8 md:top-12 flex-row flex p-2 border-b-slate-50 w-[calc(100vw-1.5rem)] md:w-[calc(100vw-2rem)] bg-background `
+          `fixed h-16 z-50 left-0 top-8 md:top-12 flex-row flex p-2 border-b-slate-50 w-full bg-drawer-background backdrop-filter backdrop-blur  `
         )}
       >
-        <div className="min-w-fit p-1 max-h-12 md:max-h-16">
-          <Link href={`/team/${project.team}`}>
-            <h4 className="text-xs  underline cursor-pointer">Back to Team</h4>
+        <div className="min-w-fit p-1 pl-8 h-full justify-evenly flex flex-col">
+          <Link
+            href={`/team/${project.team}`}
+            className="flex flex-row group/back-team"
+          >
+            <ArrowLeft className="w-4 h-4 cursor-pointer rounded-full " />
+            <h4 className="text-xs  ml-2 cursor-pointer group-hover/back-team:underline">
+              Back to Team
+            </h4>
           </Link>
-          <div className="flex items-center m-2 ">
-            <h4 className=" text-sm md:text-md lg:text-lg pr-3">Project:</h4>
-            <h4 className="text-sm md:text-md font-bold lg:text-lg">
+          <div className="flex items-center m-2 h-full justify-between max-w-[20ch]   md:max-w-md">
+            <h4 className=" text-xs md:text-sm lg:text-md pr-3 italic">
+              Project:
+            </h4>
+            <h4 className="text-xs md:text-sm font-bold lg:text-md text-ellipsis truncate">
               {project.name}
             </h4>
           </div>
@@ -141,14 +148,14 @@ export function ProjectPage({
       <main
         className={cn(
           isUserAdmin ? "left-6 md:left-8 " : "left-0",
-          `fixed top-[8rem] w-[calc(100vw-1.5rem)] md:w-[calc(100vw-2rem)] h-[calc(100vh-5rem)] md:h-[calc(100vh-8rem)] border border-l-0`
+          `fixed w-[calc(100vw-1.5rem)] md:w-[calc(100vw-2rem)] bg-background min-h-[calc(100vh-2rem)] md:min-h-[calc(100vh-3rem)] border border-l-0`
         )}
       >
         <ScrollArea
           type="always"
-          className=" w-[calc(100vw-2rem)] flex  h-[calc(100vh-8rem)] "
+          className=" w-[calc(100vw-2rem)] flex h-[calc(100vh-2rem)] md:h-[calc(100vh-3rem)] "
         >
-          <div className="flex justify-start align-top">
+          <div className="flex justify-start  pt-16 align-top">
             <CardView
               viewType={sortBy}
               tasks={tasks}

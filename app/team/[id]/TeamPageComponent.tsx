@@ -87,8 +87,8 @@ export async function TeamPageComponent({
     user.teamsAsMember.includes(teamId)
   );
   return (
-    <div className=" absolute flex flex-col w-full  items-center top-8 md:top-12 min-h-[calc(100vh-2rem) md:min-h-[calc(100vh-3rem)">
-      <main className="flex bg-background overflow-x-hidden w-full flex-col gap-4 md:gap-8">
+    <div className=" absolute flex flex-col w-full  items-center top-8 md:top-12 min-h-[calc(100vh-2rem)] md:min-h-[calc(100vh-3rem)]">
+      <main className="flex bg-background overflow-x-hidden w-full flex-col gap-4 min-h-[calc(100vh-2rem)] md:min-h-[calc(100vh-3rem)] md:gap-8">
         {/* <div className="w-full h-[15vh] bg-primary-foreground fixed top-[4em] left-0 "></div> */}
 
         <div className="z-20 overflow-x-clip  w-full px-4  self-center bg-accordian-background  border-b border-secondary-foreground">
@@ -177,6 +177,7 @@ export async function TeamPageComponent({
                     <div className="ml-auto flex flex-wrap items-center "> */}
                       <TeamMemberTable
                         userId={userId}
+                        userData={user}
                         team={team}
                         teamUsers={teamUsers}
                         globalUsers={usersList}

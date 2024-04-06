@@ -1,8 +1,9 @@
 "use client";
 
-import { signIn, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
 import SignUpForm from "./SignUpForm";
 import SignInForm from "./SignInForm";
 const HomePageComponent = () => {
@@ -22,17 +23,19 @@ const HomePageComponent = () => {
     return <div>Loading...</div>;
   } else
     return (
-      <div className="absolute  bg-background top-12 left-0 flex flex-col lg:flex-row h-screen">
+      <div className="absolute  bg-background top-0 left-0 flex flex-col  w-full lg:flex-row h-full">
         {/* Left side (announcement or other content) */}
         <div className=" lg:flex-1  flex flex-col  text-center justify-center items-center min-h-[300px]">
-          <h1 className=" max-w-[80%] sm:max-w-60% text-3xl  sm:text-2xl leading-tight tracking-lighter md:text-6xl lg:leading-[1.1] text-orange-500 font-bold mb-4">
+          <h1 className="  bg-gradient-to-r from-orange-500 via-pink-500 to-purple-500 text-transparent bg-clip-text max-w-[80%] sm:max-w-60%  text-4xl leading-tight tracking-lighter md:text-6xl lg:leading-[1.1] text-orange-500 font-bold mb-4">
             {" It's time to get your sh** in order."}
           </h1>
           <h3 className="text-lg text-muted-foreground sm:text-xl">
             TaskCompass is here to help!
           </h3>
         </div>
-
+        {/* <div>
+          <Button>Register / Sign In</Button>
+        </div> */}
         {/* Right side (sign-in form) */}
         <div className="lg:flex-1  p-10">
           {/* <div className="lg:flex-1 bg-gradient-to-r from-gray-800 to-gray-600 p-10"> */}
