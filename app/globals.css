@@ -281,7 +281,8 @@
     */
     /* --card: rgb(31, 40, 53); */
     /* --card: rgb(31, 40, 53); */
-    --card: rgb(60, 108, 136);
+    /* --card: rgb(60, 108, 136); */
+    --card: rgb(43, 90, 118);
     --card-foreground: rgb(250, 250, 250);
 
     /* --card-foreground: rgb(37, 38, 42); */
