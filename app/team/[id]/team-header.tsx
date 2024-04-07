@@ -94,7 +94,7 @@ export function TeamHeader({ team }: { team: TeamDto }) {
                   name="name"
                   render={({ field }) => {
                     return (
-                      <FormItem className="self-center min-w-[180px] border-solid rounded-lg hover:border-gray-700 border-2 max-w-[100%]">
+                      <FormItem className="self-center min-w-[180px] border-solid border-transparent rounded-lg hover:border-gray-700 border-2 max-w-[100%]">
                         <FormControl>
                           <Input
                             type="text"
