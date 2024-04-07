@@ -16,7 +16,7 @@ import { ProjectDto } from "@/use-cases/project/types";
 import { UserDto } from "@/use-cases/user/types";
 import { updateProjectUsersAction } from "@/app/project/_actions/update-project-users.action";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { z } from "zod";
 import { Label } from "@/components/ui/label";
@@ -44,6 +44,10 @@ export function MemberCardSearchTable({
   projectUsers: UserDto[];
 }) {
   const router = useRouter();
+  const userData = projectUsers.filter((user) => user.id === userId)[0];
+  const userPermission = userData.projectsAsAdmin.includes(project.id)
+    ? "admin"
+    : "member";
   const filteredTeamUsers = teamUsers.filter(
     (user) => !projectUsers.some((pUser) => pUser.id === user.id)
   );
@@ -55,6 +59,13 @@ export function MemberCardSearchTable({
   console.log("teamUsersList", teamUsersList);
   const [projectUsersList, setProjectUsersList] =
     useState<UserDto[]>(projectUsers);
+
+  // useEffect(() => {
+  //   setTeamUsersList(filteredTeamUsers);
+  // }, [teamUsers, projectUsers, filteredTeamUsers]); // Update teamUsersList when teamUsers changes
+  useEffect(() => {
+    setProjectUsersList(projectUsers);
+  }, [projectUsers]);
   console.log("projectUsersList", projectUsersList);
   const projectUsersIdLists = projectUsersList.map((user) => user.id);
 
@@ -130,7 +141,7 @@ export function MemberCardSearchTable({
             >
               <UserSearchIcon />
             </Button>
-            <span className="sr-only">Edit Members</span>
+            <span className="sr-only">Edit Project Users</span>
           </div>
         </DialogTrigger>
         <DialogContent className="max-w-[95vw] mx-2 w-fit  ">
@@ -138,96 +149,159 @@ export function MemberCardSearchTable({
             <CommandInput className="h-9 " placeholder="Search members..." />
             <CommandGroup>
               <Label className="m-4">
-                <div className="font-semibold">Project Members</div>
+                <div className="font-semibold">Project Users</div>
               </Label>
               <div className="max-h-[40vh]  overflow-auto">
-                {projectUsersList?.map((user, index) => (
-                  <CommandItem className=" group" value={user.name} key={index}>
-                    <div className="flex items-center w-full h-14 gap-2">
-                      <div className="flex w-full items-center justify-start gap-2">
-                        <Avatar className=" w-10 h-10">
-                          {/* <AvatarImage src={user.avatar} /> */}
-                          <AvatarFallback className={`text-sm bg-primary`}>
-                            {getInitials(user.name)}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div className=" gap-4">
-                          <div>
-                            <div className="flex flex-col justify-start mr-4">
-                              <span className="font-medium">{user.name}</span>{" "}
-                            </div>
-                            <span className="text-xs text-gray-500 dark:text-gray-400">
-                              {user.email}
-                            </span>{" "}
+                <CommandItem className=" group" value={userData.name}>
+                  <div className="flex items-center w-full h-14 gap-2">
+                    <div className="flex w-full items-center justify-start gap-2">
+                      <Avatar className=" w-10 h-10">
+                        {/* <AvatarImage src={userData.avatar} /> */}
+                        <AvatarFallback className={`text-sm bg-primary`}>
+                          {getInitials(userData.name)}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className=" gap-4">
+                        <div>
+                          <div className="flex flex-col justify-start mr-4">
+                            <span className="font-medium">{userData.name}</span>
                           </div>
-                          <div className="col-span-2 flex flex-col justify-center items-end gap-1">
-                            <div className="flex items-center gap-1"></div>
-                          </div>
+                          <span className="text-xs text-gray-500 dark:text-gray-400">
+                            {userData.email}
+                          </span>
                         </div>
-                        <div className="flex flex-row mr-auto ">
-                          {project.createdBy !== user.id ? (
-                            <MemberCardPermissionsSelect
-                              user={user}
-                              project={project}
-                            />
-                          ) : (
-                            <Badge className="shrink-0" variant="secondary">
-                              Admin
-                            </Badge>
-                          )}
-                        </div>
-                        <div className=" ml-auto">
-                          <div className=" opacity-0 group-hover:opacity-100">
-                            {user.id !== userId && (
-                              <Button
-                                className="mx-2 hover:bg-red-200"
-                                variant="ghost"
-                                onClick={() => {
-                                  if (user.id !== userId) {
-                                    setSelectedUser(user);
-                                    if (
-                                      userHasTasksInProject(user, project.id)
-                                    ) {
-                                      // if (user.tasks.length > 0) {
-                                      toast.error(
-                                        `User cannot be removed from Project.\n User still has  ${usersTasksInProjectCount(
-                                          user,
-                                          project.id
-                                        )}  task${
-                                          usersTasksInProjectCount(
-                                            user,
-                                            project.id
-                                          ) > 1
-                                            ? "s"
-                                            : ""
-                                        } assigned to them.`
-                                        // @ts-ignore
-                                      );
-                                      // handleUserHasTasks(user);
-                                      return;
-                                    }
-                                    setProjectUsersList((prev) =>
-                                      prev.filter((u) => u.id !== user.id)
-                                    );
-                                    setTeamUsersList((prev) => {
-                                      if (!prev.some((u) => u.id === user.id)) {
-                                        return [...prev, user];
-                                      }
-                                      return prev;
-                                    });
-                                    toast.success("User removed from Project");
-                                  }
-                                }}
-                              >
-                                <XIcon className="mr-auto text-red-400"></XIcon>
-                              </Button>
-                            )}
-                          </div>
+                        <div className="col-span-2 flex flex-col justify-center items-end gap-1">
+                          <div className="flex items-center gap-1"></div>
                         </div>
                       </div>
+                      <div className="flex flex-row mr-auto ">
+                        <Badge
+                          className="shrink-0 mx-2 bg-primary"
+                          variant="secondary"
+                        >
+                          You
+                        </Badge>
+                        <Badge
+                          className={`shrink-0 mx-2 ${
+                            userData.projectsAsAdmin.includes(project.id)
+                              ? "bg-badgeRed"
+                              : "bg-badgeGreen"
+                          }`}
+                          variant="secondary"
+                        >
+                          {/* {userPermission}
+                           */}
+                          {userData.projectsAsAdmin.includes(project.id)
+                            ? "Admin"
+                            : "Member"}
+                        </Badge>
+                      </div>
                     </div>
-                  </CommandItem>
-                ))}
+                  </div>
+                </CommandItem>
+                {projectUsersList?.map(
+                  (user, index) =>
+                    user.id !== userId && (
+                      <CommandItem
+                        className=" group"
+                        value={user.name}
+                        key={index}
+                      >
+                        <div className="flex items-center w-full h-14 gap-2">
+                          <div className="flex w-full items-center justify-start gap-2">
+                            <Avatar className=" w-10 h-10">
+                              {/* <AvatarImage src={user.avatar} /> */}
+                              <AvatarFallback className={`text-sm bg-primary`}>
+                                {getInitials(user.name)}
+                              </AvatarFallback>
+                            </Avatar>
+                            <div className=" gap-4">
+                              <div>
+                                <div className="flex flex-col justify-start mr-4">
+                                  <span className="font-medium">
+                                    {user.name}
+                                  </span>{" "}
+                                </div>
+                                <span className="text-xs text-gray-500 dark:text-gray-400">
+                                  {user.email}
+                                </span>{" "}
+                              </div>
+                              <div className="col-span-2 flex flex-col justify-center items-end gap-1">
+                                <div className="flex items-center gap-1"></div>
+                              </div>
+                            </div>
+                            <div className="flex flex-row mr-auto ">
+                              {project.createdBy !== user.id ? (
+                                <MemberCardPermissionsSelect
+                                  user={user}
+                                  project={project}
+                                />
+                              ) : (
+                                <Badge className="shrink-0" variant="secondary">
+                                  Admin
+                                </Badge>
+                              )}
+                            </div>
+                            <div className=" ml-auto">
+                              <div className=" opacity-0 group-hover:opacity-100">
+                                {user.id !== userId && (
+                                  <Button
+                                    className="mx-2 hover:bg-red-200"
+                                    variant="ghost"
+                                    onClick={() => {
+                                      if (user.id !== userId) {
+                                        setSelectedUser(user);
+                                        if (
+                                          userHasTasksInProject(
+                                            user,
+                                            project.id
+                                          )
+                                        ) {
+                                          // if (user.tasks.length > 0) {
+                                          toast.error(
+                                            `User cannot be removed from Project.\n User still has  ${usersTasksInProjectCount(
+                                              user,
+                                              project.id
+                                            )}  task${
+                                              usersTasksInProjectCount(
+                                                user,
+                                                project.id
+                                              ) > 1
+                                                ? "s"
+                                                : ""
+                                            } assigned to them.`
+                                            // @ts-ignore
+                                          );
+                                          // handleUserHasTasks(user);
+                                          return;
+                                        }
+                                        setProjectUsersList((prev) =>
+                                          prev.filter((u) => u.id !== user.id)
+                                        );
+                                        setTeamUsersList((prev) => {
+                                          if (
+                                            !prev.some((u) => u.id === user.id)
+                                          ) {
+                                            return [...prev, user];
+                                          }
+                                          return prev;
+                                        });
+                                        toast.success(
+                                          "User removed from Project"
+                                        );
+                                      }
+                                    }}
+                                  >
+                                    <XIcon className="mr-auto text-red-400"></XIcon>
+                                  </Button>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </CommandItem>
+                    )
+                )}
               </div>
             </CommandGroup>
             <Separator />

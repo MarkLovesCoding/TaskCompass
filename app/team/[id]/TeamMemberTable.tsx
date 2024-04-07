@@ -13,21 +13,15 @@ import {
 } from "@/components/ui/command";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import {
-  PlusCircleIcon,
-  PlusIcon,
-  Search,
-  UserSearchIcon,
-  XIcon,
-} from "lucide-react";
-import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
+import { PlusIcon, Search, XIcon } from "lucide-react";
+import { AvatarFallback, Avatar } from "@/components/ui/avatar";
 import { getInitials } from "@/lib/utils/getInitials";
 import { ProjectDto } from "@/use-cases/project/types";
 import { UserDto } from "@/use-cases/user/types";
 import { updateTeamUsersAction } from "@/app/team/_actions/update-team-users.action";
 // import { updateProjectAdminsAction } from "@/app/PROJECTS-CLEAN/_actions/update-project-admins.action";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Label } from "@/components/ui/label";
 import toast from "react-hot-toast";
@@ -50,6 +44,9 @@ export function TeamMemberTable({
   globalUsers: UserDto[];
   projects: ProjectDto[];
 }) {
+  //default useEffect to update teamUsersLists and Permissions on render., dependant on users data
+  //check on mongodb if permissions updates right away on save.
+  //
   const router = useRouter();
 
   const filteredGlobalUsers = globalUsers.filter(
@@ -67,17 +64,18 @@ export function TeamMemberTable({
 
   const [globalUsersList, setGlobalUsersList] =
     useState<UserDto[]>(filteredGlobalUsers);
-  const [teamUsersList, setTeamUsersList] = useState<UserDto[]>(
-    teamUsers.filter((user) => user.id !== userId)
-  );
+  const [teamUsersList, setTeamUsersList] = useState<UserDto[]>(teamUsers);
   const [teamUsersIdLists, setTeamUsersIdLists] = useState<string[]>(
     // teamUsersList.map((user) => user.id)
-    teamUsersList.filter((user) => user.id !== userId).map((user) => user.id)
+    teamUsersList.map((user) => user.id)
   );
 
-  console.log("teamUsersIdLists", teamUsersIdLists);
-  console.log("teamUsersList", teamUsersList);
-  // const teamUsersIdLists = teamUsersList.map((user) => user.id);
+  useEffect(() => {
+    setTeamUsersList(teamUsers);
+  }, [teamUsers]); // Update teamUsersList when teamUsers changes
+  useEffect(() => {
+    setTeamUsersIdLists(teamUsersList.map((user) => user.id));
+  }, [teamUsersList]);
 
   const getUserType = (user: UserDto, projectId: string) => {
     if (user.projectsAsAdmin.includes(projectId)) {
@@ -96,6 +94,7 @@ export function TeamMemberTable({
   const onUpdateTeamUserFormSubmit = async (isOpen: boolean) => {
     console.log("onUpdateTeamUserFormSubmit", isOpen);
     console.log("teamUsersIdLists", teamUsersIdLists);
+
     console.log("team.id", team.id);
     await updateTeamUsersAction(
       team.id,
@@ -161,8 +160,25 @@ export function TeamMemberTable({
                     </div>
                   </div>
                   <div className="flex flex-row mr-auto ">
-                    <Badge className="shrink-0" variant="secondary">
-                      Admin
+                    <Badge
+                      className="shrink-0 mx-2 bg-primary"
+                      variant="secondary"
+                    >
+                      You
+                    </Badge>
+                    <Badge
+                      className={`shrink-0 mx-2 ${
+                        userData.teamsAsAdmin.includes(team.id)
+                          ? "bg-badgeRed"
+                          : "bg-badgeGreen"
+                      }`}
+                      variant="secondary"
+                    >
+                      {/* {userPermission}
+                       */}
+                      {userData.teamsAsAdmin.includes(team.id)
+                        ? "Admin"
+                        : "Member"}
                     </Badge>
                   </div>
                 </div>
@@ -206,7 +222,7 @@ export function TeamMemberTable({
                     </div>
                     <div className=" ml-auto">
                       <div className=" opacity-0 group-hover:opacity-100">
-                        {user.id !== userId && (
+                        {user.id !== userId && user.id !== team.createdBy && (
                           <Button
                             className="mx-2 hover:bg-red-200"
                             variant="ghost"
@@ -257,50 +273,57 @@ export function TeamMemberTable({
               <Label className="m-4">
                 <div className="font-semibold">Global Users</div>
               </Label>
-              {globalUsersList?.map((user, index) => (
-                <CommandItem className=" group" value={user.name} key={index}>
-                  {/* <div className="flex items-center gap-2"> */}
-                  <div className="flex items-center justify-between w-full gap-2">
-                    <div className="flex flex-row gap-2">
-                      <Avatar className=" w-10 h-10">
-                        {/* <AvatarImage src={user.avatar} /> */}
-                        <AvatarFallback className={`text-sm bg-gray-500`}>
-                          {getInitials(user.name)}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <span className="font-medium">{user.name}</span>
-                        <div className="flex items-center gap-1"></div>
-                        <span className="text-xs text-gray-500 dark:text-gray-400">
-                          {user.email}
-                        </span>
-                      </div>
-                    </div>
+              {globalUsersList?.map(
+                (user, index) =>
+                  user.id !== userId && (
+                    <CommandItem
+                      className=" group"
+                      value={user.name}
+                      key={index}
+                    >
+                      {/* <div className="flex items-center gap-2"> */}
+                      <div className="flex items-center justify-between w-full gap-2">
+                        <div className="flex flex-row gap-2">
+                          <Avatar className=" w-10 h-10">
+                            {/* <AvatarImage src={user.avatar} /> */}
+                            <AvatarFallback className={`text-sm bg-gray-500`}>
+                              {getInitials(user.name)}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div>
+                            <span className="font-medium">{user.name}</span>
+                            <div className="flex items-center gap-1"></div>
+                            <span className="text-xs text-gray-500 dark:text-gray-400">
+                              {user.email}
+                            </span>
+                          </div>
+                        </div>
 
-                    <div className="ml-auto">
-                      <Button
-                        variant={"ghost"}
-                        className="mx-2 hover:bg-green-200"
-                        onClick={() => {
-                          setTeamUsersList((prev) => {
-                            if (!prev.some((u) => u.id === user.id)) {
-                              return [...prev, user];
-                            }
-                            return prev;
-                          });
-                          setGlobalUsersList((prev) =>
-                            prev.filter((u) => u.id !== user.id)
-                          );
-                          toast.success("User added to Team");
-                        }}
-                      >
-                        <PlusIcon className=" opacity-0 group-hover:opacity-100 text-green-600"></PlusIcon>
-                      </Button>
-                    </div>
-                  </div>
-                  {/* </div> */}
-                </CommandItem>
-              ))}
+                        <div className="ml-auto">
+                          <Button
+                            variant={"ghost"}
+                            className="mx-2 hover:bg-green-200"
+                            onClick={() => {
+                              setTeamUsersList((prev) => {
+                                if (!prev.some((u) => u.id === user.id)) {
+                                  return [...prev, user];
+                                }
+                                return prev;
+                              });
+                              setGlobalUsersList((prev) =>
+                                prev.filter((u) => u.id !== user.id)
+                              );
+                              toast.success("User added to Team");
+                            }}
+                          >
+                            <PlusIcon className=" opacity-0 group-hover:opacity-100 text-green-600"></PlusIcon>
+                          </Button>
+                        </div>
+                      </div>
+                      {/* </div> */}
+                    </CommandItem>
+                  )
+              )}
             </CommandGroup>
           )}
         </Command>

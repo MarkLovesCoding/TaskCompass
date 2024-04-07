@@ -86,6 +86,16 @@ export async function TeamPageComponent({
   const teamUsersMembers = teamUsers.filter((user) =>
     user.teamsAsMember.includes(teamId)
   );
+  console.log("++++++++++++++++++++++++++++");
+  console.log(
+    "teamUsersIds",
+    teamUsers.map((user) => user.id)
+  );
+  console.log("teamUsersAdmins", teamUsersAdmins);
+  console.log("teamUsersMembers", teamUsersMembers);
+  console.log("userId", userId);
+  console.log("++++++++++++++++++++++++++++");
+
   return (
     <div className=" absolute flex flex-col w-full  items-center top-8 md:top-12 min-h-[calc(100vh-2rem)] md:min-h-[calc(100vh-3rem)]">
       <main className="flex bg-background overflow-x-hidden w-full flex-col gap-4 min-h-[calc(100vh-2rem)] md:min-h-[calc(100vh-3rem)] md:gap-8">
@@ -234,7 +244,8 @@ export async function TeamPageComponent({
                             <Badge className=" min-w-fit text-xs px-2 py-[0.2em] m-1 bg-badgeBlue">
                               {` Members: ${teamUsersMembers.length}`}
                             </Badge>
-                            <ScrollArea>
+                            {/* <ScrollArea> */}
+                            <div className="flex flex-row">
                               {teamUsersMembers.map((member, index) => (
                                 <div key={index} className="p-2">
                                   <Popover>
@@ -259,8 +270,9 @@ export async function TeamPageComponent({
                                   </Popover>
                                 </div>
                               ))}
-                              <ScrollBar orientation="horizontal" />
-                            </ScrollArea>
+                              {/* <ScrollBar orientation="horizontal" />
+                            </ScrollArea> */}
+                            </div>
                           </div>
                         </div>
                       </div>
