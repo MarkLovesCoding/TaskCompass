@@ -86,15 +86,6 @@ export async function TeamPageComponent({
   const teamUsersMembers = teamUsers.filter((user) =>
     user.teamsAsMember.includes(teamId)
   );
-  console.log("++++++++++++++++++++++++++++");
-  console.log(
-    "teamUsersIds",
-    teamUsers.map((user) => user.id)
-  );
-  console.log("teamUsersAdmins", teamUsersAdmins);
-  console.log("teamUsersMembers", teamUsersMembers);
-  console.log("userId", userId);
-  console.log("++++++++++++++++++++++++++++");
 
   return (
     <div className=" absolute flex flex-col w-full  items-center top-8 md:top-12 min-h-[calc(100vh-2rem)] md:min-h-[calc(100vh-3rem)]">
