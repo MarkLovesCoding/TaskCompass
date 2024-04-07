@@ -264,10 +264,12 @@
     /* --background: rgb(22, 46, 73); */
     /* --background: rgb(22, 46, 68); */
     /* --background: rgb(16 18 20); */
-    --background: rgb(26 40 45);
+    /* --background: rgb(26 40 45); */
+    --background: rgb(37 55 62);
     --drawer-background: rgba(22, 46, 68, 0.6);
     /* --accordian-background: rgba(22, 36, 52, 0.7); */
-    --accordion-background: rgba(16, 18, 20, 0.7);
+    /* --accordion-background: rgba(16, 18, 20, 0.7); */
+    --accordion-background: rgba(24, 32, 38, 0.7);
     --main-background: rgb(54, 67, 86);
     /* --nav-background: rgb(23, 32, 44); */
     /* --nav-background: #0b1416; */
