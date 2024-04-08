@@ -23,14 +23,14 @@ const HomePageComponent = () => {
     return <div>Loading...</div>;
   } else
     return (
-      <div className="absolute  bg-background top-0 left-0 flex flex-col  w-full lg:flex-row h-full">
+      <div className="absolute  bg-background top-0 left-0 flex flex-col  w-full lg:flex-row min-h-[100vh] h-auto">
         {/* Left side (announcement or other content) */}
-        <div className=" lg:flex-1  flex flex-col  text-center justify-center items-center min-h-[300px]">
-          <h1 className="  bg-gradient-to-r from-orange-500 via-pink-500 to-purple-500 text-transparent bg-clip-text max-w-[80%] sm:max-w-60%  text-4xl leading-tight tracking-lighter md:text-6xl lg:leading-[1.1] text-orange-500 font-bold mb-4">
-            {" It's time to get your sh** in order."}
+        <div className=" lg:flex-1   self-center flex flex-col  text-center  justify-center items-center h-full min-h-[300px] ">
+          <h1 className="  bg-gradient-to-r  from-orange-500 via-pink-500 to-purple-500 text-transparent bg-clip-text max-w-[80%] sm:max-w-60%  text-5xl leading-tight tracking-lighter md:text-6xl lg:leading-[1.1] text-orange-500 font-bold p-8 pb-4">
+            {" Time to get your sh** together."}
           </h1>
-          <h3 className="text-lg text-muted-foreground sm:text-xl">
-            TaskCompass is here to help!
+          <h3 className="text-lg text-muted-foreground sm:text-xl p-8 pt-4">
+            TaskCompass is here to help you organize your next project!
           </h3>
         </div>
         {/* <div>
