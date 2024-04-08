@@ -46,14 +46,13 @@ export function TeamMemberTable({
 }) {
   //default useEffect to update teamUsersLists and Permissions on render., dependant on users data
   //check on mongodb if permissions updates right away on save.
-  //
-  const router = useRouter();
+  // might be better to filter global users in api ...
 
-  const filteredGlobalUsers = globalUsers.filter(
-    (user) =>
-      !teamUsers.some((tUser) => tUser.id === user.id || tUser.id === userId)
+  const [filteredGlobalUsers, setFilteredGlobalUsers] = useState<UserDto[]>(
+    globalUsers.filter(
+      (user) => !teamUsers.some((tUser) => tUser.id === user.id)
+    )
   );
-
   const [projectTasksInTeam, setProjectTasksInTeam] = useState<string[]>(
     projects.map((project) => project.tasks).flat()
   );
@@ -62,13 +61,16 @@ export function TeamMemberTable({
   );
   const [isOpen, setIsOpen] = useState(false);
 
-  const [globalUsersList, setGlobalUsersList] =
-    useState<UserDto[]>(filteredGlobalUsers);
   const [teamUsersList, setTeamUsersList] = useState<UserDto[]>(teamUsers);
   const [teamUsersIdLists, setTeamUsersIdLists] = useState<string[]>(
-    // teamUsersList.map((user) => user.id)
     teamUsersList.map((user) => user.id)
   );
+
+  useEffect(() => {
+    setFilteredGlobalUsers((prev) =>
+      prev.filter((user) => !teamUsers.some((tUser) => tUser.id === user.id))
+    );
+  }, [userId, teamUsers, globalUsers]);
 
   useEffect(() => {
     setTeamUsersList(teamUsers);
@@ -92,10 +94,6 @@ export function TeamMemberTable({
       .length;
   };
   const onUpdateTeamUserFormSubmit = async (isOpen: boolean) => {
-    console.log("onUpdateTeamUserFormSubmit", isOpen);
-    console.log("teamUsersIdLists", teamUsersIdLists);
-
-    console.log("team.id", team.id);
     await updateTeamUsersAction(
       team.id,
       teamUsersList.map((user) => user.id)
@@ -107,18 +105,6 @@ export function TeamMemberTable({
       userTypes[user.id as string] = getUserType(user, team.id) as string; // Make sure project.id is defined and correct
     });
     return userTypes;
-  };
-
-  const [userTypes, setUserTypes] = useState({
-    ...getUserTypes(teamUsersList),
-  });
-
-  // Function to handle the change in user type
-  const handleChange = (userId: string, userType: string) => {
-    setUserTypes((prevUserTypes) => ({
-      ...prevUserTypes,
-      [userId]: userType, // Update the userType for the specific userId
-    }));
   };
 
   return (
@@ -233,7 +219,6 @@ export function TeamMemberTable({
                                   if (user.id !== userId) {
                                     setSelectedUser(user);
                                     if (userHasTasksInTeamProjects(user)) {
-                                      // if (user.tasks.length > 0) {
                                       toast.error(
                                         `User cannot be removed from Team.\n User still has  ${usersTasksInProjectCount(
                                           user
@@ -244,19 +229,21 @@ export function TeamMemberTable({
                                         } assigned to them.`
                                         // @ts-ignore
                                       );
-                                      // handleUserHasTasks(user);
+
                                       return;
                                     }
                                     setTeamUsersList((prev) =>
                                       prev.filter((u) => u.id !== user.id)
                                     );
-                                    setGlobalUsersList((prev) => {
+                                    setFilteredGlobalUsers((prev) => {
                                       if (!prev.some((u) => u.id === user.id)) {
                                         return [...prev, user];
                                       }
                                       return prev;
                                     });
-                                    toast.success("User removed from Team");
+                                    toast.success(
+                                      user.name + " removed from Team"
+                                    );
                                   }
                                 }}
                               >
@@ -272,12 +259,12 @@ export function TeamMemberTable({
             )}
           </CommandGroup>
           <Separator />
-          {globalUsersList.length > 0 && (
+          {filteredGlobalUsers.length > 0 && (
             <CommandGroup>
               <Label className="m-4">
                 <div className="font-semibold">Global Users</div>
               </Label>
-              {globalUsersList?.map(
+              {filteredGlobalUsers?.map(
                 (user, index) =>
                   user.id !== userId && (
                     <CommandItem
@@ -314,10 +301,10 @@ export function TeamMemberTable({
                                 }
                                 return prev;
                               });
-                              setGlobalUsersList((prev) =>
+                              setFilteredGlobalUsers((prev) =>
                                 prev.filter((u) => u.id !== user.id)
                               );
-                              toast.success("User added to Team");
+                              toast.success(user.name + " added to Team");
                             }}
                           >
                             <PlusIcon className=" opacity-0 group-hover:opacity-100 text-green-600"></PlusIcon>
