@@ -13,9 +13,6 @@ export async function UpdateProjectUserRoleAction(
   updateType: "admin" | "member"
 ) {
   const { getUser } = await getUserFromSession();
-  console.log("projectId", projectId);
-  console.log("projectUserId", projectUserId);
-  console.log("updateType", updateType);
 
   try {
     await updateProjectUserRoleUseCase(
