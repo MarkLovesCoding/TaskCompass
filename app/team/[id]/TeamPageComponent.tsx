@@ -89,10 +89,10 @@ export async function TeamPageComponent({
 
   return (
     <div className=" absolute flex flex-col w-full  items-center top-8 md:top-12 min-h-[calc(100vh-2rem)] md:min-h-[calc(100vh-3rem)]">
-      <main className="flex bg-background overflow-x-hidden w-full flex-col gap-4 min-h-[calc(100vh-2rem)] md:min-h-[calc(100vh-3rem)] md:gap-8">
+      <main className="flex bg-gradient-background-light dark:bg-gradient-background-dark overflow-x-hidden w-full flex-col gap-4 min-h-[calc(100vh-2rem)] md:min-h-[calc(100vh-3rem)] md:gap-8">
         {/* <div className="w-full h-[15vh] bg-primary-foreground fixed top-[4em] left-0 "></div> */}
 
-        <div className="z-20 overflow-x-clip  w-full px-4  self-center   border-b border-secondary-foreground bg-accordion-background">
+        <div className="z-20 overflow-x-clip  w-full px-4  self-center shadow-md   bg-accordion-background">
           {/* <div className="bg-gray-100 p-4 rounded-lg shadow-md"> */}
           <Accordion type="single" collapsible defaultValue="summary">
             <AccordionItem value="summary">
@@ -103,7 +103,7 @@ export async function TeamPageComponent({
               </AccordionTrigger>
               <AccordionContent>
                 {/* <Separator className="mb-2 bg-gray-500 h-[1px] mr-16 ml-16 " /> */}
-                <div className="flex flex-col md:flex-row md:flex-wrap md:justify-between md:mx-[12%] bg-transparent md:border-r-slate-600">
+                <div className="flex flex-col  md:flex-row md:flex-wrap md:justify-between md:mx-[12%] bg-transparent md:border-r-slate-600">
                   {/* <div className="flex flex-col  justify-between md:flex-row md:flex-wrap md:justify-between md:space-x-4  "> */}
                   {/* <div className="bg-muted mx-2 shadow-sm pl-4 md:flex-grow mb-2  md:max-w-[360px] lg:max-w-[400px] rounded-lg p-3  "> */}
                   <div className="mb-4 md:w-1/4">

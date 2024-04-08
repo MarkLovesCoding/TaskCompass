@@ -44,11 +44,11 @@
   }
 
   .dark {
-    --background: rgb(37 55 62);
+    --background: rgb(28, 44, 50);
     --drawer-background: rgba(22, 46, 68, 0.6);
-    --accordion-background: rgba(24, 32, 38, 0.7);
+    --accordion-background: rgba(26, 33, 36, 0.7);
     --main-background: rgb(54, 67, 86);
-    --nav-background: rgb(11, 20, 22);
+    --nav-background: rgb(12, 23, 26);
 
     --foreground: rgb(236, 236, 236);
 
@@ -109,5 +109,44 @@
 
   .description-input.editing {
     @apply border-2 border-black rounded-lg  bg-card text-card-foreground;
+  }
+  .bg-gradient-background-dark {
+    background: hsl(196.8deg 63.5% 8.19%) 0%;
+    background: -moz-linear-gradient(
+      68deg,
+      hsl(196.8deg 63.5% 8.19%) 0%,
+      hsl(196.8deg 33.1% 13.84%) 100%
+    );
+    background: -webkit-linear-gradient(
+      68deg,
+      hsl(196.8deg 63.5% 8.19%) 0%,
+      hsl(196.8deg 33.1% 13.84%) 100%
+    );
+    background: linear-gradient(
+      68deg,
+      hsl(196.8deg 63.5% 8.19%) 0%,
+      hsl(196.8deg 33.1% 13.84%) 100%
+    );
+  }
+  .bg-gradient-background-light {
+    background: hsla(0, 0%, 97%, 1);
+
+    background: linear-gradient(
+      206deg,
+      hsla(0, 0%, 97%, 1) 0%,
+      hsla(222, 48%, 95%, 1) 100%
+    );
+
+    background: -moz-linear-gradient(
+      206deg,
+      hsla(0, 0%, 97%, 1) 0%,
+      hsla(222, 48%, 95%, 1) 100%
+    );
+
+    background: -webkit-linear-gradient(
+      206deg,
+      hsla(0, 0%, 97%, 1) 0%,
+      hsla(222, 48%, 95%, 1) 100%
+    );
   }
 }

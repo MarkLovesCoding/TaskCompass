@@ -71,7 +71,7 @@ export function ProjectPage({
       </div>
       <div
         className={cn(
-          `fixed h-16 z-40 left-0 top-8 md:top-12 flex-row flex p-2 border-b-slate-50 w-full bg-accordion-background backdrop-filter backdrop-blur  `
+          `fixed h-16 z-40 shadow-md left-0 top-8 md:top-12 flex-row flex p-2 border-b-slate-50 w-full bg-accordion-background backdrop-filter backdrop-blur  `
         )}
       >
         <div className="min-w-fit p-1 pl-8 h-full justify-evenly flex flex-col">
@@ -148,7 +148,7 @@ export function ProjectPage({
       <main
         className={cn(
           isUserAdmin ? "left-6 md:left-8 " : "left-0",
-          `fixed w-[calc(100vw-1.5rem)] md:w-[calc(100vw-2rem)] bg-background min-h-[calc(100vh-2rem)] md:min-h-[calc(100vh-3rem)] border border-l-0`
+          `fixed w-[calc(100vw-1.5rem)] md:w-[calc(100vw-2rem)] bg-gradient-background-light dark:bg-gradient-background-dark min-h-[calc(100vh-2rem)] md:min-h-[calc(100vh-3rem)] border border-l-0`
         )}
       >
         <ScrollArea
