@@ -14,7 +14,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { UpdateTeamUserRoleAction } from "../_actions/update-team-user-role.action";
 import { TeamDto } from "@/use-cases/team/types";
-type MemberCardSearchUserBlockProps = {
+type TeamUserBlockProps = {
   user: UserDto;
   team: TeamDto;
 };
@@ -25,10 +25,7 @@ const getUserType = (user: UserDto, projectId: string) => {
     return "member";
   }
 };
-const MemberCardPermissionsSelect = ({
-  user,
-  team,
-}: MemberCardSearchUserBlockProps) => {
+const TeamUserPermissionsSelect = ({ user, team }: TeamUserBlockProps) => {
   const existingRole = getUserType(user, team.id);
   const [selectedRole, setSelectedRole] = useState(
     existingRole as "admin" | "member"
@@ -91,4 +88,4 @@ const MemberCardPermissionsSelect = ({
   );
 };
 
-export default MemberCardPermissionsSelect;
+export default TeamUserPermissionsSelect;

@@ -1,4 +1,4 @@
-import { AvatarFallback, Avatar } from "@/components/ui/avatar";
+import { AvatarFallback, Avatar } from "@/components/ui/avatar-card";
 import { Badge } from "@/components/ui/badge";
 import { CardHeader, CardContent, Card } from "@/components/ui/card";
 import Link from "next/link";
@@ -6,9 +6,9 @@ import Link from "next/link";
 import { MailIcon, KeyIcon } from "lucide-react";
 import { UserDto } from "@/use-cases/user/types";
 import { getInitials } from "@/lib/utils/getInitials";
-import MemberCardPermissionsSelect from "./TeamUserCardPermissionsSelect";
+import TeamUserCardPermissionsSelect from "./TeamUserCardPermissionsSelect";
 import { TeamDto } from "@/use-cases/team/types";
-type MemberCardWithPermissionsProps = {
+type TeamUserCardWithPermissionsProps = {
   user: UserDto;
 
   team: TeamDto;
@@ -17,13 +17,13 @@ export function TeamUserCardWithPermissions({
   user,
 
   team,
-}: MemberCardWithPermissionsProps) {
+}: TeamUserCardWithPermissionsProps) {
   return (
-    <Card className="max-w-[95vw] mx-auto rounded-lg">
+    <Card className="max-w-[95vw] mx-auto  border-2 border-nav-background  ">
       <CardHeader className="pb-6">
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-3">
-            <Avatar className="w-10 h-10">
+            <Avatar className="w-8 h-8 md:w-10 md:h-10 bg-primary">
               {/* <AvatarImage alt={user.name} src="@/public/default-avatar.jpg" /> */}
               <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
             </Avatar>
@@ -57,7 +57,7 @@ export function TeamUserCardWithPermissions({
           </div>
           <div className="text-right space-x-4 flex flex-row">
             {team.createdBy !== user.id ? (
-              <MemberCardPermissionsSelect user={user} team={team} />
+              <TeamUserCardPermissionsSelect user={user} team={team} />
             ) : (
               <Badge className="shrink-0" variant="destructive">
                 Admin

@@ -3,7 +3,7 @@ import { TaskDto } from "@/use-cases/task/types";
 import { UserDto } from "@/use-cases/user/types";
 
 import { AvatarFallback, Avatar } from "@/components/ui/avatar";
-import { MemberCardWithPermissions } from "./UserCardWithPermissions";
+import { ProjectUserCardWithPermissions } from "./ProjectUserCardWithPermissions";
 import { ProjectHeader } from "./ProjectHeader";
 import {
   ArrowRightCircle,
@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 
 // import UpdateProjectUsersCard from "./UpdateProjectUsersCard";
-import { MemberCardSearchTable } from "./ProjectUserSearchTable";
+import { ProjectUserSearchTable } from "./ProjectUserSearchTable";
 import {
   Popover,
   PopoverContent,
@@ -186,7 +186,7 @@ const ProjectDrawer = ({
             >
               <div className="flex flex-row  justify-start align-middle ml-2">
                 <h3 className="   mr-auto text-md font-bold">Users</h3>
-                <MemberCardSearchTable
+                <ProjectUserSearchTable
                   userId={userId}
                   project={project}
                   teamUsers={uniqueTeamUsers}
@@ -225,7 +225,7 @@ const ProjectDrawer = ({
                               <span className="sr-only">User Avatar</span>
                             </PopoverTrigger>
                             <PopoverContent className="w-[calc(100%-3em)] m-4 p-0 border-none">
-                              <MemberCardWithPermissions
+                              <ProjectUserCardWithPermissions
                                 user={member}
                                 project={project}
                                 tasks={tasks}
@@ -267,8 +267,8 @@ const ProjectDrawer = ({
                               </Avatar>
                               <span className="sr-only">User Avatar</span>
                             </PopoverTrigger>
-                            <PopoverContent>
-                              <MemberCardWithPermissions
+                            <PopoverContent className="w-[calc(100%-3em)] m-4 p-0 border-none">
+                              <ProjectUserCardWithPermissions
                                 user={member}
                                 project={project}
                                 tasks={tasks}

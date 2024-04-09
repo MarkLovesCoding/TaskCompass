@@ -176,12 +176,12 @@ export async function TeamPageComponent({
 
                             <div className="flex flex-row">
                               {teamUsersAdmins.map((member, index) => (
-                                <div key={index} className="p-1 py-2 ">
+                                <div key={index} className="p-2">
                                   <Popover>
                                     <PopoverTrigger>
                                       <Avatar key={index} className="w-8 h-8 ">
                                         <AvatarFallback
-                                          className={` text-xs  rounded-full bg-primary border-2 border-black text-white`}
+                                          className={` text-xs hover:bg-primary bg-secondary`}
                                         >
                                           {getInitials(member.name)}
                                         </AvatarFallback>
@@ -190,7 +190,7 @@ export async function TeamPageComponent({
                                         User Avatar
                                       </span>
                                     </PopoverTrigger>
-                                    <PopoverContent className="w-[calc(100%-3em)] m-4 p-0 border-2 rounded-lg border-card-foreground shadow-lg">
+                                    <PopoverContent className="w-[calc(100%-3em)] m-4 p-0 border-none">
                                       <TeamUserCardWithPermissions
                                         user={member}
                                         team={team}
@@ -219,7 +219,7 @@ export async function TeamPageComponent({
                                     <PopoverTrigger>
                                       <Avatar key={index} className=" w-8 h-8">
                                         <AvatarFallback
-                                          className={` text-xs  rounded-full bg-primary border-2 border-black text-white`}
+                                          className={` text-xs hover:bg-primary bg-secondary`}
                                         >
                                           {getInitials(member.name)}
                                         </AvatarFallback>
@@ -228,7 +228,7 @@ export async function TeamPageComponent({
                                         User Avatar
                                       </span>
                                     </PopoverTrigger>
-                                    <PopoverContent>
+                                    <PopoverContent className="w-[calc(100%-3em)] m-4 p-0 border-none ">
                                       <TeamUserCardWithPermissions
                                         user={member}
                                         team={team}

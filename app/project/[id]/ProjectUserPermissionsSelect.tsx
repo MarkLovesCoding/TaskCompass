@@ -4,7 +4,7 @@ import {
   SelectItem,
   SelectContent,
   Select,
-} from "@/components/ui/select";
+} from "@/components/ui/select-user-permissions";
 import React, { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { ProjectDto } from "@/use-cases/project/types";
@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { UpdateProjectUserRoleAction } from "../_actions/update-project-user-role.action";
-type MemberCardSearchUserBlockProps = {
+type ProjectUserBlockProps = {
   user: UserDto;
   project: ProjectDto;
 };
@@ -24,10 +24,10 @@ const getUserType = (user: UserDto, projectId: string) => {
     return "member";
   }
 };
-const MemberCardPermissionsSelect = ({
+const ProjectUserPermissionsSelect = ({
   user,
   project,
-}: MemberCardSearchUserBlockProps) => {
+}: ProjectUserBlockProps) => {
   const existingRole = getUserType(user, project.id);
   const [selectedRole, setSelectedRole] = useState(
     existingRole as "admin" | "member"
@@ -58,31 +58,6 @@ const MemberCardPermissionsSelect = ({
   };
 
   const router = useRouter();
-  // const form = useForm<z.infer<typeof formSchema>>({
-  //   resolver: zodResolver(formSchema),
-  //   defaultValues: {
-  //     users: [...project.members, ...project.admins],
-  //   },
-  // });
-  // const filteredTeamUsers = teamUsers.filter(
-  //   (user) => !projectUsers.some((pUser) => pUser.id === user.id)
-  // );
-  // const [teamUsersList, setTeamUsersList] =
-  //   useState<UserDto[]>(filteredTeamUsers);
-  // console.log("teamUsersList", teamUsersList);
-  // const [projectUsersList, setProjectUsersList] =
-  //   useState<UserDto[]>(projectUsers);
-  // console.log("projectUsersList", projectUsersList);
-
-  // const getUserTypes = (projectUsers: UserDto[]) => {
-  //   const userTypes: Record<string, string> = {}; // Define userTypes as an object with string index signature
-  //   projectUsers.forEach((user) => {
-  //     // if (user) {
-  //     userTypes[user.id as string] = getUserType(user, project.id) as string; // Make sure project.id is defined and correct
-  //     // }
-  //   });
-  //   return userTypes;
-  // };
 
   // Function to handle the change in user type
   return (
@@ -102,7 +77,7 @@ const MemberCardPermissionsSelect = ({
       {showSubmitButton && (
         <Button
           type="submit"
-          className="ml-4"
+          className="ml-4 p-2 md:px-4 h-8 text-xs  bg-primary hover:bg-badgeGreen md:text-sm"
           onClick={(e) => {
             e.preventDefault();
 
@@ -117,4 +92,4 @@ const MemberCardPermissionsSelect = ({
   );
 };
 
-export default MemberCardPermissionsSelect;
+export default ProjectUserPermissionsSelect;

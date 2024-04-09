@@ -22,15 +22,7 @@ import { useEffect, useState } from "react";
 import { Label } from "@/components/ui/label";
 
 import toast from "react-hot-toast";
-import MemberCardPermissionsSelect from "./ProjectUserCardPermissionsSelect";
-// import {
-//   Dialog,
-//   DialogContent,
-//   DialogTrigger,
-// } from "@/components/ui/dialog-user-search";
-// const formSchema = z.object({
-//   users: z.array(z.string()).min(1),
-// });
+import ProjectUserPermissionsSelect from "./ProjectUserPermissionsSelect";
 
 export function ProjectUserTableCommand({
   userId,
@@ -44,9 +36,9 @@ export function ProjectUserTableCommand({
   projectUsers: UserDto[];
 }) {
   const userData = projectUsers.filter((user) => user.id === userId)[0];
-  const userPermission = userData.projectsAsAdmin.includes(project.id)
-    ? "admin"
-    : "member";
+  // const userPermission = userData.projectsAsAdmin.includes(project.id)
+  //   ? "admin"
+  //   : "member";
   const filteredTeamUsers = teamUsers.filter(
     (user) => !projectUsers.some((pUser) => pUser.id === user.id)
   );
@@ -89,11 +81,6 @@ export function ProjectUserTableCommand({
 
     // Custom Icon
     icon: "🧐",
-    // Change colors of success/error/loading icon
-    // iconTheme: {
-    //   primary: "#000",
-    //   secondary: "#fff",
-    // },
 
     // Aria
     ariaProps: {
@@ -167,7 +154,7 @@ export function ProjectUserTableCommand({
                         />
                         <div className="flex flex-row mr-auto ">
                           {project.createdBy !== user.id ? (
-                            <MemberCardPermissionsSelect
+                            <ProjectUserPermissionsSelect
                               user={user}
                               project={project}
                             />

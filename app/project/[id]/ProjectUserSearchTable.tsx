@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dialog-user-search";
 import { ProjectUserTableCommand } from "./ProjectUserTableCommand";
 
-export function MemberCardSearchTable({
+export function ProjectUserSearchTable({
   userId,
   project,
   teamUsers,
@@ -33,7 +33,7 @@ export function MemberCardSearchTable({
             variant="outline"
             className=" text-xs    py-1 m-1 h-8  hover:bg-primary bg-secondary"
           >
-            <UserSearchIcon className="w-10 h-10 cursor-pointer hover:bg-primary p-2 rounded-full" />
+            <UserSearchIcon className="w-8 h-8 lg:w-10 lg:h-10 cursor-pointer  p-2 " />
           </Button>
           <span className="sr-only">Edit Project Users</span>
         </div>
