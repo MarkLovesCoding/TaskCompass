@@ -17,7 +17,6 @@ async function getTeam(teamId: string): Promise<TeamDto> {
 
   try {
     // Find the user by ID
-    console.log("---------------teamId", teamId);
     const team = await Team.findById(teamId);
     return teamModelToTeamDto(team);
   } catch (error) {

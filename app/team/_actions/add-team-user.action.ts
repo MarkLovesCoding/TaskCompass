@@ -23,7 +23,7 @@ export async function addTeamUserAction(teamId: string, teamUserId: string) {
         teamUserId: teamUserId,
       }
     );
-    revalidatePath("/TEAMS-CLEAN/[slug]/page");
+    revalidatePath("/team/[slug]/page");
 
     //for toasts, not yet implemented
     return { success: true };
