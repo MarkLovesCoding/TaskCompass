@@ -15,6 +15,8 @@ import { getInitials } from "@/lib/utils/getInitials";
 import { ProjectDto } from "@/use-cases/project/types";
 import { UserDto } from "@/use-cases/user/types";
 import { updateProjectUsersAction } from "@/app/project/_actions/update-project-users.action";
+import { addProjectUserAction } from "@/app/project/_actions/add-project-user.action";
+import { removeProjectUserAction } from "@/app/project/_actions/remove-project-user.action";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -56,7 +58,6 @@ export function MemberCardSearchTable({
   );
   const [teamUsersList, setTeamUsersList] =
     useState<UserDto[]>(filteredTeamUsers);
-  console.log("teamUsersList", teamUsersList);
   const [projectUsersList, setProjectUsersList] =
     useState<UserDto[]>(projectUsers);
 
@@ -66,7 +67,6 @@ export function MemberCardSearchTable({
   useEffect(() => {
     setProjectUsersList(projectUsers);
   }, [projectUsers]);
-  console.log("projectUsersList", projectUsersList);
   const projectUsersIdLists = projectUsersList.map((user) => user.id);
 
   const getUserType = (user: UserDto, projectId: string) => {
@@ -85,21 +85,31 @@ export function MemberCardSearchTable({
   ): number => {
     return user.tasks.filter((task) => project.tasks.includes(task)).length;
   };
-  const onUpdateProjectUserFormSubmit = async (isOpen: boolean) => {
-    await updateProjectUsersAction(project.id, projectUsersIdLists);
-    router.refresh();
-  };
-  const getUserTypes = (projectUsers: UserDto[]) => {
-    const userTypes: Record<string, string> = {}; // Define userTypes as an object with string index signature
-    projectUsers.forEach((user) => {
-      userTypes[user.id as string] = getUserType(user, project.id) as string; // Make sure project.id is defined and correct
-    });
-    return userTypes;
-  };
+  // const onUpdateProjectUserFormSubmit = async (isOpen: boolean) => {
+  //   await updateProjectUsersAction(project.id, projectUsersIdLists);
+  //   router.refresh();
+  // };
 
-  const [userTypes, setUserTypes] = useState({
-    ...getUserTypes(projectUsersList),
-  });
+  const onAddProjectUserSubmit = async (user: UserDto) => {
+    await addProjectUserAction(project.id, user.id);
+  };
+  const onRemoveProjectUserSubmit = async (user: UserDto) => {
+    await removeProjectUserAction(project.id, user.id);
+  };
+  // const onRemoveProjectUserSubmit = async (user: UserDto) => {
+  //   await removeProjectUserAction(project.id, user.id);
+  // };
+  // const getUserTypes = (projectUsers: UserDto[]) => {
+  //   const userTypes: Record<string, string> = {}; // Define userTypes as an object with string index signature
+  //   projectUsers.forEach((user) => {
+  //     userTypes[user.id as string] = getUserType(user, project.id) as string; // Make sure project.id is defined and correct
+  //   });
+  //   return userTypes;
+  // };
+
+  // const [userTypes, setUserTypes] = useState({
+  //   ...getUserTypes(projectUsersList),
+  // });
 
   // Function to handle the change in user type
   // const handleChange = (userId: string, userType: string) => {
@@ -132,7 +142,7 @@ export function MemberCardSearchTable({
   };
   return (
     <>
-      <Dialog onOpenChange={onUpdateProjectUserFormSubmit}>
+      <Dialog>
         <DialogTrigger asChild>
           <div>
             <Button
@@ -275,6 +285,7 @@ export function MemberCardSearchTable({
                                           // handleUserHasTasks(user);
                                           return;
                                         }
+                                        onRemoveProjectUserSubmit(user);
                                         setProjectUsersList((prev) =>
                                           prev.filter((u) => u.id !== user.id)
                                         );
@@ -338,6 +349,7 @@ export function MemberCardSearchTable({
                               variant={"ghost"}
                               className="mx-2 hover:bg-green-200"
                               onClick={() => {
+                                onAddProjectUserSubmit(user);
                                 setProjectUsersList((prev) => {
                                   if (!prev.some((u) => u.id === user.id)) {
                                     return [...prev, user];

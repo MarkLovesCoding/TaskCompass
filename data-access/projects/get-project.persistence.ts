@@ -18,6 +18,7 @@ async function getProject(projectId: string): Promise<ProjectDto> {
 
   try {
     // Find the user by ID
+    console.log(">>>>>>projectId", projectId);
     const project = await Project.findById(projectId);
     return projectModelToProjectDto(project);
   } catch (error) {
