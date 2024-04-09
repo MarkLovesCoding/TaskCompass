@@ -44,10 +44,8 @@ const MemberCardPermissionsSelect = ({
   }, [selectedRole, existingRole]);
   const handleRoleChange = (value: string) => {
     setSelectedRole(value as "admin" | "member");
-    // You can perform additional actions here if needed
   };
   const handleRoleChangeSubmit = async () => {
-    // You can perform additional actions here if needed
     await UpdateTeamUserRoleAction(
       user.id,
       team.id,
