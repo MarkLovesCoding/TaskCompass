@@ -22,6 +22,11 @@ export async function updateProjectUsersUseCase(
   const project = await context.getProject(data.projectId);
   const validatedProject = new ProjectEntity(project);
   validatedProject.updateUsers(data.updatedUsers);
-
-  await context.updateProject(projectToDto(validatedProject));
+  const updatedproject = projectToDto(validatedProject);
+  await context.updateProject(updatedproject);
+  await context.updateManyProjectUsers(
+    data.projectId,
+    project.users,
+    updatedproject.users
+  );
 }

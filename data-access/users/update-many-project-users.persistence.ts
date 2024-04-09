@@ -24,12 +24,14 @@ async function updateManyProjectUsers(
       (user) => !updatedUsers.includes(user)
     );
     for (const user of removedUsers) {
-      User.findByIdAndUpdate(user, {
+      await User.findByIdAndUpdate(user, {
         $pull: { projectsAsMember: projectId, projectsAsAdmin: projectId },
       });
     }
     for (const user of addedUsers) {
-      User.findByIdAndUpdate(user, { $push: { projectsAsMember: projectId } });
+      await User.findByIdAndUpdate(user, {
+        $push: { projectsAsMember: projectId },
+      });
     }
   } catch (error) {
     throw new Error("Error updating Project users" + error);

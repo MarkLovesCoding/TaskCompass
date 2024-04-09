@@ -22,11 +22,17 @@ async function updateManyTeamUsers(
     const removedUsers = initialUsers.filter(
       (member) => !updatedUsers.includes(member)
     );
+
     for (const user of removedUsers) {
-      User.findByIdAndUpdate(user, { $pull: { teamsAsAdmin: teamId } });
+      await User.findByIdAndUpdate(user, {
+        $pull: {
+          teamsAsMember: teamId,
+          teamsAsAdmin: teamId,
+        },
+      });
     }
     for (const user of addedUsers) {
-      User.findByIdAndUpdate(user, { $push: { teamsAsAdmin: teamId } });
+      await User.findByIdAndUpdate(user, { $push: { teamsAsMember: teamId } });
     }
   } catch (error) {
     throw new Error("Error updating team users" + error);

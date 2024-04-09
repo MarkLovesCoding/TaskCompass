@@ -19,6 +19,8 @@ import { getInitials } from "@/lib/utils/getInitials";
 import { ProjectDto } from "@/use-cases/project/types";
 import { UserDto } from "@/use-cases/user/types";
 import { updateTeamUsersAction } from "@/app/team/_actions/update-team-users.action";
+import { addTeamUserAction } from "@/app/team/_actions/add-team-user.action";
+import { removeTeamUserAction } from "@/app/team/_actions/remove-team-user.action";
 // import { updateProjectAdminsAction } from "@/app/PROJECTS-CLEAN/_actions/update-project-admins.action";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -79,13 +81,6 @@ export function TeamMemberTable({
     setTeamUsersIdLists(teamUsersList.map((user) => user.id));
   }, [teamUsersList]);
 
-  const getUserType = (user: UserDto, projectId: string) => {
-    if (user.projectsAsAdmin.includes(projectId)) {
-      return "admin";
-    } else if (user.projectsAsMember.includes(projectId)) {
-      return "member";
-    }
-  };
   const userHasTasksInTeamProjects = (user: UserDto): boolean => {
     return user.tasks.some((task) => projectTasksInTeam.includes(task));
   };
@@ -93,26 +88,19 @@ export function TeamMemberTable({
     return user.tasks.filter((task) => projectTasksInTeam.includes(task))
       .length;
   };
-  const onUpdateTeamUserFormSubmit = async (isOpen: boolean) => {
-    await updateTeamUsersAction(
-      team.id,
-      teamUsersList.map((user) => user.id)
-    );
+
+  const onAddTeamUserSubmit = async (user: UserDto) => {
+    await addTeamUserAction(team.id, user.id);
   };
-  const getUserTypes = (projectUsers: UserDto[]) => {
-    const userTypes: Record<string, string> = {}; // Define userTypes as an object with string index signature
-    projectUsers.forEach((user) => {
-      userTypes[user.id as string] = getUserType(user, team.id) as string; // Make sure project.id is defined and correct
-    });
-    return userTypes;
+  const onRemoveTeamUserSubmit = async (user: UserDto) => {
+    await removeTeamUserAction(team.id, user.id);
   };
 
   return (
-    <Popover onOpenChange={onUpdateTeamUserFormSubmit}>
+    <Popover>
       <PopoverTrigger asChild>
         <div>
           <Search className="w-10 h-10 cursor-pointer hover:bg-primary p-2 rounded-full" />
-
           <span className="sr-only">Edit Team Users</span>
         </div>
       </PopoverTrigger>
@@ -232,6 +220,7 @@ export function TeamMemberTable({
 
                                       return;
                                     }
+                                    onRemoveTeamUserSubmit(user);
                                     setTeamUsersList((prev) =>
                                       prev.filter((u) => u.id !== user.id)
                                     );
@@ -295,6 +284,7 @@ export function TeamMemberTable({
                             variant={"ghost"}
                             className="mx-2 hover:bg-green-200"
                             onClick={() => {
+                              onAddTeamUserSubmit(user);
                               setTeamUsersList((prev) => {
                                 if (!prev.some((u) => u.id === user.id)) {
                                   return [...prev, user];
