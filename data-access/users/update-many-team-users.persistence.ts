@@ -4,7 +4,7 @@ import connectDB from "@/db/connectDB";
 import User from "@/db/(models)/User";
 
 async function updateManyTeamUsers(
-  projectId: string,
+  teamId: string,
   initialUsers: string[],
   updatedUsers: string[]
 ): Promise<void> {
@@ -23,13 +23,13 @@ async function updateManyTeamUsers(
       (member) => !updatedUsers.includes(member)
     );
     for (const user of removedUsers) {
-      User.findByIdAndUpdate(user, { $pull: { teamsAsAdmin: projectId } });
+      User.findByIdAndUpdate(user, { $pull: { teamsAsAdmin: teamId } });
     }
     for (const user of addedUsers) {
-      User.findByIdAndUpdate(user, { $push: { teamsAsAdmin: projectId } });
+      User.findByIdAndUpdate(user, { $push: { teamsAsAdmin: teamId } });
     }
   } catch (error) {
-    throw new Error("Error updating Project users" + error);
+    throw new Error("Error updating team users" + error);
   }
 }
 export default updateManyTeamUsers;

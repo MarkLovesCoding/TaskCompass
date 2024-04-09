@@ -19,8 +19,11 @@ export async function updateTeamUsersUseCase(
   if (!userId) throw new Error("User not found");
 
   const team = await context.getTeam(data.teamId);
+  //check changed users?
+  //
   const validatedTeam = new TeamEntity(team);
   validatedTeam.updateUsers(data.updatedUsers);
-
-  await context.updateTeam(teamToDto(validatedTeam));
+  const updatedTeam = teamToDto(validatedTeam);
+  await context.updateTeam(updatedTeam);
+  await context.updateManyTeamUsers(data.teamId, team.users, updatedTeam.users);
 }
