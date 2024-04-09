@@ -126,6 +126,9 @@ export async function TeamPageComponent({
                                 <div className="">No archived projects</div>
                               ) : (
                                 <div className=" flex flex-col">
+                                  <Label className="text-center md:text-lg mb-4">
+                                    Archived Projects
+                                  </Label>
                                   {projects.map(
                                     (project, project_idx) =>
                                       project.archived && (

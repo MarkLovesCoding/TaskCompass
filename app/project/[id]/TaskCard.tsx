@@ -14,7 +14,7 @@ import {
   Select,
 } from "@/components/ui/select";
 import { ArchiveIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button-alert";
 import {
   Form,
   FormControl,
@@ -23,6 +23,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+} from "@/components/ui/dialog-user-search";
 import {
   Card,
   CardDescription,
@@ -622,8 +627,8 @@ export const TaskCard = ({
             name="archived"
             render={({ field }) => (
               <FormItem>
-                <Popover open={archivedOpen} onOpenChange={setArchivedOpen}>
-                  <PopoverTrigger asChild>
+                <Dialog open={archivedOpen} onOpenChange={setArchivedOpen}>
+                  <DialogTrigger asChild>
                     <FormControl>
                       <Button
                         title="Archive Task"
@@ -644,11 +649,13 @@ export const TaskCard = ({
                         Archive Task
                       </Button> */}
                     </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="">
+                  </DialogTrigger>
+                  <DialogContent className="p-4 rounded-lg border-2 border-primary bg-alert-background backdrop-filter">
                     {/* <Card> */}
                     {/* <CardHeader> */}
-                    <Label className="text-center">Archive Task</Label>
+                    <Label className="text-center text-xl md:text-2xl">
+                      Archive Task
+                    </Label>
                     {/* </CardHeader> */}
                     <div className="p-4 mb-2 ">
                       <p className="text-center">
@@ -664,7 +671,6 @@ export const TaskCard = ({
                         className="text-sm "
                         variant="destructive"
                         onClick={() => {
-                          console.log("archived");
                           handleArchivedSubmit();
                         }}
                       >
@@ -675,15 +681,14 @@ export const TaskCard = ({
                         variant="outline"
                         onClick={() => {
                           handleArchivedCancel();
-                          console.log("cancel");
                         }}
                       >
                         Cancel
                       </Button>
                     </div>
                     {/* </Card> */}
-                  </PopoverContent>
-                </Popover>
+                  </DialogContent>
+                </Dialog>
 
                 <FormMessage />
               </FormItem>

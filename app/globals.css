@@ -8,6 +8,7 @@
     --main-background: rgb(245, 245, 245);
     --nav-background: rgb(174, 175, 182);
     --drawer-background: rgba(255, 255, 255, 0.7);
+    --alert-background: rgba(204, 203, 208, 0.9);
     --accordion-background: rgba(204, 203, 208, 0.7);
     --card: rgb(228, 228, 228);
     --card-foreground: rgb(22, 22, 22);
@@ -45,7 +46,8 @@
 
   .dark {
     --background: rgb(28, 44, 50);
-    --drawer-background: rgba(22, 46, 68, 0.6);
+    --drawer-background: rgba(22, 46, 68, 0.65);
+    --alert-background: rgba(22, 46, 68, 0.9);
     --accordion-background: rgba(26, 33, 36, 0.7);
     --main-background: rgb(54, 67, 86);
     --nav-background: rgb(12, 23, 26);

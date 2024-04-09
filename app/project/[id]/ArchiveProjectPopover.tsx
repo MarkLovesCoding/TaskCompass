@@ -5,10 +5,16 @@ import {
 } from "@/components/ui/popover";
 import { Label } from "@/components/ui/label";
 import React from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button-alert";
 import { updateProjectArchivedAction } from "../../team/_actions/update-project-archived.action";
 import { ProjectDto } from "@/use-cases/project/types";
 import { useRouter } from "next/navigation";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+} from "@/components/ui/dialog-user-search";
+
 import { ArchiveIcon } from "lucide-react";
 const ArchiveProjectPopover = ({ project }: { project: ProjectDto }) => {
   const archiveProjectFormObject = {
@@ -25,8 +31,8 @@ const ArchiveProjectPopover = ({ project }: { project: ProjectDto }) => {
         variant="outline"
         className="h-fit w-fit py-1 px-2 group/archive hover:border-destructive hover:bg-destructive"
       >
-        <Popover open={isOpen} onOpenChange={setIsOpen}>
-          <PopoverTrigger className="group/archive   ">
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
+          <DialogTrigger className="group/archive   ">
             <div className="flex flex-row">
               <ArchiveIcon className="w-4 h-4 mr-1   self-center   group-hover/archive:text-white" />
               <div className="py-1 px-1 text-xs group-hover/archive:text-white">
@@ -35,11 +41,13 @@ const ArchiveProjectPopover = ({ project }: { project: ProjectDto }) => {
                 <span className="sr-only">Archive Project Trigger</span>
               </div>
             </div>
-          </PopoverTrigger>{" "}
-          <PopoverContent>
+          </DialogTrigger>{" "}
+          <DialogContent className="p-4 rounded-lg border-2 border-primary bg-alert-background backdrop-filter">
             {/* <Card>
             <CardHeader> */}
-            <Label className="">Archive Project</Label>
+            <Label className="text-center text-xl md:text-2xl">
+              Archive Project
+            </Label>
             {/* </CardHeader> */}
             <div className="p-4 mb-2 ">
               <p> Are you sure you want to archive this project? </p>
@@ -72,8 +80,8 @@ const ArchiveProjectPopover = ({ project }: { project: ProjectDto }) => {
               </Button>
             </div>
             {/* </Card> */}
-          </PopoverContent>
-        </Popover>
+          </DialogContent>
+        </Dialog>
         <span className="sr-only">Archive Project Button</span>
       </Button>
     </>

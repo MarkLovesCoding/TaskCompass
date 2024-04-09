@@ -25,6 +25,9 @@ module.exports = {
         drawer: {
           background: "var(--drawer-background)",
         },
+        alert: {
+          background: "var(--alert-background)",
+        },
         main: {
           background: "var(--main-background)",
         },

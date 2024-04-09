@@ -78,7 +78,7 @@ const ProjectDrawer = ({
         </div>
 
         <div
-          className={`group  tooSmall:hidden flex flex-col bg-accordion-background backdrop-filter backdrop-blur-lg   fixed top-12 left-0 h-[calc(100vh-3rem)] w-[425px] max-w-[95vw] rounded-tr-lg rounded-br-lg border-r-2 border-t-2 border-b-2 z-40 border-r-card hover:border-r-primary border-t-card hover:border-t-primary border-b-card hover:border-b-primary cursor-grab active:cursor-grabbing p-2 pt-3 `}
+          className={`group  tooSmall:hidden flex flex-col bg-drawer-background backdrop-filter backdrop-blur-lg   fixed top-12 left-0 h-[calc(100vh-3rem)] w-[425px] max-w-[95vw] rounded-tr-lg rounded-br-lg border-r-2 border-t-2 border-b-2 z-40 border-r-card hover:border-r-primary border-t-card hover:border-t-primary border-b-card hover:border-b-primary cursor-grab active:cursor-grabbing p-2 pt-3 `}
         >
           <DrawerClose className="">
             <ArrowLeftCircleIcon className="absolute right-[-1em] z-50 top-[calc(50%-3rem)]  rounded-full w-8 h-8 self-center bg-background text-card group-hover:text-primary" />
@@ -158,6 +158,9 @@ const ProjectDrawer = ({
                             <div className="">No archived tasks</div>
                           ) : (
                             <div className=" flex flex-col">
+                              <Label className="text-center md:text-lg mb-4">
+                                Archived Tasks
+                              </Label>
                               {tasks.map(
                                 (task, task_idx) =>
                                   task.archived && (
