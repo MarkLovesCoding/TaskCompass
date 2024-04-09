@@ -1,27 +1,19 @@
-import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
+import { AvatarFallback, Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { CardHeader, CardContent, Card } from "@/components/ui/card";
 import Link from "next/link";
-import {
-  SelectValue,
-  SelectTrigger,
-  SelectItem,
-  SelectContent,
-  Select,
-} from "@/components/ui/select";
-import { MailIcon, KeyIcon, CheckIcon, ClockIcon } from "lucide-react";
-import { ProjectDto } from "@/use-cases/project/types";
+
+import { MailIcon, KeyIcon } from "lucide-react";
 import { UserDto } from "@/use-cases/user/types";
 import { getInitials } from "@/lib/utils/getInitials";
-import { TaskDto } from "@/use-cases/task/types";
-import MemberCardPermissionsSelect from "./TeamMemberCardPermissionsSelect";
+import MemberCardPermissionsSelect from "./TeamUserCardPermissionsSelect";
 import { TeamDto } from "@/use-cases/team/types";
 type MemberCardWithPermissionsProps = {
   user: UserDto;
 
   team: TeamDto;
 };
-export function TeamMemberCardWithPermissions({
+export function TeamUserCardWithPermissions({
   user,
 
   team,
@@ -37,11 +29,7 @@ export function TeamMemberCardWithPermissions({
             </Avatar>
             <div className="text-lg font-bold">{user.name}</div>
           </div>
-          <div className="ml-auto flex items-center space-x-2">
-            {/* <Badge variant="outline">{`${usersTasks.length} task${
-              usersTasks.length > 1 ? "s" : ""
-            }`}</Badge> */}
-          </div>
+          <div className="ml-auto flex items-center space-x-2"></div>
         </div>
       </CardHeader>
       <CardContent className="pt-0 space-y-4 smallWidth:space-y-2">
@@ -77,32 +65,6 @@ export function TeamMemberCardWithPermissions({
             )}
           </div>
         </div>
-        {/* <div className="grid grid-cols-2 gap-4 smallWidth:gap-2">
-          <div className="flex items-center space-x-2 smallWidth:space-x-1">
-            <CheckIcon className="w-4 h-4 opacity-60" />
-            <span className="text-sm smallWidth:text-xs font-medium">
-              Tasks Completed
-            </span>
-          </div>
-          <div className="text-right">
-            <span className="text-sm  smallWidth:text-xs font-medium">
-              {tasksCompleted}
-            </span>
-          </div>
-        </div> */}
-        {/* <div className="grid grid-cols-2 gap-4 smallWidth:gap-">
-          <div className="flex items-center space-x-2 smallWidth:space-x-1">
-            <ClockIcon className="w-4 h-4 opacity-60" />
-            <span className="text-sm smallWidth:text-xs font-medium">
-              Active Tasks
-            </span>
-          </div>
-          <div className="text-right">
-            <span className="text-sm smallWidth:text-xs  font-medium">
-              {tasksActive}
-            </span>
-          </div>
-        </div> */}
       </CardContent>
     </Card>
   );

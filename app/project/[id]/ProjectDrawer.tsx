@@ -3,7 +3,7 @@ import { TaskDto } from "@/use-cases/task/types";
 import { UserDto } from "@/use-cases/user/types";
 
 import { AvatarFallback, Avatar } from "@/components/ui/avatar";
-import { MemberCardWithPermissions } from "./member-card-with-permissions";
+import { MemberCardWithPermissions } from "./UserCardWithPermissions";
 import { ProjectHeader } from "./ProjectHeader";
 import {
   ArrowRightCircle,
@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 
 // import UpdateProjectUsersCard from "./UpdateProjectUsersCard";
-import { MemberCardSearchTable } from "./member-card-search-table";
+import { MemberCardSearchTable } from "./ProjectUserSearchTable";
 import {
   Popover,
   PopoverContent,

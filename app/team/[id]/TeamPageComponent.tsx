@@ -2,10 +2,10 @@ import Link from "next/link";
 import { unstable_noStore } from "next/cache";
 import { useQuery } from "@tanstack/react-query";
 import AddProjectCard from "./AddProjectCard";
-import { TeamMemberTable } from "./TeamMemberTable";
-import { TeamHeader } from "@/app/team/[id]/team-header";
+import { TeamUserSearchTable } from "./TeamUserSearchTable";
+import { TeamHeader } from "@/app/team/[id]/TeamHeader";
 import UnarchiveProjectPopover from "./UnarchiveProjectPopover";
-import { TeamMemberCardWithPermissions } from "./team-member-card-with-permissions";
+import { TeamUserCardWithPermissions } from "./TeamUserCardWithPermissions";
 import { getInitials } from "@/lib/utils/getInitials";
 
 import { UserIcon, UserCog, ArchiveIcon, Scroll } from "lucide-react";
@@ -90,10 +90,7 @@ export async function TeamPageComponent({
   return (
     <div className=" absolute flex flex-col w-full  items-center top-8 md:top-12 min-h-[calc(100vh-2rem)] md:min-h-[calc(100vh-3rem)]">
       <main className="flex bg-gradient-background-light dark:bg-gradient-background-dark overflow-x-hidden w-full flex-col gap-4 min-h-[calc(100vh-2rem)] md:min-h-[calc(100vh-3rem)] md:gap-8">
-        {/* <div className="w-full h-[15vh] bg-primary-foreground fixed top-[4em] left-0 "></div> */}
-
         <div className="z-20 overflow-x-clip  w-full px-4  self-center shadow-md   bg-accordion-background">
-          {/* <div className="bg-gray-100 p-4 rounded-lg shadow-md"> */}
           <Accordion type="single" collapsible defaultValue="summary">
             <AccordionItem value="summary">
               <AccordionTrigger>
@@ -102,12 +99,8 @@ export async function TeamPageComponent({
                 </div>
               </AccordionTrigger>
               <AccordionContent>
-                {/* <Separator className="mb-2 bg-gray-500 h-[1px] mr-16 ml-16 " /> */}
                 <div className="flex flex-col  md:flex-row md:flex-wrap md:justify-between md:mx-[12%] bg-transparent md:border-r-slate-600">
-                  {/* <div className="flex flex-col  justify-between md:flex-row md:flex-wrap md:justify-between md:space-x-4  "> */}
-                  {/* <div className="bg-muted mx-2 shadow-sm pl-4 md:flex-grow mb-2  md:max-w-[360px] lg:max-w-[400px] rounded-lg p-3  "> */}
                   <div className="mb-4 md:w-1/4">
-                    {/* <div className="ml-auto flex flex-start flex-col flex-wrap space-x-2"> */}
                     <div className="ml-auto flex flex-wrap items-center ">
                       <Label className="font-bold text-sm md:text:sm pb-4">
                         Projects:
@@ -121,15 +114,11 @@ export async function TeamPageComponent({
                         </Badge>
                         <Popover>
                           <PopoverTrigger className=" ">
-                            {/* <div className="flex flex-row items-center space-x-2 p-1  rounded hover:bg-primary-foreground"> */}
-                            {/* <div className="flex flex-row mr-auto items-center space-x-2 "> */}
                             <Badge className="bg-badgeGray min-w-fit text-xs px-2 py-[0.2em] m-1">
                               <ArchiveIcon className="w-4 h-4 mr-1 opacity-60" />
 
                               {`Archived: ${countArchivedProjects}`}
                             </Badge>
-                            {/* </div> */}
-                            {/* </div> */}
                           </PopoverTrigger>
                           <PopoverContent>
                             <ScrollArea>
@@ -160,23 +149,14 @@ export async function TeamPageComponent({
                       </div>
                     </div>
                   </div>
-                  {/* <Separator className="my-4 bg-gray-700 h-[1px] space-x-16 md:hidden" />
-                  <Separator
-                    orientation="vertical"
-                    className="hidden my-4 bg-gray-700 md:w-[1px] h-auto mx-4 space-y-16 md:block"
-                  /> */}
-                  {/* <div
-                    className={` bg-muted mb-2 mx-2 shadow-sm pl-4 md:flex-grow rounded-lg p-3 flex md:max-w-[360px] lg:max-w-[400px]  flex-col   `}
-                  > */}
+
                   <div className="mb-4 md:w-1/4">
-                    {/* <div className="flex flex-row  justify-between "> */}
                     <div className="ml-auto flex flex-wrap items-center ">
                       <Label className="font-bold mr-16 text-sm md:text:sm pb-">
                         Users:
                       </Label>
-                      {/* </div>
-                    <div className="ml-auto flex flex-wrap items-center "> */}
-                      <TeamMemberTable
+
+                      <TeamUserSearchTable
                         userId={userId}
                         userData={user}
                         team={team}
@@ -193,9 +173,7 @@ export async function TeamPageComponent({
                             <Badge className=" min-w-fit text-xs px-2 py-[0.2em] m-1 bg-badgeRed ">
                               {` Admins: ${teamUsersAdmins.length}`}
                             </Badge>
-                            {/* </div>
-                        <div className=" mb-2 flex flex-row overflow-auto"> */}
-                            {/* <> */}
+
                             <div className="flex flex-row">
                               {teamUsersAdmins.map((member, index) => (
                                 <div key={index} className="p-1 py-2 ">
@@ -213,7 +191,7 @@ export async function TeamPageComponent({
                                       </span>
                                     </PopoverTrigger>
                                     <PopoverContent className="w-[calc(100%-3em)] m-4 p-0 border-2 rounded-lg border-card-foreground shadow-lg">
-                                      <TeamMemberCardWithPermissions
+                                      <TeamUserCardWithPermissions
                                         user={member}
                                         team={team}
                                       />
@@ -221,10 +199,8 @@ export async function TeamPageComponent({
                                   </Popover>
                                 </div>
                               ))}
-                              {/* <ScrollBar orientation="horizontal" /> */}
                             </div>
                           </div>
-                          {/* </> */}
                         </div>
                       </div>
 
@@ -253,7 +229,7 @@ export async function TeamPageComponent({
                                       </span>
                                     </PopoverTrigger>
                                     <PopoverContent>
-                                      <TeamMemberCardWithPermissions
+                                      <TeamUserCardWithPermissions
                                         user={member}
                                         team={team}
                                       />
@@ -269,39 +245,12 @@ export async function TeamPageComponent({
                       </div>
                     </div>
                   </div>
-                  {/* <div className="text-2xl font-bold">
-                    <div className="w-96 flex flex-row">
-                      {teamUsers.map((member, index) => (
-                        <Avatar key={index} className=" w-12 h-12">
-                          <AvatarFallback className={`text-sm bg-gray-500`}>
-                            {getInitials(member.name)}
-                          </AvatarFallback>
-                        </Avatar>
-                      ))}
-                      <TeamMemberTable
-                        userId={userId}
-                        team={team}
-                        teamUsers={teamUsers}
-                        globalUsers={usersList}
-                        projects={projects}
-                      />
-                    </div>
-                  </div> */}
+                  {/*                  
                   {isUserAdmin && (
                     <div className="flex flex-row">
-                      {/* <div className="p-4">
-                        <Dialog>
-                          <DialogTrigger>
-                            <PlusIcon className="w-8 h-8 self-center cursor-pointer" />
-                            <span className="sr-only">New Project Button</span>
-                          </DialogTrigger>
-                          <DialogContent className="max-w-[300px]">
-                            <AddProjectCard teamId={teamId} />
-                          </DialogContent>
-                        </Dialog>
-                      </div> */}
+                    
                     </div>
-                  )}
+                  )} */}
                 </div>
               </AccordionContent>
             </AccordionItem>

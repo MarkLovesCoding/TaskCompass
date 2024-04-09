@@ -5,32 +5,48 @@ import {
   SelectItem,
   SelectContent,
   Select,
-} from "@/components/ui/select";
+} from "@/components/ui/select-user-permissions";
 import React, { useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { ProjectDto } from "@/use-cases/project/types";
 import { UserDto } from "@/use-cases/user/types";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { UpdateTeamUserRoleAction } from "../_actions/update-team-user-role.action";
 import { TeamDto } from "@/use-cases/team/types";
+import { ProjectDto } from "@/use-cases/project/types";
+import { UpdateProjectUserRoleAction } from "@/app/project/_actions/update-project-user-role.action";
+type ObjectType = TeamDto | ProjectDto;
 type MemberCardSearchUserBlockProps = {
   user: UserDto;
-  team: TeamDto;
+  object: ObjectType;
+  cardType: "team" | "project";
 };
-const getUserType = (user: UserDto, projectId: string) => {
-  if (user.teamsAsAdmin.includes(projectId)) {
-    return "admin";
+const getUserType = (
+  user: UserDto,
+  id: string,
+  cardType: "team" | "project"
+) => {
+  if ((cardType = "project")) {
+    if (user.projectsAsAdmin.includes(id)) {
+      return "admin";
+    } else {
+      return "member";
+    }
   } else {
-    return "member";
+    if (user.teamsAsAdmin.includes(id)) {
+      return "admin";
+    } else {
+      return "member";
+    }
   }
 };
-const MemberCardPermissionsSelect = ({
+const GenericMemberCardPermissionsSelect = ({
   user,
-  team,
+  object,
+  cardType,
 }: MemberCardSearchUserBlockProps) => {
-  const existingRole = getUserType(user, team.id);
+  const existingRole = getUserType(user, object.id, cardType);
   const [selectedRole, setSelectedRole] = useState(
     existingRole as "admin" | "member"
   ); // Default value is 'admin'
@@ -46,11 +62,19 @@ const MemberCardPermissionsSelect = ({
     setSelectedRole(value as "admin" | "member");
   };
   const handleRoleChangeSubmit = async () => {
-    await UpdateTeamUserRoleAction(
-      user.id,
-      team.id,
-      selectedRole as "admin" | "member"
-    );
+    if (cardType === "team") {
+      await UpdateTeamUserRoleAction(
+        user.id,
+        object.id,
+        selectedRole as "admin" | "member"
+      );
+    } else {
+      await UpdateProjectUserRoleAction(
+        user.id,
+        object.id,
+        selectedRole as "admin" | "member"
+      );
+    }
     // updateProjectUserRoleAction(user, project, selectedRole);
     toast.success(`User role updated to ${selectedRole}`);
     setShowSubmitButton(false);
@@ -64,10 +88,10 @@ const MemberCardPermissionsSelect = ({
     <>
       <Select
         onValueChange={(value) => handleRoleChange(value)}
-        defaultValue={getUserType(user, team.id)}
+        defaultValue={getUserType(user, object.id, cardType)}
       >
         <SelectTrigger>
-          <SelectValue placeholder={getUserType(user, team.id)} />
+          <SelectValue placeholder={getUserType(user, object.id, cardType)} />
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="admin">Admin</SelectItem>
@@ -77,7 +101,7 @@ const MemberCardPermissionsSelect = ({
       {showSubmitButton && (
         <Button
           type="submit"
-          className="ml-4"
+          className="ml-4 p-2 md:px-4 h-8 text-xs  bg-primary hover:bg-badgeGreen md:text-sm"
           onClick={(e) => {
             e.preventDefault();
 
@@ -92,4 +116,4 @@ const MemberCardPermissionsSelect = ({
   );
 };
 
-export default MemberCardPermissionsSelect;
+export default GenericMemberCardPermissionsSelect;

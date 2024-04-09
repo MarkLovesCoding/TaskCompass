@@ -6,8 +6,7 @@ import getTeam from "@/data-access/teams/get-team.persistence";
 import getTeamUsers from "@/data-access/users/get-team-users.persistence";
 import getProjectTasks from "@/data-access/tasks/get-project-tasks.persistence";
 import getProjectUsers from "@/data-access/users/get-project-users.persistence";
-import getProjectAdmins from "@/data-access/users/get-project-admins.persistence";
-import { ProjectPage } from "@/app/project/[id]/project-page-component";
+import { ProjectPage } from "@/app/project/[id]/MainProjectComponent";
 import toast, { Toaster } from "react-hot-toast";
 import { sessionAuth } from "@/lib/sessionAuth";
 import getUserObject from "@/data-access/users/get-user.persistence";
@@ -34,12 +33,6 @@ const Projects = async ({ params }: { params: ParamsType }) => {
   if (!project) {
     return <p>No project found.</p>;
   }
-  console.log("Project: ", project);
-  console.log("Tasks: ", tasks);
-  console.log("Team: ", team);
-  console.log("User: ", user);
-  console.log("Team Users: ", teamUsers);
-  console.log("Project Users: ", projectUsers);
 
   return (
     <div className="absolute top-[3rem] left-0 flex align-baseline max-h-[calc(100vh-3rem)]">

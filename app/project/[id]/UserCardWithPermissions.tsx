@@ -12,7 +12,7 @@ import { ProjectDto } from "@/use-cases/project/types";
 import { UserDto } from "@/use-cases/user/types";
 import { getInitials } from "@/lib/utils/getInitials";
 import { TaskDto } from "@/use-cases/task/types";
-import MemberCardPermissionsSelect from "./MemberCardPermissionsSelect";
+import MemberCardPermissionsSelect from "./ProjectUserCardPermissionsSelect";
 import { TeamDto } from "@/use-cases/team/types";
 type MemberCardWithPermissionsProps = {
   user: UserDto;

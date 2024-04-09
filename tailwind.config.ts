@@ -118,6 +118,7 @@ module.exports = {
           // raw: "(max-width:515px) and (min-height:325px) and (max-height:640px)",
           raw: "(max-width: 319px), (max-height:319px), (max-width:515px) and (min-height:319px) and (max-height:567px)",
         },
+        mobileMinWidth: { raw: "(min-width: 414px)" },
       },
     },
   },
