@@ -148,8 +148,14 @@ export const TaskCard = ({
     newPriority: string,
     newStatus: string,
     newCategory: string
-  ): Record<string, string> | null {
+  ): Record<string, string>[] {
     const changes = [];
+    console.log("existingPriority", existingPriority);
+    console.log("newPriority", newPriority);
+    console.log("existingStatus", existingStatus);
+    console.log("newStatus", newStatus);
+    console.log("existingCategory", existingCategory);
+    console.log("newCategory", newCategory);
 
     if (existingPriority !== newPriority) {
       changes.push({
@@ -174,9 +180,11 @@ export const TaskCard = ({
         existingSubType: existingCategory,
       });
     }
-
+    console.log("changes", changes);
     // if (changes.length === 1) {
-    return changes[0];
+    ///needs to return all to prevent single change from being returned only
+
+    return changes;
   }
 
   const onSubmit = async (values: z.infer<typeof taskFormSchema>) => {
@@ -189,18 +197,21 @@ export const TaskCard = ({
       values.status,
       values.category
     );
-    if (taskOrderChanges !== null) {
+    console.log("taskOrderChanges", taskOrderChanges);
+    if (taskOrderChanges.length !== 0) {
       try {
-        await updateProjectTasksOrderFromTaskCardAction(
-          values.projectId,
-          values.id,
+        for (let i = 0; i < taskOrderChanges.length; i++) {
+          console.log("updating task Order Changes: ", i + 1);
+          await updateProjectTasksOrderFromTaskCardAction(
+            values.projectId,
+            values.id,
 
-          taskOrderChanges
-        );
+            taskOrderChanges[i]
+          );
+        }
       } catch (error) {
         toast.error("Error updating task order");
       }
-      // toast.success("Task updated");
     }
     try {
       await updateTaskAction(values, task.assignees);

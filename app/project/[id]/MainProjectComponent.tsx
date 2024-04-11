@@ -49,7 +49,7 @@ export function ProjectPage({
   team: TeamDto;
   projectUsers: UserDto[];
 }) {
-  const [sortBy, setSortBy] = useState<string>("priority");
+  const [sortBy, setSortBy] = useState<string>("status");
   const isUserAdmin =
     project && user.projectsAsAdmin.some((id) => id === project.id);
   const uniqueProjectUsers = [...projectUsers];
@@ -114,11 +114,11 @@ export function ProjectPage({
                   value={sortBy}
                   onValueChange={setSortBy}
                 >
-                  <DropdownMenuRadioItem value="priority">
-                    Priority
-                  </DropdownMenuRadioItem>
                   <DropdownMenuRadioItem value="status">
                     Status
+                  </DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem value="priority">
+                    Priority
                   </DropdownMenuRadioItem>
                   <DropdownMenuRadioItem value="category">
                     Category
