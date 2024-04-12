@@ -65,14 +65,14 @@ const AddProjectCard = ({ teamId }: { teamId: string }) => {
         className="mt-4 mr-2 "
         onSubmit={form.handleSubmit(onNewProjectFormSubmit)}
       >
-        <h2>Create New Project</h2>
+        <h2 className=" text-lg font-bold mb-4 ">Create New Project</h2>
         <FormField
           control={form.control}
           name="name"
           render={({ field }) => {
             return (
               <FormItem className="mt-2">
-                <FormLabel>Name </FormLabel>
+                <FormLabel className="">Project Name</FormLabel>
                 <FormControl>
                   <Input
                     className={`header-input text-md max-w-[75%] ${

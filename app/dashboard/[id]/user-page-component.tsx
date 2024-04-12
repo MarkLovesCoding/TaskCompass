@@ -133,7 +133,7 @@ export async function UserPageComponent({
               <TabsTrigger value="projects">Projects</TabsTrigger>
             </TabsList>
             <TabsContent value="teams">
-              <div className=" z-20 flex-grow mt-2 flex w-full lg:max-w-[60vw] lg:mr-4 flex-col md:justify-start">
+              <div className=" z-20 flex-grow mt-2 flex w-full md:max-w-[60vw] md:mr-4 flex-col md:justify-start">
                 <div className="flex  max-w-[90vw] p-2 justify-start ml-[10%] md:ml-0 my-4 h-[40px] align-top ">
                   <h1 className="text-lg md:text-xl font-bold mr-6 self-center">
                     Your Teams

@@ -17,6 +17,7 @@ import * as z from "zod";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createNewTeamAction } from "./_actions/create-new-team.action";
+import { useState } from "react";
 
 const formSchema = z.object({
   name: z.string().min(4),
@@ -34,6 +35,16 @@ const AddTeamCard = () => {
       name: "",
     },
   });
+  const [isTeamNameEditing, setIsTeamNameEditing] = useState(false);
+
+  const handleTeamNameBlur = () => {
+    // TeamNameField.onBlur();
+    setIsTeamNameEditing(false);
+  };
+
+  const handleTeamNameClick = () => {
+    setIsTeamNameEditing(true); // Trigger the onClick event for the field
+  };
 
   const onNewTeamFormSubmit = async (values: z.infer<typeof formSchema>) => {
     await createNewTeamAction(values);
@@ -45,22 +56,35 @@ const AddTeamCard = () => {
         className="mt-4 mr-2"
         onSubmit={form.handleSubmit(onNewTeamFormSubmit)}
       >
+        {" "}
+        <h2 className=" text-lg font-bold mb-4 ">Create New Team</h2>
         <FormField
           control={form.control}
           name="name"
           render={({ field }) => {
             return (
               <FormItem className="mt-2">
-                <FormLabel>Create New Team</FormLabel>
+                <FormLabel className="">Team Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="New team name" type="text" {...field} />
+                  <Input
+                    className={`header-input text-md max-w-[75%] ${
+                      isTeamNameEditing ? "editing" : ""
+                    }`}
+                    placeholder="New team name"
+                    maxLength={25}
+                    type="text"
+                    spellCheck="false"
+                    {...field}
+                    onClick={handleTeamNameClick}
+                    onChange={field.onChange}
+                    onBlur={handleTeamNameBlur}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             );
           }}
         />
-
         <DialogFooter className="sm:justify-start mt-10">
           <DialogClose asChild>
             <Button

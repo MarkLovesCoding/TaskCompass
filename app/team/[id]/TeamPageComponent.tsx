@@ -260,42 +260,44 @@ export async function TeamPageComponent({
           </Accordion>
         </div>
 
-        <div className=" z-20 flex p-4 md:p-20 md:pt-0 justify-center self-center flex-col  w-full">
-          <div className=" flex w-full flex-col lg:max-w-[60vw] justify-center">
-            <div className="flex ml-[12%] md:ml-0 p-2 justify-start align-top h-fit ">
+        <div className="z-20 flex justify-center  self-center  m-4 w-full">
+          <div className=" z-20 flex-grow mt-2 flex w-full md:max-w-[60vw] md:mr-4 flex-col md:justify-start">
+            <div className="flex  max-w-[90vw] p-2 justify-start ml-[10%] md:ml-0 my-4 h-[40px] align-top ">
               <h1 className="text-lg md:text-xl font-bold mr-6 self-center">
-                Projects
+                Team Projects
               </h1>
-              <div className="p-4">
-                <Dialog>
-                  <DialogTrigger>
-                    <Button
-                      title="Add New Project"
-                      className="rounded-full ml-auto w-fit px-4"
-                      size="icon"
-                    >
-                      New Project
-                      <PlusIcon className="w-4 h-4 ml-4 " />
-                      <span className="sr-only">New Project Button</span>
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="max-w-[300px]">
-                    <AddProjectCard teamId={teamId} />
-                  </DialogContent>
-                </Dialog>
-              </div>
+              {/* <div className="p-4"> */}
+              <Dialog>
+                <DialogTrigger className="h-fit flex self-center">
+                  <Button
+                    title="Add New Project"
+                    className="rounded-full ml-auto w-fit px-4"
+                    size="icon"
+                  >
+                    New Project
+                    <PlusIcon className="w-4 h-4 ml-4 " />
+                    <span className="sr-only">New Project Button</span>
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-[280px]">
+                  <AddProjectCard teamId={teamId} />
+                </DialogContent>
+              </Dialog>
+              {/* </div> */}
             </div>
             <div className=" flex max-w-[90vw] justify-center md:justify-start flex-row flex-wrap">
               {projects &&
                 projects.map(
                   (project, project_idx) =>
                     project.archived === false && (
-                      <Link
+                      <Card
                         key={project_idx}
-                        className="truncate m-2 shadow-lg hover:shadow-sm bg-card"
-                        href={`/project/${project.id}`}
+                        className=" hover:border-orange-300  border-2 mb-4 max-w-full mr-4 md:mb-4 flex items-center w-72 h-28 bg-card shadow-lg hover:shadow-sm"
                       >
-                        <Card className="hover:border-orange-300  border-2   p-1 flex items-center w-72 h-28     ">
+                        <Link
+                          className="w-full h-full p-2"
+                          href={`/project/${project.id}`}
+                        >
                           <CardHeader className="p-0 pl-2">
                             <CardTitle className="text-sm md:text-base ">
                               {project.name}
@@ -314,8 +316,8 @@ export async function TeamPageComponent({
                               </div>
                             </CardDescription>
                           </CardHeader>
-                        </Card>
-                      </Link>
+                        </Link>
+                      </Card>
                     )
                 )}
             </div>
