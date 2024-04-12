@@ -18,6 +18,7 @@ import * as z from "zod";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createNewProjectAction } from "../_actions/create-new-project.action";
+import { useState } from "react";
 const formSchema = z.object({
   name: z.string().min(4),
   description: z.string().min(4).max(100),
@@ -33,7 +34,26 @@ const AddProjectCard = ({ teamId }: { teamId: string }) => {
       description: "This is a new project description",
     },
   });
+  const [isProjectNameEditing, setIsProjectNameEditing] = useState(false);
+  const [isProjectDescriptionEditing, setIsProjectDescriptionEditing] =
+    useState(false);
 
+  const handleProjectNameBlur = () => {
+    // ProjectNameField.onBlur();
+    setIsProjectNameEditing(false);
+  };
+
+  const handleProjectNameClick = () => {
+    setIsProjectNameEditing(true); // Trigger the onClick event for the field
+  };
+
+  const handleProjectDescriptionBlur = () => {
+    // descriptionField.onBlur(); // Trigger the onBlur event for the field
+    setIsProjectDescriptionEditing(false);
+  };
+  const handleProjectDescriptionClick = () => {
+    setIsProjectDescriptionEditing(true);
+  };
   const onNewProjectFormSubmit = async (values: z.infer<typeof formSchema>) => {
     console.log("values", values, "teamId", teamId);
     await createNewProjectAction(values, teamId);
@@ -55,9 +75,17 @@ const AddProjectCard = ({ teamId }: { teamId: string }) => {
                 <FormLabel>Name </FormLabel>
                 <FormControl>
                   <Input
+                    className={`header-input text-md max-w-[75%] ${
+                      isProjectNameEditing ? "editing" : ""
+                    }`}
                     placeholder="New project name"
+                    maxLength={25}
                     type="text"
+                    spellCheck="false"
                     {...field}
+                    onClick={handleProjectNameClick}
+                    onChange={field.onChange}
+                    onBlur={handleProjectNameBlur}
                   />
                 </FormControl>
                 <FormMessage />
@@ -73,7 +101,19 @@ const AddProjectCard = ({ teamId }: { teamId: string }) => {
               <FormItem className="mt-2">
                 <FormLabel> Description</FormLabel>
                 <FormControl>
-                  <Textarea placeholder="New project description" {...field} />
+                  <Textarea
+                    className={`description-input max-w-[95%] resize-none ${
+                      isProjectDescriptionEditing ? "editing" : ""
+                    }`}
+                    placeholder="New project description"
+                    spellCheck="false"
+                    {...field}
+                    maxLength={50}
+                    minLength={3}
+                    onClick={handleProjectDescriptionClick}
+                    onChange={field.onChange}
+                    onBlur={handleProjectDescriptionBlur}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

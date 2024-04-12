@@ -14,6 +14,9 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import LogoPng from "../public/compass_small.png";
+import Image from "next/image";
+
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ModeToggle } from "./themeTogglerSwitch";
@@ -50,7 +53,13 @@ const Navigation: React.FC = async () => {
             className="flex items-center gap-2 text-lg font-semibold sm:text-base mr-4"
             href="#"
           >
-            <CompassIcon className="w-6 h-6 md:w-10 md:h-10  fill-orange" />
+            {/* <CompassIcon className="w-6 h-6 md:w-10 md:h-10  fill-orange" /> */}
+            <Image
+              src={LogoPng}
+              alt="Task Compass Logo"
+              width={40}
+              height={40}
+            />{" "}
             <span className="text-sm md:text-base font-bold">TaskCompass</span>
             <span className="sr-only">Task Compass Project Management App</span>
           </Link>
