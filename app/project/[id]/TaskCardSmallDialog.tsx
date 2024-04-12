@@ -168,7 +168,7 @@ const TaskCardSmallDialog = ({
       </DialogTrigger>
       <DialogContent
         onOpenAutoFocus={(event: Event) => event.preventDefault()}
-        className=" p-6 w-max-[300px] overflow-auto h-max-[550px] backdrop-filter backdrop-blur bg-taskcard-background rounded-lg border-2"
+        className=" p-6 w-max-[300px] overflow-auto h-max-[550px] bg-clip backdrop-blur-lg bg-taskcard-background rounded-lg border-2"
       >
         <ScrollArea className="">
           <TaskCard

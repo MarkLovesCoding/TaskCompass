@@ -142,11 +142,12 @@ export async function UserPageComponent({
                     <DialogTrigger className="h-fit flex self-center">
                       <Button
                         title="Add New Team"
-                        className="rounded-full  ml-auto"
+                        className="rounded-full  ml-auto w-fit px-4"
                         size="icon"
                       >
+                        New Team
                         {/* <p>Add Team</p> */}
-                        <PlusIcon className="w-4 h-4" />
+                        <PlusIcon className="w-4 h-4 ml-4" />
                         <span className="sr-only">New Team Button</span>
                       </Button>
                     </DialogTrigger>

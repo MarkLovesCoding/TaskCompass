@@ -14,7 +14,7 @@ import {
   CardDescription,
   CardHeader,
   Card,
-} from "@/components/ui/card";
+} from "@/components/ui/dashboard-card";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
@@ -99,7 +99,7 @@ export async function TeamPageComponent({
                 </div>
               </AccordionTrigger>
               <AccordionContent>
-                <div className="flex flex-col  md:flex-row md:flex-wrap md:justify-between md:mx-[12%] bg-transparent md:border-r-slate-600">
+                <div className="flex flex-col pl-8 md:pl-0 md:flex-row md:flex-wrap md:justify-evenly md:mx-[12%] bg-transparent md:border-r-slate-600">
                   <div className="mb-4 md:w-1/4">
                     <div className="ml-auto flex flex-wrap items-center ">
                       <Label className="font-bold text-sm md:text:sm pb-4">
@@ -260,7 +260,7 @@ export async function TeamPageComponent({
           </Accordion>
         </div>
 
-        <div className=" z-20 flex p-4 md:p-10 justify-center self-center flex-col mt-4 w-full">
+        <div className=" z-20 flex p-4 md:p-20 md:pt-0 justify-center self-center flex-col  w-full">
           <div className=" flex w-full flex-col lg:max-w-[60vw] justify-center">
             <div className="flex ml-[12%] md:ml-0 p-2 justify-start align-top h-fit ">
               <h1 className="text-lg md:text-xl font-bold mr-6 self-center">
@@ -271,10 +271,11 @@ export async function TeamPageComponent({
                   <DialogTrigger>
                     <Button
                       title="Add New Project"
-                      className="rounded-full ml-auto"
+                      className="rounded-full ml-auto w-fit px-4"
                       size="icon"
                     >
-                      <PlusIcon className="w-4 h-4" />
+                      New Project
+                      <PlusIcon className="w-4 h-4 ml-4 " />
                       <span className="sr-only">New Project Button</span>
                     </Button>
                   </DialogTrigger>

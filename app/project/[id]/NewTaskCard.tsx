@@ -30,7 +30,14 @@ const formSchema = z.object({
 export const NewTaskCard: React.FC<TaskFormProps> = ({ project }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isHeaderEditing, setIsHeaderEditing] = useState(false);
+  const handleNameBlur = () => {
+    // nameField.onBlur();
+    setIsHeaderEditing(false);
+  };
 
+  const handleNameClick = () => {
+    setIsHeaderEditing(true); // Trigger the onClick event for the field
+  };
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -56,7 +63,7 @@ export const NewTaskCard: React.FC<TaskFormProps> = ({ project }) => {
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           method="post"
-          className="grid gap-6 w-full max-w-md mx-auto bg-transparent p-6"
+          className="grid gap-6 w-full max-w-md mx-auto  p-6"
         >
           <FormField
             control={form.control}
@@ -69,9 +76,13 @@ export const NewTaskCard: React.FC<TaskFormProps> = ({ project }) => {
                       isHeaderEditing ? "editing" : ""
                     }`}
                     placeholder="Task Name"
-                    maxLength={20}
+                    maxLength={25}
+                    spellCheck="false"
                     type="text"
                     {...field}
+                    onClick={handleNameClick}
+                    onChange={field.onChange}
+                    onBlur={handleNameBlur}
                   />
                 </FormControl>
                 <FormMessage />
@@ -83,7 +94,7 @@ export const NewTaskCard: React.FC<TaskFormProps> = ({ project }) => {
             <PopoverClose asChild>
               <Button
                 type="submit"
-                className="m-auto flex justify-center align-middle w-fit"
+                className="m-auto flex justify-center hover:border-white border-transparent border-2 align-middle w-fit"
               >
                 Create New
               </Button>
@@ -92,7 +103,7 @@ export const NewTaskCard: React.FC<TaskFormProps> = ({ project }) => {
               <Button
                 type="button"
                 variant="ghost"
-                className="m-auto flex justify-center align-middle w-fit"
+                className="m-auto flex justify-center hover:border-white border-2  border-transparent align-middle w-fit"
               >
                 Close
               </Button>
