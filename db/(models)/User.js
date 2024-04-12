@@ -12,7 +12,7 @@ const UserSchema = new Schema(
     teamsAsAdmin: [{ type: Schema.Types.ObjectId, ref: "Team" }],
     teamsAsMember: [{ type: Schema.Types.ObjectId, ref: "Team" }],
     tasks: [{ type: Schema.Types.ObjectId, ref: "Task" }],
-    avatar: String,
+    avatar: { type: String, default: "default_avatar.png" },
     role: String,
   },
   {

@@ -26,7 +26,6 @@ export const options = {
       async profile(profile) {
         await connectDB();
         console.log("Profile GitHub: ", profile);
-
         let userRole = "GitHub User";
         const existingUser = await User.findOne({
           email: profile.email,
