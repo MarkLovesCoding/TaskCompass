@@ -5,7 +5,7 @@ import {
   CommandItem,
   CommandGroup,
   Command,
-} from "@/components/ui/command";
+} from "@/components/ui/command-user-search";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { PlusIcon, Search, XIcon } from "lucide-react";
@@ -102,7 +102,7 @@ export function TeamUserTableCommand({
 
   return (
     <Command className="p-2 py-4 ">
-      <CommandInput className="h-9" placeholder="Search members..." />
+      <CommandInput className="h-9" placeholder="Search users..." />
       <CommandGroup>
         <Label className="m-4">
           <div className="font-semibold">Team Users</div>
@@ -142,25 +142,27 @@ export function TeamUserTableCommand({
             user.id !== userId && (
               <CommandItem className=" group" value={user.name} key={index}>
                 <div className="flex items-center w-full h-14 gap-2">
-                  <div className="flex w-full overflow-x-auto items-center justify-start gap-2">
-                    <UserInformationComponent
-                      user={user}
-                      userStatus={getUserStatus(user, team)}
-                    />
-
-                    <div className="flex flex-row mr-auto ">
-                      {team.createdBy !== user.id ? (
-                        <TeamMemberCardPermissionsSelect
-                          user={user}
-                          team={team}
-                        />
-                      ) : (
-                        <Badge className="shrink-0" variant="secondary">
-                          Admin
-                        </Badge>
-                      )}
+                  <div className="flex w-full overflow-x-auto items-center justify-between gap-2">
+                    <div className="flex flex-row space-x-2">
+                      <UserInformationComponent
+                        user={user}
+                        userStatus={getUserStatus(user, team)}
+                      />
                     </div>
-                    <div className=" ml-auto">
+                    <div className="flex flex-row space-x-2 ml-auto">
+                      <div className="flex flex-row mr-auto ">
+                        {team.createdBy !== user.id ? (
+                          <TeamMemberCardPermissionsSelect
+                            user={user}
+                            team={team}
+                          />
+                        ) : (
+                          <Badge className="shrink-0" variant="secondary">
+                            Admin
+                          </Badge>
+                        )}
+                      </div>
+
                       <div className=" opacity-0 group-hover:opacity-100">
                         {user.id !== team.createdBy && (
                           <Button
@@ -220,33 +222,37 @@ export function TeamUserTableCommand({
                 user.id !== userId && (
                   <CommandItem className=" group" value={user.name} key={index}>
                     {/* <div className="flex items-center gap-2"> */}
-                    <div className="flex items-center overflow-x-auto justify-between w-full gap-2">
-                      <div className="flex flex-row gap-2">
-                        <UserInformationComponent
-                          user={user}
-                          userStatus={getUserStatus(user, team)}
-                        />
-                      </div>
-                      <div className="ml-auto">
-                        <Button
-                          variant={"ghost"}
-                          className="mx-2 hover:bg-green-200"
-                          onClick={() => {
-                            onAddTeamUserSubmit(user);
-                            setTeamUsersList((prev) => {
-                              if (!prev.some((u) => u.id === user.id)) {
-                                return [...prev, user];
-                              }
-                              return prev;
-                            });
-                            setFilteredGlobalUsers((prev) =>
-                              prev.filter((u) => u.id !== user.id)
-                            );
-                            toast.success(user.name + " added to Team");
-                          }}
-                        >
-                          <PlusIcon className=" opacity-0 group-hover:opacity-100 text-green-600"></PlusIcon>
-                        </Button>
+                    <div className="flex items-center w-full h-14 gap-2">
+                      <div className="flex w-full overflow-x-auto items-center justify-between gap-2">
+                        <div className="flex flex-row space-x-2">
+                          <UserInformationComponent
+                            user={user}
+                            userStatus={getUserStatus(user, team)}
+                          />
+                        </div>
+                        <div className="flex flex-row space-x-2 ml-auto">
+                          <div className="flex flex-row mr-auto ">
+                            <Button
+                              variant={"ghost"}
+                              className="mx-2 hover:bg-green-200"
+                              onClick={() => {
+                                onAddTeamUserSubmit(user);
+                                setTeamUsersList((prev) => {
+                                  if (!prev.some((u) => u.id === user.id)) {
+                                    return [...prev, user];
+                                  }
+                                  return prev;
+                                });
+                                setFilteredGlobalUsers((prev) =>
+                                  prev.filter((u) => u.id !== user.id)
+                                );
+                                toast.success(user.name + " added to Team");
+                              }}
+                            >
+                              <PlusIcon className=" opacity-0 group-hover:opacity-100 text-green-600"></PlusIcon>
+                            </Button>
+                          </div>
+                        </div>
                       </div>
                     </div>
                     {/* </div> */}

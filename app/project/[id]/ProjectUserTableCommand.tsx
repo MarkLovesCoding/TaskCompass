@@ -104,20 +104,23 @@ export function ProjectUserTableCommand({
   return (
     <>
       <Command>
-        <CommandInput className="h-9 " placeholder="Search members..." />
+        <CommandInput className="h-9 " placeholder="Search users..." />
         <CommandGroup>
           <Label className="m-4">
             <div className="font-semibold">Project Users</div>
           </Label>
           <div className="max-h-[40vh]  overflow-auto">
             <CommandItem className=" group" value={userData.name}>
-              <div className="flex items-center w-full h-14 gap-2">
-                <div className="flex w-full items-center justify-start gap-2">
+              <div className="flex w-full overflow-x-auto items-center justify-between gap-2">
+                <div className="flex flex-row space-x-2">
                   <UserInformationComponent
                     user={userData}
                     userStatus={getUserStatus(userData, project)}
                   />
+                </div>
+                <div className="flex flex-row space-x-2 ml-auto">
                   <div className="flex flex-row mr-auto ">
+                    {" "}
                     <Badge
                       className="shrink-0 mx-2 bg-primary"
                       variant="secondary"
@@ -147,70 +150,79 @@ export function ProjectUserTableCommand({
                 user.id !== userId && (
                   <CommandItem className=" group" value={user.name} key={index}>
                     <div className="flex items-center w-full h-14 gap-2">
-                      <div className="flex w-full items-center justify-start gap-2">
-                        <UserInformationComponent
-                          user={user}
-                          userStatus={getUserStatus(user, project)}
-                        />
-                        <div className="flex flex-row mr-auto ">
-                          {project.createdBy !== user.id ? (
-                            <ProjectUserPermissionsSelect
-                              user={user}
-                              project={project}
-                            />
-                          ) : (
-                            <Badge className="shrink-0" variant="secondary">
-                              Admin
-                            </Badge>
-                          )}
+                      <div className="flex w-full overflow-x-auto items-center justify-between gap-2">
+                        <div className="flex flex-row space-x-2">
+                          <UserInformationComponent
+                            user={user}
+                            userStatus={getUserStatus(user, project)}
+                          />
                         </div>
-                        <div className=" ml-auto">
-                          <div className=" opacity-0 group-hover:opacity-100">
-                            {user.id !== userId && (
-                              <Button
-                                className="mx-2 hover:bg-red-200"
-                                variant="ghost"
-                                onClick={() => {
-                                  if (user.id !== userId) {
-                                    setSelectedUser(user);
-                                    if (
-                                      userHasTasksInProject(user, project.id)
-                                    ) {
-                                      // if (user.tasks.length > 0) {
-                                      toast.error(
-                                        `User cannot be removed from Project.\n User still has  ${usersTasksInProjectCount(
-                                          user,
-                                          project.id
-                                        )}  task${
-                                          usersTasksInProjectCount(
+                        <div className="flex flex-row space-x-2 ml-auto">
+                          <div className="flex flex-row mr-auto ">
+                            {" "}
+                            {project.createdBy !== user.id ? (
+                              <ProjectUserPermissionsSelect
+                                user={user}
+                                project={project}
+                              />
+                            ) : (
+                              <Badge className="shrink-0" variant="secondary">
+                                Admin
+                              </Badge>
+                            )}
+                          </div>
+                          <div className=" ml-auto">
+                            <div className=" opacity-0 group-hover:opacity-100">
+                              {user.id !== userId && (
+                                <Button
+                                  className="mx-2 hover:bg-red-200"
+                                  variant="ghost"
+                                  onClick={() => {
+                                    if (user.id !== userId) {
+                                      setSelectedUser(user);
+                                      if (
+                                        userHasTasksInProject(user, project.id)
+                                      ) {
+                                        // if (user.tasks.length > 0) {
+                                        toast.error(
+                                          `User cannot be removed from Project.\n User still has  ${usersTasksInProjectCount(
                                             user,
                                             project.id
-                                          ) > 1
-                                            ? "s"
-                                            : ""
-                                        } assigned to them.`
-                                        // @ts-ignore
-                                      );
-                                      // handleUserHasTasks(user);
-                                      return;
-                                    }
-                                    onRemoveProjectUserSubmit(user);
-                                    setProjectUsersList((prev) =>
-                                      prev.filter((u) => u.id !== user.id)
-                                    );
-                                    setTeamUsersList((prev) => {
-                                      if (!prev.some((u) => u.id === user.id)) {
-                                        return [...prev, user];
+                                          )}  task${
+                                            usersTasksInProjectCount(
+                                              user,
+                                              project.id
+                                            ) > 1
+                                              ? "s"
+                                              : ""
+                                          } assigned to them.`
+                                          // @ts-ignore
+                                        );
+                                        // handleUserHasTasks(user);
+                                        return;
                                       }
-                                      return prev;
-                                    });
-                                    toast.success("User removed from Project");
-                                  }
-                                }}
-                              >
-                                <XIcon className="mr-auto text-red-400"></XIcon>
-                              </Button>
-                            )}
+                                      onRemoveProjectUserSubmit(user);
+                                      setProjectUsersList((prev) =>
+                                        prev.filter((u) => u.id !== user.id)
+                                      );
+                                      setTeamUsersList((prev) => {
+                                        if (
+                                          !prev.some((u) => u.id === user.id)
+                                        ) {
+                                          return [...prev, user];
+                                        }
+                                        return prev;
+                                      });
+                                      toast.success(
+                                        "User removed from Project"
+                                      );
+                                    }
+                                  }}
+                                >
+                                  <XIcon className="mr-auto text-red-400"></XIcon>
+                                </Button>
+                              )}
+                            </div>
                           </div>
                         </div>
                       </div>

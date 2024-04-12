@@ -42,6 +42,10 @@ module.exports = {
           foreground: "var(--taskcard-foreground)",
           background: "var(--taskcard-background)",
         },
+        usersearch: {
+          foreground: "var(--usersearch-foreground)",
+          background: "var(--usersearch-background)",
+        },
         taskcardsmall: {
           // foreground: "var(--taskcard-foreground)",
           background: "var(--taskcardsmall-background)",

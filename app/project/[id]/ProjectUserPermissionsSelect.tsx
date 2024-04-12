@@ -77,7 +77,7 @@ const ProjectUserPermissionsSelect = ({
       {showSubmitButton && (
         <Button
           type="submit"
-          className="ml-4 p-2 md:px-4 h-8 text-xs  bg-primary hover:bg-badgeGreen md:text-sm"
+          className="ml-4 p-2 md:px-4 h-8 text-xs self-center  bg-primary hover:bg-badgeGreen md:text-sm"
           onClick={(e) => {
             e.preventDefault();
 

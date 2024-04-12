@@ -42,7 +42,6 @@ const SignUpForm = () => {
   });
   const onSignUpSubmit = async (values: z.infer<typeof formSchema>) => {
     // e.preventDefault();
-    console.log("form submitted_________________", values);
     const res = await fetch("/api/Users", {
       method: "POST",
       body: JSON.stringify(values),
