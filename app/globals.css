@@ -124,17 +124,17 @@
   .bg-gradient-background-dark {
     background: hsl(196.8deg 63.5% 8.19%) 0%;
     background: -moz-linear-gradient(
-      290deg,
+      124deg,
       hsl(196.8deg 52.98% 11.71%) 0%,
       hsl(198deg 83.66% 21.95%) 100%
     );
     background: -webkit-linear-gradient(
-      290deg,
+      124deg,
       hsl(196.8deg 52.98% 11.71%) 0%,
       hsl(198deg 83.66% 21.95%) 100%
     );
     background: linear-gradient(
-      290deg,
+      124deg,
       hsl(196.8deg 52.98% 11.71%) 0%,
       hsl(198deg 83.66% 21.95%) 100%
     );

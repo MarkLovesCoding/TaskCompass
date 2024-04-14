@@ -64,7 +64,7 @@ const HomePageComponent = () => {
           </Link>
         </div>
         <div className="   self-center flex flex-col  text-center w-full justify-center items-center h-[80vh] mt-[20vh] min-h-[300px] ">
-          <h2 className="  bg-gradient-to-r  from-orange-500 via-pink-500 to-purple-500 text-transparent bg-clip-text max-w-[80%] sm:max-w-60%  text-5xl leading-tight tracking-lighter md:text-6xl lg:leading-[1.1] text-orange-500 font-bold p-8 pb-4">
+          <h2 className="  bg-gradient-to-r  from-orange-500 via-pink-500 to-purple-500 text-transparent bg-clip-text max-w-[700px] sm:max-w-60%  text-5xl leading-tight tracking-lighter md:text-6xl lg:leading-[1.1] text-orange-500 font-bold p-8 pb-4">
             {" Simplifying Project Management"}
           </h2>
 
