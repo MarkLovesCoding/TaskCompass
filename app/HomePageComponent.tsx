@@ -1,9 +1,16 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { useEffect } from "react";
+import {
+  useRef,
+  useState,
+  useEffect,
+  useLayoutEffect,
+  forwardRef,
+} from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import debounce from "lodash/debounce";
 
 import Link from "next/link";
 import Image from "next/image";
@@ -20,6 +27,8 @@ const HomePageComponent = () => {
   const { data: session } = useSession();
   const router = useRouter();
 
+  // Cleanup
+
   useEffect(() => {
     // Redirect to home if the user is already signed in
     if (session) {
@@ -27,12 +36,15 @@ const HomePageComponent = () => {
       router.push(`/dashboard/${session!.user.id}`);
     }
   }, [session, router]);
+
   if (session) {
-    // Render loading screen
+    // Render loading screen tbd
     return <div>Loading...</div>;
   } else
     return (
-      <div className="absolute bg-gradient-background-dark  top-0 left-0 flex flex-col  w-full min-h-[100vh] h-auto overflow-hidden">
+      <div
+        className={`absolute bg-gradient-background-dark transition-colors  top-0 left-0 flex flex-col  w-full min-h-[100vh] h-auto overflow-hidden`}
+      >
         {/* Left side (announcement or other content) */}
         <div className="absolute top-[5px] left-[20px] md:top-[20px] md:left-[40px] flex flex-row h-[100px] justify-center items-center">
           <Image
@@ -51,7 +63,7 @@ const HomePageComponent = () => {
             </Button>
           </Link>
         </div>
-        <div className="   self-center flex flex-col  text-center w-full justify-center items-center h-[70vh] mt-[20vh] min-h-[300px] ">
+        <div className="   self-center flex flex-col  text-center w-full justify-center items-center h-[80vh] mt-[20vh] min-h-[300px] ">
           <h2 className="  bg-gradient-to-r  from-orange-500 via-pink-500 to-purple-500 text-transparent bg-clip-text max-w-[80%] sm:max-w-60%  text-5xl leading-tight tracking-lighter md:text-6xl lg:leading-[1.1] text-orange-500 font-bold p-8 pb-4">
             {" Simplifying Project Management"}
           </h2>
@@ -60,84 +72,85 @@ const HomePageComponent = () => {
             TaskCompass is here to help you navigate your next project!
           </h3>
         </div>
-
-        <FeatureSection
-          title={"Visualize, Categorize, Prioritize"}
-          description={
-            "Fluid Drag and Drop KanBan-style. View by Status, Priority, or Categories."
-          }
-          side="right"
-        >
-          <Image
-            className=" flex top-[75px] -left-16 sm:-left-16 sm:top-[40%] w-[300px] sm:w-[320px] lg:w-[340px]"
-            src={PriorityView}
-            alt="dashboard-image-1"
-          />
-        </FeatureSection>
-
-        <FeatureSection
-          title={"Create, Edit, Complete"}
-          description={
-            "Create Tasks with Due Dates, Descriptions, Assignees, and more."
-          }
-          side="left"
-        >
-          <Image
-            className=" flex top-10 -right-16 md:-right-16 md:top-[50%] w-[200px] sm:w-[250px] lg:w-[280px]"
-            src={MoveTask}
-            alt="dashboard-image-1"
-          />
-          <Image
-            className=" flex top-10 -left-16 md:-left-16 md:top-[25%] w-[200px] sm:w-[250px] lg:w-[280px]"
-            src={SWCard}
-            alt="dashboard-image-1"
-          />
-        </FeatureSection>
-
-        <FeatureSection
-          title={"Manage, Archive, Retrieve"}
-          description={
-            " Manage your Dashboard, Team and Projects, with custom themes, tracking, assigning and archival/retrieval."
-          }
-          side="right"
-        >
-          <Image
-            className=" flex top-10 -right-16 md:-right-16 md:top-[50%] w-[220px] sm:w-[250px] lg:w-[280px]"
-            src={ArchiveTaskCard}
-            alt="dashboard-image-1"
-          />
-          <Image
-            className=" flex top-10 -left-16 md:-left-16 md:top-[25%] w-[220px] sm:w-[250px] lg:w-[280px]"
-            src={DashboardTeams}
-            alt="dashboard-image-1"
-          />
-        </FeatureSection>
-        <FeatureSection
-          title={"Build, Administrate, Assign"}
-          description={
-            "Form effective teams with appropriate roles and permissions. Customize Project Users from Team List. Assign Tasks Project Members."
-          }
-          side="left"
-        >
-          <div className="flex flex-row justify-between items-end first-line:pb-8">
+        <div className="mb-10">
+          <FeatureSection
+            title={"Visualize, Categorize, Prioritize"}
+            description={
+              "Fluid Drag and Drop KanBan-style. View by Status, Priority, or Categories."
+            }
+            side="right"
+          >
             <Image
-              className=" flex top-10 -left-16 md:-left-16 md:top-[25%] pb-2 w-[160px] sm:w-[170px] lg:w-[190px]"
-              src={GroguCard}
+              className=" flex top-[75px] -left-16 sm:-left-16 sm:top-[40%] w-[300px] sm:w-[320px] lg:w-[340px]"
+              src={PriorityView}
               alt="dashboard-image-1"
-              // width={400}
-              // height={400}
+            />
+          </FeatureSection>
+
+          <FeatureSection
+            title={"Create, Edit, Complete"}
+            description={
+              "Create Tasks with Due Dates, Descriptions, Assignees, and more."
+            }
+            side="left"
+          >
+            <Image
+              className=" flex top-10 -right-16 md:-right-16 md:top-[50%] w-[200px] sm:w-[250px] lg:w-[280px]"
+              src={MoveTask}
+              alt="dashboard-image-1"
             />
             <Image
-              className=" flex top-10 -right-16 md:-right-16 md:top-[50%] w-[200px] sm:w-[300px] lg:w-[320px]"
-              src={FullUsers}
+              className=" flex top-10 -left-16 md:-left-16 md:top-[25%] w-[200px] sm:w-[250px] lg:w-[280px]"
+              src={SWCard}
               alt="dashboard-image-1"
-              // width={400}
-              // height={400}
             />
-          </div>
-        </FeatureSection>
+          </FeatureSection>
 
-        <div className="  bg-nav-background border-t-accent border-t self-center flex flex-row  text-center w-full justify-center items-center h-[30vh] min-h-[150px] ">
+          <FeatureSection
+            title={"Manage, Archive, Retrieve"}
+            description={
+              " Manage your Dashboard, Team and Projects, with custom themes, tracking, assigning and archival/retrieval."
+            }
+            side="right"
+          >
+            <Image
+              className=" flex top-10 -right-16 md:-right-16 md:top-[50%] w-[220px] sm:w-[250px] lg:w-[280px]"
+              src={ArchiveTaskCard}
+              alt="dashboard-image-1"
+            />
+            <Image
+              className=" flex top-10 -left-16 md:-left-16 md:top-[25%] w-[220px] sm:w-[250px] lg:w-[280px]"
+              src={DashboardTeams}
+              alt="dashboard-image-1"
+            />
+          </FeatureSection>
+          <FeatureSection
+            title={"Build, Administrate, Assign"}
+            description={
+              "Form effective teams with appropriate roles and permissions. Customize Project Users from Team List. Assign Tasks Project Members."
+            }
+            side="left"
+          >
+            <div className="flex flex-row justify-between items-end first-line:pb-8">
+              <Image
+                className=" flex top-10 -left-16 md:-left-16 md:top-[25%] pb-2 w-[160px] sm:w-[170px] lg:w-[190px]"
+                src={GroguCard}
+                alt="dashboard-image-1"
+                // width={400}
+                // height={400}
+              />
+              <Image
+                className=" flex top-10 -right-16 md:-right-16 md:top-[50%] w-[200px] sm:w-[300px] lg:w-[320px]"
+                src={FullUsers}
+                alt="dashboard-image-1"
+                // width={400}
+                // height={400}
+              />
+            </div>
+          </FeatureSection>
+        </div>
+
+        <div className="  bg-nav-background border-t-accent border-t self-center flex flex-row  text-center w-full justify-center items-center h-[50vh] min-h-[150px] ">
           <div className="flex min-w-[50%] flex-col">
             <h2 className="text-2xl">Task Compass</h2>
             <h2 className="text-lg">
@@ -157,39 +170,46 @@ const HomePageComponent = () => {
       </div>
     );
 };
-
-const FeatureSection = (props: {
+interface FeatureSectionProps {
   title: string;
   description: string;
   side: "right" | "left";
   children: React.ReactNode;
-}) => {
-  return (
+}
+const FeatureSection = forwardRef<HTMLDivElement, FeatureSectionProps>(
+  ({ title, description, side, children }, ref) => (
     <div
+      ref={ref}
       className={`  ${
-        props.side == "left" ? "sm:flex-row " : "sm:flex-row-reverse "
-      } self-center flex flex-col border-b border-b-accent overflow-clip  text-center w-full justify-end items-end h-[80vh] sm:h-[70vh] lg:h-[65vh]  min-h-[300px] `}
+        side === "left" ? "sm:flex-row " : "sm:flex-row-reverse "
+      } self-center flex flex-col border-t border-t-accent overflow-clip  text-center w-full justify-end items-end h-[80vh] sm:h-[70vh] lg:h-[65vh]  min-h-[300px] `}
     >
       <div className="flex-col self-center items-center flex w-full sm:w-[50%] lg:w-[65%] m-12 md:mr-0  md:m-12">
         <div className="  lg:w-[40vw] mt-12 sm:mt-0 sm:[70vw] w-full px-[10%] sm:px-[0%]">
-          <h2 className="text-2xl"> {props.title} </h2>
-
+          <h2 className="text-2xl"> {title} </h2>
           <h3 className="text-base text-muted-foreground sm:text-xl p-8 pb-0 pt-4">
-            {props.description}
+            {description}
           </h3>
         </div>
       </div>
       <div className="flex relative h-[250px]  justify-end flex-col  w-full sm:w-[50%]  items-center md:p-0">
         <div className="flex flex-row justify-evenly items-end">
-          <div className="flex flex-row justify-between items-end first-line:pb-8">
-            <div className="flex flex-row justify-evenly items-end">
-              {props.children}
+          <div
+            className={`flex flex-row justify-evenly items-end first-line:pb-8`}
+          >
+            <div
+              className={`flex flex-row ${
+                side == "left" ? "justify-evenly" : "justify-end"
+              } items-end`}
+            >
+              {children}
             </div>
           </div>
         </div>
       </div>
     </div>
-  );
-};
+  )
+);
 
+FeatureSection.displayName = "FeatureSection";
 export default HomePageComponent;
