@@ -109,7 +109,7 @@ const HomePageComponent = () => {
           <FeatureSection
             title={"Manage, Archive, Retrieve"}
             description={
-              " Manage your Dashboard, Team and Projects, with custom themes, tracking, assigning and archival/retrieval."
+              "Accessible Personal, Team, and Project Dashboards. Easy Team and Project cleanup with archiving/retrival."
             }
             side="right"
           >
@@ -127,7 +127,7 @@ const HomePageComponent = () => {
           <FeatureSection
             title={"Build, Administrate, Assign"}
             description={
-              "Form effective teams with appropriate roles and permissions. Customize Project Users from Team List. Assign Tasks Project Members."
+              "Form effective teams with appropriate roles and permissions. Manage Project Users. Assign Tasks."
             }
             side="left"
           >
