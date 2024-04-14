@@ -8,21 +8,16 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
 import LogoPng from "../public/compass.png";
-import TaskColumns from "../public/task-columns.png";
-import NewProject from "../public/new-project.png";
-import TaskCardAssign from "../public/task-card-assign.png";
-import ActivateTask from "../public/activate-task.png";
-import ArchiveTask from "../public/archive-task.png";
+
+import GroguCard from "../public/grogu-card.png";
+import ArchiveTaskCard from "../public/archive-task-card.png";
+import DashboardTeams from "../public/dashboard-teams.png";
 import ArchiveProject from "../public/archive-project.png";
 import FullUsers from "../public/full-users.png";
 import DarkMode from "../public/dark-mode.png";
 import MoveTask from "../public/move-task.png";
 import PriorityView from "../public/priority-view.png";
 import SWCard from "../public/sw-card.png";
-import ArchiveProjectCard from "../public/archive-project-card.png";
-import Dashboard from "../public/dashboard.png";
-import { DropdownMenu } from "@/components/ui/dropdown-menu";
-import Task from "@/db/(models)/Task";
 const HomePageComponent = () => {
   const { data: session } = useSession();
   const router = useRouter();
@@ -58,7 +53,7 @@ const HomePageComponent = () => {
             </Button>
           </Link>
         </div>
-        <div className="   self-center flex flex-col  text-center w-full justify-center items-center h-[90vh] min-h-[300px] ">
+        <div className="   self-center flex flex-col  text-center w-full justify-center items-center h-[60vh] mt-[20vh] min-h-[300px] ">
           <h2 className="  bg-gradient-to-r  from-orange-500 via-pink-500 to-purple-500 text-transparent bg-clip-text max-w-[80%] sm:max-w-60%  text-5xl leading-tight tracking-lighter md:text-6xl lg:leading-[1.1] text-orange-500 font-bold p-8 pb-4">
             {" Simplifying Project Management"}
           </h2>
@@ -68,9 +63,9 @@ const HomePageComponent = () => {
           </h3>
         </div>
 
-        <div className="   self-center flex flex-col border-b border-b-accent md:flex-row-reverse text-center w-full justify-center items-center h-[80vh] md:h-[65vh] min-h-[300px] ">
-          <div className="flex-col flex w-full md:w-[50%] lg:w-[65%] m-6 mb-0 md:ml-0  md:m-12">
-            <div className="lg:w-[40vw] md:[70vw] w-full px-[10%] md:px-[0%]">
+        <div className="   self-center flex flex-col border-b border-b-accent overflow-clip sm:flex-row-reverse text-center w-full justify-end items-end h-[80vh] sm:h-[70vh] lg:h-[60vh]  min-h-[300px] ">
+          <div className="flex-col self-center items-center flex w-full sm:w-[50%] lg:w-[65%] m-6 mb-0 md:ml-0  md:m-12">
+            <div className="  lg:w-[40vw] mt-12 sm:mt-0 sm:[70vw] w-full px-[10%] sm:px-[0%]">
               <h2 className="text-2xl"> Visualize, Categorize, Prioritize</h2>
 
               <h3 className="text-base text-muted-foreground sm:text-xl p-8 pb-0 pt-4">
@@ -79,49 +74,19 @@ const HomePageComponent = () => {
               </h3>
             </div>
           </div>
-          <div className="flex relative h-full  flex-col border-b border-b-accent overflow-clip w-full md:w-[50%] justify-center items-center p-8 md:p-0 md:justify-start">
-            <div>
-              {/* <Image
-                className=" absolute top-10 -left-16 md:-left-16 md:top-[25%] w-[400px] md:w-[400px] lg:w-[400px]"
-                src={TaskColumns}
-                // src={TaskColumns}
-                alt="Task Compass Logo"
-                // sizes="(max-width: 768px) 60vw, (max-width: 1024px) 30vw, 10vw"
-                // width={400}
-                // height={400}
-              />{" "} */}
-              <Image
-                className=" absolute top-10 -left-16 md:-left-16 md:top-[25%] w-[200px] md:w-[250px] lg:w-[370px]"
-                src={PriorityView}
-                alt="dashboard-image-1"
-                // width={400}
-                // height={400}
-              />
-            </div>
+          <div className="flex relative h-[250px]  justify-end flex-col  w-full sm:w-[50%]  items-center md:p-0 ">
+            <Image
+              className=" flex top-[75px] -left-16 sm:-left-16 sm:top-[40%] w-[300px] sm:w-[320px] lg:w-[340px]"
+              src={PriorityView}
+              alt="dashboard-image-1"
+              // width={400}
+              // height={400}
+            />
           </div>
         </div>
-
-        <div className="   self-center flex flex-col-reverse overflow-clip border-b border-b-accent md:flex-row-reverse text-center w-full justify-center items-center h-[80vh] md:h-[65vh] min-h-[300px] ">
-          <div className="flex relative h-full  flex-col w-full md:w-[50%] justify-center items-center p-8 md:p-0 md:justify-start">
-            <div>
-              <Image
-                className=" absolute top-10 -right-16 md:-right-16 md:top-[45%] w-[200px] md:w-[250px] lg:w-[370px]"
-                src={MoveTask}
-                alt="dashboard-image-1"
-                // width={400}
-                // height={400}
-              />
-              <Image
-                className=" absolute top-10 -left-16 md:-left-16 md:top-[25%] w-[200px] md:w-[250px] lg:w-[370px]"
-                src={SWCard}
-                alt="dashboard-image-1"
-                // width={400}
-                // height={400}
-              />
-            </div>
-          </div>
-          <div className="flex-col flex w-full md:w-[50%] lg:w-[65%] m-6 mb-0 md:ml-0  md:m-12">
-            <div className="lg:w-[40vw] md:[70vw] w-full px-[10%] md:px-[0%]">
+        <div className="   self-center flex flex-col border-b border-b-accent overflow-clip sm:flex-row text-center w-full justify-end items-end h-[80vh] sm:h-[70vh] lg:h-[60vh] min-h-[300px] ">
+          <div className="flex-col self-center items-center flex w-full sm:w-[50%] lg:w-[65%] m-6 mb-0 md:mr-0  md:m-12">
+            <div className="  lg:w-[40vw] mt-12 sm:mt-0 sm:[70vw] w-full px-[10%] sm:px-[0%]">
               <h2 className="text-2xl"> Create, Edit, Complete </h2>
 
               <h3 className="text-base text-muted-foreground sm:text-xl p-8 pb-0 pt-4">
@@ -129,47 +94,102 @@ const HomePageComponent = () => {
               </h3>
             </div>
           </div>
-        </div>
-
-        <div className="   self-center flex flex-col border-b border-b-accent overflow-clip md:flex-row-reverse text-center w-full justify-center items-center h-[80vh] md:h-[65vh] min-h-[300px] ">
-          <div className="max-w-[1024px]">
-            <div className="lg:w-[40vw] md:[80vw] w-full ">
-              <h2 className="text-2xl">Manage, Archive, Retrieve </h2>
-
-              <h3 className="text-base text-muted-foreground sm:text-xl p-8 pt-4">
-                Manage your Team and Project views, with Project and Task
-                tracking and easy archival/retrieval.
-              </h3>
-            </div>
-            <div className="flex relative h-full  flex-col w-full md:w-[50%] justify-center items-center p-8 md:p-0 md:justify-start">
+          <div className="flex relative h-[250px]  justify-end flex-col  w-full sm:w-[45%]  items-center md:p-0">
+            <div className="flex flex-row justify-evenly items-end">
               <Image
-                className=" absolute top-10 -left-16 md:-left-16 md:top-[25%] w-[200px] md:w-[250px] lg:w-[370px]"
-                src={ArchiveProject}
-                alt="Task Compass Logo"
+                className=" flex top-10 -right-16 md:-right-16 md:top-[50%] w-[200px] sm:w-[250px] lg:w-[280px]"
+                src={MoveTask}
+                alt="dashboard-image-1"
+                // width={400}
+                // height={400}
+              />
+              <Image
+                className=" flex top-10 -left-16 md:-left-16 md:top-[25%] w-[200px] sm:w-[250px] lg:w-[280px]"
+                src={SWCard}
+                alt="dashboard-image-1"
                 // width={400}
                 // height={400}
               />
             </div>
           </div>
         </div>
-        <div className="   self-center flex flex-col-reverse border-b border-b-accent overflow-clip md:flex-row-reverse text-center w-full justify-center items-center h-[80vh] md:h-[65vh] min-h-[300px] ">
-          <div className="flex relative h-full  flex-col w-full md:w-[50%] justify-center items-center p-8 md:p-0 md:justify-start">
-            <Image
-              className=" absolute top-10 -right-16 md:-right-16 md:top-[45%] w-[200px] md:w-[250px] lg:w-[370px]"
-              src={FullUsers}
+
+        <div className="   self-center flex flex-col border-b border-b-accent overflow-clip sm:flex-row-reverse text-center w-full justify-end items-end h-[80vh] sm:h-[70vh] lg:h-[60vh] min-h-[300px] ">
+          <div className="flex-col self-center items-center flex w-full sm:w-[50%] lg:w-[65%] m-6 mb-0 md:mr-0  md:m-12">
+            <div className="  lg:w-[40vw]  mt-12 sm:mt-0 sm:[70vw] w-full px-[10%] sm:px-[0%]">
+              <h2 className="text-2xl"> Manage, Archive, Retrieve </h2>
+
+              <h3 className="text-base text-muted-foreground sm:text-xl p-8 pb-0 pt-4">
+                Manage your Dashboard, Team and Projects, with custom themes,
+                tracking, assigning and archival/retrieval.
+              </h3>
+            </div>
+          </div>
+          <div className="flex relative h-[250px]   justify-end flex-col     w-full sm:w-[50%]  items-center md:p-0 ">
+            {/* <Image
+              className=" flex top-[75px] -left-16 sm:-left-16 sm:top-[40%] w-[300px] sm:w-[320px] lg:w-[340px]"
+              src={ArchiveTaskCard}
               alt="dashboard-image-1"
               // width={400}
               // height={400}
-            />
+            /> */}
+            <div className="flex flex-row sm:justify-end items-end">
+              <Image
+                className=" flex top-10 -right-16 md:-right-16 md:top-[50%] w-[220px] sm:w-[250px] lg:w-[280px]"
+                src={ArchiveTaskCard}
+                alt="dashboard-image-1"
+                // width={400}
+                // height={400}
+              />
+              <Image
+                className=" flex top-10 -left-16 md:-left-16 md:top-[25%] w-[220px] sm:w-[250px] lg:w-[280px]"
+                src={DashboardTeams}
+                alt="dashboard-image-1"
+                // width={400}
+                // height={400}
+              />
+              {/* <Image
+                className=" flex top-10 -left-16 md:-left-16 md:top-[25%] w-[220px] md:w-[250px] lg:w-[370px]"
+                src={DarkMode}
+                alt="dashboard-image-1"
+                // width={400}
+                // height={400}
+              /> */}
+            </div>
           </div>
-          <div className="flex-col flex w-full md:w-[50%] m-8 md:mr-0  md:m-12">
-            <h2 className="text-2xl">Build, Administrate, Assign </h2>
+        </div>
 
-            <h3 className="text-base text-muted-foreground sm:text-xl p-8 pt-4">
-              Form effective teams with appropriate roles and permissions.
-              Customize Project Users from Team List. Assign Tasks Project
-              Members.
-            </h3>
+        <div className="   self-center flex flex-col border-b border-b-accent overflow-clip sm:flex-row text-center w-full justify-end items-end h-[80vh] sm:h-[70vh] lg:h-[60vh]  min-h-[300px] ">
+          <div className="flex-col self-center items-center flex w-full sm:w-[50%] lg:w-[65%] m-6 mb-0 md:mr-0  md:m-12">
+            <div className="  lg:w-[40vw] mt-12 sm:mt-0 sm:[70vw] w-full px-[10%] sm:px-[0%]">
+              <h2 className="text-2xl"> Build, Administrate, Assign </h2>
+
+              <h3 className="text-base text-muted-foreground sm:text-xl p-8 pb-0 pt-4">
+                Form effective teams with appropriate roles and permissions.
+                Customize Project Users from Team List. Assign Tasks Project
+                Members.
+              </h3>
+            </div>
+          </div>
+          <div className="flex relative h-[250px]  justify-end flex-col  w-full sm:w-[50%]  items-center md:p-0">
+            <div className="flex flex-row justify-evenly items-end">
+              <div className="flex flex-row justify-between items-end first-line:pb-8">
+                <Image
+                  className=" flex top-10 -left-16 md:-left-16 md:top-[25%] pb-2 w-[160px] sm:w-[170px] lg:w-[190px]"
+                  src={GroguCard}
+                  alt="dashboard-image-1"
+                  // width={400}
+                  // height={400}
+                />
+                <Image
+                  className=" flex top-10 -right-16 md:-right-16 md:top-[50%] w-[200px] sm:w-[300px] lg:w-[320px]"
+                  src={FullUsers}
+                  alt="dashboard-image-1"
+                  // width={400}
+                  // height={400}
+                />
+              </div>
+            </div>
           </div>
         </div>
 
@@ -185,13 +205,19 @@ const HomePageComponent = () => {
         <div className="  bg-nav-background border-t-accent border-t self-center flex flex-row  text-center w-full justify-center items-center h-[30vh] min-h-[150px] ">
           <div className="flex min-w-[50%] flex-col">
             <h2 className="text-2xl">Task Compass</h2>
-            <h2 className="text-lg">© markhalstead.dev 2024</h2>
+            <h2 className="text-lg">
+              ©
+              <Link href={`https://www.markhalstead.dev`}>
+                markhalstead.dev
+              </Link>{" "}
+              2024
+            </h2>
           </div>
-          <div className="flex min-w-[50%]">
+          {/* <div className="flex min-w-[50%]">
             <h3 className="text-base text-muted-foreground sm:text-xl p-8 pt-4">
               Get in Touch.
             </h3>
-          </div>
+          </div> */}
         </div>
         {/* Right side (sign-in form) */}
       </div>
