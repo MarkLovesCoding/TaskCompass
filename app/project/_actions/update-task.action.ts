@@ -1,5 +1,7 @@
 "use server";
 import { updateTask } from "@/data-access/tasks/update-task.persistence";
+import { updateUser } from "@/data-access/users/update-user.persistence";
+import getUserObject from "@/data-access/users/get-user.persistence";
 import getTask from "@/data-access/tasks/get-task.persistence";
 import { updateTaskUseCase } from "@/use-cases/task/update-task.use-case";
 import { getUserFromSession } from "@/lib/sessionAuth";
@@ -33,6 +35,8 @@ export async function updateTaskAction(
         updateTask,
         getTask,
         getUser,
+        getUserObject,
+        updateUser,
       },
       {
         id: formData.id,
