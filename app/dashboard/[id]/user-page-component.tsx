@@ -13,7 +13,7 @@ import {
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 import { PlusIcon } from "lucide-react";
-
+import ArchivedProjectCardWithUnarchiveAction from "./UnarchiveProjectCard";
 import type { UserDto } from "@/use-cases/user/types";
 import type { ProjectDto } from "@/use-cases/project/types";
 import type { TeamDto } from "@/use-cases/team/types";
@@ -54,6 +54,13 @@ export async function UserPageComponent({
   const userTasksInProgress = userTasks.filter(
     (task) => task.status !== "completed"
   );
+  const getProjectsTeamName = (projectId: string) => {
+    const team = [...usersTeamsAsAdmin, ...usersTeamsAsMember].find((team) =>
+      team.projects.includes(projectId)
+    );
+    return team ? team.name : "";
+  };
+
   return (
     <div className="absolute flex flex-col top-[2em] md:top-[3em] w-full h-[calc(100vh-2em)] md:h-[calc(100vh-3em)]">
       <main className="flex  items-center bg-gradient-background-light dark:bg-gradient-background-dark overflow-x-hidden flex-col  h-[calc(100vh-2em)] md:h-[calc(100vh-3em)]  md:gap-8 ">
@@ -243,66 +250,93 @@ export async function UserPageComponent({
 
                 <div className="flex max-w-[90vw] justify-center md:justify-start flex-row flex-wrap ">
                   {usersProjectsAsAdmin &&
-                    usersProjectsAsAdmin.map((project, project_idx) => (
-                      <Card
-                        key={project_idx}
-                        className="hover:border-orange-300  border-2  mb-4 max-w-full  mr-4 md:mb-4 flex items-center w-72 h-28 bg-card shadow-lg hover:shadow-sm"
-                      >
-                        <Link
-                          className="w-full h-full p-2"
-                          href={`/project/${project.id}`}
+                    usersProjectsAsAdmin.map((project, project_idx) =>
+                      project.archived ? (
+                        <ArchivedProjectCardWithUnarchiveAction
+                          key={project_idx}
+                          project={project}
+                          team={getProjectsTeamName(project.id)}
+                          permission={"admin"}
+                        />
+                      ) : (
+                        <Card
+                          key={project_idx}
+                          className="hover:border-orange-300  border-2  mb-4 max-w-full  mr-4 md:mb-4 flex items-center w-72 h-28 bg-card shadow-lg hover:shadow-sm"
                         >
-                          <CardHeader className="p-0 pl-2">
-                            <div className=" flex justify-end">
-                              <Badge className=" min-w-fit text-xs px-2 py-[0.2em] m-1 self-end bg-badgeRed ">{`Admin`}</Badge>
-                            </div>
-
-                            <CardTitle className="text-sm md:text-base">
-                              {project.name}
-                            </CardTitle>
-                            <CardDescription className="text-xs text-ellipsis">
-                              <Badge className="  min-w-fit text-xs px-2 py-[0.2em] m-1 self-end bg-badgeYellow ">
-                                {`Users:  ${project.users.length}`}
-                              </Badge>
-                              <Badge className="  min-w-fit text-xs px-2 py-[0.2em] m-1 self-end bg-badgePurple ">
-                                {`Tasks:  ${project.tasks.length}`}
-                              </Badge>
-                            </CardDescription>
-                          </CardHeader>
-                        </Link>
-                      </Card>
-                    ))}
+                          <Link
+                            className="w-full h-full p-2"
+                            href={`/project/${project.id}`}
+                          >
+                            <CardHeader className="p-0 pl-2">
+                              <div className="flex flex-row w-full justify-between">
+                                <p className="text-xs text-accent-foreground">
+                                  Team: {getProjectsTeamName(project.id)}
+                                </p>
+                                <div className=" flex justify-end">
+                                  <Badge className=" min-w-fit text-xs px-2 py-[0.2em] m-1 self-end bg-badgeRed ">{`Admin`}</Badge>
+                                </div>
+                              </div>
+                              <CardTitle className="text-sm md:text-base">
+                                {project.name}
+                              </CardTitle>
+                              <CardDescription className="text-xs text-ellipsis">
+                                <Badge className="  min-w-fit text-xs px-2 py-[0.2em] m-1 self-end bg-badgeYellow ">
+                                  {`Users:  ${project.users.length}`}
+                                </Badge>
+                                <Badge className="  min-w-fit text-xs px-2 py-[0.2em] m-1 self-end bg-badgePurple ">
+                                  {`Tasks:  ${project.tasks.length}`}
+                                </Badge>
+                              </CardDescription>
+                            </CardHeader>
+                          </Link>
+                        </Card>
+                      )
+                    )}
 
                   {usersProjectsAsMember &&
-                    usersProjectsAsMember.map((project, project_idx) => (
-                      <Card
-                        key={project_idx}
-                        className=" hover:border-orange-300  border-2 mb-4 max-w-full mr-4 flex items-center w-72 h-28 bg-card  shadow-lg hover:shadow-sm"
-                      >
-                        <Link
-                          className="w-full h-full p-2"
-                          href={`/project/${project.id}`}
+                    usersProjectsAsMember.map((project, project_idx) =>
+                      project.archived ? (
+                        <ArchivedProjectCardWithUnarchiveAction
+                          key={project_idx}
+                          project={project}
+                          team={getProjectsTeamName(project.id)}
+                          permission={"member"}
+                        />
+                      ) : (
+                        <Card
+                          key={project_idx}
+                          className=" hover:border-orange-300  border-2 mb-4 max-w-full mr-4 flex items-center w-72 h-28 bg-card  shadow-lg hover:shadow-sm"
                         >
-                          <CardHeader className="p-0 pl-2">
-                            <div className=" flex justify-end">
-                              <Badge className=" min-w-fit text-xs px-2 py-[0.2em] m-1 self-end bg-badgeBlue ">{`Member`}</Badge>
-                            </div>
-                            <CardTitle className="text-sm  md:text-base">
-                              {project.name}
-                            </CardTitle>
-                            <CardDescription className="text-xs text-ellipsis">
-                              {/* <p className="truncate">{project.description}</p> */}
-                              <Badge className="  min-w-fit text-xs px-2 py-[0.2em] m-1 self-end bg-badgeYellow ">
-                                {`Users:  ${project.users.length}`}
-                              </Badge>
-                              <Badge className="  min-w-fit text-xs px-2 py-[0.2em] m-1 self-end bg-badgePurple ">
-                                {`Tasks:  ${project.tasks.length}`}
-                              </Badge>
-                            </CardDescription>
-                          </CardHeader>
-                        </Link>
-                      </Card>
-                    ))}
+                          <Link
+                            className="w-full h-full p-2"
+                            href={`/project/${project.id}`}
+                          >
+                            <CardHeader className="p-0 pl-2">
+                              <div className="flex flex-row w-full justify-between">
+                                <p className="text-xs text-accent-foreground">
+                                  Team: {getProjectsTeamName(project.id)}
+                                </p>
+                                <div className=" flex justify-end">
+                                  <Badge className=" min-w-fit text-xs px-2 py-[0.2em] m-1 self-end bg-badgeBlue ">{`Member`}</Badge>
+                                </div>
+                              </div>
+                              <CardTitle className="text-sm  md:text-base">
+                                {project.name}
+                              </CardTitle>
+                              <CardDescription className="text-xs text-ellipsis">
+                                {/* <p className="truncate">{project.description}</p> */}
+                                <Badge className="  min-w-fit text-xs px-2 py-[0.2em] m-1 self-end bg-badgeYellow ">
+                                  {`Users:  ${project.users.length}`}
+                                </Badge>
+                                <Badge className="  min-w-fit text-xs px-2 py-[0.2em] m-1 self-end bg-badgePurple ">
+                                  {`Tasks:  ${project.tasks.length}`}
+                                </Badge>
+                              </CardDescription>
+                            </CardHeader>
+                          </Link>
+                        </Card>
+                      )
+                    )}
                 </div>
               </div>
             </TabsContent>

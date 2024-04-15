@@ -121,6 +121,7 @@
   .description-input.editing {
     @apply border-2 border-black rounded-lg  bg-card text-card-foreground;
   }
+
   .bg-gradient-background-dark {
     background: hsl(196.8deg 63.5% 8.19%) 0%;
     background: -moz-linear-gradient(
@@ -135,21 +136,19 @@
     );
     background: linear-gradient(204deg, rgb(8, 24, 30) 0%, rgb(6, 41, 56) 100%);
   }
+
   .bg-gradient-background-light {
     background: hsla(0, 0%, 97%, 1);
-
     background: linear-gradient(
       206deg,
       hsla(0, 0%, 97%, 1) 0%,
       hsla(222, 48%, 95%, 1) 100%
     );
-
     background: -moz-linear-gradient(
       206deg,
       hsla(0, 0%, 97%, 1) 0%,
       hsla(222, 48%, 95%, 1) 100%
     );
-
     background: -webkit-linear-gradient(
       206deg,
       hsla(0, 0%, 97%, 1) 0%,
