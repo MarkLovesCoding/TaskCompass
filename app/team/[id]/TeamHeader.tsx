@@ -24,7 +24,13 @@ const formSchema = z.object({
   name: z.string().min(4).max(25),
 });
 
-export function TeamHeader({ team, admin }: { team: TeamDto; admin: boolean }) {
+export function TeamHeader({
+  team,
+  isCurrentUserAdmin,
+}: {
+  team: TeamDto;
+  isCurrentUserAdmin: boolean;
+}) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     // mode: "onChange",
@@ -91,10 +97,10 @@ export function TeamHeader({ team, admin }: { team: TeamDto; admin: boolean }) {
                   <Label className="text-base font-bold text-left">Team</Label>
                   <Badge
                     className={`min-w-fit text-xs px-2 py-[0.2em] m-1 ${
-                      admin ? "bg-badgeRed" : "bg-badgeBlue"
+                      isCurrentUserAdmin ? "bg-badgeRed" : "bg-badgeBlue"
                     } `}
                   >
-                    {admin ? `Admin` : `Member`}
+                    {isCurrentUserAdmin ? `Admin` : `Member`}
                   </Badge>
                 </div>
               </div>

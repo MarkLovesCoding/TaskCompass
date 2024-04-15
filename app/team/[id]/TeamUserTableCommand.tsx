@@ -23,6 +23,9 @@ import toast from "react-hot-toast";
 import TeamMemberCardPermissionsSelect from "./TeamUserCardPermissionsSelect";
 import { TeamDto } from "@/use-cases/team/types";
 
+const capitalizeFirstLetter = (string: string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+};
 export function TeamUserTableCommand({
   userId,
   userData,
@@ -30,6 +33,7 @@ export function TeamUserTableCommand({
   teamUsers,
   globalUsers,
   projects,
+  isCurrentUserAdmin,
 }: {
   userId: string;
   userData: UserDto;
@@ -37,6 +41,7 @@ export function TeamUserTableCommand({
   teamUsers: UserDto[];
   globalUsers: UserDto[];
   projects: ProjectDto[];
+  isCurrentUserAdmin: boolean;
 }) {
   //default useEffect to update teamUsersLists and Permissions on render., dependant on users data
   //check on mongodb if permissions updates right away on save.
@@ -99,7 +104,17 @@ export function TeamUserTableCommand({
       return "member";
     }
   };
-
+  const getUserStatusBadgeColor = (user: UserDto, team: TeamDto) => {
+    if (user.id === userId) {
+      return "bg-primary";
+    } else if (team.createdBy === user.id) {
+      return "bg-badgePurple";
+    } else if (user.teamsAsAdmin.includes(team.id)) {
+      return "bg-badgeRed";
+    } else {
+      return "bg-badgeBlue";
+    }
+  };
   return (
     <Command className="p-2 py-4 ">
       <CommandInput className="h-9" placeholder="Search users..." />
@@ -109,27 +124,33 @@ export function TeamUserTableCommand({
         </Label>
         <CommandItem className=" group" value={userData.name}>
           <div className="flex items-center w-full h-14 gap-2">
-            <div className="flex w-fulloverflow-x-auto items-center justify-start gap-2">
+            <div className="flex w-full overflow-x-auto items-center justify-start gap-2">
               <UserInformationComponent
                 user={userData}
                 userStatus={getUserStatus(userData, team)}
               />
 
-              <div className="flex flex-row mr-auto ">
+              <div className="flex flex-row ml-auto ">
                 <Badge className="shrink-0 mx-2 bg-primary" variant="secondary">
                   You
                 </Badge>
                 <Badge
                   className={`shrink-0 mx-2 ${
-                    userData.teamsAsAdmin.includes(team.id)
-                      ? "bg-badgeRed"
-                      : "bg-badgeGreen"
+                    // userData.teamsAsAdmin.includes(team.id)
+                    isCurrentUserAdmin ? "bg-badgeRed" : "bg-badgeBlue"
                   }`}
                   variant="secondary"
                 >
                   {/* {userPermission}
                    */}
-                  {userData.teamsAsAdmin.includes(team.id) ? "Admin" : "Member"}
+                  {
+                    // userData.teamsAsAdmin.includes(team.id)
+                    team.createdBy == userData.id
+                      ? "Creator"
+                      : isCurrentUserAdmin
+                      ? "Admin"
+                      : "Member"
+                  }
                 </Badge>
               </div>
             </div>
@@ -151,20 +172,26 @@ export function TeamUserTableCommand({
                     </div>
                     <div className="flex flex-row space-x-2 ml-auto">
                       <div className="flex flex-row mr-auto ">
-                        {team.createdBy !== user.id ? (
+                        {team.createdBy !== user.id && isCurrentUserAdmin ? (
                           <TeamMemberCardPermissionsSelect
                             user={user}
                             team={team}
                           />
                         ) : (
-                          <Badge className="shrink-0" variant="secondary">
-                            Admin
+                          <Badge
+                            variant="secondary"
+                            className={`shrink-0 ${getUserStatusBadgeColor(
+                              user,
+                              team
+                            )}`}
+                          >
+                            {capitalizeFirstLetter(getUserStatus(user, team))}
                           </Badge>
                         )}
                       </div>
 
                       <div className=" opacity-0 group-hover:opacity-100">
-                        {user.id !== team.createdBy && (
+                        {user.id !== team.createdBy && isCurrentUserAdmin && (
                           <Button
                             className="mx-2 hover:bg-red-200"
                             variant="ghost"
@@ -210,7 +237,7 @@ export function TeamUserTableCommand({
             )
         )}
       </CommandGroup>
-      {filteredGlobalUsers.length > 0 && (
+      {filteredGlobalUsers.length > 0 && isCurrentUserAdmin && (
         <>
           <Separator />
           <CommandGroup>

@@ -10,14 +10,20 @@ import TeamUserCardPermissionsSelect from "./TeamUserCardPermissionsSelect";
 import { TeamDto } from "@/use-cases/team/types";
 type TeamUserCardWithPermissionsProps = {
   user: UserDto;
-
   team: TeamDto;
+  isCurrentUserAdmin: boolean;
 };
 export function TeamUserCardWithPermissions({
   user,
-
   team,
+  isCurrentUserAdmin,
 }: TeamUserCardWithPermissionsProps) {
+  const getUserPrivilegesLevel = (user: UserDto, team: TeamDto) => {
+    const doesUserHaveAdminPrivileges = user.teamsAsAdmin.some(
+      (teamAsAdmin) => teamAsAdmin === team.id
+    );
+    return doesUserHaveAdminPrivileges;
+  };
   return (
     <Card className="max-w-[95vw] mx-auto  border-2 border-nav-background  ">
       <CardHeader className="pb-6">
@@ -56,11 +62,17 @@ export function TeamUserCardWithPermissions({
             <span className="text-sm smallWidth:text-xs font-medium">Role</span>
           </div>
           <div className="text-right space-x-4 flex flex-row">
-            {team.createdBy !== user.id ? (
+            {team.createdBy !== user.id && isCurrentUserAdmin ? (
               <TeamUserCardPermissionsSelect user={user} team={team} />
             ) : (
-              <Badge className="shrink-0" variant="destructive">
-                Admin
+              <Badge
+                className={`min-w-fit text-xs px-2 py-[0.2em] m-1 ${
+                  getUserPrivilegesLevel(user, team)
+                    ? "bg-badgeRed"
+                    : "bg-badgeBlue"
+                } `}
+              >
+                {getUserPrivilegesLevel(user, team) ? `Admin` : `Member`}
               </Badge>
             )}
           </div>

@@ -75,8 +75,9 @@ export async function TeamPageComponent({
   console.log("team", team);
   const teamId = team.id;
   const archivedProjects = projects.filter((project) => project.archived);
-  const isUserAdmin = user.teamsAsAdmin.some((team) => team === teamId);
-
+  const isCurrentUserAdmin = user.teamsAsAdmin.some((team) => team === teamId);
+  console.log("teamId", teamId);
+  console.log("isUserAdmin", isCurrentUserAdmin);
   const countArchivedProjects = archivedProjects.length;
   const countProjects = projects.length - countArchivedProjects;
 
@@ -95,7 +96,10 @@ export async function TeamPageComponent({
             <AccordionItem value="summary">
               <AccordionTrigger>
                 <div className="flex w-full">
-                  <TeamHeader team={team} />
+                  <TeamHeader
+                    team={team}
+                    isCurrentUserAdmin={isCurrentUserAdmin}
+                  />
                 </div>
               </AccordionTrigger>
               <AccordionContent>
@@ -166,6 +170,7 @@ export async function TeamPageComponent({
                         teamUsers={teamUsers}
                         globalUsers={usersList}
                         projects={projects}
+                        isCurrentUserAdmin={isCurrentUserAdmin}
                       />
                     </div>
                     <div className=" flex flex-col  ">
@@ -194,10 +199,14 @@ export async function TeamPageComponent({
                                       </span>
                                     </PopoverTrigger>
                                     <PopoverContent className="w-[calc(100%-3em)] m-4 p-0 border-none">
+                                      {/* {isUserAdmin ? ( */}
+
                                       <TeamUserCardWithPermissions
                                         user={member}
                                         team={team}
+                                        isCurrentUserAdmin={isCurrentUserAdmin}
                                       />
+                                      {/* ) */}
                                     </PopoverContent>
                                   </Popover>
                                 </div>
@@ -235,6 +244,7 @@ export async function TeamPageComponent({
                                       <TeamUserCardWithPermissions
                                         user={member}
                                         team={team}
+                                        isCurrentUserAdmin={isCurrentUserAdmin}
                                       />
                                     </PopoverContent>
                                   </Popover>

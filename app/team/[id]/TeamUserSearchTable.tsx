@@ -23,6 +23,7 @@ export function TeamUserSearchTable({
   teamUsers,
   globalUsers,
   projects,
+  isCurrentUserAdmin,
 }: {
   userId: string;
   userData: UserDto;
@@ -30,6 +31,7 @@ export function TeamUserSearchTable({
   teamUsers: UserDto[];
   globalUsers: UserDto[];
   projects: ProjectDto[];
+  isCurrentUserAdmin: boolean;
 }) {
   //default useEffect to update teamUsersLists and Permissions on render., dependant on users data
   //check on mongodb if permissions updates right away on save.
@@ -40,7 +42,7 @@ export function TeamUserSearchTable({
       <DialogTrigger asChild>
         <div>
           <UserSearchIcon className="w-10 h-10 cursor-pointer hover:bg-primary p-2 rounded-full" />
-          <span className="sr-only">Edit Team Users</span>
+          <span className="sr-only">Show/Edit Team Users</span>
         </div>
       </DialogTrigger>
       <DialogContent className=" max-w-[95vw] mx-2 w-fit ">
@@ -51,6 +53,7 @@ export function TeamUserSearchTable({
           teamUsers={teamUsers}
           globalUsers={globalUsers}
           projects={projects}
+          isCurrentUserAdmin={isCurrentUserAdmin}
         />
       </DialogContent>
     </Dialog>

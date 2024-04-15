@@ -52,7 +52,8 @@
     --background: rgb(28, 44, 50);
     --drawer-background: rgba(17, 41, 62, 0.75);
     --alert-background: rgba(22, 46, 68, 0.9);
-    --accordion-background: rgba(26, 33, 36, 0.7);
+    /* --accordion-background: rgba(26, 33, 36, 0.7); */
+    --accordion-background: rgb(34, 43, 47, 70%);
     --main-background: rgb(54, 67, 86);
     --nav-background: rgb(12, 23, 26);
 
