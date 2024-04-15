@@ -89,7 +89,7 @@ export async function TeamPageComponent({
   );
 
   return (
-    <div className=" absolute flex flex-col w-full  items-center top-8 md:top-12 min-h-[calc(100vh-2rem)] md:min-h-[calc(100vh-3rem)]">
+    <div className=" absolute flex flex-col w-full  items-center top-8 md:top-12 min-h-[calc(100vh-2rem)] md:min-h-[calc(100vh-3rem)] overflow-x-hidden">
       <main className="flex bg-gradient-background-light dark:bg-gradient-background-dark overflow-x-hidden w-full flex-col gap-4 min-h-[calc(100vh-2rem)] md:min-h-[calc(100vh-3rem)] md:gap-8">
         <div className="z-20 overflow-x-clip  w-full px-4  self-center shadow-md   bg-accordion-background">
           <Accordion type="single" collapsible defaultValue="summary">
@@ -103,7 +103,7 @@ export async function TeamPageComponent({
                 </div>
               </AccordionTrigger>
               <AccordionContent>
-                <div className="flex flex-col pl-8 md:pl-0 md:flex-row md:flex-wrap md:justify-evenly md:mx-[12%] bg-transparent md:border-r-slate-600">
+                <div className="flex flex-col pl-8 md:pl-0 md:flex-row md:flex-wrap md:justify-evenly md:mx-[12%] bg-transparent md:border-r-slate-600 ">
                   <div className="mb-4 md:w-1/4">
                     <div className="ml-auto flex flex-wrap items-center ">
                       <Label className="font-bold text-sm md:text:sm pb-4">
@@ -185,7 +185,7 @@ export async function TeamPageComponent({
                               {` Admins: ${teamUsersAdmins.length}`}
                             </Badge>
 
-                            <div className="flex flex-row">
+                            <div className="flex flex-row overflow-y-auto">
                               {teamUsersAdmins.map((member, index) => (
                                 <div key={index} className="p-2">
                                   <Popover>
@@ -227,7 +227,7 @@ export async function TeamPageComponent({
                               {` Members: ${teamUsersMembers.length}`}
                             </Badge>
                             {/* <ScrollArea> */}
-                            <div className="flex flex-row">
+                            <div className="flex flex-row overflow-y-auto">
                               {teamUsersMembers.map((member, index) => (
                                 <div key={index} className="p-2">
                                   <Popover>
@@ -300,14 +300,14 @@ export async function TeamPageComponent({
               )}
               {/* </div> */}
             </div>
-            <div className=" flex max-w-[90vw] justify-center md:justify-start flex-row flex-wrap">
+            <div className=" flex max-w-[90vw] self-center justify-center md:justify-start flex-row flex-wrap">
               {projects &&
                 projects.map(
                   (project, project_idx) =>
                     project.archived === false && (
                       <Card
                         key={project_idx}
-                        className=" hover:border-orange-300  border-2 mb-4 max-w-full mr-4 md:mb-4 flex items-center w-72 h-28 bg-card shadow-lg hover:shadow-sm"
+                        className=" hover:border-orange-300  border-2 mb-4 max-w-full sm:mr-4 flex items-center w-72 h-28 bg-card shadow-lg hover:shadow-sm"
                       >
                         <Link
                           className="w-full h-full p-2"
