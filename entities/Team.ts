@@ -31,6 +31,7 @@ export class TeamEntity {
   getName() {
     return this.name;
   }
+
   getUsers() {
     return this.users;
   }
@@ -42,22 +43,27 @@ export class TeamEntity {
   getId() {
     return this.id;
   }
+
   getCreatedBy() {
     return this.createdBy;
   }
+
   addUser(user: string) {
     this.users.push(user);
   }
+
   removeUser(user: string) {
     if (user !== this.createdBy) {
       this.users = this.users.filter((m) => m !== user);
     }
   }
+
   addUsers(users: string[]) {
     users.forEach((user) => {
       this.users.push(user);
     });
   }
+
   removeUsers(users: string[]) {
     users.forEach((user) => {
       if (user !== this.createdBy) {
@@ -65,6 +71,7 @@ export class TeamEntity {
       }
     });
   }
+
   updateUsers(users: string[]) {
     this.users = users;
   }
@@ -72,6 +79,7 @@ export class TeamEntity {
   addProject(project: string) {
     this.projects.push(project);
   }
+
   updateName(name: string) {
     this.name = name;
   }

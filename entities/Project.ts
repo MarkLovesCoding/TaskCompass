@@ -52,24 +52,31 @@ export class ProjectEntity {
   getName() {
     return this.name;
   }
+
   getDescription() {
     return this.description;
   }
+
   getTasks() {
     return this.tasks;
   }
+
   getTeam() {
     return this.team;
   }
+
   getId() {
     return this.id;
   }
+
   getArchived() {
     return this.archived;
   }
+
   getUsers() {
     return this.users;
   }
+
   getCreatedBy() {
     return this.createdBy;
   }
@@ -77,6 +84,7 @@ export class ProjectEntity {
   getColumnOrder() {
     return this.columnOrder;
   }
+
   getTasksOrder() {
     return this.tasksOrder;
   }
@@ -84,16 +92,19 @@ export class ProjectEntity {
   addUser(user: string) {
     this.users.push(user);
   }
+
   removeUser(user: string) {
     if (user !== this.createdBy) {
       this.users = this.users.filter((m) => m !== user);
     }
   }
+
   addUsers(users: string[]) {
     users.forEach((user) => {
       this.users.push(user);
     });
   }
+
   removeUsers(users: string[]) {
     users.forEach((user) => {
       if (user !== this.createdBy) {
@@ -101,6 +112,7 @@ export class ProjectEntity {
       }
     });
   }
+
   updateUsers(users: string[]) {
     this.users = users;
   }
@@ -108,12 +120,15 @@ export class ProjectEntity {
   updateArchived(archived: boolean) {
     this.archived = archived;
   }
+
   addTask(project: string) {
     this.tasks.push(project);
   }
+
   updateName(name: string) {
     this.name = name;
   }
+
   updateDescription(description: string) {
     this.description = description;
   }
@@ -121,6 +136,7 @@ export class ProjectEntity {
   updateColumnOrder(columnOrder: ColumnOrder) {
     this.columnOrder = columnOrder;
   }
+
   updateTasksOrder(
     taskId: string,
 
@@ -140,6 +156,7 @@ export class ProjectEntity {
     }
     this.tasksOrder = newTasksOrder;
   }
+
   updateTeam(team: string) {
     this.team = team;
   }
@@ -152,7 +169,6 @@ export class ProjectEntity {
       tasks: z.array(z.string()).optional(),
       createdBy: z.string(),
       archived: z.boolean(),
-
       tasksOrder: z.object({
         priority: z.object({
           High: z.array(z.string()),

@@ -15,7 +15,6 @@ const ProjectSchema = new Schema(
     team: { type: Schema.Types.ObjectId, ref: "Team" },
     archived: { type: Boolean, default: false },
     createdBy: { type: Schema.Types.ObjectId, ref: "User" },
-
     columnOrder: {
       priority: { type: [String], default: ["High", "Medium", "Low"] },
       status: {

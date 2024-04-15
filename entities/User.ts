@@ -47,33 +47,43 @@ export class UserEntity {
   getName() {
     return this.name;
   }
+
   getEmail() {
     return this.email;
   }
+
   getProjectsAsAdmin() {
     return this.projectsAsAdmin;
   }
+
   getProjectsAsMember() {
     return this.projectsAsMember;
   }
+
   getTeamsAsAdmin() {
     return this.teamsAsAdmin;
   }
+
   getTeamsAsMember() {
     return this.teamsAsMember;
   }
+
   getTasks() {
     return this.tasks;
   }
+
   getId() {
     return this.id;
   }
+
   getAvatar() {
     return this.avatar;
   }
+
   addProjectAsAdmin(project: string) {
     this.projectsAsAdmin.push(project);
   }
+
   removeProjectAsAdmin(project: string) {
     this.projectsAsAdmin = this.projectsAsAdmin.filter((p) => p !== project);
   }
@@ -81,12 +91,15 @@ export class UserEntity {
   addTeamAsAdmin(team: string) {
     this.teamsAsAdmin.push(team);
   }
+
   removeTeamAsAdmin(team: string) {
     this.teamsAsAdmin = this.teamsAsAdmin.filter((t) => t !== team);
   }
+
   addProjectAsMember(project: string) {
     this.projectsAsMember.push(project);
   }
+
   removeProjectAsMember(project: string) {
     this.projectsAsMember = this.projectsAsMember.filter((p) => p !== project);
   }
@@ -94,18 +107,23 @@ export class UserEntity {
   addTeamAsMember(team: string) {
     this.teamsAsMember.push(team);
   }
+
   removeTeamAsMember(team: string) {
     this.teamsAsMember = this.teamsAsMember.filter((t) => t !== team);
   }
+
   addTask(task: string) {
     this.tasks.push(task);
   }
+
   removeTask(task: string) {
     this.tasks = this.tasks.filter((t) => t !== task);
   }
+
   updateAvatar(avatar: string) {
     this.avatar = avatar;
   }
+
   updateUserProjectPermissions(
     projectId: string,
     updateType: "admin" | "member"
@@ -140,6 +158,7 @@ export class UserEntity {
       throw new Error("Invalid update type");
     }
   }
+
   private validate() {
     const projectSchema = z.object({
       name: z.string().min(3).max(30),

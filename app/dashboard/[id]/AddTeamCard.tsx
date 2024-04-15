@@ -56,7 +56,6 @@ const AddTeamCard = () => {
         className="mt-4 mr-2"
         onSubmit={form.handleSubmit(onNewTeamFormSubmit)}
       >
-        {" "}
         <h2 className=" text-lg font-bold mb-4 ">Create New Team</h2>
         <FormField
           control={form.control}

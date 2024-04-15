@@ -124,20 +124,16 @@
   .bg-gradient-background-dark {
     background: hsl(196.8deg 63.5% 8.19%) 0%;
     background: -moz-linear-gradient(
-      124deg,
-      hsl(196.8deg 52.98% 11.71%) 0%,
-      hsl(198deg 83.66% 21.95%) 100%
+      204deg,
+      rgb(8, 24, 30) 0%,
+      rgb(6, 41, 56) 100%
     );
     background: -webkit-linear-gradient(
-      124deg,
-      hsl(196.8deg 52.98% 11.71%) 0%,
-      hsl(198deg 83.66% 21.95%) 100%
+      204deg,
+      rgb(8, 24, 30) 0%,
+      rgb(6, 41, 56) 100%
     );
-    background: linear-gradient(
-      124deg,
-      hsl(196.8deg 52.98% 11.71%) 0%,
-      hsl(198deg 83.66% 21.95%) 100%
-    );
+    background: linear-gradient(204deg, rgb(8, 24, 30) 0%, rgb(6, 41, 56) 100%);
   }
   .bg-gradient-background-light {
     background: hsla(0, 0%, 97%, 1);

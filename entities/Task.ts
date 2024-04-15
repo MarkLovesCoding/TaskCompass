@@ -48,40 +48,47 @@ export class TaskEntity {
     this.dueDate = dueDate;
     this.startDate = startDate;
     this.archived = archived;
-
     this.priority = priority;
     this.status = status;
-
     this.validate();
   }
 
   getName() {
     return this.name;
   }
+
   getDescription() {
     return this.description;
   }
+
   getProject() {
     return this.project;
   }
+
   getAssignees() {
     return this.assignees;
   }
+
   getDueDate() {
     return this.dueDate;
   }
+
   getStartDate() {
     return this.startDate;
   }
+
   getArchived() {
     return this.archived;
   }
+
   getCategory() {
     return this.category;
   }
+
   getPriority() {
     return this.priority;
   }
+
   getStatus() {
     return this.status;
   }
@@ -89,15 +96,19 @@ export class TaskEntity {
   getId() {
     return this.id;
   }
+
   updateName(name: string) {
     this.name = name;
   }
+
   updateDescription(description: string) {
     this.description = description;
   }
+
   updateProject(project: string) {
     this.project = project;
   }
+
   addAssignees(assignees: string[]) {
     assignees.forEach((assignee) => {
       if (this.assignees.indexOf(assignee) === -1) {
@@ -105,23 +116,29 @@ export class TaskEntity {
       }
     });
   }
+
   removeAssignees(assignees: string[]) {
     assignees.forEach((assignee) => {
       this.assignees = this.assignees.filter((a) => a !== assignee);
     });
   }
+
   updateDueDate(dueDate: Date) {
     this.dueDate = dueDate;
   }
+
   updateStartDate(startDate: Date) {
     this.startDate = startDate;
   }
+
   updateArchived(archived: boolean) {
     this.archived = archived;
   }
+
   updatePriority(priority: string) {
     this.priority = priority;
   }
+
   updateStatus(status: string) {
     this.status = status;
   }
@@ -133,6 +150,7 @@ export class TaskEntity {
   removeAssignee(assignee: string) {
     this.assignees = this.assignees.filter((a) => a !== assignee);
   }
+
   private validate() {
     const taskSchema = z.object({
       name: z.string().min(3).max(25),
