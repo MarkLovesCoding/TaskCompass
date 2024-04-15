@@ -11,7 +11,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover_add";
-
+import { Badge } from "@/components/ui/badge";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -83,13 +83,28 @@ export function ProjectPage({
               Back to Team
             </h4>
           </Link>
-          <div className="flex items-center m-2 h-full justify-between max-w-[20ch]   md:max-w-md">
+          <div className="flex items-center m-2 mt-0 h-full justify-between max-w-[20ch]   md:max-w-md">
             <h4 className=" text-xs md:text-sm lg:text-md pr-3 italic">
               Project:
             </h4>
-            <h4 className="text-xs md:text-sm font-bold lg:text-md text-ellipsis truncate">
+            <h4 className="text-xs md:text-sm font-bold mr-2 lg:text-md text-ellipsis truncate">
               {project.name}
             </h4>
+            <Badge
+              className={` min-w-fit text-xs px-2 py-[0.2em] m-1 ${
+                project.createdBy == userId
+                  ? "bg-badgePurple"
+                  : isCurrentUserAdmin
+                  ? "bg-badgeRed"
+                  : "bg-badgeBlue"
+              } `}
+            >
+              {project.createdBy == userId
+                ? "Creator"
+                : isCurrentUserAdmin
+                ? `Admin`
+                : `Member`}
+            </Badge>
           </div>
         </div>
         <div className="flex flex-row w-full   justify-center align-middle ">
