@@ -139,6 +139,9 @@ export async function TeamPageComponent({
                                         <div key={project_idx}>
                                           <UnarchiveProjectPopover
                                             project={project}
+                                            isCurrentUserAdmin={
+                                              isCurrentUserAdmin
+                                            }
                                           />
                                           {project_idx !== 0 ||
                                             (project_idx !==
@@ -277,22 +280,24 @@ export async function TeamPageComponent({
                 Team Projects
               </h1>
               {/* <div className="p-4"> */}
-              <Dialog>
-                <DialogTrigger className="h-fit flex self-center">
-                  <Button
-                    title="Add New Project"
-                    className="rounded-full ml-auto w-fit px-4"
-                    size="icon"
-                  >
-                    New Project
-                    <PlusIcon className="w-4 h-4 ml-4 " />
-                    <span className="sr-only">New Project Button</span>
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="max-w-[280px]">
-                  <AddProjectCard teamId={teamId} />
-                </DialogContent>
-              </Dialog>
+              {isCurrentUserAdmin && (
+                <Dialog>
+                  <DialogTrigger className="h-fit flex self-center">
+                    <Button
+                      title="Add New Project"
+                      className="rounded-full ml-auto w-fit px-4"
+                      size="icon"
+                    >
+                      New Project
+                      <PlusIcon className="w-4 h-4 ml-4 " />
+                      <span className="sr-only">New Project Button</span>
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-[280px]">
+                    <AddProjectCard teamId={teamId} />
+                  </DialogContent>
+                </Dialog>
+              )}
               {/* </div> */}
             </div>
             <div className=" flex max-w-[90vw] justify-center md:justify-start flex-row flex-wrap">
