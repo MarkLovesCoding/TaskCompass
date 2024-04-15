@@ -94,7 +94,9 @@ export function TeamHeader({
               <div className="flex  pr-4 items-center">
                 <LayoutIcon className="w-6 h-6 mr-2 md:w-8 md:h-8 self-center md:mr-4" />
                 <div>
-                  <Label className="text-base font-bold text-left">Team</Label>
+                  <Label className="text-base font-bold text-left mr-2">
+                    Team
+                  </Label>
                   <Badge
                     className={`min-w-fit text-xs px-2 py-[0.2em] m-1 ${
                       isCurrentUserAdmin ? "bg-badgeRed" : "bg-badgeBlue"
