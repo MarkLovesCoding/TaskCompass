@@ -123,13 +123,16 @@ const Navigation: React.FC = async () => {
                   </DropdownMenuSubTrigger>
                   <DropdownMenuPortal>
                     <DropdownMenuSubContent>
-                      {projects.map((project, project_idx) => (
-                        <DropdownMenuItem key={project_idx}>
-                          <Link href={`/project/${project.id}`}>
-                            {project.name}
-                          </Link>
-                        </DropdownMenuItem>
-                      ))}
+                      {projects.map(
+                        (project, project_idx) =>
+                          !project.archived && (
+                            <DropdownMenuItem key={project_idx}>
+                              <Link href={`/project/${project.id}`}>
+                                {project.name}
+                              </Link>
+                            </DropdownMenuItem>
+                          )
+                      )}
                     </DropdownMenuSubContent>
                   </DropdownMenuPortal>
                 </DropdownMenuSub>
