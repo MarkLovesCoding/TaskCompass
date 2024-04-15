@@ -175,6 +175,7 @@ export function ProjectPage({
               tasks={tasks}
               project={project}
               projectUsers={uniqueProjectUsers}
+              isCurrentUserAdmin={isCurrentUserAdmin}
             />
           </div>
           <ScrollBar orientation="horizontal" />

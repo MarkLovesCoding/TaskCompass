@@ -18,11 +18,13 @@ const CardView = ({
   tasks,
   project,
   projectUsers,
+  isCurrentUserAdmin,
 }: {
   viewType: string;
   tasks: TaskDto[];
   project: ProjectDto;
   projectUsers: UserDto[];
+  isCurrentUserAdmin: boolean;
 }) => {
   const taskIds = tasks.map((task) => task.id);
   const projectTasksIdsOrder = project.tasksOrder[viewType];
@@ -243,6 +245,7 @@ const CardView = ({
                     sorted_idx={sorted_idx}
                     projectUsers={projectUsers}
                     sorted_type={column[0] as string}
+                    isCurrentUserAdmin={isCurrentUserAdmin}
                   />
                 </div>
               ))}

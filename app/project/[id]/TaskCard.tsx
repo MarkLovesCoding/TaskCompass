@@ -291,7 +291,8 @@ export const TaskCard = ({
     { option: "Low", color: "text-badgeGreen" },
   ];
   const statusOptions = ["Not Started", "Up Next", "In Progress", "Completed"];
-  renderCount++;
+
+  console.log("<<<<<<<<<<<<<<<<<<<<<<isCurrentUserAdmin", isCurrentUserAdmin);
   return (
     <div className="max-w-[95%] ">
       <Form {...form}>
