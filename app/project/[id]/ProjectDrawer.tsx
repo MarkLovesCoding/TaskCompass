@@ -35,6 +35,7 @@ import {
 } from "@/components/ui/drawer";
 import { Label } from "@/components/ui/label";
 import { TeamDto } from "@/use-cases/team/types";
+import { ProjectHeaderStatic } from "./ProjectHeaderStatic";
 type ProjectDrawerProps = {
   userId: string;
   team: TeamDto;
@@ -42,6 +43,7 @@ type ProjectDrawerProps = {
   project: ProjectDto;
   teamUsers: UserDto[];
   projectUsers: UserDto[];
+  isCurrentUserAdmin: boolean;
 };
 const ProjectDrawer = ({
   userId,
@@ -50,11 +52,15 @@ const ProjectDrawer = ({
   project,
   teamUsers,
   projectUsers,
+  isCurrentUserAdmin,
 }: ProjectDrawerProps) => {
   // const isUserAdmin = false;
   const archivedTasks = tasks.filter((task) => task.archived);
   const uniqueTeamUsers = [...teamUsers];
   const uniqueProjectUsers = [...projectUsers];
+  console.log("projectUsers", projectUsers);
+  console.log("uniqueProjectUsers", uniqueProjectUsers);
+  console.log(uniqueProjectUsers.find((user) => user.id === userId));
   const projectAdmins = projectUsers.filter((user) =>
     user.projectsAsAdmin.includes(project.id)
   );
@@ -88,7 +94,11 @@ const ProjectDrawer = ({
             <ScrollBar />
             {/* <div className="flex-1 basis-1/2"> */}
             <div className="  flex flex-col mb-2  order-1  p-2">
-              <ProjectHeader project={project} />
+              {isCurrentUserAdmin ? (
+                <ProjectHeader project={project} />
+              ) : (
+                <ProjectHeaderStatic project={project} />
+              )}
             </div>
             <div
               className={`   order-2 mb-2
@@ -165,7 +175,10 @@ const ProjectDrawer = ({
                                 (task, task_idx) =>
                                   task.archived && (
                                     <div key={task_idx}>
-                                      <UnarchiveTaskPopover task={task} />
+                                      <UnarchiveTaskPopover
+                                        task={task}
+                                        isCurrentUserAdmin={isCurrentUserAdmin}
+                                      />
                                       {(task_idx !== 0 ||
                                         task_idx !==
                                           archivedTasks.length - 1) && (
@@ -194,6 +207,7 @@ const ProjectDrawer = ({
                   project={project}
                   teamUsers={uniqueTeamUsers}
                   projectUsers={uniqueProjectUsers}
+                  isCurrentUserAdmin={isCurrentUserAdmin}
                 />
               </div>
               <div className=" flex flex-col  ">
@@ -233,6 +247,7 @@ const ProjectDrawer = ({
                                 project={project}
                                 tasks={tasks}
                                 team={team}
+                                isCurrentUserAdmin={isCurrentUserAdmin}
                               />
                             </PopoverContent>
                           </Popover>
@@ -276,6 +291,7 @@ const ProjectDrawer = ({
                                 project={project}
                                 tasks={tasks}
                                 team={team}
+                                isCurrentUserAdmin={isCurrentUserAdmin}
                               />
                             </PopoverContent>
                           </Popover>
@@ -286,21 +302,23 @@ const ProjectDrawer = ({
                 </div>
               </div>
             </div>
-            <div
-              className={` 1/10
+            {isCurrentUserAdmin && (
+              <div
+                className={` 1/10
           flex align-bottom justify-end mb-2 my-0 order-4
           `}
-            >
-              <div className="flex justify-center my-auto">
-                {/* <Button
+              >
+                <div className="flex justify-center my-auto">
+                  {/* <Button
                   variant="outline"
                   className="h-fit w-fit group/hover hover:border-destructive hover:bg-destructive"
                 > */}
-                <ArchiveProjectPopover project={project} />
-                {/* <span className="sr-only">Archive Project Button</span>
+                  <ArchiveProjectPopover project={project} />
+                  {/* <span className="sr-only">Archive Project Button</span>
                 </Button> */}
+                </div>
               </div>
-            </div>{" "}
+            )}
           </ScrollArea>
         </div>
       </DrawerContent>

@@ -19,11 +19,13 @@ export function ProjectUserSearchTable({
   project,
   teamUsers,
   projectUsers,
+  isCurrentUserAdmin,
 }: {
   userId: string;
   project: ProjectDto;
   teamUsers: UserDto[];
   projectUsers: UserDto[];
+  isCurrentUserAdmin: boolean;
 }) {
   return (
     <Dialog>
@@ -35,7 +37,7 @@ export function ProjectUserSearchTable({
           >
             <UserSearchIcon className="w-8 h-8 lg:w-10 lg:h-10 cursor-pointer  p-2 " />
           </Button>
-          <span className="sr-only">Edit Project Users</span>
+          <span className="sr-only">Show / Edit Project Users</span>
         </div>
       </DialogTrigger>
       <DialogContent className="max-w-[95vw] mx-2 w-fit  ">
@@ -44,6 +46,7 @@ export function ProjectUserSearchTable({
           project={project}
           teamUsers={teamUsers}
           projectUsers={projectUsers}
+          isCurrentUserAdmin={isCurrentUserAdmin}
         />
       </DialogContent>
     </Dialog>

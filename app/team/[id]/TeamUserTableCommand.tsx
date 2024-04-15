@@ -137,7 +137,11 @@ export function TeamUserTableCommand({
                 <Badge
                   className={`shrink-0 mx-2 ${
                     // userData.teamsAsAdmin.includes(team.id)
-                    isCurrentUserAdmin ? "bg-badgeRed" : "bg-badgeBlue"
+                    team.createdBy == userData.id
+                      ? "bg-badgePurple"
+                      : isCurrentUserAdmin
+                      ? "bg-badgeRed"
+                      : "bg-badgeBlue"
                   }`}
                   variant="secondary"
                 >
@@ -191,44 +195,48 @@ export function TeamUserTableCommand({
                       </div>
 
                       <div className=" opacity-0 group-hover:opacity-100">
-                        {user.id !== team.createdBy && isCurrentUserAdmin && (
-                          <Button
-                            className="mx-2 hover:bg-red-200"
-                            variant="ghost"
-                            onClick={() => {
-                              if (user.id !== userId) {
-                                setSelectedUser(user);
-                                if (userHasTasksInTeamProjects(user)) {
-                                  toast.error(
-                                    `User cannot be removed from Team.\n User still has  ${usersTasksInProjectCount(
-                                      user
-                                    )}  task${
-                                      usersTasksInProjectCount(user) > 1
-                                        ? "s"
-                                        : ""
-                                    } assigned to them.`
-                                    // @ts-ignore
-                                  );
+                        {user.id !== team.createdBy &&
+                          user.id !== userId &&
+                          isCurrentUserAdmin && (
+                            <Button
+                              className="mx-2 hover:bg-red-200"
+                              variant="ghost"
+                              onClick={() => {
+                                if (user.id !== userId) {
+                                  setSelectedUser(user);
+                                  if (userHasTasksInTeamProjects(user)) {
+                                    toast.error(
+                                      `User cannot be removed from Team.\n User still has  ${usersTasksInProjectCount(
+                                        user
+                                      )}  task${
+                                        usersTasksInProjectCount(user) > 1
+                                          ? "s"
+                                          : ""
+                                      } assigned to them.`
+                                      // @ts-ignore
+                                    );
 
-                                  return;
-                                }
-                                onRemoveTeamUserSubmit(user);
-                                setTeamUsersList((prev) =>
-                                  prev.filter((u) => u.id !== user.id)
-                                );
-                                setFilteredGlobalUsers((prev) => {
-                                  if (!prev.some((u) => u.id === user.id)) {
-                                    return [...prev, user];
+                                    return;
                                   }
-                                  return prev;
-                                });
-                                toast.success(user.name + " removed from Team");
-                              }
-                            }}
-                          >
-                            <XIcon className="mr-auto  text-red-400"></XIcon>
-                          </Button>
-                        )}
+                                  onRemoveTeamUserSubmit(user);
+                                  setTeamUsersList((prev) =>
+                                    prev.filter((u) => u.id !== user.id)
+                                  );
+                                  setFilteredGlobalUsers((prev) => {
+                                    if (!prev.some((u) => u.id === user.id)) {
+                                      return [...prev, user];
+                                    }
+                                    return prev;
+                                  });
+                                  toast.success(
+                                    user.name + " removed from Team"
+                                  );
+                                }
+                              }}
+                            >
+                              <XIcon className="mr-auto  text-red-400"></XIcon>
+                            </Button>
+                          )}
                       </div>
                     </div>
                   </div>

@@ -67,12 +67,18 @@ export function TeamUserCardWithPermissions({
             ) : (
               <Badge
                 className={`min-w-fit text-xs px-2 py-[0.2em] m-1 ${
-                  getUserPrivilegesLevel(user, team)
+                  team.createdBy == user.id
+                    ? "bg-badgePurple"
+                    : getUserPrivilegesLevel(user, team)
                     ? "bg-badgeRed"
                     : "bg-badgeBlue"
                 } `}
               >
-                {getUserPrivilegesLevel(user, team) ? `Admin` : `Member`}
+                {team.createdBy == user.id
+                  ? "Creator"
+                  : getUserPrivilegesLevel(user, team)
+                  ? `Admin`
+                  : `Member`}
               </Badge>
             )}
           </div>

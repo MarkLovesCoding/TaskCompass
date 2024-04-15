@@ -23,12 +23,14 @@ type ProjectUserCardWithPermissionsProps = {
   project: ProjectDto;
   tasks: TaskDto[];
   team: TeamDto;
+  isCurrentUserAdmin: boolean;
 };
 export function ProjectUserCardWithPermissions({
   user,
   project,
   tasks,
   team,
+  isCurrentUserAdmin,
 }: ProjectUserCardWithPermissionsProps) {
   console.log("taskss: ", tasks);
   const usersTasks = tasks.filter((task) => task.assignees.includes(user.id));
@@ -40,7 +42,12 @@ export function ProjectUserCardWithPermissions({
   const tasksActive = usersTasks.filter(
     (task) => task.status !== "Completed"
   ).length;
-
+  const getUserPrivilegesLevel = (user: UserDto, project: ProjectDto) => {
+    const doesUserHaveAdminPrivileges = user.projectsAsAdmin.some(
+      (projectAsAdmin) => projectAsAdmin === project.id
+    );
+    return doesUserHaveAdminPrivileges;
+  };
   return (
     <Card className="max-w-[95vw] mx-auto  border-2 border-nav-background  ">
       <CardHeader className="pb-6">
@@ -85,11 +92,23 @@ export function ProjectUserCardWithPermissions({
             <span className="text-sm smallWidth:text-xs font-medium">Role</span>
           </div>
           <div className="text-right flex flex-row">
-            {project.createdBy !== user.id ? (
+            {project.createdBy !== user.id && isCurrentUserAdmin ? (
               <ProjectUserPermissionsSelect user={user} project={project} />
             ) : (
-              <Badge className="shrink-0" variant="secondary">
-                Admin
+              <Badge
+                className={`min-w-fit text-xs px-2 py-[0.2em] m-1 ${
+                  project.createdBy == user.id
+                    ? "bg-badgePurple"
+                    : getUserPrivilegesLevel(user, project)
+                    ? "bg-badgeRed"
+                    : "bg-badgeBlue"
+                } `}
+              >
+                {project.createdBy == user.id
+                  ? "Creator"
+                  : getUserPrivilegesLevel(user, project)
+                  ? `Admin`
+                  : `Member`}
               </Badge>
             )}
           </div>

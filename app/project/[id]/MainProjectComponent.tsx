@@ -50,7 +50,7 @@ export function ProjectPage({
   projectUsers: UserDto[];
 }) {
   const [sortBy, setSortBy] = useState<string>("status");
-  const isUserAdmin =
+  const isCurrentUserAdmin =
     project && user.projectsAsAdmin.some((id) => id === project.id);
   const uniqueProjectUsers = [...projectUsers];
   if (!project || !tasks) return <div>Loading...</div>;
@@ -58,16 +58,15 @@ export function ProjectPage({
   return (
     <div className="flex flex-col justify-start items-center min-h-full ">
       <div className="z-50">
-        {isUserAdmin && (
-          <ProjectDrawer
-            userId={userId}
-            team={team}
-            tasks={tasks}
-            project={project}
-            teamUsers={teamUsers}
-            projectUsers={projectUsers}
-          />
-        )}
+        <ProjectDrawer
+          userId={userId}
+          team={team}
+          tasks={tasks}
+          project={project}
+          teamUsers={teamUsers}
+          projectUsers={projectUsers}
+          isCurrentUserAdmin={isCurrentUserAdmin}
+        />
       </div>
       <div
         className={cn(
@@ -147,7 +146,7 @@ export function ProjectPage({
       </div>
       <main
         className={cn(
-          isUserAdmin ? "left-6 md:left-8 " : "left-0",
+          isCurrentUserAdmin ? "left-6 md:left-8 " : "left-0",
           `fixed w-[calc(100vw-1.5rem)] md:w-[calc(100vw-2rem)] bg-gradient-background-light dark:bg-gradient-background-dark min-h-[calc(100vh-2rem)] md:min-h-[calc(100vh-3rem)] border border-l-0`
         )}
       >

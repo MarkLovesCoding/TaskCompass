@@ -23,22 +23,28 @@ import { Label } from "@/components/ui/label";
 
 import toast from "react-hot-toast";
 import ProjectUserPermissionsSelect from "./ProjectUserPermissionsSelect";
-
+import { ProjectHeader } from "./ProjectHeader";
+const capitalizeFirstLetter = (string: string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+};
 export function ProjectUserTableCommand({
   userId,
   project,
   teamUsers,
   projectUsers,
+  isCurrentUserAdmin,
 }: {
   userId: string;
   project: ProjectDto;
   teamUsers: UserDto[];
   projectUsers: UserDto[];
+  isCurrentUserAdmin: boolean;
 }) {
   const userData = projectUsers.filter((user) => user.id === userId)[0];
   // const userPermission = userData.projectsAsAdmin.includes(project.id)
   //   ? "admin"
   //   : "member";
+  console.log("userData", userData);
   const filteredTeamUsers = teamUsers.filter(
     (user) => !projectUsers.some((pUser) => pUser.id === user.id)
   );
@@ -100,7 +106,17 @@ export function ProjectUserTableCommand({
       return "member";
     }
   };
-
+  const getUserStatusBadgeColor = (user: UserDto, project: ProjectDto) => {
+    if (user.id === userId) {
+      return "bg-primary";
+    } else if (project.createdBy === user.id) {
+      return "bg-badgePurple";
+    } else if (user.teamsAsAdmin.includes(project.id)) {
+      return "bg-badgeRed";
+    } else {
+      return "bg-badgeBlue";
+    }
+  };
   return (
     <>
       <Command>
@@ -129,15 +145,19 @@ export function ProjectUserTableCommand({
                     </Badge>
                     <Badge
                       className={`shrink-0 mx-2 ${
-                        userData.projectsAsAdmin.includes(project.id)
+                        project.createdBy == userData.id
+                          ? "bg-badgePurple"
+                          : isCurrentUserAdmin
                           ? "bg-badgeRed"
-                          : "bg-badgeGreen"
+                          : "bg-badgeBlue"
                       }`}
                       variant="secondary"
                     >
                       {/* {userPermission}
                        */}
-                      {userData.projectsAsAdmin.includes(project.id)
+                      {project.createdBy == userData.id
+                        ? "Creator"
+                        : isCurrentUserAdmin
                         ? "Admin"
                         : "Member"}
                     </Badge>
@@ -160,68 +180,82 @@ export function ProjectUserTableCommand({
                         <div className="flex flex-row space-x-2 ml-auto">
                           <div className="flex flex-row mr-auto ">
                             {" "}
-                            {project.createdBy !== user.id ? (
+                            {project.createdBy !== user.id &&
+                            isCurrentUserAdmin ? (
                               <ProjectUserPermissionsSelect
                                 user={user}
                                 project={project}
                               />
                             ) : (
-                              <Badge className="shrink-0" variant="secondary">
-                                Admin
+                              <Badge
+                                variant="secondary"
+                                className={`shrink-0 ${getUserStatusBadgeColor(
+                                  user,
+                                  project
+                                )}`}
+                              >
+                                {capitalizeFirstLetter(
+                                  getUserStatus(user, project)
+                                )}
                               </Badge>
                             )}
                           </div>
                           <div className=" ml-auto">
                             <div className=" opacity-0 group-hover:opacity-100">
-                              {user.id !== userId && (
-                                <Button
-                                  className="mx-2 hover:bg-red-200"
-                                  variant="ghost"
-                                  onClick={() => {
-                                    if (user.id !== userId) {
-                                      setSelectedUser(user);
-                                      if (
-                                        userHasTasksInProject(user, project.id)
-                                      ) {
-                                        // if (user.tasks.length > 0) {
-                                        toast.error(
-                                          `User cannot be removed from Project.\n User still has  ${usersTasksInProjectCount(
+                              {user.id !== project.createdBy &&
+                                user.id !== userId &&
+                                isCurrentUserAdmin && (
+                                  <Button
+                                    className="mx-2 hover:bg-red-200"
+                                    variant="ghost"
+                                    onClick={() => {
+                                      if (user.id !== userId) {
+                                        setSelectedUser(user);
+                                        if (
+                                          userHasTasksInProject(
                                             user,
                                             project.id
-                                          )}  task${
-                                            usersTasksInProjectCount(
+                                          )
+                                        ) {
+                                          // if (user.tasks.length > 0) {
+                                          toast.error(
+                                            `User cannot be removed from Project.\n User still has  ${usersTasksInProjectCount(
                                               user,
                                               project.id
-                                            ) > 1
-                                              ? "s"
-                                              : ""
-                                          } assigned to them.`
-                                          // @ts-ignore
-                                        );
-                                        // handleUserHasTasks(user);
-                                        return;
-                                      }
-                                      onRemoveProjectUserSubmit(user);
-                                      setProjectUsersList((prev) =>
-                                        prev.filter((u) => u.id !== user.id)
-                                      );
-                                      setTeamUsersList((prev) => {
-                                        if (
-                                          !prev.some((u) => u.id === user.id)
-                                        ) {
-                                          return [...prev, user];
+                                            )}  task${
+                                              usersTasksInProjectCount(
+                                                user,
+                                                project.id
+                                              ) > 1
+                                                ? "s"
+                                                : ""
+                                            } assigned to them.`
+                                            // @ts-ignore
+                                          );
+                                          // handleUserHasTasks(user);
+                                          return;
                                         }
-                                        return prev;
-                                      });
-                                      toast.success(
-                                        "User removed from Project"
-                                      );
-                                    }
-                                  }}
-                                >
-                                  <XIcon className="mr-auto text-red-400"></XIcon>
-                                </Button>
-                              )}
+                                        onRemoveProjectUserSubmit(user);
+                                        setProjectUsersList((prev) =>
+                                          prev.filter((u) => u.id !== user.id)
+                                        );
+                                        setTeamUsersList((prev) => {
+                                          if (
+                                            !prev.some((u) => u.id === user.id)
+                                          ) {
+                                            return [...prev, user];
+                                          }
+                                          return prev;
+                                        });
+                                        toast.success(
+                                          "User removed from Project"
+                                        );
+                                      }
+                                    }}
+                                  >
+                                    <XIcon className="mr-auto text-red-400"></XIcon>
+                                  </Button>
+                                )}
                             </div>
                           </div>
                         </div>
@@ -249,25 +283,27 @@ export function ProjectUserTableCommand({
                       />
 
                       <div className="ml-auto">
-                        <Button
-                          variant={"ghost"}
-                          className="mx-2 hover:bg-green-200"
-                          onClick={() => {
-                            onAddProjectUserSubmit(user);
-                            setProjectUsersList((prev) => {
-                              if (!prev.some((u) => u.id === user.id)) {
-                                return [...prev, user];
-                              }
-                              return prev;
-                            });
-                            setTeamUsersList((prev) =>
-                              prev.filter((u) => u.id !== user.id)
-                            );
-                            toast.success("User added to Project");
-                          }}
-                        >
-                          <PlusIcon className=" opacity-0 group-hover:opacity-100 text-green-600"></PlusIcon>
-                        </Button>
+                        {isCurrentUserAdmin && (
+                          <Button
+                            variant={"ghost"}
+                            className="mx-2 hover:bg-green-200"
+                            onClick={() => {
+                              onAddProjectUserSubmit(user);
+                              setProjectUsersList((prev) => {
+                                if (!prev.some((u) => u.id === user.id)) {
+                                  return [...prev, user];
+                                }
+                                return prev;
+                              });
+                              setTeamUsersList((prev) =>
+                                prev.filter((u) => u.id !== user.id)
+                              );
+                              toast.success("User added to Project");
+                            }}
+                          >
+                            <PlusIcon className=" opacity-0 group-hover:opacity-100 text-green-600"></PlusIcon>
+                          </Button>
+                        )}
                       </div>
                     </div>
                   </div>

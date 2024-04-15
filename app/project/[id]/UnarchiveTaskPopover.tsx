@@ -22,7 +22,13 @@ import {
   DialogContent,
 } from "@/components/ui/dialog-user-search";
 
-const UnarchiveTaskPopover = ({ task }: { task: TaskDto }) => {
+const UnarchiveTaskPopover = ({
+  task,
+  isCurrentUserAdmin,
+}: {
+  task: TaskDto;
+  isCurrentUserAdmin: boolean;
+}) => {
   const unarchiveFormObject = {
     id: task.id,
     archived: false,
@@ -78,41 +84,61 @@ const UnarchiveTaskPopover = ({ task }: { task: TaskDto }) => {
             <span className="sr-only">Activate Task Menu Trigger</span>
           </div>
         </DialogTrigger>{" "}
-        <DialogContent className="p-4 rounded-lg border-2 border-primary bg-alert-background backdrop-filter">
-          {/* <Card className="rounded-lg"> */}
-          {/* <CardHeader> */}
-          {/* <div className=" "> */}
-          <Label className="text-center text-xl md:text-2xl">
-            Activate Task
-          </Label>
-          {/* </CardHeader> */}
-          <div className="p-4 mb-2 ">
-            <p> Are you sure you want to activate this task? </p>
-          </div>
-          <div className="w-full flex flex-row justify-evenly">
-            <Button
-              className=" "
-              variant="default"
-              onClick={() => {
-                updateTaskArchivedAction(unarchiveFormObject);
-                setIsOpen(false);
-              }}
-            >
-              Activate
-            </Button>
-            <Button
-              className=" "
-              variant="outline"
-              onClick={() => {
-                setIsOpen(false);
-              }}
-            >
-              Cancel
-            </Button>
-            {/* </div> */}
-          </div>
-          {/* </Card> */}
-        </DialogContent>
+        {isCurrentUserAdmin ? (
+          <DialogContent className="p-4 rounded-lg border-2 border-primary bg-alert-background backdrop-filter">
+            {/* <Card className="rounded-lg"> */}
+            {/* <CardHeader> */}
+            {/* <div className=" "> */}
+            <Label className="text-center text-xl md:text-2xl">
+              Activate Task
+            </Label>
+            {/* </CardHeader> */}
+            <div className="p-4 mb-2 ">
+              <p> Are you sure you want to activate this task? </p>
+            </div>
+            <div className="w-full flex flex-row justify-evenly">
+              <Button
+                className=" "
+                variant="default"
+                onClick={() => {
+                  updateTaskArchivedAction(unarchiveFormObject);
+                  setIsOpen(false);
+                }}
+              >
+                Activate
+              </Button>
+              <Button
+                className=" "
+                variant="outline"
+                onClick={() => {
+                  setIsOpen(false);
+                }}
+              >
+                Cancel
+              </Button>
+              {/* </div> */}
+            </div>
+            {/* </Card> */}
+          </DialogContent>
+        ) : (
+          <DialogContent className="p-4 rounded-lg border-2 border-primary bg-alert-background backdrop-filter">
+            <Label className="text-center text-base p-8 md:text-lg">
+              Admin Permissions Required to Unarchive Task
+            </Label>
+            <div className="w-full flex flex-row justify-evenly">
+              <Button
+                className="text-sm "
+                variant="outline"
+                onClick={() => {
+                  // handleArchivedCancel();
+                  setIsOpen(false);
+                }}
+              >
+                Close
+              </Button>
+            </div>
+          </DialogContent>
+        )}
       </Dialog>
     </>
   );

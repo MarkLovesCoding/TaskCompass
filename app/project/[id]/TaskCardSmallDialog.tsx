@@ -32,6 +32,7 @@ const TaskCardSmallDialog = ({
   projectUsers,
   task_idx,
   sorted_idx,
+  isCurrentUserAdmin,
 }: {
   isDraggingOver: boolean;
   tasks: TaskDto[];
@@ -40,6 +41,7 @@ const TaskCardSmallDialog = ({
   projectUsers: UserDto[];
   task_idx: number;
   sorted_idx: number;
+  isCurrentUserAdmin: boolean;
 }) => {
   const colorByPriority = (priority: string) => {
     switch (priority) {
@@ -176,6 +178,7 @@ const TaskCardSmallDialog = ({
             project={project}
             projectUsers={projectUsers}
             isTaskOpen={taskCardOpenStates[task.id]}
+            isCurrentUserAdmin={isCurrentUserAdmin}
           />
           <ScrollBar orientation="vertical" className="h-full">
             {/* <ScrollBar orientation="horizontal" className="w-full "> */}

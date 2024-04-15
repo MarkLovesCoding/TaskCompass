@@ -11,6 +11,7 @@ type CardColumnProps = {
   sorted_idx: number;
   projectUsers: UserDto[];
   sorted_type: string;
+  isCurrentUserAdmin: boolean;
 };
 const CardColumn = ({
   tasksList,
@@ -18,6 +19,7 @@ const CardColumn = ({
   sorted_idx,
   projectUsers,
   sorted_type,
+  isCurrentUserAdmin,
 }: CardColumnProps) => {
   return (
     <Draggable draggableId={sorted_type} index={sorted_idx} key={sorted_type}>
@@ -62,6 +64,7 @@ const CardColumn = ({
                               projectUsers={projectUsers}
                               task_idx={task_idx}
                               sorted_idx={sorted_idx}
+                              isCurrentUserAdmin={isCurrentUserAdmin}
                             />
                           </div>
                         )

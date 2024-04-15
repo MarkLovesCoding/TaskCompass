@@ -88,11 +88,13 @@ export const TaskCard = ({
   project,
   projectUsers,
   isTaskOpen,
+  isCurrentUserAdmin,
 }: {
   task: TaskDto;
   project: ProjectDto;
   projectUsers: UserDto[];
   isTaskOpen: boolean;
+  isCurrentUserAdmin: boolean;
 }) => {
   unstable_noStore();
   const formRef = React.useRef<HTMLFormElement>(null);
@@ -578,45 +580,47 @@ export const TaskCard = ({
                       </Avatar>
                     ))}
                   <FormControl>
-                    <DropdownMenu
-                    //  onOpenChange={handleAssigneesChange}
-                    >
-                      <DropdownMenuTrigger asChild>
-                        <Avatar className="cursor-pointer  w-12 h-12 m-2">
-                          <AvatarFallback
-                            className={`text-sm bg-gray-500 hover:bg-grey:700`}
-                          >
-                            +
-                          </AvatarFallback>
-                        </Avatar>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent
-                        onFocusOutside={(e) => e.preventDefault()}
-                        className="w-56"
+                    {isCurrentUserAdmin && (
+                      <DropdownMenu
+                      //  onOpenChange={handleAssigneesChange}
                       >
-                        <DropdownMenuLabel>Project Users</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        {projectUsers?.map((user, index) => (
-                          <DropdownMenuCheckboxItem
-                            key={index}
-                            onSelect={(e) => {
-                              e.preventDefault();
-                            }}
-                            checked={field.value.includes(user.id)} // Check if user is already in assignees
-                            onCheckedChange={(checked) => {
-                              const updatedAssignees = checked
-                                ? [...field.value, user.id] // Add user to assignees array
-                                : field.value.filter(
-                                    (assignee) => assignee !== user.id
-                                  ); // Remove user from assignees array
-                              field.onChange(updatedAssignees); // Update assignees field value
-                            }}
-                          >
-                            {user.name}
-                          </DropdownMenuCheckboxItem>
-                        ))}
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Avatar className="cursor-pointer  w-12 h-12 m-2">
+                            <AvatarFallback
+                              className={`text-sm bg-gray-500 hover:bg-grey:700`}
+                            >
+                              +
+                            </AvatarFallback>
+                          </Avatar>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent
+                          onFocusOutside={(e) => e.preventDefault()}
+                          className="w-56"
+                        >
+                          <DropdownMenuLabel>Project Users</DropdownMenuLabel>
+                          <DropdownMenuSeparator />
+                          {projectUsers?.map((user, index) => (
+                            <DropdownMenuCheckboxItem
+                              key={index}
+                              onSelect={(e) => {
+                                e.preventDefault();
+                              }}
+                              checked={field.value.includes(user.id)} // Check if user is already in assignees
+                              onCheckedChange={(checked) => {
+                                const updatedAssignees = checked
+                                  ? [...field.value, user.id] // Add user to assignees array
+                                  : field.value.filter(
+                                      (assignee) => assignee !== user.id
+                                    ); // Remove user from assignees array
+                                field.onChange(updatedAssignees); // Update assignees field value
+                              }}
+                            >
+                              {user.name}
+                            </DropdownMenuCheckboxItem>
+                          ))}
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    )}
                   </FormControl>
                 </div>
 
@@ -626,31 +630,32 @@ export const TaskCard = ({
           />{" "}
         </form>
       </Form>{" "}
-      <Form {...form}>
-        <form
-          ref={archivedFormRef}
-          onSubmit={archivedForm.handleSubmit(onArchivedFormSubmit)}
-          method="post"
-          className="grid gap-6 w-full max-w-md mr-auto  "
-        >
-          <FormField
-            control={archivedForm.control}
-            name="archived"
-            render={({ field }) => (
-              <FormItem>
-                <Dialog open={archivedOpen} onOpenChange={setArchivedOpen}>
-                  <DialogTrigger asChild>
-                    <FormControl>
-                      <Button
-                        title="Archive Task"
-                        variant="outline"
-                        className="h-fit w-fit py-2 px-2 absolute top-0 right-8  border:nav-background hover:border-destructive hover:bg-destructive group"
-                      >
-                        <ArchiveIcon className="w-4 h-4  group-hover:text-white self-center" />
-                        <span className="sr-only">Archive Task Button</span>
-                        {/* <Label className="text-xs">Archive Task</Label> */}
-                      </Button>
-                      {/* <Button
+      {isCurrentUserAdmin && (
+        <Form {...form}>
+          <form
+            ref={archivedFormRef}
+            onSubmit={archivedForm.handleSubmit(onArchivedFormSubmit)}
+            method="post"
+            className="grid gap-6 w-full max-w-md mr-auto  "
+          >
+            <FormField
+              control={archivedForm.control}
+              name="archived"
+              render={({ field }) => (
+                <FormItem>
+                  <Dialog open={archivedOpen} onOpenChange={setArchivedOpen}>
+                    <DialogTrigger asChild>
+                      <FormControl>
+                        <Button
+                          title="Archive Task"
+                          variant="outline"
+                          className="h-fit w-fit py-2 px-2 absolute top-0 right-8  border:nav-background hover:border-destructive hover:bg-destructive group"
+                        >
+                          <ArchiveIcon className="w-4 h-4  group-hover:text-white self-center" />
+                          <span className="sr-only">Archive Task Button</span>
+                          {/* <Label className="text-xs">Archive Task</Label> */}
+                        </Button>
+                        {/* <Button
                         variant={"outline"}
                         className={cn(
                           "w-full pl-3 text-left font-normal",
@@ -659,54 +664,55 @@ export const TaskCard = ({
                       >
                         Archive Task
                       </Button> */}
-                    </FormControl>
-                  </DialogTrigger>
-                  <DialogContent className="p-4 rounded-lg border-2 border-primary bg-alert-background backdrop-filter">
-                    {/* <Card> */}
-                    {/* <CardHeader> */}
-                    <Label className="text-center text-xl md:text-2xl">
-                      Archive Task
-                    </Label>
-                    {/* </CardHeader> */}
-                    <div className="p-4 mb-2 ">
-                      <p className="text-center">
-                        {" "}
-                        Are you sure you want to archive this task?{" "}
-                      </p>
-                      <p className="text-center text-xs">
-                        It can be retrieved from the archive later.{" "}
-                      </p>
-                    </div>
-                    <div className="w-full flex flex-row justify-evenly">
-                      <Button
-                        className="text-sm "
-                        variant="destructive"
-                        onClick={() => {
-                          handleArchivedSubmit();
-                        }}
-                      >
-                        Archive
-                      </Button>
-                      <Button
-                        className="text-sm "
-                        variant="outline"
-                        onClick={() => {
-                          handleArchivedCancel();
-                        }}
-                      >
-                        Cancel
-                      </Button>
-                    </div>
-                    {/* </Card> */}
-                  </DialogContent>
-                </Dialog>
+                      </FormControl>
+                    </DialogTrigger>
+                    <DialogContent className="p-4 rounded-lg border-2 border-primary bg-alert-background backdrop-filter">
+                      {/* <Card> */}
+                      {/* <CardHeader> */}
+                      <Label className="text-center text-xl md:text-2xl">
+                        Archive Task
+                      </Label>
+                      {/* </CardHeader> */}
+                      <div className="p-4 mb-2 ">
+                        <p className="text-center">
+                          {" "}
+                          Are you sure you want to archive this task?{" "}
+                        </p>
+                        <p className="text-center text-xs">
+                          It can be retrieved from the archive later.{" "}
+                        </p>
+                      </div>
+                      <div className="w-full flex flex-row justify-evenly">
+                        <Button
+                          className="text-sm "
+                          variant="destructive"
+                          onClick={() => {
+                            handleArchivedSubmit();
+                          }}
+                        >
+                          Archive
+                        </Button>
+                        <Button
+                          className="text-sm "
+                          variant="outline"
+                          onClick={() => {
+                            handleArchivedCancel();
+                          }}
+                        >
+                          Cancel
+                        </Button>
+                      </div>
+                      {/* </Card> */}
+                    </DialogContent>
+                  </Dialog>
 
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </form>
-      </Form>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </form>
+        </Form>
+      )}
     </div>
   );
 };
