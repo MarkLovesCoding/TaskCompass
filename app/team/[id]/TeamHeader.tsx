@@ -14,6 +14,7 @@ import {
 
 import * as z from "zod";
 import { LayoutIcon } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { useForm, useController } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { updateTeamDetailsAction } from "../_actions/update-team-details.action";
@@ -23,7 +24,7 @@ const formSchema = z.object({
   name: z.string().min(4).max(25),
 });
 
-export function TeamHeader({ team }: { team: TeamDto }) {
+export function TeamHeader({ team, admin }: { team: TeamDto; admin: boolean }) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     // mode: "onChange",
@@ -86,7 +87,16 @@ export function TeamHeader({ team }: { team: TeamDto }) {
             <div className="flex flex-row items-center justify-start ">
               <div className="flex  pr-4 items-center">
                 <LayoutIcon className="w-6 h-6 mr-2 md:w-8 md:h-8 self-center md:mr-4" />
-                <Label className="text-base font-bold text-left">Team</Label>
+                <div>
+                  <Label className="text-base font-bold text-left">Team</Label>
+                  <Badge
+                    className={`min-w-fit text-xs px-2 py-[0.2em] m-1 ${
+                      admin ? "bg-badgeRed" : "bg-badgeBlue"
+                    } `}
+                  >
+                    {admin ? `Admin` : `Member`}
+                  </Badge>
+                </div>
               </div>
               <div>
                 <FormField
