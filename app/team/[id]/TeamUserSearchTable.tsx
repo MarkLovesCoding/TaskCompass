@@ -45,7 +45,7 @@ export function TeamUserSearchTable({
           <span className="sr-only">Show/Edit Team Users</span>
         </div>
       </DialogTrigger>
-      <DialogContent className=" max-w-[95vw] mx-2 w-fit ">
+      <DialogContent className=" max-w-[95vw] max-h-[90vh] mx-2 w-fit ">
         <TeamUserTableCommand
           userId={userId}
           userData={userData}

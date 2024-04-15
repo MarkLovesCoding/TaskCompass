@@ -40,7 +40,7 @@ export function ProjectUserSearchTable({
           <span className="sr-only">Show / Edit Project Users</span>
         </div>
       </DialogTrigger>
-      <DialogContent className="max-w-[95vw] mx-2 w-fit  ">
+      <DialogContent className="max-w-[95vw] max-h-[90vh] mx-2 w-fit  ">
         <ProjectUserTableCommand
           userId={userId}
           project={project}
