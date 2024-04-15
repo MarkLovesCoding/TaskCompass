@@ -153,12 +153,6 @@ export const TaskCard = ({
     newCategory: string
   ): Record<string, string>[] {
     const changes = [];
-    console.log("existingPriority", existingPriority);
-    console.log("newPriority", newPriority);
-    console.log("existingStatus", existingStatus);
-    console.log("newStatus", newStatus);
-    console.log("existingCategory", existingCategory);
-    console.log("newCategory", newCategory);
 
     if (existingPriority !== newPriority) {
       changes.push({
@@ -183,7 +177,6 @@ export const TaskCard = ({
         existingSubType: existingCategory,
       });
     }
-    console.log("changes", changes);
     // if (changes.length === 1) {
     ///needs to return all to prevent single change from being returned only
 
@@ -200,7 +193,6 @@ export const TaskCard = ({
       values.status,
       values.category
     );
-    console.log("taskOrderChanges", taskOrderChanges);
     if (taskOrderChanges.length !== 0) {
       try {
         for (let i = 0; i < taskOrderChanges.length; i++) {
@@ -294,7 +286,6 @@ export const TaskCard = ({
 
   const statusOptions = ["Not Started", "Up Next", "In Progress", "Completed"];
 
-  console.log("<<<<<<<<<<<<<<<<<<<<<<isCurrentUserAdmin", isCurrentUserAdmin);
   return (
     <div className="max-w-[95%] ">
       <Form {...form}>
