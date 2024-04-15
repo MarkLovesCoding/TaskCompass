@@ -19,6 +19,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { UserIcon, UserCog, CheckIcon, ClockIcon } from "lucide-react";
+import { getAvatarColorBasedOnPermissions } from "./utils";
 
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea, ScrollBar } from "@/components/ui/card-scroll-area";
@@ -226,34 +227,35 @@ const ProjectDrawer = ({
                     </Label>
                   </div>
 
-                  <div className=" mb-2 flex flex-row overflow-auto">
-                    <>
-                      {projectAdmins.map((member, index) => (
-                        <div key={index} className="p-2">
-                          <Popover>
-                            <PopoverTrigger>
-                              <Avatar key={index} className="w-8 h-8 ">
-                                <AvatarFallback
-                                  className={` text-xs hover:bg-primary bg-secondary`}
-                                >
-                                  {getInitials(member.name)}
-                                </AvatarFallback>
-                              </Avatar>
-                              <span className="sr-only">User Avatar</span>
-                            </PopoverTrigger>
-                            <PopoverContent className="w-[calc(100%-3em)] m-4 p-0 border-none">
-                              <ProjectUserCardWithPermissions
-                                user={member}
-                                project={project}
-                                tasks={tasks}
-                                team={team}
-                                isCurrentUserAdmin={isCurrentUserAdmin}
-                              />
-                            </PopoverContent>
-                          </Popover>
-                        </div>
-                      ))}
-                    </>
+                  <div className=" mb-2 flex flex-row overflow-auto max-w-[90%]">
+                    {projectAdmins.map((member, index) => (
+                      <div key={index} className="p-2">
+                        <Popover>
+                          <PopoverTrigger>
+                            <Avatar key={index} className="w-8 h-8 ">
+                              <AvatarFallback
+                                className={` text-xs hover:bg-primary ${getAvatarColorBasedOnPermissions(
+                                  member,
+                                  project
+                                )}`}
+                              >
+                                {getInitials(member.name)}
+                              </AvatarFallback>
+                            </Avatar>
+                            <span className="sr-only">User Avatar</span>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-[calc(100%-3em)] m-4 p-0 border-none">
+                            <ProjectUserCardWithPermissions
+                              user={member}
+                              project={project}
+                              tasks={tasks}
+                              team={team}
+                              isCurrentUserAdmin={isCurrentUserAdmin}
+                            />
+                          </PopoverContent>
+                        </Popover>
+                      </div>
+                    ))}
                   </div>
                 </div>
 
@@ -270,34 +272,35 @@ const ProjectDrawer = ({
                       </p>
                     </Label>
                   </div>
-                  <div className=" mb-2 flex flex-row">
-                    <>
-                      {projectMembers.map((member, index) => (
-                        <div key={index} className="p-2">
-                          <Popover>
-                            <PopoverTrigger>
-                              <Avatar key={index} className=" w-8 h-8">
-                                <AvatarFallback
-                                  className={` text-xs hover:bg-primary bg-secondary`}
-                                >
-                                  {getInitials(member.name)}
-                                </AvatarFallback>
-                              </Avatar>
-                              <span className="sr-only">User Avatar</span>
-                            </PopoverTrigger>
-                            <PopoverContent className="w-[calc(100%-3em)] m-4 p-0 border-none">
-                              <ProjectUserCardWithPermissions
-                                user={member}
-                                project={project}
-                                tasks={tasks}
-                                team={team}
-                                isCurrentUserAdmin={isCurrentUserAdmin}
-                              />
-                            </PopoverContent>
-                          </Popover>
-                        </div>
-                      ))}
-                    </>
+                  <div className=" mb-2 flex flex-row overflow-auto max-w-[90%]">
+                    {projectMembers.map((member, index) => (
+                      <div key={index} className="p-2">
+                        <Popover>
+                          <PopoverTrigger>
+                            <Avatar key={index} className=" w-8 h-8">
+                              <AvatarFallback
+                                className={` text-xs hover:bg-primary  ${getAvatarColorBasedOnPermissions(
+                                  member,
+                                  project
+                                )}`}
+                              >
+                                {getInitials(member.name)}
+                              </AvatarFallback>
+                            </Avatar>
+                            <span className="sr-only">User Avatar</span>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-[calc(100%-3em)] m-4 p-0 border-none">
+                            <ProjectUserCardWithPermissions
+                              user={member}
+                              project={project}
+                              tasks={tasks}
+                              team={team}
+                              isCurrentUserAdmin={isCurrentUserAdmin}
+                            />
+                          </PopoverContent>
+                        </Popover>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>

@@ -13,7 +13,7 @@ import {
   SelectContent,
   Select,
 } from "@/components/ui/select";
-import { ArchiveIcon } from "lucide-react";
+import { ArchiveIcon, UserPlus2Icon, UserSearchIcon } from "lucide-react";
 import { Button } from "@/components/ui/button-alert";
 import {
   Form,
@@ -60,6 +60,7 @@ import { TaskDto } from "@/use-cases/task/types";
 import { format } from "date-fns";
 import { useRouter } from "next/navigation";
 
+import { getAvatarColorBasedOnPermissions } from "./utils";
 import { updateTaskArchivedAction } from "../_actions/update-task-archived.action";
 import { updateTaskAction } from "../_actions/update-task.action";
 import { UserDto } from "@/use-cases/user/types";
@@ -290,6 +291,7 @@ export const TaskCard = ({
     { option: "Medium", color: "text-badgeYellow" },
     { option: "Low", color: "text-badgeGreen" },
   ];
+
   const statusOptions = ["Not Started", "Up Next", "In Progress", "Completed"];
 
   console.log("<<<<<<<<<<<<<<<<<<<<<<isCurrentUserAdmin", isCurrentUserAdmin);
@@ -565,34 +567,27 @@ export const TaskCard = ({
             control={form.control}
             name="assignees"
             render={({ field }) => (
-              <FormItem className="flex px-2 flex-col gap-3">
-                <FormLabel className="text-xs font-bold">
-                  Users Assigned
-                </FormLabel>
-                <div className="flex flex-row w-full">
-                  {projectUsers
-                    .filter((user) => currentAssignees.includes(user.id))
-                    .map((user, index) => (
-                      <Avatar key={index} className=" w-12 h-12 m-2">
-                        {/* <AvatarImage src={user.avatar} /> */}
-                        <AvatarFallback className={`text-sm bg-gray-500`}>
-                          {getInitials(user.name)}
-                        </AvatarFallback>
-                      </Avatar>
-                    ))}
+              <FormItem className="flex px-2 flex-col gap-3 max-w-[310px] smallWidth:max-w-[calc(90vw-1.5em)] md:max-w-[390px] ">
+                <div className="flex flex-row">
+                  <FormLabel className="text-xs font-bold">
+                    Users Assigned
+                  </FormLabel>
                   <FormControl>
                     {isCurrentUserAdmin && (
                       <DropdownMenu
                       //  onOpenChange={handleAssigneesChange}
                       >
                         <DropdownMenuTrigger asChild>
-                          <Avatar className="cursor-pointer  w-12 h-12 m-2">
+                          <div className=" ml-8 w-16 h-8 flex justify-center items-center self-center bg-card-background hover:bg-primary hover:cursor-pointer rounded-md">
+                            <UserPlus2Icon className="    w-6 h-6" />
+                          </div>
+                          {/* <Avatar className="cursor-pointer  w-12 h-12 m-1">
                             <AvatarFallback
                               className={`text-sm bg-gray-500 hover:bg-grey:700`}
                             >
                               +
                             </AvatarFallback>
-                          </Avatar>
+                          </Avatar> */}
                         </DropdownMenuTrigger>
                         <DropdownMenuContent
                           onFocusOutside={(e) => e.preventDefault()}
@@ -623,6 +618,26 @@ export const TaskCard = ({
                       </DropdownMenu>
                     )}
                   </FormControl>
+                </div>
+                <div className="flex flex-row w-full overflow-y-auto">
+                  {projectUsers
+                    .filter((user) => currentAssignees.includes(user.id))
+                    .map((user, index) => (
+                      <Avatar
+                        key={index}
+                        className=" w-12 h-12 m-1 hover:cursor-pointer"
+                      >
+                        {/* <AvatarImage src={user.avatar} /> */}
+                        <AvatarFallback
+                          className={`text-sm ${getAvatarColorBasedOnPermissions(
+                            user,
+                            project
+                          )}`}
+                        >
+                          {getInitials(user.name)}
+                        </AvatarFallback>
+                      </Avatar>
+                    ))}
                 </div>
 
                 <FormMessage />

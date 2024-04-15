@@ -1,6 +1,7 @@
 import type { TaskDto } from "@/use-cases/task/types";
 import type { SortType } from "./constants";
 import { ProjectDto } from "@/use-cases/project/types";
+import { UserDto } from "@/use-cases/user/types";
 
 // Type guard to check if 'key' is a valid key of type 'T'
 function isValidKey<T extends object>(obj: T, key: keyof any): key is keyof T {
@@ -47,3 +48,18 @@ export function capitalizeEachWord(str: string) {
     })
     .join(" ");
 }
+
+export const getAvatarColorBasedOnPermissions = (
+  user: UserDto,
+  project: ProjectDto
+) => {
+  if (project.createdBy === user.id) {
+    return "bg-badgePurple";
+  } else if (user.projectsAsAdmin.includes(project.id)) {
+    return "bg-badgeRed";
+  } else if (user.projectsAsMember.includes(project.id)) {
+    return "bg-badgeBlue";
+  } else {
+    return "bg-badgeGray";
+  }
+};
