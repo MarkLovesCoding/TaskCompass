@@ -180,14 +180,14 @@ export async function TeamPageComponent({
                       <div>
                         <div className="flex flex-col  w-[225px] mobileLandscape:w-[175px]">
                           <div className="flex flex-row mr-auto items-center space-x-2 ">
-                            <UserCog className="w-4 h-4 mr-1 opacity-60" />
+                            <UserCog className="min-w-4 min-h-4 mr-1 opacity-60" />
                             <Badge className=" min-w-fit text-xs px-2 py-[0.2em] m-1 bg-badgeRed ">
                               {` Admins: ${teamUsersAdmins.length}`}
                             </Badge>
 
-                            <div className="flex flex-row overflow-y-auto">
+                            <div className="flex flex-row w-[225px] mobileLandscape:w-[175px] overflow-y-auto">
                               {teamUsersAdmins.map((member, index) => (
-                                <div key={index} className="p-2">
+                                <div key={index} className="p-1">
                                   <Popover>
                                     <PopoverTrigger>
                                       <Avatar key={index} className="w-8 h-8 ">
@@ -209,7 +209,6 @@ export async function TeamPageComponent({
                                         team={team}
                                         isCurrentUserAdmin={isCurrentUserAdmin}
                                       />
-                                      {/* ) */}
                                     </PopoverContent>
                                   </Popover>
                                 </div>
@@ -222,14 +221,13 @@ export async function TeamPageComponent({
                       <div>
                         <div className="flex flex-col  w-[225px] mobileLandscape:w-[175px] ">
                           <div className="flex flex-row mr-auto items-center space-x-2 ">
-                            <UserIcon className="w-4 h-4 mr-1 opacity-60" />
+                            <UserIcon className="min-w-4 min-h-4 mr-1 opacity-60" />
                             <Badge className=" min-w-fit text-xs px-2 py-[0.2em] m-1 bg-badgeBlue">
                               {` Members: ${teamUsersMembers.length}`}
                             </Badge>
-                            {/* <ScrollArea> */}
-                            <div className="flex flex-row overflow-y-auto">
+                            <div className="flex flex-row w-[225px] mobileLandscape:w-[175px] overflow-y-auto">
                               {teamUsersMembers.map((member, index) => (
-                                <div key={index} className="p-2">
+                                <div key={index} className="p-1 ">
                                   <Popover>
                                     <PopoverTrigger>
                                       <Avatar key={index} className=" w-8 h-8">
@@ -253,20 +251,12 @@ export async function TeamPageComponent({
                                   </Popover>
                                 </div>
                               ))}
-                              {/* <ScrollBar orientation="horizontal" />
-                            </ScrollArea> */}
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                  {/*                  
-                  {isUserAdmin && (
-                    <div className="flex flex-row">
-                    
-                    </div>
-                  )} */}
                 </div>
               </AccordionContent>
             </AccordionItem>
@@ -279,7 +269,6 @@ export async function TeamPageComponent({
               <h1 className="text-lg md:text-xl font-bold mr-6 self-center">
                 Team Projects
               </h1>
-              {/* <div className="p-4"> */}
               {isCurrentUserAdmin && (
                 <Dialog>
                   <DialogTrigger className="h-fit flex self-center">
@@ -298,7 +287,6 @@ export async function TeamPageComponent({
                   </DialogContent>
                 </Dialog>
               )}
-              {/* </div> */}
             </div>
             <div className=" flex max-w-[90vw] self-center justify-center md:justify-start flex-row flex-wrap">
               {projects &&
