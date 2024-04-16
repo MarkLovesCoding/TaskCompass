@@ -81,10 +81,10 @@ const ResetPasswordForm = () => {
 
   return (
     <div>
-      <h2 className="text-3xl font-extrabold mb-6">Forgot Your Password?</h2>
-      <h3 className="text-xl font-bold mb-4">
+      <h2 className="text-3xl font-extrabold mb-6">Reset your password</h2>
+      {/* <h3 className="text-xl font-bold mb-4">
         {`   No prob! We'll send you a link to the email associated with the account.`}
-      </h3>
+      </h3> */}
 
       <Form {...form}>
         <form
