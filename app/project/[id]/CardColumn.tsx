@@ -21,6 +21,8 @@ const CardColumn = ({
   sorted_type,
   isCurrentUserAdmin,
 }: CardColumnProps) => {
+  const tasksNotArchived = tasksList.filter((task) => !task.archived);
+
   return (
     <Draggable draggableId={sorted_type} index={sorted_idx} key={sorted_type}>
       {(provided, snapshot) => (
@@ -50,7 +52,7 @@ const CardColumn = ({
                   ` w-[250px] m-4 md:mx-8  flex flex-col  mb-0 rounded-lg md:py-6 items-center align-top px-2  `
                 )}
               >
-                {tasksList.length === 0
+                {tasksList.filter((task) => !task.archived).length === 0
                   ? "No tasks"
                   : tasksList.map(
                       (task, task_idx) =>
