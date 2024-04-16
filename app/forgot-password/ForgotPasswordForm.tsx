@@ -47,6 +47,7 @@ const ForgotPasswordForm = () => {
         },
         body: JSON.stringify(values),
       });
+      console.log("res", res.body);
       if (res.status == 400) {
         setErrorMessage("User with this email is not registered.");
       }
@@ -69,7 +70,7 @@ const ForgotPasswordForm = () => {
       <Form {...form}>
         <form
           className="mb-4"
-          // onSubmit={form.handleSu)}
+          onSubmit={form.handleSubmit(handleForgotEmailSubmit)}
           method="post"
         >
           <FormField

@@ -7,11 +7,10 @@ import bcrypt from "bcrypt";
 import crypto from "crypto";
 import sgMail from "@sendgrid/mail";
 
-import Team from "@/db/(models)/Team";
 export async function POST(req: Request, res: Response): Promise<any> {
+  console.log("FIRST LINE IN FORGOT PASSWORD API");
   await connectDB();
   console.log("CONNECTE TO DB");
-  console.log("IN API req___________:", req);
 
   const { email } = await req.json();
   //confirm Data exists
@@ -33,6 +32,7 @@ export async function POST(req: Request, res: Response): Promise<any> {
       { status: 409 }
     );
   }
+  console.log("existingUser", existingUser);
   //create token
   const resetToken = crypto.randomBytes(20).toString("hex");
   const passwordResetToken = crypto
@@ -44,6 +44,8 @@ export async function POST(req: Request, res: Response): Promise<any> {
 
   existingUser.resetToken = passwordResetToken;
   existingUser.resetTokenExpiry = passwordResetExpires;
+  existingUser.save();
+  console.log("existingusersaved", existingUser);
   const resetURL = "http://localhost:3000/reset-password/" + resetToken;
   console.log("RESET URL", resetURL);
   const body = "Reset Password by clicking on following link:" + resetURL;
@@ -57,12 +59,14 @@ export async function POST(req: Request, res: Response): Promise<any> {
   sgMail
     .send(msg)
     .then(() => {
+      console.log("Email sent___");
       return new NextResponse("Password Reset Link Sent", { status: 200 });
     })
-    .catch(async (err) => {
+    .catch(async (err: any) => {
       existingUser.resetToken = undefined;
       existingUser.resetTokenExpiry = undefined;
       await existingUser.save();
+
       return NextResponse.json(
         { message: "Error Sending Password Link Reset Email", err },
         { status: 500 }

@@ -20,6 +20,7 @@ const ForgotPasswordComponent = () => {
       router.push(`/dashboard/${session!.user.id}`);
     }
   }, [session, router]);
+
   return (
     <div className="absolute bg-gradient-background-light justify-center dark:bg-gradient-background-dark  top-0 left-0 flex flex-col  w-full lg:flex-row min-h-[100vh] h-auto">
       {/* Left side (announcement or other content) */}
