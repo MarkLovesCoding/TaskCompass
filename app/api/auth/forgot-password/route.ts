@@ -5,8 +5,8 @@ import Project from "@/db/(models)/Project";
 import { UserType } from "@/lib/types/types";
 import bcrypt from "bcrypt";
 import crypto from "crypto";
-import sgMail from "@sendgrid/mail";
-
+// import sgMail from "@sendgrid/mail";
+import { Resend } from "resend";
 export async function POST(req: Request, res: Response): Promise<any> {
   console.log("FIRST LINE IN FORGOT PASSWORD API");
   await connectDB();
@@ -44,38 +44,57 @@ export async function POST(req: Request, res: Response): Promise<any> {
 
   existingUser.resetToken = passwordResetToken;
   existingUser.resetTokenExpiry = passwordResetExpires;
-  existingUser.save();
-  console.log("existingusersaved", existingUser);
+  existingUser.markModified("resetToken");
+  existingUser.markModified("resetTokenExpiry");
+  console.log("existinguser__", existingUser);
   const resetURL = "http://localhost:3000/reset-password/" + resetToken;
   console.log("RESET URL", resetURL);
-  const body = "Reset Password by clicking on following link:" + resetURL;
+  const body = "Reset Password by clicking on following link: " + resetURL;
   const msg = {
     to: email, // Change to your recipient
     from: "mark.halstead.dev@gmail.com", // Change to your verified sender
     subject: "TaskCompass -- Reset Password",
     text: body,
   };
-  sgMail.setApiKey(process.env.SENDGRID_API || "");
-  sgMail
-    .send(msg)
-    .then(() => {
-      console.log("Email sent___");
-      return new NextResponse("Password Reset Link Sent", { status: 200 });
-    })
-    .catch(async (err: any) => {
+  // sgMail.setApiKey(process.env.SENDGRID_API || "");
+  const resend = new Resend(process.env.RESEND_API);
+  (async function () {
+    const { data, error } = await resend.emails.send(msg);
+
+    if (error) {
       existingUser.resetToken = undefined;
       existingUser.resetTokenExpiry = undefined;
-      await existingUser.save();
+      existingUser.markModified("resetToken");
+      existingUser.markModified("resetTokenExpiry");
+      console.log("HERE");
+      console.log(existingUser);
+      await existingUser.save().then((err: any, updatedDoc: any) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+        console.log("Document updated successfully:", updatedDoc);
+      });
 
       return NextResponse.json(
-        { message: "Error Sending Password Link Reset Email", err },
+        { message: "Error Sending Password Link Reset Email", error },
         { status: 500 }
       );
-    });
+    }
+
+    console.log({ data });
+    return new NextResponse("Password Reset Link Sent", { status: 200 });
+  })();
 
   try {
-    await existingUser.save();
-
+    // await existingUser.save();
+    await User.findOneAndUpdate(
+      { _id: existingUser.id },
+      {
+        resetToken: passwordResetToken,
+        resetTokenExpiry: passwordResetExpires,
+      }
+    );
     return NextResponse.json(
       { message: "User Saved with Reset Tokens" },
       { status: 201 }

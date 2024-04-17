@@ -6,7 +6,7 @@ const UserSchema = new Schema(
   {
     name: String,
     email: String,
-    password: String,
+    password: { type: String, required: false },
     projectsAsAdmin: [{ type: Schema.Types.ObjectId, ref: "Project" }],
     projectsAsMember: [{ type: Schema.Types.ObjectId, ref: "Project" }],
     teamsAsAdmin: [{ type: Schema.Types.ObjectId, ref: "Team" }],
@@ -14,8 +14,8 @@ const UserSchema = new Schema(
     tasks: [{ type: Schema.Types.ObjectId, ref: "Task" }],
     avatar: { type: String, default: "default_avatar.png" },
     role: String,
-    resetToken: { type: String || undefined, default: undefined },
-    resetTokenExpiry: { type: Number || undefined, default: undefined },
+    resetToken: { type: String || undefined, required: false },
+    resetTokenExpiry: { type: Number || undefined, required: false },
   },
   {
     timestamps: true,

@@ -1,6 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { FormEvent } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -43,8 +43,35 @@ interface FormData {
   passwordConfirm: string;
 }
 
-const ResetPasswordForm = () => {
+const ResetPasswordForm = ({ params }: any) => {
   const router = useRouter();
+
+  useEffect(() => {
+    const verifyToken = async () => {
+      try {
+        const res = await fetch("/api/auth/verify-token", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ token: params.token }),
+        });
+        if (res.status === 400) {
+          setErrorMessage("Token is invalid or has expired.");
+
+          router.push("/forgot-password");
+        }
+        if (res.status === 200) {
+          setErrorMessage("");
+          router.push("/login");
+        }
+      } catch (error) {
+        setErrorMessage("Token is invalid or has expired.");
+        console.log(error);
+      }
+    };
+    verifyToken();
+  }, [params.token]);
 
   const [errorMessage, setErrorMessage] = useState<string>("");
 
@@ -55,11 +82,11 @@ const ResetPasswordForm = () => {
       passwordConfirm: "",
     },
   });
-  const handleForgotEmailSubmit = async (values: FormData) => {
+  const handleResetPasswordSubmit = async (values: FormData) => {
     console.log("values", values);
 
     try {
-      const res = await fetch("/api/auth/forgot-password", {
+      const res = await fetch("/api/auth/reset-password", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -68,11 +95,13 @@ const ResetPasswordForm = () => {
       });
       console.log("res", res.body);
       if (res.status == 400) {
-        setErrorMessage("User with this email is not registered.");
+        setErrorMessage("Error resetting password.");
       }
       if (res.status === 200) {
-        setErrorMessage("Password reset link sent to your email.");
-        router.push("/login");
+        setErrorMessage("Password reset successfully.");
+        setTimeout(() => {
+          router.push("/login");
+        }, 1000);
       }
     } catch (error) {
       console.log(error);
@@ -89,7 +118,7 @@ const ResetPasswordForm = () => {
       <Form {...form}>
         <form
           className="mb-4"
-          onSubmit={form.handleSubmit(handleForgotEmailSubmit)}
+          onSubmit={form.handleSubmit(handleResetPasswordSubmit)}
           method="post"
         >
           <FormField
