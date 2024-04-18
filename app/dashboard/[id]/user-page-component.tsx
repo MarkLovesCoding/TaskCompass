@@ -22,7 +22,6 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { getInitials } from "@/lib/utils/getInitials";
 import { Badge } from "@/components/ui/badge";
 import { TaskDto } from "@/use-cases/task/types";
-import { ScrollArea, ScrollBar } from "@/components/ui/dashboard-scroll-area";
 
 import {
   Accordion,
@@ -61,6 +60,10 @@ export async function UserPageComponent({
     return team ? team.name : "";
   };
 
+  console.log("projects", usersProjectsAsAdmin, usersProjectsAsMember);
+  for (let project of [...usersProjectsAsAdmin, ...usersProjectsAsMember]) {
+    console.log("project thumbs", project.backgroundImageThumb);
+  }
   return (
     <div className="absolute flex flex-col top-[2em] md:top-[3em] w-full h-[calc(100vh-2em)] md:h-[calc(100vh-3em)]">
       <main className="flex  items-center bg-gradient-background-light dark:bg-gradient-background-dark overflow-x-hidden flex-col  h-[calc(100vh-2em)] md:h-[calc(100vh-3em)]  md:gap-8 ">
@@ -261,6 +264,21 @@ export async function UserPageComponent({
                       ) : (
                         <Card
                           key={project_idx}
+                          style={
+                            project.backgroundImageThumb?.length > 0
+                              ? {
+                                  backgroundImage:
+                                    "url('" +
+                                    project.backgroundImageThumb +
+                                    "')" +
+                                    ", linear-gradient(215deg, rgba(255,255,255,0.2),rgba(255,255,255,0.1))",
+                                  backgroundBlendMode: "overlay",
+                                  backgroundSize: "cover",
+                                  backgroundPosition: " center",
+                                  backgroundRepeat: "no-repeat",
+                                }
+                              : {}
+                          }
                           className="hover:border-orange-300  border-2  mb-4 max-w-full  mr-4 md:mb-4 flex items-center w-72 h-28 bg-card shadow-lg hover:shadow-sm"
                         >
                           <Link
@@ -304,6 +322,22 @@ export async function UserPageComponent({
                         />
                       ) : (
                         <Card
+                          style={
+                            project.backgroundImageThumb?.length > 0
+                              ? {
+                                  backgroundImage:
+                                    "url('" +
+                                    project.backgroundImageThumb +
+                                    "')",
+                                  // +
+                                  // ", linear-gradient(215deg, rgba(255,255,255,0.2),rgba(255,255,255,0.1))",
+                                  // backgroundBlendMode: "overlay",
+                                  backgroundSize: "cover",
+                                  backgroundPosition: " center",
+                                  backgroundRepeat: "no-repeat",
+                                }
+                              : {}
+                          }
                           key={project_idx}
                           className=" hover:border-orange-300  border-2 mb-4 max-w-full mr-4 flex items-center w-72 h-28 bg-card  shadow-lg hover:shadow-sm"
                         >

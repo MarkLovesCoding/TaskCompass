@@ -28,6 +28,7 @@ export function projectModelToProjectDto(
     createdBy: project.createdBy.toString(),
     archived: project.archived,
     backgroundImage: project.backgroundImage,
+    backgroundImageThumb: project.backgroundImageThumb,
     tasksOrder: plainifyTasksOrder,
     columnOrder: plainifyColumnOrder,
   };

@@ -148,7 +148,7 @@ export function ProjectPage({
   };
   const setNewBackground = async (urls: TUrls) => {
     setProjectBackgroundImage(urls.full);
-    await updateProjectBackgroundAction(project.id, urls.full, urls.thumb);
+    await updateProjectBackgroundAction(project.id, urls.full, urls.small);
   };
   const isCurrentUserAdmin =
     project && user.projectsAsAdmin.some((id) => id === project.id);
