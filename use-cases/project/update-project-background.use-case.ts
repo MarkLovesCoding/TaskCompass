@@ -13,6 +13,7 @@ export async function updateProjectBackgroundUseCase(
   data: {
     projectId: string;
     projectBackgroundImage: string;
+    projectBackgroundImageThumb: string;
   }
 ) {
   const user = context.getUser();
@@ -24,8 +25,6 @@ export async function updateProjectBackgroundUseCase(
   });
 
   validatedProject.updateBackgroundImage(data.projectBackgroundImage);
-  console.log("------------------VALIDATED PROJECT-----::,", validatedProject);
+  validatedProject.updateBackgroundImageThumb(data.projectBackgroundImageThumb);
   await context.updateProject(projectToDto(validatedProject));
-  const again = await context.getProject(data.projectId);
-  console.log("AGAIN", again);
 }

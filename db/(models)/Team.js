@@ -9,6 +9,8 @@ const TeamSchema = new Schema(
     // members: [{ type: Schema.Types.ObjectId, ref: "User" }],
     projects: [{ type: Schema.Types.ObjectId, ref: "Project" }],
     createdBy: { type: Schema.Types.ObjectId, ref: "User" },
+    backgroundImage: { type: String, default: "" },
+    backgroundImageThumbnail: { type: String, default: "" },
   },
   {
     timestamps: true,

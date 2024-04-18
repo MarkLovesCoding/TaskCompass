@@ -2,7 +2,13 @@
 import { capitalizeEachWord } from "./utils";
 import { Button } from "@/components/ui/button";
 import { NewTaskCard } from "./NewTaskCard";
-import { PlusIcon, FolderKanbanIcon, ArrowLeft, Scroll } from "lucide-react";
+import {
+  PlusIcon,
+  FolderKanbanIcon,
+  ArrowLeft,
+  Scroll,
+  ImageIcon,
+} from "lucide-react";
 import Link from "next/link";
 import type { ProjectDto } from "@/use-cases/project/types";
 import type { TaskDto } from "@/use-cases/task/types";
@@ -35,6 +41,7 @@ import { TeamDto } from "@/use-cases/team/types";
 import { updateProjectBackgroundAction } from "../_actions/update-project-background.action";
 import ProjectDrawer from "./ProjectDrawer";
 import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
+
 export function ProjectPage({
   // id,
   userId,
@@ -59,83 +66,52 @@ export function ProjectPage({
     project.backgroundImage
   );
   const PER_PAGE = 12;
-  const [selectedImages, setSelectedImages] = useState<string[]>([]);
+  const [selectedImages, setSelectedImages] = useState<any[]>([]);
   const [imagesLoadPage, setImagesLoadPage] = useState<number>(1);
-
-  // useEffect(() => {
-  //   if (project.backgroundImage !== "") {
-  //     console.log("project.backgroundImage", project);
-  //     setProjectBackgroundImage(project.backgroundImage);
-  //   }
-  // }, [project.backgroundImage]);
-  // useEffect(() => {
-  //   const currentTheme = localStorage.getItem("theme");
-  //   if (project.backgroundImage == "") {
-  //     setIsDefaultBackground(true);
-
-  //     setDefaultBackground(
-  //       "bg-gradient-background-light dark:bg-gradient-background-dark"
-  //     );
-  //   } else {
-  //     setIsDefaultBackground(false);
-  //     setDefaultBackground("");
-  //     setProjectBackgroundImage(project.backgroundImage);
-  //   }
-  // }, []);
 
   const loadImageSetonOpen = async (bool: boolean) => {
     // isImagesDialogOpen = bool;
-    console.log("boolOnOpen", bool);
     if (bool) {
-      await loadImageSet();
+      await loadNextImageSet();
     }
   };
 
-  const imagesFromUnsplash = async (page: number, perPage: number) => {
-    try {
-      const response = await fetch(`/api/unsplash`, {
-        method: "POST",
-        headers: { ContentType: "application/json" },
-        body: JSON.stringify({ page, perPage }),
-      });
-      const data = await response.json();
-      const images = parseUnsplashData(data);
-
-      return images;
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      return null;
-    }
-  };
-  const parseUnsplashData = (data: any) => {
-    const images = data.results.map((image: any) => {
-      return {
-        id: image.id,
-        urls: image.urls,
-        user: image.user,
-      };
-    });
-    return images;
-  };
-  const loadImageSet = async () => {
-    console.log("_______HERE");
+  const loadNextImageSet = async () => {
     const nextPage = imagesLoadPage + 1;
-    console.log("nextPage", nextPage);
+    const showPage = imagesLoadPage == 1 ? 1 : nextPage;
+    // await apiSearchNext(nextPage);
+    await fetch("/api/unsplash", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ page: showPage, perPage: PER_PAGE }),
+      cache: "no-cache",
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        setSelectedImages((prev) => {
+          return [...prev, ...data];
+        });
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
     setImagesLoadPage(nextPage);
-    // console.log("imagesLoadPage", imagesLoadPage);
-    const data = await imagesFromUnsplash(nextPage, PER_PAGE);
-    console.log("data)))):", data);
-    setSelectedImages((prevImageData) => {
-      return [...prevImageData, ...data];
-    });
-    console.log("selectedImages,", selectedImages);
-    // Do something with the fetched data, like updating state or rendering it
   };
-  const setNewBackground = async (url: string) => {
-    // console.log("selectedImage", url);
-    setProjectBackgroundImage(url);
-    await updateProjectBackgroundAction(project.id, url);
-    // document.body.style.backgroundImage = `url(${selectedImage})`;
+  type TUrls = {
+    full: string;
+    large: string;
+    regular: string;
+    raw: string;
+    small: string;
+    thumb: string;
+  };
+  const setNewBackground = async (urls: TUrls) => {
+    setProjectBackgroundImage(urls.full);
+    await updateProjectBackgroundAction(project.id, urls.full, urls.small);
   };
   const isCurrentUserAdmin =
     project && user.projectsAsAdmin.some((id) => id === project.id);
@@ -243,50 +219,64 @@ export function ProjectPage({
               </PopoverContent>
             </Popover>
           </div>
-          <div>
+          <div title="Change Background" className="p-2">
             <Dialog onOpenChange={loadImageSetonOpen}>
               <DialogTrigger asChild>
                 <Button variant="outline" className="group hover:bg-accent">
-                  <Label className="hidden md:flex ">Change Background</Label>
-                  <PlusIcon className="w-8 h-8 md:ml-3 self-center group-hover:text-primary" />
+                  {/* <Label className="hidden md:flex ">Change Background</Label> */}
+                  <ImageIcon className="w-8 h-8 self-center group-hover:text-primary" />
                   <span className="sr-only">Change Background Button</span>
                 </Button>
               </DialogTrigger>
-              <DialogContent className="border-2 w-[80%]  bg-cardcolumn-background  p-4 border-nav-background">
+              <DialogContent className="border-2 w-[80%]  bg-accordion-background backdrop-blur  p-4 border-nav-background">
                 <div className="flex flex-col h-fit overflow-auto">
-                  <h1>Customize Background</h1>
-                  <div className="flex flex-wrap justify-center h-[300px] p-4">
-                    {selectedImages.map((image: any, index) => {
-                      return (
-                        <div
-                          key={index}
-                          className="relative max-w-[120px] max-h-[80px] m-1 overflow-y-clip hover:border-white border-2 rounded-sm truncate text-ellipsis"
-                        >
-                          <Image
-                            onClick={() => setNewBackground(image.urls.full)}
-                            src={image.urls.thumb}
-                            alt="Background Image"
-                            width={120}
-                            height={80}
-                            className="max-w-[120px] h-auto overflow-clip rounded cursor-pointer "
-                          />
-
-                          <Link
-                            href={image.user.links.html}
-                            className="px-5  truncate text-ellipsis"
-                            title={image.user.name}
+                  <h1 className="font-bold text-lg w-full text-center">
+                    Customize Background
+                  </h1>
+                  <div className="flex flex-wrap justify-center h-[300px] p-2">
+                    {selectedImages.length > 0 ? (
+                      selectedImages.map((image: any, index) => {
+                        return (
+                          <div
+                            key={index}
+                            className="relative max-w-[120px] max-h-[80px] m-1 overflow-y-clip cursor-pointer hover:border-white border-2 rounded-sm truncate text-ellipsis group"
                           >
-                            <p className="absolute top-[60px] left-[12px]  max-w-[calc(100%-24px)]  bg-badgeGray/40 text-xs truncate text-ellipsis">
-                              {image.user.name}
-                            </p>
-                          </Link>
-                          {/* <p>{image.url.full}</p> */}
-                        </div>
-                      );
-                    })}
-                    <Button onClick={loadImageSet} className="w-24 ">
-                      + Load More
-                    </Button>
+                            <Image
+                              onClick={() => setNewBackground(image.urls)}
+                              src={image.urls.thumb}
+                              alt="Background Image"
+                              width={120}
+                              height={80}
+                              className={`${
+                                image.width / image.height > 1.5
+                                  ? "w-auto h-[80px]"
+                                  : "w-[120px] h-auto"
+                              }  overflow-clip rounded cursor-pointer z-40 `}
+                            />
+                            {/* <div className="w-full h-full absolute top-0 left-0 z-30 bg-black/10 group-hover:bg-black/0"></div> */}
+                            <Link
+                              href={image.user.links.html}
+                              className=" w-full absolute h-[20px]  bg-black/30 z-40 hover:bg-black/60 top-[60px] left-[0px]  truncate text-ellipsis "
+                              title={image.user.name}
+                            >
+                              <p className="  px-2 text-xs truncate text-ellipsis">
+                                {image.user.name}
+                              </p>
+                            </Link>
+                            {/* <p>{image.url.full}</p> */}
+                          </div>
+                        );
+                      })
+                    ) : (
+                      <div className="flex justify-center">
+                        <p>Loading Images...</p>
+                      </div>
+                    )}
+                    <div className="min-w-full py-4 flex justify-center">
+                      <Button onClick={loadNextImageSet} className="w-24">
+                        + Load More
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </DialogContent>

@@ -4,12 +4,16 @@ export type TeamDto = {
   users: string[];
   projects: string[];
   createdBy: string;
+  backgroundImage: string;
+  backgroundImageThumbnail: string;
 };
 export type CreateTeamDto = {
   name: string;
   users: string[];
   projects: string[];
   createdBy: string;
+  backgroundImage: string;
+  backgroundImageThumbnail: string;
 };
 export type UpdateTeamUsers = (
   teamId: string,

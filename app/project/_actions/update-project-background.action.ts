@@ -6,7 +6,8 @@ import { updateProjectBackgroundUseCase } from "@/use-cases/project/update-proje
 import { getUserFromSession } from "@/lib/sessionAuth";
 export async function updateProjectBackgroundAction(
   projectId: string,
-  projectBackgroundImage: string
+  projectBackgroundImage: string,
+  projectBackgroundImageThumb: string
 ) {
   const { getUser } = await getUserFromSession();
   console.log("updateProjectBackground", projectId, projectBackgroundImage);
@@ -20,9 +21,10 @@ export async function updateProjectBackgroundAction(
       {
         projectId: projectId,
         projectBackgroundImage: projectBackgroundImage,
+        projectBackgroundImageThumb: projectBackgroundImageThumb,
       }
     );
-    revalidatePath("/project/[slug]");
+    revalidatePath(`/project/${projectId}`);
 
     //for toasts, not yet implemented
     return { success: true };

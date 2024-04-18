@@ -4,4 +4,6 @@ export type TeamModelType = {
   projects: string[];
   users: string[];
   createdBy: string;
+  backgroundImage: string;
+  backgroundImageThumbnail: string;
 };

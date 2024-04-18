@@ -10,6 +10,7 @@ export class UserEntity {
   private teamsAsAdmin: string[];
   private teamsAsMember: string[];
   private tasks: string[];
+  private dashboardBackgroundImage: string;
 
   constructor({
     id,
@@ -21,6 +22,7 @@ export class UserEntity {
     teamsAsAdmin,
     teamsAsMember,
     tasks,
+    dashboardBackgroundImage,
   }: {
     id: string;
     name: string;
@@ -31,6 +33,7 @@ export class UserEntity {
     teamsAsAdmin: string[];
     teamsAsMember: string[];
     tasks: string[];
+    dashboardBackgroundImage: string;
   }) {
     this.id = id;
     this.name = name;
@@ -41,6 +44,7 @@ export class UserEntity {
     this.teamsAsAdmin = teamsAsAdmin;
     this.teamsAsMember = teamsAsMember;
     this.tasks = tasks;
+    this.dashboardBackgroundImage = dashboardBackgroundImage;
     this.validate();
   }
 
@@ -78,6 +82,9 @@ export class UserEntity {
 
   getAvatar() {
     return this.avatar;
+  }
+  getDashboardBackgroundImage() {
+    return this.dashboardBackgroundImage;
   }
 
   addProjectAsAdmin(project: string) {
@@ -123,6 +130,9 @@ export class UserEntity {
   updateAvatar(avatar: string) {
     this.avatar = avatar;
   }
+  updateDashboardBackgroundImage(dashboardBackgroundImage: string) {
+    this.dashboardBackgroundImage = dashboardBackgroundImage;
+  }
 
   updateUserProjectPermissions(
     projectId: string,
@@ -167,6 +177,7 @@ export class UserEntity {
       teams: z.array(z.string()).optional(),
       tasks: z.array(z.string()).optional(),
       avatar: z.string().min(3),
+      dashboardBackgroundImage: z.string().optional(),
     });
     try {
       projectSchema.parse(this);

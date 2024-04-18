@@ -1,5 +1,7 @@
+"use client";
 import Link from "next/link";
-
+import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
 import AddTeamCard from "./AddTeamCard";
 
 import { Button } from "@/components/ui/button";
@@ -12,7 +14,7 @@ import {
 
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
-import { PlusIcon } from "lucide-react";
+import { ImageIcon, PlusIcon } from "lucide-react";
 import ArchivedProjectCardWithUnarchiveAction from "./UnarchiveProjectCard";
 import type { UserDto } from "@/use-cases/user/types";
 import type { ProjectDto } from "@/use-cases/project/types";
@@ -22,7 +24,6 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { getInitials } from "@/lib/utils/getInitials";
 import { Badge } from "@/components/ui/badge";
 import { TaskDto } from "@/use-cases/task/types";
-import { ScrollArea, ScrollBar } from "@/components/ui/dashboard-scroll-area";
 
 import {
   Accordion,
@@ -31,9 +32,11 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { updateUserDashboardBackgroundAction } from "./_actions/update-user-dashboard-background.action";
 // get teams
 // get projects
-export async function UserPageComponent({
+
+export function UserPageComponent({
   user,
   usersTeamsAsMember,
   usersTeamsAsAdmin,
@@ -61,11 +64,100 @@ export async function UserPageComponent({
     return team ? team.name : "";
   };
 
+  //Background Image
+  const [dashboardBackgroundImage, setDashboardBackgroundImage] =
+    useState<string>(user.dashboardBackgroundImage);
+  const PER_PAGE = 12;
+  const [selectedImages, setSelectedImages] = useState<any[]>([]);
+  const [imagesLoadPage, setImagesLoadPage] = useState<number>(1);
+
+  const loadImageSetonOpen = async (bool: boolean) => {
+    // isImagesDialogOpen = bool;
+    if (bool) {
+      await loadNextImageSet();
+    }
+  };
+
+  const loadNextImageSet = async () => {
+    const nextPage = imagesLoadPage + 1;
+    const showPage = imagesLoadPage == 1 ? 1 : nextPage;
+    // await apiSearchNext(nextPage);
+    await fetch("/api/unsplash", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ page: showPage, perPage: PER_PAGE }),
+      cache: "no-cache",
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        setSelectedImages((prev) => {
+          return [...prev, ...data];
+        });
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+    setImagesLoadPage(nextPage);
+  };
+  type TUrls = {
+    full: string;
+    large: string;
+    regular: string;
+    raw: string;
+    small: string;
+    thumb: string;
+  };
+  const setNewBackground = async (urls: TUrls) => {
+    setDashboardBackgroundImage(urls.full);
+    await updateUserDashboardBackgroundAction(user.id, urls.full);
+  };
+  const imageContainerRef = useRef<HTMLDivElement>(null);
+  const handleScroll = () => {
+    if (!imageContainerRef.current) {
+      console.log("Ref is not attached");
+      return;
+    }
+    const { scrollTop, scrollHeight, clientHeight } = imageContainerRef.current;
+    console.log(scrollTop, scrollHeight, clientHeight);
+    if (scrollTop + clientHeight >= scrollHeight) {
+      console.log("You have reached the bottom!");
+      // loadNextImageSet(); // Uncomment this to load more content
+    }
+  };
+  useEffect(() => {
+    const scrollContainer = imageContainerRef.current;
+    if (scrollContainer) {
+      scrollContainer.addEventListener("scroll", handleScroll);
+    }
+
+    return () => {
+      if (scrollContainer) {
+        scrollContainer.removeEventListener("scroll", handleScroll);
+      }
+    };
+  }, []); // Empty dependencies array indicates this runs only once after mounting
+
   return (
     <div className="absolute flex flex-col top-[2em] md:top-[3em] w-full h-[calc(100vh-2em)] md:h-[calc(100vh-3em)]">
-      <main className="flex  items-center bg-gradient-background-light dark:bg-gradient-background-dark overflow-x-hidden flex-col  h-[calc(100vh-2em)] md:h-[calc(100vh-3em)]  md:gap-8 ">
+      <main
+        style={
+          dashboardBackgroundImage
+            ? {
+                backgroundImage: "url(" + dashboardBackgroundImage + ")",
+                backgroundSize: "cover",
+                backgroundPosition: " center",
+                backgroundRepeat: "no-repeat",
+              }
+            : {}
+        }
+        className="flex  items-center bg-gradient-background-light dark:bg-gradient-background-dark overflow-x-hidden flex-col  h-[calc(100vh-2em)] md:h-[calc(100vh-3em)]  md:gap-8 "
+      >
         {/* <div className="w-full h-[15vh] bg-card-background absolute top-0 left-0 "></div> */}
-        <div className="z-20   w-full flex flex-col items-center self-center  pl-8 p-1 bg-accordion-background  shadow-md space-y-4  ">
+        <div className="z-20   w-full flex flex-col items-center self-center  pl-8 p-1 bg-accordion-background backdrop-blur shadow-md space-y-4  ">
           {/* <div className="bg-gray-100 p-4 rounded-lg shadow-md"> */}
           <Accordion type="single" collapsible className="w-full">
             <AccordionItem value="summary">
@@ -124,6 +216,84 @@ export async function UserPageComponent({
                       <Badge className=" min-w-fit text-xs px-2 py-[0.2em] m-1  bg-badgeBlue">{` Member: ${usersProjectsAsMember.length}`}</Badge>
                     </div>
                   </div>
+                  <div className="mb-4 md:w-1/6">
+                    <Dialog onOpenChange={loadImageSetonOpen}>
+                      <DialogTrigger asChild>
+                        <Button
+                          variant="outline"
+                          className="group hover:bg-accent"
+                        >
+                          <Label className="hidden md:flex ">
+                            Change Background
+                          </Label>
+                          <ImageIcon className="w-8 h-8 md:ml-3 self-center group-hover:text-primary" />
+                          <span className="sr-only">
+                            Change Background Button
+                          </span>
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent className="border-2 w-[80%]  bg-cardcolumn-background  p-4 border-nav-background">
+                        <div
+                          className="flex flex-col h-fit overflow-auto"
+                          ref={imageContainerRef}
+                        >
+                          <h1 className="font-bold text-lg w-full text-center">
+                            Customize Background
+                          </h1>
+                          <div className="flex flex-wrap justify-center h-[300px] p-2">
+                            {selectedImages.length > 0 ? (
+                              selectedImages.map((image: any, index) => {
+                                return (
+                                  <div
+                                    key={index}
+                                    className="relative max-w-[120px] max-h-[80px] m-1 overflow-y-clip cursor-pointer hover:border-white border-2 rounded-sm truncate text-ellipsis group"
+                                  >
+                                    <Image
+                                      onClick={() =>
+                                        setNewBackground(image.urls)
+                                      }
+                                      src={image.urls.thumb}
+                                      alt="Background Image"
+                                      width={120}
+                                      height={80}
+                                      className={`${
+                                        image.width / image.height > 1.5
+                                          ? "w-auto h-[80px]"
+                                          : "w-[120px] h-auto"
+                                      }  overflow-clip rounded cursor-pointer z-40 `}
+                                    />
+                                    {/* <div className="w-full h-full absolute top-0 left-0 z-30 bg-black/10 group-hover:bg-black/0"></div> */}
+                                    <Link
+                                      href={image.user.links.html}
+                                      className=" w-full absolute h-[20px]  bg-black/30 z-40 hover:bg-black/60 top-[60px] left-[0px]  truncate text-ellipsis "
+                                      title={image.user.name}
+                                    >
+                                      <p className="  px-2 text-xs truncate text-ellipsis">
+                                        {image.user.name}
+                                      </p>
+                                    </Link>
+                                    {/* <p>{image.url.full}</p> */}
+                                  </div>
+                                );
+                              })
+                            ) : (
+                              <div className="flex justify-center">
+                                <p>Loading Images...</p>
+                              </div>
+                            )}
+                            <div className="min-w-full py-4 flex justify-center">
+                              <Button
+                                onClick={loadNextImageSet}
+                                className="w-24"
+                              >
+                                + Load More
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      </DialogContent>
+                    </Dialog>
+                  </div>
                 </div>
               </AccordionContent>
             </AccordionItem>
@@ -133,7 +303,11 @@ export async function UserPageComponent({
         <div className="z-20 flex justify-center  self-center  m-4 w-full">
           <Tabs
             defaultValue="teams"
-            className="flex mt-8 justify-center self-center w-fit   flex-col "
+            className="flex mt-0 p-8 bg-accordion-background backdrop-blur rounded-lg justify-center self-center w-fit   flex-col "
+            //     padding: 2em;
+            // background: #2229338a;
+            // backdrop-filter: blur(5px);
+            // border-radius: 25px;
           >
             <TabsList className="self-center">
               <TabsTrigger value="teams">Teams</TabsTrigger>
@@ -177,6 +351,22 @@ export async function UserPageComponent({
                       return (
                         <Card
                           key={team_idx}
+                          style={
+                            team.backgroundImageThumbnail?.length > 0
+                              ? {
+                                  backgroundImage:
+                                    "url('" +
+                                    team.backgroundImageThumbnail +
+                                    "')",
+                                  // +
+                                  // ", linear-gradient(215deg, rgba(255,255,255,0.2),rgba(255,255,255,0.1))",
+                                  // backgroundBlendMode: "overlay",
+                                  backgroundSize: "cover",
+                                  backgroundPosition: " center",
+                                  backgroundRepeat: "no-repeat",
+                                }
+                              : {}
+                          }
                           className=" hover:border-orange-300  border-2 mb-4 max-w-full mr-4 md:mb-4 flex items-center w-72 h-28 bg-card shadow-lg hover:shadow-sm"
                         >
                           <Link
@@ -211,6 +401,22 @@ export async function UserPageComponent({
                       return (
                         <Card
                           key={team_idx}
+                          style={
+                            team.backgroundImageThumbnail?.length > 0
+                              ? {
+                                  backgroundImage:
+                                    "url('" +
+                                    team.backgroundImageThumbnail +
+                                    "')",
+                                  // +
+                                  // ", linear-gradient(215deg, rgba(255,255,255,0.2),rgba(255,255,255,0.1))",
+                                  // backgroundBlendMode: "overlay",
+                                  backgroundSize: "cover",
+                                  backgroundPosition: " center",
+                                  backgroundRepeat: "no-repeat",
+                                }
+                              : {}
+                          }
                           className=" mb-4 hover:border-orange-300  border-2  max-w-full flex  mr-4 items-center w-72 h-28 bg-card shadow-lg hover:shadow-sm"
                         >
                           <Link
@@ -261,6 +467,22 @@ export async function UserPageComponent({
                       ) : (
                         <Card
                           key={project_idx}
+                          style={
+                            project.backgroundImageThumb?.length > 0
+                              ? {
+                                  backgroundImage:
+                                    "url('" +
+                                    project.backgroundImageThumb +
+                                    "')",
+                                  // +
+                                  // ", linear-gradient(215deg, rgba(255,255,255,0.2),rgba(255,255,255,0.1))",
+                                  // backgroundBlendMode: "overlay",
+                                  backgroundSize: "cover",
+                                  backgroundPosition: " center",
+                                  backgroundRepeat: "no-repeat",
+                                }
+                              : {}
+                          }
                           className="hover:border-orange-300  border-2  mb-4 max-w-full  mr-4 md:mb-4 flex items-center w-72 h-28 bg-card shadow-lg hover:shadow-sm"
                         >
                           <Link
@@ -304,6 +526,22 @@ export async function UserPageComponent({
                         />
                       ) : (
                         <Card
+                          style={
+                            project.backgroundImageThumb?.length > 0
+                              ? {
+                                  backgroundImage:
+                                    "url('" +
+                                    project.backgroundImageThumb +
+                                    "')",
+                                  // +
+                                  // ", linear-gradient(215deg, rgba(255,255,255,0.2),rgba(255,255,255,0.1))",
+                                  // backgroundBlendMode: "overlay",
+                                  backgroundSize: "cover",
+                                  backgroundPosition: " center",
+                                  backgroundRepeat: "no-repeat",
+                                }
+                              : {}
+                          }
                           key={project_idx}
                           className=" hover:border-orange-300  border-2 mb-4 max-w-full mr-4 flex items-center w-72 h-28 bg-card  shadow-lg hover:shadow-sm"
                         >

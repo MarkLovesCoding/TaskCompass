@@ -27,6 +27,7 @@ export async function createNewProjectUseCase(
     team: data.teamId,
     archived: false,
     backgroundImage: "",
+    backgroundImageThumb: "",
     createdBy: user.userId,
     tasksOrder: {
       priority: { High: [], Medium: [], Low: [] },

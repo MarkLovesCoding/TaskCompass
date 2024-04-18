@@ -11,6 +11,8 @@ export function teamToDto(team: TeamEntity): TeamDto {
     users: team.getUsers(),
     projects: team.getProjects(),
     createdBy: team.getCreatedBy(),
+    backgroundImage: team.getBackgroundImage(),
+    backgroundImageThumbnail: team.getBackgroundImageThumbnail(),
   };
 }
 export function teamToCreateTeamDto(team: TeamEntity): CreateTeamDto {
@@ -19,5 +21,7 @@ export function teamToCreateTeamDto(team: TeamEntity): CreateTeamDto {
     users: team.getUsers(),
     projects: team.getProjects(),
     createdBy: team.getCreatedBy(),
+    backgroundImage: team.getBackgroundImage(),
+    backgroundImageThumbnail: team.getBackgroundImageThumbnail(),
   };
 }
