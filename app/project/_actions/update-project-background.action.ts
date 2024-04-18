@@ -1,36 +1,31 @@
 "use server";
-import { updateProjectDetailsUseCase } from "@/use-cases/project/update-project-details.use-case";
-
 import { updateProject } from "@/data-access/projects/update-project.persistence";
 import getProject from "@/data-access/projects/get-project.persistence";
-
 import { revalidatePath } from "next/cache";
+import { updateProjectBackgroundUseCase } from "@/use-cases/project/update-project-background.use-case";
 import { getUserFromSession } from "@/lib/sessionAuth";
-type Form = {
-  name: string;
-  description: string;
-};
-
-export async function updateProjectDetailsAction(
-  form: Form,
-  projectId: string
+export async function updateProjectBackgroundAction(
+  projectId: string,
+  projectBackgroundImage: string
 ) {
   const { getUser } = await getUserFromSession();
-
+  console.log("updateProjectBackground", projectId, projectBackgroundImage);
   try {
-    await updateProjectDetailsUseCase(
+    await updateProjectBackgroundUseCase(
       {
-        getProject,
         updateProject,
+        getProject,
         getUser,
       },
       {
-        name: form.name,
-        description: form.description,
         projectId: projectId,
+        projectBackgroundImage: projectBackgroundImage,
       }
     );
     revalidatePath("/project/[slug]");
+
+    //for toasts, not yet implemented
+    return { success: true };
   } catch (error: any) {
     console.error(error);
   }

@@ -13,6 +13,7 @@ export class ProjectEntity {
   private archived: boolean;
   private columnOrder: ColumnOrder;
   private tasksOrder: TasksOrder;
+  private backgroundImage: string;
   constructor({
     id,
     name,
@@ -24,6 +25,7 @@ export class ProjectEntity {
     archived = false,
     columnOrder,
     tasksOrder,
+    backgroundImage,
   }: {
     id?: string;
     name: string;
@@ -35,6 +37,7 @@ export class ProjectEntity {
     archived: boolean;
     columnOrder: ColumnOrder;
     tasksOrder: TasksOrder;
+    backgroundImage: string;
   }) {
     this.id = id;
     this.name = name;
@@ -46,6 +49,7 @@ export class ProjectEntity {
     this.archived = archived;
     this.columnOrder = columnOrder;
     this.tasksOrder = tasksOrder;
+    this.backgroundImage = backgroundImage;
     this.validate();
   }
 
@@ -88,7 +92,9 @@ export class ProjectEntity {
   getTasksOrder() {
     return this.tasksOrder;
   }
-
+  getBackgroundImage() {
+    return this.backgroundImage;
+  }
   addUser(user: string) {
     this.users.push(user);
   }
@@ -119,6 +125,9 @@ export class ProjectEntity {
 
   updateArchived(archived: boolean) {
     this.archived = archived;
+  }
+  updateBackgroundImage(backgroundImage: string) {
+    this.backgroundImage = backgroundImage;
   }
 
   addTask(project: string) {
@@ -169,6 +178,7 @@ export class ProjectEntity {
       tasks: z.array(z.string()).optional(),
       createdBy: z.string(),
       archived: z.boolean(),
+      backgroundImage: z.string().optional(),
       tasksOrder: z.object({
         priority: z.object({
           High: z.array(z.string()),

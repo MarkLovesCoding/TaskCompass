@@ -2,10 +2,12 @@
 import { capitalizeEachWord } from "./utils";
 import { Button } from "@/components/ui/button";
 import { NewTaskCard } from "./NewTaskCard";
-import { PlusIcon, FolderKanbanIcon, ArrowLeft } from "lucide-react";
+import { PlusIcon, FolderKanbanIcon, ArrowLeft, Scroll } from "lucide-react";
 import Link from "next/link";
 import type { ProjectDto } from "@/use-cases/project/types";
 import type { TaskDto } from "@/use-cases/task/types";
+import axios from "axios";
+
 import {
   Popover,
   PopoverContent,
@@ -20,16 +22,19 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import Image from "next/image";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea, ScrollBar } from "@/components/ui/card-scroll-area";
 import { UserDto } from "@/use-cases/user/types";
 
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
 import CardView from "./CardView";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils/utils";
 import { TeamDto } from "@/use-cases/team/types";
+import { updateProjectBackgroundAction } from "../_actions/update-project-background.action";
 import ProjectDrawer from "./ProjectDrawer";
+import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
 export function ProjectPage({
   // id,
   userId,
@@ -49,14 +54,97 @@ export function ProjectPage({
   team: TeamDto;
   projectUsers: UserDto[];
 }) {
+  console.log("project", project);
   const [sortBy, setSortBy] = useState<string>("status");
+  const [projectBackgroundImage, setProjectBackgroundImage] = useState<string>(
+    project.backgroundImage
+  );
+  const PER_PAGE = 12;
+  const [selectedImages, setSelectedImages] = useState<string[]>([]);
+  const [imagesLoadPage, setImagesLoadPage] = useState<number>(1);
+
+  // useEffect(() => {
+  //   if (project.backgroundImage !== "") {
+  //     console.log("project.backgroundImage", project);
+  //     setProjectBackgroundImage(project.backgroundImage);
+  //   }
+  // }, [project.backgroundImage]);
+  // useEffect(() => {
+  //   const currentTheme = localStorage.getItem("theme");
+  //   if (project.backgroundImage == "") {
+  //     setIsDefaultBackground(true);
+
+  //     setDefaultBackground(
+  //       "bg-gradient-background-light dark:bg-gradient-background-dark"
+  //     );
+  //   } else {
+  //     setIsDefaultBackground(false);
+  //     setDefaultBackground("");
+  //     setProjectBackgroundImage(project.backgroundImage);
+  //   }
+  // }, []);
+
+  const loadImageSetonOpen = (bool: boolean) => {
+    // isImagesDialogOpen = bool;
+    console.log("boolOnOpen", bool);
+    if (bool) {
+      loadImageSet();
+    }
+  };
+
+  const imagesFromUnsplash = async (page: number, perPage: number) => {
+    try {
+      const response = await fetch(`/api/unsplash`, {
+        method: "POST",
+        headers: { ContentType: "application/json" },
+        body: JSON.stringify({ page, perPage }),
+
+        cache: "no-store",
+      });
+      const data = await response.json();
+      const images = parseUnsplashData(data);
+
+      return images;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      return null;
+    }
+  };
+  const parseUnsplashData = (data: any) => {
+    const images = data.results.map((image: any) => {
+      return {
+        id: image.id,
+        urls: image.urls,
+        user: image.user,
+      };
+    });
+    return images;
+  };
+  const loadImageSet = async () => {
+    const nextPage = imagesLoadPage + 1;
+    setImagesLoadPage(nextPage);
+    // console.log("imagesLoadPage", imagesLoadPage);
+    const data = await imagesFromUnsplash(nextPage, PER_PAGE);
+
+    setSelectedImages((prevImageData) => {
+      return [...prevImageData, ...data];
+    });
+    console.log("selectedImages,", selectedImages);
+    // Do something with the fetched data, like updating state or rendering it
+  };
+  const setNewBackground = async (url: string) => {
+    // console.log("selectedImage", url);
+    setProjectBackgroundImage(url);
+    await updateProjectBackgroundAction(project.id, url);
+    // document.body.style.backgroundImage = `url(${selectedImage})`;
+  };
   const isCurrentUserAdmin =
     project && user.projectsAsAdmin.some((id) => id === project.id);
   const uniqueProjectUsers = [...projectUsers];
   if (!project || !tasks) return <div>Loading...</div>;
 
   return (
-    <div className="flex flex-col justify-start items-center min-h-full ">
+    <div className={`flex flex-col justify-start items-center min-h-full `}>
       <div className="z-50">
         <ProjectDrawer
           userId={userId}
@@ -156,13 +244,72 @@ export function ProjectPage({
               </PopoverContent>
             </Popover>
           </div>
+          <div>
+            <Dialog onOpenChange={loadImageSetonOpen}>
+              <DialogTrigger asChild>
+                <Button variant="outline" className="group hover:bg-accent">
+                  <Label className="hidden md:flex ">Change Background</Label>
+                  <PlusIcon className="w-8 h-8 md:ml-3 self-center group-hover:text-primary" />
+                  <span className="sr-only">Change Background Button</span>
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="border-2 w-[80%]  bg-cardcolumn-background  p-4 border-nav-background">
+                <div className="flex flex-col h-fit overflow-auto">
+                  <h1>Customize Background</h1>
+                  <div className="flex flex-wrap justify-center h-[300px] p-4">
+                    {selectedImages.map((image: any, index) => {
+                      return (
+                        <div
+                          key={index}
+                          className="relative max-w-[120px] max-h-[80px] m-1 overflow-y-clip hover:border-white border-2 rounded-sm truncate text-ellipsis"
+                        >
+                          <Image
+                            onClick={() => setNewBackground(image.urls.full)}
+                            src={image.urls.thumb}
+                            alt="Background Image"
+                            width={120}
+                            height={80}
+                            className="max-w-[120px] h-auto overflow-clip rounded cursor-pointer "
+                          />
+
+                          <Link
+                            href={image.user.links.html}
+                            className="px-5  truncate text-ellipsis"
+                            title={image.user.name}
+                          >
+                            <p className="absolute top-[60px] left-[12px]  max-w-[calc(100%-24px)]  bg-badgeGray/40 text-xs truncate text-ellipsis">
+                              {image.user.name}
+                            </p>
+                          </Link>
+                          {/* <p>{image.url.full}</p> */}
+                        </div>
+                      );
+                    })}
+                    <Button onClick={loadImageSet} className="w-24 ">
+                      + Load More
+                    </Button>
+                  </div>
+                </div>
+              </DialogContent>
+            </Dialog>
+          </div>
           {/* )} */}
         </div>
       </div>
       <main
+        style={
+          projectBackgroundImage
+            ? {
+                backgroundImage: "url(" + projectBackgroundImage + ")",
+                backgroundSize: "cover",
+                backgroundPosition: " center",
+                backgroundRepeat: "no-repeat",
+              }
+            : {}
+        }
         className={cn(
           isCurrentUserAdmin ? "left-6 md:left-8 " : "left-0",
-          `fixed w-[calc(100vw-1.5rem)] md:w-[calc(100vw-2rem)] bg-gradient-background-light dark:bg-gradient-background-dark min-h-[calc(100vh-2rem)] md:min-h-[calc(100vh-3rem)] border border-l-0`
+          `bg-gradient-background-light dark:bg-gradient-background-dark fixed w-[calc(100vw-1.5rem)] md:w-[calc(100vw-2rem)]  min-h-[calc(100vh-2rem)] md:min-h-[calc(100vh-3rem)] border border-l-0`
         )}
       >
         <ScrollArea

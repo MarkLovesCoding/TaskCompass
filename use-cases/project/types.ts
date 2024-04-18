@@ -9,6 +9,7 @@ export type ProjectDto = {
   team: string;
   createdBy: string;
   archived: boolean;
+  backgroundImage: string;
   tasksOrder: TasksOrder;
   columnOrder: ColumnOrder;
 };
@@ -20,6 +21,7 @@ export type CreateProjectDto = {
   team: string;
   createdBy: string;
   archived: boolean;
+  backgroundImage: string;
   tasksOrder: TasksOrder;
   columnOrder: ColumnOrder;
 };

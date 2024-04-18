@@ -6,6 +6,7 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 import Navigation from "./Navigation";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import Provider from "./(providers)/Providers";
+
 config.autoAddCss = false;
 
 export const metadata: Metadata = {

@@ -14,6 +14,7 @@ const ProjectSchema = new Schema(
     tasks: [{ type: Schema.Types.ObjectId, ref: "Task" }],
     team: { type: Schema.Types.ObjectId, ref: "Team" },
     archived: { type: Boolean, default: false },
+    backgroundImage: { type: String, default: "" },
     createdBy: { type: Schema.Types.ObjectId, ref: "User" },
     columnOrder: {
       priority: { type: [String], default: ["High", "Medium", "Low"] },
