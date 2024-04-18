@@ -46,6 +46,10 @@ export type UpdateTasksOrderFromTaskCard = (
   category: string,
   status: string
 ) => Promise<void>;
+export type UpdateProjectBackground = (
+  projectId: string,
+  projectBackground: string
+) => Promise<void>;
 export type CreateNewProject = (
   project: CreateProjectDto,
   userId: string
