@@ -84,11 +84,11 @@ export function ProjectPage({
   //   }
   // }, []);
 
-  const loadImageSetonOpen = (bool: boolean) => {
+  const loadImageSetonOpen = async (bool: boolean) => {
     // isImagesDialogOpen = bool;
     console.log("boolOnOpen", bool);
     if (bool) {
-      loadImageSet();
+      await loadImageSet();
     }
   };
 
@@ -98,8 +98,6 @@ export function ProjectPage({
         method: "POST",
         headers: { ContentType: "application/json" },
         body: JSON.stringify({ page, perPage }),
-
-        cache: "no-store",
       });
       const data = await response.json();
       const images = parseUnsplashData(data);
@@ -121,6 +119,7 @@ export function ProjectPage({
     return images;
   };
   const loadImageSet = async () => {
+    console.log("_______HERE");
     const nextPage = imagesLoadPage + 1;
     setImagesLoadPage(nextPage);
     // console.log("imagesLoadPage", imagesLoadPage);
