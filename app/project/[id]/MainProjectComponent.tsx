@@ -54,7 +54,6 @@ export function ProjectPage({
   team: TeamDto;
   projectUsers: UserDto[];
 }) {
-  console.log("project", project);
   const [sortBy, setSortBy] = useState<string>("status");
   const [projectBackgroundImage, setProjectBackgroundImage] = useState<string>(
     project.backgroundImage
@@ -121,10 +120,11 @@ export function ProjectPage({
   const loadImageSet = async () => {
     console.log("_______HERE");
     const nextPage = imagesLoadPage + 1;
+    console.log("nextPage", nextPage);
     setImagesLoadPage(nextPage);
     // console.log("imagesLoadPage", imagesLoadPage);
     const data = await imagesFromUnsplash(nextPage, PER_PAGE);
-
+    console.log("data)))):", data);
     setSelectedImages((prevImageData) => {
       return [...prevImageData, ...data];
     });
