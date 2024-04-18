@@ -7,6 +7,7 @@ export type ProjectModelType = {
   team: string;
   createdBy: string;
   archived: boolean;
+  backgroundImage: string;
   tasksOrder: TasksOrder;
   columnOrder: ColumnOrder;
 };

@@ -27,6 +27,7 @@ export function projectModelToProjectDto(
     team: convertedTeam,
     createdBy: project.createdBy.toString(),
     archived: project.archived,
+    backgroundImage: project.backgroundImage,
     tasksOrder: plainifyTasksOrder,
     columnOrder: plainifyColumnOrder,
   };
