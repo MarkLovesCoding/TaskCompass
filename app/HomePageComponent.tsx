@@ -25,32 +25,32 @@ import MoveTask from "../public/move-task.png";
 import PriorityView from "../public/priority-view.png";
 import SWCard from "../public/sw-card.png";
 
-function calculateColor(scrollY: number) {
-  const triggerPoints = [0, 100, 180, 260, 320, 400]; // Adjust trigger points in viewport height (vh)
-  const colors = [
-    "rgba(14,37,46,1)",
-    "rgba(9,75,103,1)",
-    "rgba(14,37,46,1)",
-    "rgba(9,75,103,1)",
-    "rgba(14,37,46,1)",
-    "rgba(9,75,103,1)",
-  ];
-  for (let i = 0; i < triggerPoints.length - 1; i++) {
-    if (
-      scrollY >= (triggerPoints[i] * window.innerHeight) / 100 &&
-      scrollY < (triggerPoints[i + 1] * window.innerHeight) / 100
-    ) {
-      const progress =
-        (scrollY - (triggerPoints[i] * window.innerHeight) / 100) /
-        (((triggerPoints[i + 1] - triggerPoints[i]) * window.innerHeight) /
-          100);
-      const currentColor = colors[i];
-      const nextColor = colors[i + 1];
-      return interpolateColors(currentColor, nextColor, progress);
-    }
-  }
-  return colors[0]; // Default color
-}
+// function calculateColor(scrollY: number) {
+//   const triggerPoints = [0, 100, 180, 260, 320, 400]; // Adjust trigger points in viewport height (vh)
+//   const colors = [
+//     "rgba(14,37,46,1)",
+//     "rgba(9,75,103,1)",
+//     "rgba(14,37,46,1)",
+//     "rgba(9,75,103,1)",
+//     "rgba(14,37,46,1)",
+//     "rgba(9,75,103,1)",
+//   ];
+//   for (let i = 0; i < triggerPoints.length - 1; i++) {
+//     if (
+//       scrollY >= (triggerPoints[i] * window.innerHeight) / 100 &&
+//       scrollY < (triggerPoints[i + 1] * window.innerHeight) / 100
+//     ) {
+//       const progress =
+//         (scrollY - (triggerPoints[i] * window.innerHeight) / 100) /
+//         (((triggerPoints[i + 1] - triggerPoints[i]) * window.innerHeight) /
+//           100);
+//       const currentColor = colors[i];
+//       const nextColor = colors[i + 1];
+//       return interpolateColors(currentColor, nextColor, progress);
+//     }
+//   }
+//   return colors[0]; // Default color
+// }
 
 function interpolateColors(color1: string, color2: string, progress: number) {
   const rgba1 = color1.match(/\d+/g)!;
@@ -273,3 +273,30 @@ const FeatureSection = forwardRef<HTMLDivElement, FeatureSectionProps>(
 FeatureSection.displayName = "FeatureSection";
 
 export default HomePageComponent;
+
+function calculateColor(scrollY: number) {
+  const triggerPoints = [0, 100, 180, 260, 320, 400]; // Adjust trigger points in viewport height (vh)
+  const colors = [
+    "rgba(14,37,46,1)",
+    "rgba(9,75,103,1)",
+    "rgba(14,37,46,1)",
+    "rgba(9,75,103,1)",
+    "rgba(14,37,46,1)",
+    "rgba(9,75,103,1)",
+  ];
+  for (let i = 0; i < triggerPoints.length - 1; i++) {
+    if (
+      scrollY >= (triggerPoints[i] * window.innerHeight) / 100 &&
+      scrollY < (triggerPoints[i + 1] * window.innerHeight) / 100
+    ) {
+      const progress =
+        (scrollY - (triggerPoints[i] * window.innerHeight) / 100) /
+        (((triggerPoints[i + 1] - triggerPoints[i]) * window.innerHeight) /
+          100);
+      const currentColor = colors[i];
+      const nextColor = colors[i + 1];
+      return interpolateColors(currentColor, nextColor, progress);
+    }
+  }
+  return colors[0]; // Default color
+}
