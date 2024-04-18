@@ -62,27 +62,6 @@ export function ProjectPage({
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
   const [imagesLoadPage, setImagesLoadPage] = useState<number>(1);
 
-  // useEffect(() => {
-  //   if (project.backgroundImage !== "") {
-  //     console.log("project.backgroundImage", project);
-  //     setProjectBackgroundImage(project.backgroundImage);
-  //   }
-  // }, [project.backgroundImage]);
-  // useEffect(() => {
-  //   const currentTheme = localStorage.getItem("theme");
-  //   if (project.backgroundImage == "") {
-  //     setIsDefaultBackground(true);
-
-  //     setDefaultBackground(
-  //       "bg-gradient-background-light dark:bg-gradient-background-dark"
-  //     );
-  //   } else {
-  //     setIsDefaultBackground(false);
-  //     setDefaultBackground("");
-  //     setProjectBackgroundImage(project.backgroundImage);
-  //   }
-  // }, []);
-
   const loadImageSetonOpen = async (bool: boolean) => {
     // isImagesDialogOpen = bool;
     console.log("boolOnOpen", bool);
@@ -92,14 +71,20 @@ export function ProjectPage({
   };
 
   const imagesFromUnsplash = async (page: number, perPage: number) => {
+    console.log("page:::", page);
+    console.log("perPage:::", perPage);
     try {
       const response = await fetch(`/api/unsplash`, {
         method: "POST",
         headers: { ContentType: "application/json" },
         body: JSON.stringify({ page, perPage }),
       });
+      console.log("response:::", response);
+
       const data = await response.json();
+      console.log("data:::", data);
       const images = parseUnsplashData(data);
+      console.log("images:::", images);
 
       return images;
     } catch (error) {
