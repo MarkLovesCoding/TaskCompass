@@ -28,7 +28,7 @@ export async function UpdateProjectUserRoleAction(
         updateType: updateType,
       }
     );
-    revalidatePath("/TEAMS-CLEAN/[slug]");
+    revalidatePath("/project/[slug]");
 
     //for toasts, not yet implemented
     return { success: true };

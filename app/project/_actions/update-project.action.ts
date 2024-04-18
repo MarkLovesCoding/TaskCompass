@@ -7,7 +7,6 @@ import { getUserFromSession } from "@/lib/sessionAuth";
 import { ProjectDto } from "@/use-cases/project/types";
 export async function updateProjectAction(project: ProjectDto) {
   const { getUser } = await getUserFromSession();
-  console.log("---------5555--------------project", project);
   try {
     await updateProjectUseCase(
       {
@@ -18,9 +17,8 @@ export async function updateProjectAction(project: ProjectDto) {
         project: project,
       }
     );
-    console.log("---------5553--------------project", project);
 
-    revalidatePath("/TEAMS-CLEAN/[slug]/page");
+    // revalidatePath("/TEAMS-CLEAN/[slug]/page");
 
     //for toasts, not yet implemented
     // return { success: true };
