@@ -138,9 +138,17 @@ export function ProjectPage({
     await apiSearchNext(nextPage);
     setImagesLoadPage(nextPage);
   };
-  const setNewBackground = async (url: string) => {
-    setProjectBackgroundImage(url);
-    await updateProjectBackgroundAction(project.id, url);
+  type TUrls = {
+    full: string;
+    large: string;
+    regular: string;
+    raw: string;
+    small: string;
+    thumb: string;
+  };
+  const setNewBackground = async (urls: TUrls) => {
+    setProjectBackgroundImage(urls.full);
+    await updateProjectBackgroundAction(project.id, urls.full, urls.thumb);
   };
   const isCurrentUserAdmin =
     project && user.projectsAsAdmin.some((id) => id === project.id);
@@ -269,7 +277,7 @@ export function ProjectPage({
                             className="relative max-w-[120px] max-h-[80px] m-1 overflow-y-clip hover:border-white border-2 rounded-sm truncate text-ellipsis"
                           >
                             <Image
-                              onClick={() => setNewBackground(image.urls.full)}
+                              onClick={() => setNewBackground(image.urls)}
                               src={image.urls.thumb}
                               alt="Background Image"
                               width={120}

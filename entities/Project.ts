@@ -14,6 +14,7 @@ export class ProjectEntity {
   private columnOrder: ColumnOrder;
   private tasksOrder: TasksOrder;
   private backgroundImage: string;
+  private backgroundImageThumb: string;
   constructor({
     id,
     name,
@@ -26,6 +27,7 @@ export class ProjectEntity {
     columnOrder,
     tasksOrder,
     backgroundImage,
+    backgroundImageThumb,
   }: {
     id?: string;
     name: string;
@@ -38,6 +40,7 @@ export class ProjectEntity {
     columnOrder: ColumnOrder;
     tasksOrder: TasksOrder;
     backgroundImage: string;
+    backgroundImageThumb: string;
   }) {
     this.id = id;
     this.name = name;
@@ -50,6 +53,7 @@ export class ProjectEntity {
     this.columnOrder = columnOrder;
     this.tasksOrder = tasksOrder;
     this.backgroundImage = backgroundImage;
+    this.backgroundImageThumb = backgroundImageThumb;
     this.validate();
   }
 
@@ -95,6 +99,9 @@ export class ProjectEntity {
   getBackgroundImage() {
     return this.backgroundImage;
   }
+  getBackgroundImageThumb() {
+    return this.backgroundImageThumb;
+  }
   addUser(user: string) {
     this.users.push(user);
   }
@@ -128,6 +135,9 @@ export class ProjectEntity {
   }
   updateBackgroundImage(backgroundImage: string) {
     this.backgroundImage = backgroundImage;
+  }
+  updateBackgroundImageThumb(backgroundImageThumb: string) {
+    this.backgroundImageThumb = backgroundImageThumb;
   }
 
   addTask(project: string) {
@@ -179,6 +189,7 @@ export class ProjectEntity {
       createdBy: z.string(),
       archived: z.boolean(),
       backgroundImage: z.string().optional(),
+      backgroundImageThumb: z.string().optional(),
       tasksOrder: z.object({
         priority: z.object({
           High: z.array(z.string()),
