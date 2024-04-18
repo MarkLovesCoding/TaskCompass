@@ -35,6 +35,26 @@ import { TeamDto } from "@/use-cases/team/types";
 import { updateProjectBackgroundAction } from "../_actions/update-project-background.action";
 import ProjectDrawer from "./ProjectDrawer";
 import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
+
+import { createApi } from "unsplash-js";
+const api = createApi({
+  // Don't forget to set your access token here!
+  // See https://unsplash.com/developers
+  accessKey: "SsU6mvH9lF3cSQEmUUnSY1OmLqsWkFqCyXILkod-bT0",
+});
+
+type Photo = {
+  id: number;
+  width: number;
+  height: number;
+  urls: { large: string; regular: string; raw: string; small: string };
+  color: string | null;
+  user: {
+    username: string;
+    name: string;
+  };
+};
+
 export function ProjectPage({
   // id,
   userId,
@@ -59,68 +79,68 @@ export function ProjectPage({
     project.backgroundImage
   );
   const PER_PAGE = 12;
-  const [selectedImages, setSelectedImages] = useState<string[]>([]);
+  const [selectedImages, setSelectedImages] = useState<any[]>([]);
   const [imagesLoadPage, setImagesLoadPage] = useState<number>(1);
+
+  const apiSearchFirst = async (page: number) => {
+    api.search
+      .getPhotos({
+        query: "nature",
+        page: 1,
+        perPage: PER_PAGE,
+        orientation: "landscape",
+      })
+      .then((result) => {
+        console.log("result>>>>>>>>>>>>>>", result);
+        setSelectedImages(result!.response!.results);
+        // setSelectedImages(result);
+      })
+      .catch(() => {
+        console.log("something went wrong!");
+      });
+  };
+  const apiSearchNext = async (page: number) => {
+    api.search
+      .getPhotos({
+        query: "nature",
+        page: page,
+        perPage: PER_PAGE,
+        orientation: "landscape",
+      })
+      .then((result) => {
+        console.log("result>>>>>>>>>>>>>>", result);
+        setSelectedImages((prev) => {
+          return [...prev, ...result!.response!.results];
+        });
+        // setSelectedImages(result);
+      })
+      .catch(() => {
+        console.log("something went wrong!");
+      });
+  };
 
   const loadImageSetonOpen = async (bool: boolean) => {
     // isImagesDialogOpen = bool;
-    console.log("boolOnOpen", bool);
     if (bool) {
       await loadImageSet();
     }
   };
 
-  const imagesFromUnsplash = async (page: number, perPage: number) => {
-    console.log("page:::", page);
-    console.log("perPage:::", perPage);
-    try {
-      const response = await fetch(`/api/unsplash`, {
-        method: "POST",
-        headers: { ContentType: "application/json" },
-        body: JSON.stringify({ page, perPage }),
-      });
-      console.log("response:::", response);
-
-      const data = await response.json();
-      console.log("data:::", data);
-      const images = parseUnsplashData(data);
-      console.log("images:::", images);
-
-      return images;
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      return null;
-    }
-  };
-  const parseUnsplashData = (data: any) => {
-    const images = data.results.map((image: any) => {
-      return {
-        id: image.id,
-        urls: image.urls,
-        user: image.user,
-      };
-    });
-    return images;
-  };
   const loadImageSet = async () => {
-    console.log("_______HERE");
+    // const nextPage = imagesLoadPage + 1;
+    if (imagesLoadPage === 1) {
+      apiSearchFirst(imagesLoadPage);
+    }
+    // setImagesLoadPage(nextPage);
+  };
+  const loadNextImageSet = async () => {
     const nextPage = imagesLoadPage + 1;
-    console.log("nextPage", nextPage);
+    await apiSearchNext(nextPage);
     setImagesLoadPage(nextPage);
-    // console.log("imagesLoadPage", imagesLoadPage);
-    const data = await imagesFromUnsplash(nextPage, PER_PAGE);
-    console.log("data)))):", data);
-    setSelectedImages((prevImageData) => {
-      return [...prevImageData, ...data];
-    });
-    console.log("selectedImages,", selectedImages);
-    // Do something with the fetched data, like updating state or rendering it
   };
   const setNewBackground = async (url: string) => {
-    // console.log("selectedImage", url);
     setProjectBackgroundImage(url);
     await updateProjectBackgroundAction(project.id, url);
-    // document.body.style.backgroundImage = `url(${selectedImage})`;
   };
   const isCurrentUserAdmin =
     project && user.projectsAsAdmin.some((id) => id === project.id);
@@ -241,35 +261,36 @@ export function ProjectPage({
                 <div className="flex flex-col h-fit overflow-auto">
                   <h1>Customize Background</h1>
                   <div className="flex flex-wrap justify-center h-[300px] p-4">
-                    {selectedImages.map((image: any, index) => {
-                      return (
-                        <div
-                          key={index}
-                          className="relative max-w-[120px] max-h-[80px] m-1 overflow-y-clip hover:border-white border-2 rounded-sm truncate text-ellipsis"
-                        >
-                          <Image
-                            onClick={() => setNewBackground(image.urls.full)}
-                            src={image.urls.thumb}
-                            alt="Background Image"
-                            width={120}
-                            height={80}
-                            className="max-w-[120px] h-auto overflow-clip rounded cursor-pointer "
-                          />
-
-                          <Link
-                            href={image.user.links.html}
-                            className="px-5  truncate text-ellipsis"
-                            title={image.user.name}
+                    {selectedImages.length &&
+                      selectedImages.map((image: any, index) => {
+                        return (
+                          <div
+                            key={index}
+                            className="relative max-w-[120px] max-h-[80px] m-1 overflow-y-clip hover:border-white border-2 rounded-sm truncate text-ellipsis"
                           >
-                            <p className="absolute top-[60px] left-[12px]  max-w-[calc(100%-24px)]  bg-badgeGray/40 text-xs truncate text-ellipsis">
-                              {image.user.name}
-                            </p>
-                          </Link>
-                          {/* <p>{image.url.full}</p> */}
-                        </div>
-                      );
-                    })}
-                    <Button onClick={loadImageSet} className="w-24 ">
+                            <Image
+                              onClick={() => setNewBackground(image.urls.full)}
+                              src={image.urls.thumb}
+                              alt="Background Image"
+                              width={120}
+                              height={80}
+                              className="max-w-[120px] h-auto overflow-clip rounded cursor-pointer "
+                            />
+
+                            <Link
+                              href={image.user.links.html}
+                              className="px-5  truncate text-ellipsis"
+                              title={image.user.name}
+                            >
+                              <p className="absolute top-[60px] left-[12px]  max-w-[calc(100%-24px)]  bg-badgeGray/40 text-xs truncate text-ellipsis">
+                                {image.user.name}
+                              </p>
+                            </Link>
+                            {/* <p>{image.url.full}</p> */}
+                          </div>
+                        );
+                      })}
+                    <Button onClick={loadNextImageSet} className="w-24 ">
                       + Load More
                     </Button>
                   </div>
