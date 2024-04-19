@@ -13,7 +13,7 @@ export async function updateProjectBackgroundUseCase(
   data: {
     projectId: string;
     projectBackgroundImage: string;
-    projectBackgroundImageThumb: string;
+    projectBackgroundImageThumbnail: string;
   }
 ) {
   const user = context.getUser();
@@ -25,6 +25,8 @@ export async function updateProjectBackgroundUseCase(
   });
 
   validatedProject.updateBackgroundImage(data.projectBackgroundImage);
-  validatedProject.updateBackgroundImageThumb(data.projectBackgroundImageThumb);
+  validatedProject.updateBackgroundImageThumbnail(
+    data.projectBackgroundImageThumbnail
+  );
   await context.updateProject(projectToDto(validatedProject));
 }

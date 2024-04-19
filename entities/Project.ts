@@ -14,7 +14,7 @@ export class ProjectEntity {
   private columnOrder: ColumnOrder;
   private tasksOrder: TasksOrder;
   private backgroundImage: string;
-  private backgroundImageThumb: string;
+  private backgroundImageThumbnail: string;
   constructor({
     id,
     name,
@@ -27,7 +27,7 @@ export class ProjectEntity {
     columnOrder,
     tasksOrder,
     backgroundImage,
-    backgroundImageThumb,
+    backgroundImageThumbnail,
   }: {
     id?: string;
     name: string;
@@ -40,7 +40,7 @@ export class ProjectEntity {
     columnOrder: ColumnOrder;
     tasksOrder: TasksOrder;
     backgroundImage: string;
-    backgroundImageThumb: string;
+    backgroundImageThumbnail: string;
   }) {
     this.id = id;
     this.name = name;
@@ -53,7 +53,7 @@ export class ProjectEntity {
     this.columnOrder = columnOrder;
     this.tasksOrder = tasksOrder;
     this.backgroundImage = backgroundImage;
-    this.backgroundImageThumb = backgroundImageThumb;
+    this.backgroundImageThumbnail = backgroundImageThumbnail;
     this.validate();
   }
 
@@ -99,8 +99,8 @@ export class ProjectEntity {
   getBackgroundImage() {
     return this.backgroundImage;
   }
-  getBackgroundImageThumb() {
-    return this.backgroundImageThumb;
+  getBackgroundImageThumbnail() {
+    return this.backgroundImageThumbnail;
   }
   addUser(user: string) {
     this.users.push(user);
@@ -136,8 +136,8 @@ export class ProjectEntity {
   updateBackgroundImage(backgroundImage: string) {
     this.backgroundImage = backgroundImage;
   }
-  updateBackgroundImageThumb(backgroundImageThumb: string) {
-    this.backgroundImageThumb = backgroundImageThumb;
+  updateBackgroundImageThumbnail(backgroundImageThumbnail: string) {
+    this.backgroundImageThumbnail = backgroundImageThumbnail;
   }
 
   addTask(project: string) {
@@ -189,7 +189,7 @@ export class ProjectEntity {
       createdBy: z.string(),
       archived: z.boolean(),
       backgroundImage: z.string().optional(),
-      backgroundImageThumb: z.string().optional(),
+      backgroundImageThumbnail: z.string().optional(),
       tasksOrder: z.object({
         priority: z.object({
           High: z.array(z.string()),

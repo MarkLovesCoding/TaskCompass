@@ -14,7 +14,7 @@ export function projectToDto(project: ProjectEntity): ProjectDto {
     createdBy: project.getCreatedBy(),
     archived: project.getArchived(),
     backgroundImage: project.getBackgroundImage(),
-    backgroundImageThumb: project.getBackgroundImageThumb(),
+    backgroundImageThumbnail: project.getBackgroundImageThumbnail(),
     tasksOrder: project.getTasksOrder(),
     columnOrder: project.getColumnOrder(),
   };
@@ -32,7 +32,7 @@ export function projectToCreateProjectDto(
     createdBy: project.getCreatedBy(),
     archived: project.getArchived(),
     backgroundImage: project.getBackgroundImage(),
-    backgroundImageThumb: project.getBackgroundImageThumb(),
+    backgroundImageThumbnail: project.getBackgroundImageThumbnail(),
     tasksOrder: project.getTasksOrder(),
     columnOrder: project.getColumnOrder(),
   };

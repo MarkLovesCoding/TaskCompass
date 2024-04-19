@@ -468,11 +468,11 @@ export function UserPageComponent({
                         <Card
                           key={project_idx}
                           style={
-                            project.backgroundImageThumb?.length > 0
+                            project.backgroundImageThumbnail?.length > 0
                               ? {
                                   backgroundImage:
                                     "url('" +
-                                    project.backgroundImageThumb +
+                                    project.backgroundImageThumbnail +
                                     "')",
                                   // +
                                   // ", linear-gradient(215deg, rgba(255,255,255,0.2),rgba(255,255,255,0.1))",
@@ -527,11 +527,11 @@ export function UserPageComponent({
                       ) : (
                         <Card
                           style={
-                            project.backgroundImageThumb?.length > 0
+                            project.backgroundImageThumbnail?.length > 0
                               ? {
                                   backgroundImage:
                                     "url('" +
-                                    project.backgroundImageThumb +
+                                    project.backgroundImageThumbnail +
                                     "')",
                                   // +
                                   // ", linear-gradient(215deg, rgba(255,255,255,0.2),rgba(255,255,255,0.1))",

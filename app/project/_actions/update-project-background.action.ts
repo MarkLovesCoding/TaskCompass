@@ -7,7 +7,7 @@ import { getUserFromSession } from "@/lib/sessionAuth";
 export async function updateProjectBackgroundAction(
   projectId: string,
   projectBackgroundImage: string,
-  projectBackgroundImageThumb: string
+  projectBackgroundImageThumbnail: string
 ) {
   const { getUser } = await getUserFromSession();
   console.log("updateProjectBackground", projectId, projectBackgroundImage);
@@ -21,7 +21,7 @@ export async function updateProjectBackgroundAction(
       {
         projectId: projectId,
         projectBackgroundImage: projectBackgroundImage,
-        projectBackgroundImageThumb: projectBackgroundImageThumb,
+        projectBackgroundImageThumbnail: projectBackgroundImageThumbnail,
       }
     );
     revalidatePath(`/project/${projectId}`);

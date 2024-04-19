@@ -442,10 +442,12 @@ export function TeamPageComponent({
                       <Card
                         key={project_idx}
                         style={
-                          project.backgroundImageThumb?.length > 0
+                          project.backgroundImageThumbnail?.length > 0
                             ? {
                                 backgroundImage:
-                                  "url('" + project.backgroundImageThumb + "')",
+                                  "url('" +
+                                  project.backgroundImageThumbnail +
+                                  "')",
                                 // +
                                 // ", linear-gradient(215deg, rgba(255,255,255,0.2),rgba(255,255,255,0.1))",
                                 // backgroundBlendMode: "overlay",
