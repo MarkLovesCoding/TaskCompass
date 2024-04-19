@@ -1,9 +1,9 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import type { FormEvent } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import {
   Form,
   FormControl,
@@ -26,8 +26,6 @@ interface FormData {
 }
 
 const ForgotPasswordForm = () => {
-  const router = useRouter();
-
   const [errorMessage, setErrorMessage] = useState<string>("");
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -37,8 +35,6 @@ const ForgotPasswordForm = () => {
     },
   });
   const handleForgotEmailSubmit = async (values: FormData) => {
-    console.log("values", values);
-
     try {
       const res = await fetch("/api/auth/forgot-password", {
         method: "POST",
@@ -47,13 +43,11 @@ const ForgotPasswordForm = () => {
         },
         body: JSON.stringify(values),
       });
-      console.log("res", res.body);
       if (res.status == 400) {
         setErrorMessage("User with this email is not registered.");
       }
       if (res.status === 200) {
         setErrorMessage("Password reset link sent to your email.");
-        router.push("/login");
       }
     } catch (error) {
       console.log(error);
@@ -103,6 +97,13 @@ const ForgotPasswordForm = () => {
       </Form>
 
       <p className="text-red-500">{errorMessage}</p>
+      <div>
+        <Link href="/registration">
+          <p className="text-center text-sm font-medium text-primary hover:text-primary-dark">
+            Back to Sign In
+          </p>
+        </Link>
+      </div>
     </div>
   );
 };

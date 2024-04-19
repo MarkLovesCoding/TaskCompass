@@ -5,14 +5,16 @@ import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import LogoPng from "../../public/compass.png";
+import LogoPng from "../../../public/compass.png";
 
 import Link from "next/link";
 import ResetPasswordForm from "./ResetPasswordForm";
 
-const ResetPasswordComponent = () => {
+const ResetPasswordComponent = ({ token }: { token: string }) => {
+  console.log("token--component", token);
   const { data: session } = useSession();
   const router = useRouter();
+
   useEffect(() => {
     // Redirect to home if the user is already signed in
     if (session) {
@@ -32,11 +34,8 @@ const ResetPasswordComponent = () => {
       </Link>
       {/* Right side (sign-in form) */}
       <div className="lg:flex-1  p-10">
-        {/* <div className="lg:flex-1 bg-gradient-to-r from-gray-800 to-gray-600 p-10"> */}
         <div className="mx-auto flex flex-col h-[100%] max-w-[500px] justify-center">
-          {/* <h2 className="text-3xl font-extrabold text-white mb-6">Sign In</h2> */}
-          <ResetPasswordForm />
-          {/* Conditional rendering based on authentication status */}
+          <ResetPasswordForm token={token} />
         </div>
       </div>
     </div>

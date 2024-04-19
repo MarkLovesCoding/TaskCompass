@@ -32,11 +32,8 @@ const ForgotPasswordComponent = () => {
       </Link>
       {/* Right side (sign-in form) */}
       <div className="lg:flex-1  p-10">
-        {/* <div className="lg:flex-1 bg-gradient-to-r from-gray-800 to-gray-600 p-10"> */}
         <div className="mx-auto flex flex-col h-[100%] max-w-[500px] justify-center">
-          {/* <h2 className="text-3xl font-extrabold text-white mb-6">Sign In</h2> */}
           <ForgotPasswordForm />
-          {/* Conditional rendering based on authentication status */}
         </div>
       </div>
     </div>
