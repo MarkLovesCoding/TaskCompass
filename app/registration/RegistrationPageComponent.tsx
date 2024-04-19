@@ -56,6 +56,9 @@ const RegistrationPageComponent = () => {
               >
                 {toRegister ? "Log In Here!" : " Sign Up Here!"}
               </span>
+              <Link href="/forgot-password">
+                <p className="ml-4 underline">Forgot Password?</p>
+              </Link>
             </div>
           </div>
         </div>
