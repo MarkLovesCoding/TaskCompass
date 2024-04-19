@@ -12,5 +12,7 @@ export function teamModelToTeamDto(team: TeamModelType) {
     projects: convertedProjects,
     users: convertedUsers,
     createdBy: team.createdBy.toString(),
+    backgroundImage: team.backgroundImage,
+    backgroundImageThumbnail: team.backgroundImageThumbnail,
   };
 }

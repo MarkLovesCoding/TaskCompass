@@ -14,6 +14,7 @@ const UserSchema = new Schema(
     tasks: [{ type: Schema.Types.ObjectId, ref: "Task" }],
     avatar: { type: String, default: "default_avatar.png" },
     role: String,
+    dashboardBackgroundImage: { type: String, default: "" },
   },
   {
     timestamps: true,

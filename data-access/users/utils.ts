@@ -29,5 +29,6 @@ export function userModelToUserDto(user: UserModelType): UserDto {
     teamsAsMember: convertedTeamsAsMember,
     tasks: convertedTasks,
     avatar: user.avatar,
+    dashboardBackgroundImage: user.dashboardBackgroundImage,
   };
 }

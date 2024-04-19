@@ -1,6 +1,8 @@
+"use client";
 import Link from "next/link";
 import { unstable_noStore } from "next/cache";
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import AddProjectCard from "./AddProjectCard";
 import { TeamUserSearchTable } from "./TeamUserSearchTable";
 import { TeamHeader } from "@/app/team/[id]/TeamHeader";
@@ -8,7 +10,13 @@ import UnarchiveProjectPopover from "./UnarchiveProjectPopover";
 import { TeamUserCardWithPermissions } from "./TeamUserCardWithPermissions";
 import { getInitials } from "@/lib/utils/getInitials";
 
-import { UserIcon, UserCog, ArchiveIcon, Scroll } from "lucide-react";
+import {
+  UserIcon,
+  UserCog,
+  ArchiveIcon,
+  Scroll,
+  ImageIcon,
+} from "lucide-react";
 import {
   CardTitle,
   CardDescription,
@@ -36,6 +44,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import Image from "next/image";
 import { CircleEllipsisIcon, PlusIcon } from "lucide-react";
 // import UpdateTeamMembersCard from "./UpdateTeamUsersCard";
 import getTeam from "@/data-access/teams/get-team.persistence";
@@ -53,9 +62,10 @@ import {
   AccordionTrigger,
   AccordionContent,
 } from "@/components/ui/accordion";
+import { updateTeamBackgroundAction } from "../_actions/update-team-background.action";
 import { Label } from "@/components/ui/label";
 
-export async function TeamPageComponent({
+export function TeamPageComponent({
   team,
   user,
   userId,
@@ -72,12 +82,9 @@ export async function TeamPageComponent({
 }) {
   unstable_noStore();
 
-  console.log("team", team);
   const teamId = team.id;
   const archivedProjects = projects.filter((project) => project.archived);
   const isCurrentUserAdmin = user.teamsAsAdmin.some((team) => team === teamId);
-  console.log("teamId", teamId);
-  console.log("isUserAdmin", isCurrentUserAdmin);
   const countArchivedProjects = archivedProjects.length;
   const countProjects = projects.length - countArchivedProjects;
 
@@ -88,10 +95,74 @@ export async function TeamPageComponent({
     user.teamsAsMember.includes(teamId)
   );
 
+  const [teamBackgroundImage, setTeamBackgroundImage] = useState<string>(
+    team.backgroundImage
+  );
+  const PER_PAGE = 12;
+  const [selectedImages, setSelectedImages] = useState<any[]>([]);
+  const [imagesLoadPage, setImagesLoadPage] = useState<number>(1);
+
+  const loadImageSetonOpen = async (bool: boolean) => {
+    // isImagesDialogOpen = bool;
+    if (bool) {
+      await loadNextImageSet();
+    }
+  };
+
+  const loadNextImageSet = async () => {
+    const nextPage = imagesLoadPage + 1;
+    const showPage = imagesLoadPage == 1 ? 1 : nextPage;
+    // await apiSearchNext(nextPage);
+    await fetch("/api/unsplash", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ page: showPage, perPage: PER_PAGE }),
+      cache: "no-cache",
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        setSelectedImages((prev) => {
+          return [...prev, ...data];
+        });
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+    setImagesLoadPage(nextPage);
+  };
+  type TUrls = {
+    full: string;
+    large: string;
+    regular: string;
+    raw: string;
+    small: string;
+    thumb: string;
+  };
+  const setNewBackground = async (urls: TUrls) => {
+    setTeamBackgroundImage(urls.full);
+    await updateTeamBackgroundAction(team.id, urls.full, urls.small);
+  };
+
   return (
     <div className=" absolute flex flex-col w-full  items-center top-8 md:top-12 min-h-[calc(100vh-2rem)] md:min-h-[calc(100vh-3rem)] overflow-x-hidden">
-      <main className="flex bg-gradient-background-light dark:bg-gradient-background-dark overflow-x-hidden w-full flex-col gap-4 min-h-[calc(100vh-2rem)] md:min-h-[calc(100vh-3rem)] md:gap-8">
-        <div className="z-20 overflow-x-clip  w-full px-4  self-center shadow-md   bg-accordion-background">
+      <main
+        style={
+          teamBackgroundImage
+            ? {
+                backgroundImage: "url(" + teamBackgroundImage + ")",
+                backgroundSize: "cover",
+                backgroundPosition: " center",
+                backgroundRepeat: "no-repeat",
+              }
+            : {}
+        }
+        className="flex bg-gradient-background-light dark:bg-gradient-background-dark overflow-x-hidden w-full flex-col gap-4 min-h-[calc(100vh-2rem)] md:min-h-[calc(100vh-3rem)]"
+      >
+        <div className="z-20 overflow-x-clip  w-full px-4  self-center shadow-md   bg-accordion-background backdrop-blur">
           <Accordion type="single" collapsible defaultValue="summary">
             <AccordionItem value="summary">
               <AccordionTrigger>
@@ -257,6 +328,81 @@ export async function TeamPageComponent({
                       </div>
                     </div>
                   </div>
+                  <div>
+                    <Dialog onOpenChange={loadImageSetonOpen}>
+                      <DialogTrigger asChild>
+                        <Button
+                          variant="outline"
+                          className="group hover:bg-accent"
+                        >
+                          <Label className="hidden md:flex ">
+                            Change Background
+                          </Label>
+                          <ImageIcon className="w-8 h-8 md:ml-3 self-center group-hover:text-primary" />
+                          <span className="sr-only">
+                            Change Background Button
+                          </span>
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent className="border-2 w-[80%]  bg-cardcolumn-background  p-4 border-nav-background">
+                        <div className="flex flex-col h-fit overflow-auto">
+                          <h1 className="font-bold text-lg w-full text-center">
+                            Customize Background
+                          </h1>
+                          <div className="flex flex-wrap justify-center h-[300px] p-2">
+                            {selectedImages.length > 0 ? (
+                              selectedImages.map((image: any, index) => {
+                                return (
+                                  <div
+                                    key={index}
+                                    className="relative max-w-[120px] max-h-[80px] m-1 overflow-y-clip cursor-pointer hover:border-white border-2 rounded-sm truncate text-ellipsis group"
+                                  >
+                                    <Image
+                                      onClick={() =>
+                                        setNewBackground(image.urls)
+                                      }
+                                      src={image.urls.thumb}
+                                      alt="Background Image"
+                                      width={120}
+                                      height={80}
+                                      className={`${
+                                        image.width / image.height > 1.5
+                                          ? "w-auto h-[80px]"
+                                          : "w-[120px] h-auto"
+                                      }  overflow-clip rounded cursor-pointer z-40 `}
+                                    />
+                                    {/* <div className="w-full h-full absolute top-0 left-0 z-30 bg-black/10 group-hover:bg-black/0"></div> */}
+                                    <Link
+                                      href={image.user.links.html}
+                                      className=" w-full absolute h-[20px]  bg-black/30 z-40 hover:bg-black/60 top-[60px] left-[0px]  truncate text-ellipsis "
+                                      title={image.user.name}
+                                    >
+                                      <p className="  px-2 text-xs truncate text-ellipsis">
+                                        {image.user.name}
+                                      </p>
+                                    </Link>
+                                    {/* <p>{image.url.full}</p> */}
+                                  </div>
+                                );
+                              })
+                            ) : (
+                              <div className="flex justify-center">
+                                <p>Loading Images...</p>
+                              </div>
+                            )}
+                            <div className="min-w-full py-4 flex justify-center">
+                              <Button
+                                onClick={loadNextImageSet}
+                                className="w-24"
+                              >
+                                + Load More
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      </DialogContent>
+                    </Dialog>
+                  </div>
                 </div>
               </AccordionContent>
             </AccordionItem>
@@ -264,8 +410,8 @@ export async function TeamPageComponent({
         </div>
 
         <div className="z-20 flex justify-center  self-center  m-4 w-full">
-          <div className=" z-20 flex-grow mt-2 flex w-full md:max-w-[60vw] md:mr-4 flex-col md:justify-start">
-            <div className="flex  max-w-[90vw] p-2 justify-start ml-[10%] md:ml-0 my-4 h-[40px] align-top ">
+          <div className=" z-20  mt-2 p-8 bg-accordion-background backdrop-blur rounded-lg flex w-fit md:max-w-fit md:mr-4 flex-col md:justify-start">
+            <div className="flex  max-w-[90vw] p-2 justify-center ml-[10%] md:ml-0 my-4 h-[40px] align-top ">
               <h1 className="text-lg md:text-xl font-bold mr-6 self-center">
                 Team Projects
               </h1>
@@ -295,10 +441,27 @@ export async function TeamPageComponent({
                     project.archived === false && (
                       <Card
                         key={project_idx}
-                        className=" hover:border-orange-300  border-2 mb-4 max-w-full sm:mr-4 flex items-center w-72 h-28 bg-card shadow-lg hover:shadow-sm"
+                        style={
+                          project.backgroundImageThumb?.length > 0
+                            ? {
+                                backgroundImage:
+                                  "url('" + project.backgroundImageThumb + "')",
+                                // +
+                                // ", linear-gradient(215deg, rgba(255,255,255,0.2),rgba(255,255,255,0.1))",
+                                // backgroundBlendMode: "overlay",
+                                backgroundSize: "cover",
+                                backgroundPosition: " center",
+                                backgroundRepeat: "no-repeat",
+                              }
+                            : {}
+                        }
+                        className=" hover:border-orange-300 relative after:bg-white/20 after:absolute after:top-0 after:left-0 after:w-full after:h-ull border-2 mb-4 max-w-full sm:mr-4 flex items-center w-72 h-28 bg-card shadow-lg hover:shadow-sm"
                       >
+                        <div className="z-30 absolute top-0 left-0 w-full h-full bg-black/40">
+                          {" "}
+                        </div>
                         <Link
-                          className="w-full h-full p-2"
+                          className="w-full h-full p-2 z-40 "
                           href={`/project/${project.id}`}
                         >
                           <CardHeader className="p-0 pl-2">

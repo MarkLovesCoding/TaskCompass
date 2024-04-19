@@ -8,6 +8,7 @@ export type UserDto = {
   teamsAsMember: string[];
   tasks: string[];
   avatar: string;
+  dashboardBackgroundImage: string;
 };
 export type User = { userId: string };
 export type UserTeamsAsAdmin = string[];

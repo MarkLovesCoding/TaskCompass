@@ -2,7 +2,13 @@
 import { capitalizeEachWord } from "./utils";
 import { Button } from "@/components/ui/button";
 import { NewTaskCard } from "./NewTaskCard";
-import { PlusIcon, FolderKanbanIcon, ArrowLeft, Scroll } from "lucide-react";
+import {
+  PlusIcon,
+  FolderKanbanIcon,
+  ArrowLeft,
+  Scroll,
+  ImageIcon,
+} from "lucide-react";
 import Link from "next/link";
 import type { ProjectDto } from "@/use-cases/project/types";
 import type { TaskDto } from "@/use-cases/task/types";
@@ -36,25 +42,6 @@ import { updateProjectBackgroundAction } from "../_actions/update-project-backgr
 import ProjectDrawer from "./ProjectDrawer";
 import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
 
-import { createApi } from "unsplash-js";
-const api = createApi({
-  // Don't forget to set your access token here!
-  // See https://unsplash.com/developers
-  accessKey: "SsU6mvH9lF3cSQEmUUnSY1OmLqsWkFqCyXILkod-bT0",
-});
-
-type Photo = {
-  id: number;
-  width: number;
-  height: number;
-  urls: { large: string; regular: string; raw: string; small: string };
-  color: string | null;
-  user: {
-    username: string;
-    name: string;
-  };
-};
-
 export function ProjectPage({
   // id,
   userId,
@@ -82,60 +69,36 @@ export function ProjectPage({
   const [selectedImages, setSelectedImages] = useState<any[]>([]);
   const [imagesLoadPage, setImagesLoadPage] = useState<number>(1);
 
-  const apiSearchFirst = async (page: number) => {
-    api.search
-      .getPhotos({
-        query: "nature",
-        page: 1,
-        perPage: PER_PAGE,
-        orientation: "landscape",
-      })
-      .then((result) => {
-        console.log("result>>>>>>>>>>>>>>", result);
-        setSelectedImages(result!.response!.results);
-        // setSelectedImages(result);
-      })
-      .catch(() => {
-        console.log("something went wrong!");
-      });
-  };
-  const apiSearchNext = async (page: number) => {
-    api.search
-      .getPhotos({
-        query: "nature",
-        page: page,
-        perPage: PER_PAGE,
-        orientation: "landscape",
-      })
-      .then((result) => {
-        console.log("result>>>>>>>>>>>>>>", result);
-        setSelectedImages((prev) => {
-          return [...prev, ...result!.response!.results];
-        });
-        // setSelectedImages(result);
-      })
-      .catch(() => {
-        console.log("something went wrong!");
-      });
-  };
-
   const loadImageSetonOpen = async (bool: boolean) => {
     // isImagesDialogOpen = bool;
     if (bool) {
-      await loadImageSet();
+      await loadNextImageSet();
     }
   };
 
-  const loadImageSet = async () => {
-    // const nextPage = imagesLoadPage + 1;
-    if (imagesLoadPage === 1) {
-      apiSearchFirst(imagesLoadPage);
-    }
-    // setImagesLoadPage(nextPage);
-  };
   const loadNextImageSet = async () => {
     const nextPage = imagesLoadPage + 1;
-    await apiSearchNext(nextPage);
+    const showPage = imagesLoadPage == 1 ? 1 : nextPage;
+    // await apiSearchNext(nextPage);
+    await fetch("/api/unsplash", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ page: showPage, perPage: PER_PAGE }),
+      cache: "no-cache",
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        setSelectedImages((prev) => {
+          return [...prev, ...data];
+        });
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
     setImagesLoadPage(nextPage);
   };
   type TUrls = {
@@ -256,25 +219,27 @@ export function ProjectPage({
               </PopoverContent>
             </Popover>
           </div>
-          <div>
+          <div title="Change Background" className="p-2">
             <Dialog onOpenChange={loadImageSetonOpen}>
               <DialogTrigger asChild>
                 <Button variant="outline" className="group hover:bg-accent">
-                  <Label className="hidden md:flex ">Change Background</Label>
-                  <PlusIcon className="w-8 h-8 md:ml-3 self-center group-hover:text-primary" />
+                  {/* <Label className="hidden md:flex ">Change Background</Label> */}
+                  <ImageIcon className="w-8 h-8 self-center group-hover:text-primary" />
                   <span className="sr-only">Change Background Button</span>
                 </Button>
               </DialogTrigger>
-              <DialogContent className="border-2 w-[80%]  bg-cardcolumn-background  p-4 border-nav-background">
+              <DialogContent className="border-2 w-[80%]  bg-accordion-background backdrop-blur  p-4 border-nav-background">
                 <div className="flex flex-col h-fit overflow-auto">
-                  <h1>Customize Background</h1>
-                  <div className="flex flex-wrap justify-center h-[300px] p-4">
-                    {selectedImages.length &&
+                  <h1 className="font-bold text-lg w-full text-center">
+                    Customize Background
+                  </h1>
+                  <div className="flex flex-wrap justify-center h-[300px] p-2">
+                    {selectedImages.length > 0 ? (
                       selectedImages.map((image: any, index) => {
                         return (
                           <div
                             key={index}
-                            className="relative max-w-[120px] max-h-[80px] m-1 overflow-y-clip hover:border-white border-2 rounded-sm truncate text-ellipsis"
+                            className="relative max-w-[120px] max-h-[80px] m-1 overflow-y-clip cursor-pointer hover:border-white border-2 rounded-sm truncate text-ellipsis group"
                           >
                             <Image
                               onClick={() => setNewBackground(image.urls)}
@@ -282,25 +247,36 @@ export function ProjectPage({
                               alt="Background Image"
                               width={120}
                               height={80}
-                              className="max-w-[120px] h-auto overflow-clip rounded cursor-pointer "
+                              className={`${
+                                image.width / image.height > 1.5
+                                  ? "w-auto h-[80px]"
+                                  : "w-[120px] h-auto"
+                              }  overflow-clip rounded cursor-pointer z-40 `}
                             />
-
+                            {/* <div className="w-full h-full absolute top-0 left-0 z-30 bg-black/10 group-hover:bg-black/0"></div> */}
                             <Link
                               href={image.user.links.html}
-                              className="px-5  truncate text-ellipsis"
+                              className=" w-full absolute h-[20px]  bg-black/30 z-40 hover:bg-black/60 top-[60px] left-[0px]  truncate text-ellipsis "
                               title={image.user.name}
                             >
-                              <p className="absolute top-[60px] left-[12px]  max-w-[calc(100%-24px)]  bg-badgeGray/40 text-xs truncate text-ellipsis">
+                              <p className="  px-2 text-xs truncate text-ellipsis">
                                 {image.user.name}
                               </p>
                             </Link>
                             {/* <p>{image.url.full}</p> */}
                           </div>
                         );
-                      })}
-                    <Button onClick={loadNextImageSet} className="w-24 ">
-                      + Load More
-                    </Button>
+                      })
+                    ) : (
+                      <div className="flex justify-center">
+                        <p>Loading Images...</p>
+                      </div>
+                    )}
+                    <div className="min-w-full py-4 flex justify-center">
+                      <Button onClick={loadNextImageSet} className="w-24">
+                        + Load More
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </DialogContent>

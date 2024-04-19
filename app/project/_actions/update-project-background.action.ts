@@ -24,7 +24,7 @@ export async function updateProjectBackgroundAction(
         projectBackgroundImageThumb: projectBackgroundImageThumb,
       }
     );
-    revalidatePath("/project/[slug]");
+    revalidatePath(`/project/${projectId}`);
 
     //for toasts, not yet implemented
     return { success: true };

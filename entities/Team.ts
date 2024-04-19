@@ -6,6 +6,8 @@ export class TeamEntity {
   private users: string[];
   private projects: string[];
   private createdBy: string;
+  private backgroundImage: string;
+  private backgroundImageThumbnail: string;
 
   constructor({
     id,
@@ -13,18 +15,24 @@ export class TeamEntity {
     users,
     projects,
     createdBy,
+    backgroundImage,
+    backgroundImageThumbnail,
   }: {
     id?: string;
     name: string;
     users: string[];
     projects: string[];
     createdBy: string;
+    backgroundImage: string;
+    backgroundImageThumbnail: string;
   }) {
     this.id = id;
     this.name = name;
     this.users = users;
     this.projects = projects;
     this.createdBy = createdBy;
+    this.backgroundImage = backgroundImage;
+    this.backgroundImageThumbnail = backgroundImageThumbnail;
     this.validate();
   }
 
@@ -47,7 +55,12 @@ export class TeamEntity {
   getCreatedBy() {
     return this.createdBy;
   }
-
+  getBackgroundImage() {
+    return this.backgroundImage;
+  }
+  getBackgroundImageThumbnail() {
+    return this.backgroundImageThumbnail;
+  }
   addUser(user: string) {
     this.users.push(user);
   }
@@ -84,12 +97,21 @@ export class TeamEntity {
     this.name = name;
   }
 
+  updateBackgroundImage(backgroundImage: string) {
+    this.backgroundImage = backgroundImage;
+  }
+  updateBackgroundImageThumbnail(backgroundImageThumbnail: string) {
+    this.backgroundImageThumbnail = backgroundImageThumbnail;
+  }
+
   private validate() {
     const teamSchema = z.object({
       name: z.string().min(3).max(30),
       users: z.array(z.string()).min(0),
       projects: z.array(z.string()).optional(),
       createdBy: z.string(),
+      backgroundImage: z.string().optional(),
+      backgroundImageThumbnail: z.string().optional(),
     });
     try {
       teamSchema.parse(this);
