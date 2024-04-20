@@ -121,7 +121,10 @@ export function TeamHeader({
                             maxLength={25}
                             placeholder="Team Name"
                             {...field}
-                            onClick={handleInputClick}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleInputClick();
+                            }}
                             onChange={handleInputChange}
                             onBlur={handleInputBlur}
                           />
