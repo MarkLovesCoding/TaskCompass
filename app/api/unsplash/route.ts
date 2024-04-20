@@ -1,4 +1,4 @@
-import { NextResponse, NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 import { createApi } from "unsplash-js";
 
 export async function POST(req: Request): Promise<any> {
@@ -17,6 +17,7 @@ export async function POST(req: Request): Promise<any> {
     })
     .then((result) => {
       const data = result!.response!.results;
+      console.log("DATA_SERVER22", [...data]);
       return data;
     })
     .catch((err: any) => {
