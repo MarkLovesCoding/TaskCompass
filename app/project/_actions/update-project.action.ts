@@ -18,7 +18,7 @@ export async function updateProjectAction(project: ProjectDto) {
       }
     );
 
-    // revalidatePath("/TEAMS-CLEAN/[slug]/page");
+    revalidatePath(`/project/${project.id}`);
 
     //for toasts, not yet implemented
     // return { success: true };

@@ -24,7 +24,7 @@ export async function updateTasksAction(projectId: string, tasks: TaskDto[]) {
         // label: formData.label,
       }
     );
-    revalidatePath(`/PROJECTS-CLEAN/${projectId}/page`);
+    revalidatePath(`/project/${projectId}/page`);
     // revalidatePath("/PROJECTS-CLEAN/[slug]/page");
   } catch (error: any) {
     console.error(error);
