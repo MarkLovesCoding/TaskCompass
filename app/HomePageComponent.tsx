@@ -25,33 +25,6 @@ import MoveTask from "../public/move-task.png";
 import PriorityView from "../public/priority-view.png";
 import SWCard from "../public/sw-card.png";
 
-// function calculateColor(scrollY: number) {
-//   const triggerPoints = [0, 100, 180, 260, 320, 400]; // Adjust trigger points in viewport height (vh)
-//   const colors = [
-//     "rgba(14,37,46,1)",
-//     "rgba(9,75,103,1)",
-//     "rgba(14,37,46,1)",
-//     "rgba(9,75,103,1)",
-//     "rgba(14,37,46,1)",
-//     "rgba(9,75,103,1)",
-//   ];
-//   for (let i = 0; i < triggerPoints.length - 1; i++) {
-//     if (
-//       scrollY >= (triggerPoints[i] * window.innerHeight) / 100 &&
-//       scrollY < (triggerPoints[i + 1] * window.innerHeight) / 100
-//     ) {
-//       const progress =
-//         (scrollY - (triggerPoints[i] * window.innerHeight) / 100) /
-//         (((triggerPoints[i + 1] - triggerPoints[i]) * window.innerHeight) /
-//           100);
-//       const currentColor = colors[i];
-//       const nextColor = colors[i + 1];
-//       return interpolateColors(currentColor, nextColor, progress);
-//     }
-//   }
-//   return colors[0]; // Default color
-// }
-
 function interpolateColors(color1: string, color2: string, progress: number) {
   const rgba1 = color1.match(/\d+/g)!;
   const rgba2 = color2.match(/\d+/g)!;
@@ -209,15 +182,14 @@ const HomePageComponent = () => {
           </FeatureSection>
         </div>
 
-        <div className="  bg-nav-background border-t-accent border-t self-center flex flex-row  text-center w-full justify-center items-center h-[50vh] min-h-[150px] ">
+        <div className="  bg-black border-t-accent border-t self-center flex flex-row  text-center w-full justify-center items-center h-[50vh] min-h-[150px] ">
           <div className="flex min-w-[50%] flex-col">
-            <h2 className="text-2xl">Task Compass</h2>
-            <h2 className="text-lg">
-              ©
+            <h2 className="text-2xl text-left">Task Compass</h2>
+            <h2 className="text-lg text-left">
               <Link href={`https://www.markhalstead.dev`}>
                 markhalstead.dev
               </Link>{" "}
-              2024
+              © 2024
             </h2>
           </div>
           {/* <div className="flex min-w-[50%]">
@@ -241,7 +213,7 @@ const FeatureSection = forwardRef<HTMLDivElement, FeatureSectionProps>(
       ref={ref}
       className={`  ${
         side === "left" ? "sm:flex-row " : "sm:flex-row-reverse "
-      } self-center flex flex-col border-t border-t-accent overflow-clip  text-center w-full justify-end items-end h-[80vh] sm:h-[70vh] lg:h-[65vh]  min-h-[300px] `}
+      } self-center flex flex-col border-t border-t-accent overflow-clip  text-center w-full justify-end items-end h-[80vh] sm:h-[80vh] lg:h-[80vh]  min-h-[300px] `}
     >
       <div className="flex-col self-center items-center flex w-full sm:w-[50%] lg:w-[65%] m-12 md:mr-0  md:m-12">
         <div className="  lg:w-[40vw] mt-12 sm:mt-0 sm:[70vw] w-full px-[10%] sm:px-[0%]">
@@ -275,14 +247,23 @@ FeatureSection.displayName = "FeatureSection";
 export default HomePageComponent;
 
 function calculateColor(scrollY: number) {
-  const triggerPoints = [0, 100, 180, 260, 320, 400]; // Adjust trigger points in viewport height (vh)
+  const triggerPoints = [0, 100, 180, 260, 340]; // Adjust trigger points in viewport height (vh)
+  // const colors = [
+  //   "rgba(14,37,46,1)",
+  //   "rgba(9,75,103,1)",
+  //   "rgba(14,37,46,1)",
+  //   "rgba(9,75,103,1)",
+  //   "rgba(14,37,46,1)",
+  //   "rgba(9,75,103,1)",
+  // ];
   const colors = [
     "rgba(14,37,46,1)",
-    "rgba(9,75,103,1)",
+    "rgba(0,0,0,1)",
     "rgba(14,37,46,1)",
-    "rgba(9,75,103,1)",
+    "rgba(0,0,0,1)",
+
     "rgba(14,37,46,1)",
-    "rgba(9,75,103,1)",
+    // "rgba(0,0,0,1)",
   ];
   for (let i = 0; i < triggerPoints.length - 1; i++) {
     if (
