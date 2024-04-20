@@ -59,9 +59,6 @@ const ProjectDrawer = ({
   const archivedTasks = tasks.filter((task) => task.archived);
   const uniqueTeamUsers = [...teamUsers];
   const uniqueProjectUsers = [...projectUsers];
-  console.log("projectUsers", projectUsers);
-  console.log("uniqueProjectUsers", uniqueProjectUsers);
-  console.log(uniqueProjectUsers.find((user) => user.id === userId));
   const projectAdmins = projectUsers.filter((user) =>
     user.projectsAsAdmin.includes(project.id)
   );

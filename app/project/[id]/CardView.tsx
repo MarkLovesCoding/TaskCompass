@@ -36,7 +36,9 @@ const CardView = ({
     type: string
   ): TaskDto[] {
     const updatedTasks = [...tasksToUpdate]; // Create a copy of the original array
+    console.log("updatedTasks in updateTasksinArray function:", updatedTasks);
     const index = updatedTasks.findIndex((task) => task.id === taskIdToUpdate); // Find the index of the task with the specified ID
+    console.log("index in updateTasksinArray function:", index);
     // const existingTasksData = { ...tasksList };
     if (index !== -1) {
       const updatedTask = updatedTasks.find(
@@ -50,6 +52,7 @@ const CardView = ({
       // If the task with the specified ID is found
       updatedTasks[index] = updatedTask; // Replace the task at that index with the new task
     }
+    console.log("Returned Updated Tasks, updateTasksInArray:", updatedTasks);
     return updatedTasks; // Return the updated array
   }
 
@@ -71,9 +74,7 @@ const CardView = ({
     return projectTasksOrder;
   }
   const sortByObject = mapIdsToTasks(projectTasksIdsOrder, tasks);
-
   const [tasksList, setTasksList] = useState<TaskDto[]>([]);
-
   const [projectData, setProjectData] = useState<ProjectDto>(project);
   const sortedTasksArray = projectData.columnOrder[viewType].map(
     (type: string) => [type, sortByObject[type]]
@@ -96,9 +97,7 @@ const CardView = ({
   ) => {
     const existingProjectData = { ...project };
     const newColumnOrder = projectData.columnOrder[viewType];
-
     newColumnOrder.splice(sourceIndex, 1);
-
     newColumnOrder.splice(destinationIndex, 0, draggableId);
     //update project data in db
     const newProjectData = { ...projectData };
@@ -122,6 +121,7 @@ const CardView = ({
   ) => {
     const existingProjectData = { ...projectData };
     const newProjectData = { ...projectData };
+    // console.log("newProjectData", newProjectData);
     if (
       sourceDroppableId === destinationDroppableId &&
       destinationIndex !== sourceIndex
@@ -140,6 +140,8 @@ const CardView = ({
         console.error(error);
       }
     } else if (sourceDroppableId !== destinationDroppableId) {
+      //error happens in UI here when not refreshed.
+
       // task moves column
       const existingTasksData = [...tasksList];
       updateTaskInArray(
@@ -157,11 +159,11 @@ const CardView = ({
       newDestinationTaskOrder.splice(destinationIndex, 0, draggableId);
       newProjectData.tasksOrder[viewType][sourceDroppableId] =
         newSourceTaskOrder;
+      console.log("updated2 newProjectData", newProjectData);
       newProjectData.tasksOrder[viewType][destinationDroppableId] =
         newDestinationTaskOrder;
 
       setProjectData(newProjectData);
-
       // Optimistic Updates state first. Then updates the backend, reverting if there is an error
 
       try {
@@ -185,7 +187,6 @@ const CardView = ({
         toast.error("Error updating project, reverting to existing data");
         throw error;
       }
-      const taskNameMoved = tasksList.find((task) => task.id === draggableId);
       toast.success(
         `Task moved from ${sourceDroppableId} to ${destinationDroppableId} `
       );
@@ -211,7 +212,6 @@ const CardView = ({
     }
     const sourceIndex = source.index;
     const destinationIndex = destination.index;
-    // updateTaskByColumnChange(type, destination.droppableId, draggableId);
     if (type == "task") {
       return updateTasksOrderInLists(
         source.droppableId,
