@@ -1,25 +1,20 @@
 "use client";
-import { capitalizeEachWord } from "./utils";
-import { Button } from "@/components/ui/button";
-import { NewTaskCard } from "./NewTaskCard";
-import {
-  PlusIcon,
-  FolderKanbanIcon,
-  ArrowLeft,
-  Scroll,
-  ImageIcon,
-} from "lucide-react";
+import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
-import type { ProjectDto } from "@/use-cases/project/types";
-import type { TaskDto } from "@/use-cases/task/types";
-import axios from "axios";
-
+import CardView from "./CardView";
+import { NewTaskCard } from "./NewTaskCard";
+import ProjectDrawer from "./ProjectDrawer";
+import { updateProjectBackgroundAction } from "../_actions/update-project-background.action";
+import { cn } from "@/lib/utils/utils";
+import { capitalizeEachWord } from "./utils";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover_add";
-import { Badge } from "@/components/ui/badge";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -28,22 +23,17 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import Image from "next/image";
+import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea, ScrollBar } from "@/components/ui/card-scroll-area";
-import { UserDto } from "@/use-cases/user/types";
-
-import { use, useEffect, useState } from "react";
-import CardView from "./CardView";
 import { Label } from "@/components/ui/label";
-import { cn } from "@/lib/utils/utils";
-import { TeamDto } from "@/use-cases/team/types";
-import { updateProjectBackgroundAction } from "../_actions/update-project-background.action";
-import ProjectDrawer from "./ProjectDrawer";
-import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
+import { PlusIcon, FolderKanbanIcon, ArrowLeft, ImageIcon } from "lucide-react";
+import type { TeamDto } from "@/use-cases/team/types";
+import type { ProjectDto } from "@/use-cases/project/types";
+import type { TaskDto } from "@/use-cases/task/types";
+import type { UserDto } from "@/use-cases/user/types";
 
 export function ProjectPage({
-  // id,
   userId,
   user,
   project,
@@ -52,7 +42,6 @@ export function ProjectPage({
   projectUsers,
   team,
 }: {
-  // id: string;
   userId: string;
   user: UserDto;
   project: ProjectDto;
@@ -70,7 +59,6 @@ export function ProjectPage({
   const [imagesLoadPage, setImagesLoadPage] = useState<number>(1);
 
   const loadImageSetonOpen = async (bool: boolean) => {
-    // isImagesDialogOpen = bool;
     if (bool) {
       await loadNextImageSet();
     }
@@ -79,14 +67,13 @@ export function ProjectPage({
   const loadNextImageSet = async () => {
     const nextPage = imagesLoadPage + 1;
     const showPage = imagesLoadPage == 1 ? 1 : nextPage;
-    // await apiSearchNext(nextPage);
+
     await fetch("/api/unsplash", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ page: showPage, perPage: PER_PAGE }),
-      cache: "no-cache",
     })
       .then((response) => {
         return response.json();
@@ -101,7 +88,7 @@ export function ProjectPage({
       });
     setImagesLoadPage(nextPage);
   };
-  type TUrls = {
+  type TUnsplashUrls = {
     full: string;
     large: string;
     regular: string;
@@ -109,7 +96,7 @@ export function ProjectPage({
     small: string;
     thumb: string;
   };
-  const setNewBackground = async (urls: TUrls) => {
+  const setNewBackground = async (urls: TUnsplashUrls) => {
     setProjectBackgroundImage(urls.full);
     await updateProjectBackgroundAction(project.id, urls.full, urls.small);
   };
@@ -171,14 +158,14 @@ export function ProjectPage({
           </div>
         </div>
         <div className="flex flex-row w-full   justify-center align-middle ">
-          <div title="Change View" className="p-2 ">
+          <div title="Change View" className="p-1 ">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="group hover:bg-accent">
+                <Button variant="outline" className="group hover:bg-accent p-2">
                   <Label className="hidden md:flex hover:cursor  ">{`View : ${capitalizeEachWord(
                     sortBy
                   )}  `}</Label>
-                  <FolderKanbanIcon className="group-hover:text-primary w-8 h-8 md:ml-3 self-center cursor-pointer" />
+                  <FolderKanbanIcon className="group-hover:text-primary w-6 h-6 md:ml-3 self-center cursor-pointer" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56 ">
@@ -205,12 +192,12 @@ export function ProjectPage({
             </DropdownMenu>
           </div>
           {/* {isUserAdmin && ( */}
-          <div title="Create New Task" className="p-2">
+          <div title="Create New Task" className="p-1">
             <Popover>
               <PopoverTrigger>
-                <Button variant="outline" className="group hover:bg-accent">
+                <Button variant="outline" className="group hover:bg-accent p-2">
                   <Label className="hidden md:flex ">New Task</Label>
-                  <PlusIcon className="w-8 h-8 md:ml-3 self-center group-hover:text-primary" />
+                  <PlusIcon className="w-6 h-6 md:ml-3 self-center group-hover:text-primary" />
                   <span className="sr-only">New Task Button</span>
                 </Button>
               </PopoverTrigger>
@@ -219,16 +206,16 @@ export function ProjectPage({
               </PopoverContent>
             </Popover>
           </div>
-          <div title="Change Background" className="p-2">
+          <div title="Change Background" className="p-1">
             <Dialog onOpenChange={loadImageSetonOpen}>
               <DialogTrigger asChild>
-                <Button variant="outline" className="group hover:bg-accent">
+                <Button variant="outline" className="group hover:bg-accent p-2">
                   {/* <Label className="hidden md:flex ">Change Background</Label> */}
-                  <ImageIcon className="w-8 h-8 self-center group-hover:text-primary" />
+                  <ImageIcon className="w-6 h-6 self-center group-hover:text-primary" />
                   <span className="sr-only">Change Background Button</span>
                 </Button>
               </DialogTrigger>
-              <DialogContent className="border-2 w-[80%]  bg-accordion-background backdrop-blur  p-4 border-nav-background">
+              <DialogContent className="border-2 w-[80%]  bg-drawer-background backdrop-blur rounded-md p-4 border-nav-background">
                 <div className="flex flex-col h-fit overflow-auto">
                   <h1 className="font-bold text-lg w-full text-center">
                     Customize Background
@@ -273,8 +260,8 @@ export function ProjectPage({
                       </div>
                     )}
                     <div className="min-w-full py-4 flex justify-center">
-                      <Button onClick={loadNextImageSet} className="w-24">
-                        + Load More
+                      <Button onClick={loadNextImageSet} className="w-28 px-1 ">
+                        More Images...
                       </Button>
                     </div>
                   </div>

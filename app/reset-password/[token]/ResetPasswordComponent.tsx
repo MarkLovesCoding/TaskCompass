@@ -1,17 +1,15 @@
 // import ResetPasswordComponent from "./ForgotPasswordComponent";
 "use client";
 import React from "react";
-import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
+import ResetPasswordForm from "./ResetPasswordForm";
 import LogoPng from "../../../public/compass.png";
 
-import Link from "next/link";
-import ResetPasswordForm from "./ResetPasswordForm";
-
 const ResetPasswordComponent = ({ token }: { token: string }) => {
-  console.log("token--component", token);
   const { data: session } = useSession();
   const router = useRouter();
 
@@ -19,13 +17,12 @@ const ResetPasswordComponent = ({ token }: { token: string }) => {
     // Redirect to home if the user is already signed in
     if (session) {
       //@ts-expect-error
-      router.push(`/dashboard/${session!.user.id}`);
+      router.push(`/dashboard/${session.user.id}`);
     }
   }, [session, router]);
 
   return (
     <div className="absolute bg-gradient-background-light justify-center dark:bg-gradient-background-dark  top-0 left-0 flex flex-col  w-full lg:flex-row min-h-[100vh] h-auto">
-      {/* Left side (announcement or other content) */}
       <Link href="/">
         <div className="absolute top-[20px] left-[40px] flex flex-row h-[100px] justify-center items-center">
           <Image src={LogoPng} alt="Task Compass Logo" width={80} height={80} />{" "}
