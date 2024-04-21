@@ -367,10 +367,13 @@ export function UserPageComponent({
                                 }
                               : {}
                           }
-                          className=" hover:border-orange-300  border-2 mb-4 max-w-full mr-4 md:mb-4 flex items-center w-72 h-28 bg-card shadow-lg hover:shadow-sm"
+                          className=" hover:border-orange-300  relative border-2 mb-4 max-w-full mr-4 md:mb-4 flex items-center w-72 h-28 bg-card shadow-lg hover:shadow-sm"
                         >
+                          <div className="z-30 absolute  top-0 left-0 w-full h-full bg-black/40">
+                            {" "}
+                          </div>
                           <Link
-                            className="w-full h-full p-2"
+                            className="w-full h-full p-2 z-40"
                             href={`/team/${team.id}`}
                           >
                             {/* <Badge className=" w-full text-xs m-0 px-[0.25em] py-[0.2em] text-center bg-red-500 ">{` Admin`}</Badge> */}
@@ -417,10 +420,13 @@ export function UserPageComponent({
                                 }
                               : {}
                           }
-                          className=" mb-4 hover:border-orange-300  border-2  max-w-full flex  mr-4 items-center w-72 h-28 bg-card shadow-lg hover:shadow-sm"
+                          className=" mb-4 hover:border-orange-300 relative border-2  max-w-full flex  mr-4 items-center w-72 h-28 bg-card shadow-lg hover:shadow-sm"
                         >
+                          <div className="z-30 absolute  top-0 left-0 w-full h-full bg-black/40">
+                            {" "}
+                          </div>
                           <Link
-                            className="w-full h-full p-2"
+                            className="w-full h-full p-2 z-40"
                             href={`/team/${team.id}`}
                           >
                             <div className=" flex justify-end">
@@ -483,10 +489,11 @@ export function UserPageComponent({
                                 }
                               : {}
                           }
-                          className="hover:border-orange-300  border-2  mb-4 max-w-full  mr-4 md:mb-4 flex items-center w-72 h-28 bg-card shadow-lg hover:shadow-sm"
+                          className="hover:border-orange-300 relative border-2  mb-4 max-w-full  mr-4 md:mb-4 flex items-center w-72 h-28 bg-card shadow-lg hover:shadow-sm"
                         >
+                          <div className="z-30 absolute  top-0 left-0 w-full h-full bg-black/40"></div>
                           <Link
-                            className="w-full h-full p-2"
+                            className="w-full h-full p-2 z-40"
                             href={`/project/${project.id}`}
                           >
                             <CardHeader className="p-0 pl-2">
@@ -543,10 +550,11 @@ export function UserPageComponent({
                               : {}
                           }
                           key={project_idx}
-                          className=" hover:border-orange-300  border-2 mb-4 max-w-full mr-4 flex items-center w-72 h-28 bg-card  shadow-lg hover:shadow-sm"
+                          className=" hover:border-orange-300 relative border-2 mb-4 max-w-full mr-4 flex items-center w-72 h-28 bg-card  shadow-lg hover:shadow-sm"
                         >
+                          <div className="z-30 absolute  top-0 left-0 w-full h-full bg-black/40"></div>
                           <Link
-                            className="w-full h-full p-2"
+                            className="w-full h-full p-2z-40"
                             href={`/project/${project.id}`}
                           >
                             <CardHeader className="p-0 pl-2">
