@@ -232,7 +232,7 @@ export function UserPageComponent({
                           </span>
                         </Button>
                       </DialogTrigger>
-                      <DialogContent className="border-2 w-[80%]  bg-cardcolumn-background  p-4 border-nav-background">
+                      <DialogContent className="border-2 w-[80%]  bg-drawer-background backdrop-blur  p-4 border-nav-background">
                         <div
                           className="flex flex-col h-fit overflow-auto"
                           ref={imageContainerRef}
@@ -246,7 +246,7 @@ export function UserPageComponent({
                                 return (
                                   <div
                                     key={index}
-                                    className="relative max-w-[120px] max-h-[80px] m-1 overflow-y-clip cursor-pointer hover:border-white border-2 rounded-sm truncate text-ellipsis group"
+                                    className="relative max-w-[120px] max-h-[80px] m-1 overflow-y-clip cursor-pointer hover:border-white border-2 truncate text-ellipsis group"
                                   >
                                     <Image
                                       onClick={() =>
@@ -284,9 +284,9 @@ export function UserPageComponent({
                             <div className="min-w-full py-4 flex justify-center">
                               <Button
                                 onClick={loadNextImageSet}
-                                className="w-24"
+                                className="w-28 px-1 "
                               >
-                                + Load More
+                                More Images...
                               </Button>
                             </div>
                           </div>
@@ -379,10 +379,10 @@ export function UserPageComponent({
                             </div>
 
                             <CardHeader className="p-0 pl-2">
-                              <CardTitle className="text-sm md:text-base">
+                              <CardTitle className="text-sm md:text-base text-imageThumbText">
                                 {team.name}
                               </CardTitle>
-                              <CardDescription className="text-xs text-ellipsis">
+                              <CardDescription className="text-xs text-ellipsis text-imageThumbText">
                                 <Badge className="  min-w-fit text-xs px-2 py-[0.2em] m-1 self-end bg-badgeYellow ">
                                   {`Users:  ${team.users.length}`}
                                 </Badge>
@@ -427,10 +427,10 @@ export function UserPageComponent({
                               <Badge className=" min-w-fit text-xs px-2 py-[0.2em] m-1 self-end bg-badgeBlue ">{`Member`}</Badge>
                             </div>
                             <CardHeader className="p-0 pl-2">
-                              <CardTitle className="text-sm md:text-base">
+                              <CardTitle className="text-sm md:text-base text-imageThumbText">
                                 {team.name}
                               </CardTitle>
-                              <CardDescription className="text-xs text-ellipsis">
+                              <CardDescription className="text-xs text-ellipsis text-imageThumbText">
                                 <Badge className="  min-w-fit text-xs px-2 py-[0.2em] m-1 self-end bg-badgeYellow ">
                                   {`Users:  ${team.users.length}`}
                                 </Badge>
@@ -498,10 +498,10 @@ export function UserPageComponent({
                                   <Badge className=" min-w-fit text-xs px-2 py-[0.2em] m-1 self-end bg-badgeRed ">{`Admin`}</Badge>
                                 </div>
                               </div>
-                              <CardTitle className="text-sm md:text-base">
+                              <CardTitle className="text-sm md:text-base text-imageThumbText">
                                 {project.name}
                               </CardTitle>
-                              <CardDescription className="text-xs text-ellipsis">
+                              <CardDescription className="text-xs text-imageThumbText text-ellipsis">
                                 <Badge className="  min-w-fit text-xs px-2 py-[0.2em] m-1 self-end bg-badgeYellow ">
                                   {`Users:  ${project.users.length}`}
                                 </Badge>
@@ -558,10 +558,10 @@ export function UserPageComponent({
                                   <Badge className=" min-w-fit text-xs px-2 py-[0.2em] m-1 self-end bg-badgeBlue ">{`Member`}</Badge>
                                 </div>
                               </div>
-                              <CardTitle className="text-sm  md:text-base">
+                              <CardTitle className="text-sm text-imageThumbText md:text-base">
                                 {project.name}
                               </CardTitle>
-                              <CardDescription className="text-xs text-ellipsis">
+                              <CardDescription className="text-xs text-ellipsis text-imageThumbText">
                                 {/* <p className="truncate">{project.description}</p> */}
                                 <Badge className="  min-w-fit text-xs px-2 py-[0.2em] m-1 self-end bg-badgeYellow ">
                                   {`Users:  ${project.users.length}`}

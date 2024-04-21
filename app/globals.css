@@ -18,6 +18,8 @@
     --usersearch-foreground: rgb(14, 14, 14);
     --usersearch-background: rgba(201, 200, 200, 0.9);
     --taskcardsmall-background: rgba(250, 250, 250, 1);
+    --imageThumbText: rgba(250, 250, 250, 1);
+
     --foreground: rgb(12, 12, 12);
     --popover: rgb(224, 222, 222);
     --popover-foreground: rgb(12, 12, 12);
@@ -62,13 +64,14 @@
     --card: rgb(43, 90, 118);
     --card-foreground: rgb(250, 250, 250);
     --taskcard-foreground: rgb(222, 219, 219);
-    /* --taskcard-background: rgba(22, 46, 68, 0.5); */
     --taskcard-background: rgba(56, 69, 75, 0.7);
     --usersearch-background: rgba(56, 69, 75, 0.9);
     --usersearch-foreground: rgb(222, 219, 219);
 
     --cardcolumn-background: rgb(56, 69, 75);
     --taskcardsmall-background: rgb(37, 40, 44);
+    --imageThumbText: rgba(250, 250, 250, 1);
+
     --primary: rgb(43, 90, 118);
     --primary-accent: rgb(58 105 133);
 

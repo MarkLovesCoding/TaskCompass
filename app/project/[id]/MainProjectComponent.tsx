@@ -226,7 +226,7 @@ export function ProjectPage({
                         return (
                           <div
                             key={index}
-                            className="relative max-w-[120px] max-h-[80px] m-1 overflow-y-clip cursor-pointer hover:border-white border-2 rounded-sm truncate text-ellipsis group"
+                            className="relative max-w-[120px] max-h-[80px] m-1 overflow-y-clip cursor-pointer hover:border-white border-2 truncate text-ellipsis group"
                           >
                             <Image
                               onClick={() => setNewBackground(image.urls)}

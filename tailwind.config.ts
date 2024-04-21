@@ -91,6 +91,7 @@ module.exports = {
         badgeBlue: "var(--badgeBlue)",
         badgeOrange: "var(--badgeOrange)",
         badgeGray: "var(--badgeGray)",
+        imageThumbText: "var(--imageThumbText)",
       },
       borderRadius: {
         lg: "var(--radius)",
