@@ -248,14 +248,6 @@ export default HomePageComponent;
 
 function calculateColor(scrollY: number) {
   const triggerPoints = [0, 100, 180, 260, 340]; // Adjust trigger points in viewport height (vh)
-  // const colors = [
-  //   "rgba(14,37,46,1)",
-  //   "rgba(9,75,103,1)",
-  //   "rgba(14,37,46,1)",
-  //   "rgba(9,75,103,1)",
-  //   "rgba(14,37,46,1)",
-  //   "rgba(9,75,103,1)",
-  // ];
   const colors = [
     "rgba(14,37,46,1)",
     "rgba(0,0,0,1)",
