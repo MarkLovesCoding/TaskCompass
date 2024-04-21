@@ -168,7 +168,6 @@ export function UserPageComponent({
                     <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
                   </Avatar>
                   <p className="text-base md:text-lg font-bold">
-                    {" "}
                     {user.name}
                     {`'s Dashboard`}
                   </p>
@@ -176,123 +175,128 @@ export function UserPageComponent({
               </AccordionTrigger>
               <AccordionContent>
                 {/* <div className="flex flex-col  md:flex-row md:flex-wrap md:justify-between md:space-x-4  "> */}
-                <div className="flex flex-col md:flex-row md:flex-wrap md:justify-between md:mx-[12%] bg-transparent ">
+                <div className="flex flex-row bg-transparent justify-between">
                   {/* <div className="mb-4 md:w-1/4"> */}
 
                   {/* </div> */}
-                  <div className="mb-4 md:w-1/4">
-                    <div className="ml-auto flex flex-wrap items-center ">
-                      <Label className="font-bold text-sm md:text:sm pb-4">
-                        Your Tasks:
-                      </Label>
+                  <div className="flex flex-col md:flex-row md:flex-wrap md:justify-stretch md:mx-[12%] ">
+                    <div className="mb-4 md:w-1/3">
+                      <div className="ml-auto flex flex-wrap items-center ">
+                        <Label className="font-bold text-sm md:text:sm pb-4">
+                          Your Tasks:
+                        </Label>
+                      </div>
+                      <div className="ml-auto flex flex-wrap items-center ">
+                        <Badge className="bg-badgeRed  min-w-fit text-xs px-2 py-[0.2em] m-1">{`${userTasks.length} assigned`}</Badge>
+                        <Badge className="bg-badgeOrange  min-w-fit text-xs px-2 py-[0.2em] m-1">{`${userTasksInProgress.length} in progress`}</Badge>
+                        <Badge className="bg-badgeGreen  min-w-fit text-xs px-2 py-[0.2em] m-1 ">{`${userTasksCompleted.length} completed`}</Badge>
+                      </div>
                     </div>
-                    <div className="ml-auto flex flex-wrap items-center ">
-                      <Badge className="bg-badgeRed  min-w-fit text-xs px-2 py-[0.2em] m-1">{`${userTasks.length} assigned`}</Badge>
-                      <Badge className="bg-badgeOrange  min-w-fit text-xs px-2 py-[0.2em] m-1">{`${userTasksInProgress.length} in progress`}</Badge>
-                      <Badge className="bg-badgeGreen  min-w-fit text-xs px-2 py-[0.2em] m-1 ">{`${userTasksCompleted.length} completed`}</Badge>
-                    </div>
-                  </div>
-                  <div className="mb-4 md:w-1/4">
-                    <div className="ml-auto flex flex-wrap items-center ">
-                      <Label className="font-bold text-sm md:text:sm pb-4">
-                        Your Teams:
-                      </Label>
-                    </div>
-                    <div className="ml-auto flex flex-wrap items-center ">
-                      <Badge className=" min-w-fit text-xs px-2 py-[0.2em] m-1 bg-badgeRed ">{` Admin: ${usersTeamsAsAdmin.length}`}</Badge>
+                    <div className="mb-4 md:w-1/3">
+                      <div className="ml-auto flex flex-wrap items-center ">
+                        <Label className="font-bold text-sm md:text:sm pb-4">
+                          Your Teams:
+                        </Label>
+                      </div>
+                      <div className="ml-auto flex flex-wrap items-center ">
+                        <Badge className=" min-w-fit text-xs px-2 py-[0.2em] m-1 bg-badgeRed ">{` Admin: ${usersTeamsAsAdmin.length}`}</Badge>
 
-                      <Badge className=" min-w-fit text-xs px-2 py-[0.2em] m-1  bg-badgeBlue ">{` Member: ${usersTeamsAsMember.length}`}</Badge>
+                        <Badge className=" min-w-fit text-xs px-2 py-[0.2em] m-1  bg-badgeBlue ">{` Member: ${usersTeamsAsMember.length}`}</Badge>
+                      </div>
                     </div>
-                  </div>
-                  <div className="mb-4 md:w-1/4">
-                    <div className="ml-auto flex flex-wrap items-center2">
-                      <Label className="font-bold text-sm md:text:sm pb-4">
-                        Your Projects:
-                      </Label>
-                    </div>
-                    <div className="ml-auto flex flex-wrap items-center ">
-                      <Badge className=" min-w-fit text-xs px-2 py-[0.2em] m-1  bg-badgeRed ">{` Admin: ${usersProjectsAsAdmin.length}`}</Badge>
+                    <div className="mb-4 md:w-1/3">
+                      <div className="ml-auto flex flex-wrap items-center2">
+                        <Label className="font-bold text-sm md:text:sm pb-4">
+                          Your Projects:
+                        </Label>
+                      </div>
+                      <div className="ml-auto flex flex-wrap items-center ">
+                        <Badge className=" min-w-fit text-xs px-2 py-[0.2em] m-1  bg-badgeRed ">{` Admin: ${usersProjectsAsAdmin.length}`}</Badge>
 
-                      <Badge className=" min-w-fit text-xs px-2 py-[0.2em] m-1  bg-badgeBlue">{` Member: ${usersProjectsAsMember.length}`}</Badge>
+                        <Badge className=" min-w-fit text-xs px-2 py-[0.2em] m-1  bg-badgeBlue">{` Member: ${usersProjectsAsMember.length}`}</Badge>
+                      </div>
                     </div>
                   </div>
-                  <div className="mb-4 md:w-1/6">
-                    <Dialog onOpenChange={loadImageSetonOpen}>
-                      <DialogTrigger asChild>
-                        <Button
-                          variant="outline"
-                          className="group hover:bg-accent"
-                        >
-                          <Label className="hidden md:flex ">
-                            Change Background
-                          </Label>
-                          <ImageIcon className="w-8 h-8 md:ml-3 self-center group-hover:text-primary" />
-                          <span className="sr-only">
-                            Change Background Button
-                          </span>
-                        </Button>
-                      </DialogTrigger>
-                      <DialogContent className="border-2 w-[80%]  bg-drawer-background backdrop-blur  p-4 border-nav-background">
-                        <div
-                          className="flex flex-col h-fit overflow-auto"
-                          ref={imageContainerRef}
-                        >
-                          <h1 className="font-bold text-lg w-full text-center">
-                            Customize Background
-                          </h1>
-                          <div className="flex flex-wrap justify-center h-[300px] p-2">
-                            {selectedImages.length > 0 ? (
-                              selectedImages.map((image: any, index) => {
-                                return (
-                                  <div
-                                    key={index}
-                                    className="relative max-w-[120px] max-h-[80px] m-1 overflow-y-clip cursor-pointer hover:border-white border-2 truncate text-ellipsis group"
-                                  >
-                                    <Image
-                                      onClick={() =>
-                                        setNewBackground(image.urls)
-                                      }
-                                      src={image.urls.thumb}
-                                      alt="Background Image"
-                                      width={120}
-                                      height={80}
-                                      className={`${
-                                        image.width / image.height > 1.5
-                                          ? "w-auto h-[80px]"
-                                          : "w-[120px] h-auto"
-                                      }  overflow-clip rounded cursor-pointer z-40 `}
-                                    />
-                                    {/* <div className="w-full h-full absolute top-0 left-0 z-30 bg-black/10 group-hover:bg-black/0"></div> */}
-                                    <Link
-                                      href={image.user.links.html}
-                                      className=" w-full absolute h-[20px]  bg-black/30 z-40 hover:bg-black/60 top-[60px] left-[0px]  truncate text-ellipsis "
-                                      title={image.user.name}
+
+                  <div className="">
+                    <div className="mb-4 md:w-1/6">
+                      <Dialog onOpenChange={loadImageSetonOpen}>
+                        <DialogTrigger asChild>
+                          <Button
+                            variant="outline"
+                            className="group hover:bg-accent px-2 mr-3"
+                          >
+                            <Label className="hidden md:flex ">
+                              Change Background
+                            </Label>
+                            <ImageIcon className="w-6 h-6 md:ml-3 self-center group-hover:text-primary" />
+                            <span className="sr-only">
+                              Change Background Button
+                            </span>
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="border-2 w-[80%]  bg-drawer-background backdrop-blur  p-4 border-nav-background">
+                          <div
+                            className="flex flex-col h-fit overflow-auto"
+                            ref={imageContainerRef}
+                          >
+                            <h1 className="font-bold text-lg w-full text-center">
+                              Customize Background
+                            </h1>
+                            <div className="flex flex-wrap justify-center h-[300px] p-2">
+                              {selectedImages.length > 0 ? (
+                                selectedImages.map((image: any, index) => {
+                                  return (
+                                    <div
+                                      key={index}
+                                      className="relative max-w-[120px] max-h-[80px] m-1 overflow-y-clip cursor-pointer hover:border-white border-2 truncate text-ellipsis group"
                                     >
-                                      <p className="  px-2 text-xs truncate text-ellipsis">
-                                        {image.user.name}
-                                      </p>
-                                    </Link>
-                                    {/* <p>{image.url.full}</p> */}
-                                  </div>
-                                );
-                              })
-                            ) : (
-                              <div className="flex justify-center">
-                                <p>Loading Images...</p>
+                                      <Image
+                                        onClick={() =>
+                                          setNewBackground(image.urls)
+                                        }
+                                        src={image.urls.thumb}
+                                        alt="Background Image"
+                                        width={120}
+                                        height={80}
+                                        className={`${
+                                          image.width / image.height > 1.5
+                                            ? "w-auto h-[80px]"
+                                            : "w-[120px] h-auto"
+                                        }  overflow-clip rounded cursor-pointer z-40 `}
+                                      />
+                                      {/* <div className="w-full h-full absolute top-0 left-0 z-30 bg-black/10 group-hover:bg-black/0"></div> */}
+                                      <Link
+                                        href={image.user.links.html}
+                                        className=" w-full absolute h-[20px]  bg-black/30 z-40 hover:bg-black/60 top-[60px] left-[0px]  truncate text-ellipsis "
+                                        title={image.user.name}
+                                      >
+                                        <p className="  px-2 text-xs truncate text-ellipsis">
+                                          {image.user.name}
+                                        </p>
+                                      </Link>
+                                      {/* <p>{image.url.full}</p> */}
+                                    </div>
+                                  );
+                                })
+                              ) : (
+                                <div className="flex justify-center">
+                                  <p>Loading Images...</p>
+                                </div>
+                              )}
+                              <div className="min-w-full py-4 flex justify-center">
+                                <Button
+                                  onClick={loadNextImageSet}
+                                  className="w-28 px-1 "
+                                >
+                                  More Images...
+                                </Button>
                               </div>
-                            )}
-                            <div className="min-w-full py-4 flex justify-center">
-                              <Button
-                                onClick={loadNextImageSet}
-                                className="w-28 px-1 "
-                              >
-                                More Images...
-                              </Button>
                             </div>
                           </div>
-                        </div>
-                      </DialogContent>
-                    </Dialog>
+                        </DialogContent>
+                      </Dialog>
+                    </div>
                   </div>
                 </div>
               </AccordionContent>
@@ -304,10 +308,6 @@ export function UserPageComponent({
           <Tabs
             defaultValue="teams"
             className="flex mt-0 p-8 bg-accordion-background backdrop-blur rounded-lg justify-center self-center w-fit   flex-col "
-            //     padding: 2em;
-            // background: #2229338a;
-            // backdrop-filter: blur(5px);
-            // border-radius: 25px;
           >
             <TabsList className="self-center">
               <TabsTrigger value="teams">Teams</TabsTrigger>
@@ -327,20 +327,12 @@ export function UserPageComponent({
                         size="icon"
                       >
                         New Team
-                        {/* <p>Add Team</p> */}
                         <PlusIcon className="w-4 h-4 ml-4" />
                         <span className="sr-only">New Team Button</span>
                       </Button>
                     </DialogTrigger>
                     <DialogContent className="max-w-[280px]">
                       <AddTeamCard />
-                      {/* <DialogFooter className="sm:justify-end">
-                  <DialogClose asChild>
-                    <Button type="button" variant="secondary">
-                      Close
-                    </Button>
-                  </DialogClose>
-                </DialogFooter> */}
                     </DialogContent>
                   </Dialog>
                 </div>
@@ -358,9 +350,7 @@ export function UserPageComponent({
                                     "url('" +
                                     team.backgroundImageThumbnail +
                                     "')",
-                                  // +
-                                  // ", linear-gradient(215deg, rgba(255,255,255,0.2),rgba(255,255,255,0.1))",
-                                  // backgroundBlendMode: "overlay",
+
                                   backgroundSize: "cover",
                                   backgroundPosition: " center",
                                   backgroundRepeat: "no-repeat",
@@ -369,14 +359,11 @@ export function UserPageComponent({
                           }
                           className=" hover:border-orange-300  relative border-2 mb-4 max-w-full mr-4 md:mb-4 flex items-center w-72 h-28 bg-card shadow-lg hover:shadow-sm"
                         >
-                          <div className="z-30 absolute  top-0 left-0 w-full h-full bg-black/40">
-                            {" "}
-                          </div>
+                          <div className="z-30 absolute  top-0 left-0 w-full h-full bg-black/40"></div>
                           <Link
                             className="w-full h-full p-2 z-40"
                             href={`/team/${team.id}`}
                           >
-                            {/* <Badge className=" w-full text-xs m-0 px-[0.25em] py-[0.2em] text-center bg-red-500 ">{` Admin`}</Badge> */}
                             <div className=" flex justify-end">
                               <Badge className=" min-w-fit text-xs px-2 py-[0.2em] m-1 self-end bg-badgeRed ">{`Admin`}</Badge>
                             </div>
@@ -422,9 +409,7 @@ export function UserPageComponent({
                           }
                           className=" mb-4 hover:border-orange-300 relative border-2  max-w-full flex  mr-4 items-center w-72 h-28 bg-card shadow-lg hover:shadow-sm"
                         >
-                          <div className="z-30 absolute  top-0 left-0 w-full h-full bg-black/40">
-                            {" "}
-                          </div>
+                          <div className="z-30 absolute  top-0 left-0 w-full h-full bg-black/40"></div>
                           <Link
                             className="w-full h-full p-2 z-40"
                             href={`/team/${team.id}`}
