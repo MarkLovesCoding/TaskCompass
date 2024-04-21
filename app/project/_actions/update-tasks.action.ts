@@ -6,7 +6,7 @@ import getTask from "@/data-access/tasks/get-task.persistence";
 import { updateTasksUseCase } from "@/use-cases/task/update-tasks.use-case";
 import { getUserFromSession } from "@/lib/sessionAuth";
 import { revalidatePath } from "next/cache";
-import { OrderInLists, TaskDto } from "@/use-cases/task/types";
+import { TaskDto } from "@/use-cases/task/types";
 
 export async function updateTasksAction(projectId: string, tasks: TaskDto[]) {
   const { getUser } = await getUserFromSession();
@@ -21,11 +21,9 @@ export async function updateTasksAction(projectId: string, tasks: TaskDto[]) {
       {
         projectId: projectId,
         tasks: tasks,
-        // label: formData.label,
       }
     );
     revalidatePath(`/project/${projectId}/page`);
-    // revalidatePath("/PROJECTS-CLEAN/[slug]/page");
   } catch (error: any) {
     console.error(error);
   }

@@ -15,11 +15,9 @@ type FormData = {
   assignees: string[];
   dueDate: Date;
   startDate: Date;
-  // archived: boolean;
   category: string;
   priority: string;
   status: string;
-  // label?: string | undefined;
 };
 
 export async function updateTaskAction(
@@ -46,16 +44,13 @@ export async function updateTaskAction(
         assignees: formData.assignees,
         dueDate: formData.dueDate,
         startDate: formData.startDate,
-        // archived: formData.archived,
         category: formData.category,
         priority: formData.priority,
         status: formData.status,
-        // label: formData.label,
         originalAssignees: originalAssignees,
       }
     );
-    revalidatePath(`/PROJECTS-CLEAN/${formData.projectId}/page`);
-    // revalidatePath("/PROJECTS-CLEAN/[slug]/page");
+    revalidatePath(`/project/${formData.projectId}`);
   } catch (error: any) {
     console.error(error);
   }

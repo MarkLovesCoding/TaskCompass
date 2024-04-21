@@ -32,7 +32,7 @@ export async function updateProjectTasksOrderFromTaskCardAction(
       }
     );
 
-    revalidatePath("/project/[slug]/page");
+    revalidatePath(`/project/${projectId}`);
 
     //for toasts, not yet implemented
     // return { success: true };

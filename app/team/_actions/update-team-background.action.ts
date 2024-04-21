@@ -25,7 +25,7 @@ export async function updateTeamBackgroundAction(
         backgroundImageThumbnail: backgroundImageThumbnail,
       }
     );
-    revalidatePath(`/team/${teamId}/page`);
+    revalidatePath(`/team/${teamId}`);
   } catch (error: any) {
     console.error(error);
   }

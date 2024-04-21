@@ -23,7 +23,8 @@ export async function createNewProjectAction(form: Form, teamId: string) {
         teamId: teamId,
       }
     );
-    revalidatePath("/TEAMS-CLEAN/[slug]/page");
+    revalidatePath(`/team/${teamId}`);
+
     return { form: { name: "" } };
   } catch (error: any) {
     console.error(error);

@@ -24,7 +24,7 @@ export async function createNewTaskAction(formData: FormData) {
         project: formData.project,
       }
     );
-    revalidatePath("/PROJECTS-CLEAN/[slug]/page");
+    revalidatePath(`/project/[slug]`);
   } catch (error: any) {
     console.error(error);
   }

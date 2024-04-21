@@ -42,16 +42,13 @@ export async function updateTaskFullCardAction(
         assignees: formData.assignees,
         dueDate: formData.dueDate,
         startDate: formData.startDate,
-        // archived: formData.archived,
         category: formData.category,
         priority: formData.priority,
         status: formData.status,
-        // label: formData.label,
         originalAssignees: originalAssignees,
       }
     );
-    revalidatePath(`/PROJECTS-CLEAN/${formData.projectId}/page`);
-    // revalidatePath("/PROJECTS-CLEAN/[slug]/page");
+    revalidatePath(`/project/${formData.projectId}`);
   } catch (error: any) {
     console.error(error);
   }

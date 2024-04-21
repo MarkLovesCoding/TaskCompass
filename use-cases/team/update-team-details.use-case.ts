@@ -4,7 +4,6 @@ import { UpdateTeam, GetTeam } from "@/use-cases/team/types";
 import { GetUserSession } from "@/use-cases/user/types";
 import { teamToDto } from "@/use-cases/team/utils";
 
-// to be sorted out with how to update team and user and impliment
 export async function updateTeamDetailsUseCase(
   context: {
     updateTeam: UpdateTeam;

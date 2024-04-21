@@ -8,7 +8,6 @@ import { revalidatePath } from "next/cache";
 type FormData = {
   id: string;
   status: string;
-  // projectId: string;
 };
 
 export async function updateTaskStatusAction(formData: FormData) {
@@ -27,8 +26,7 @@ export async function updateTaskStatusAction(formData: FormData) {
         status: formData.status,
       }
     );
-    // revalidatePath(`/PROJECTS-CLEAN/${formData.projectId}`);
-    revalidatePath("/PROJECTS-CLEAN/[slug/page");
+    revalidatePath("/project/[slug/page");
   } catch (error: any) {
     console.error(error);
   }

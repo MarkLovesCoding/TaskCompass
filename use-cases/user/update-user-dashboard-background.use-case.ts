@@ -18,6 +18,4 @@ export async function updateUserDashboardBackgroundUseCase(
   const user = new UserEntity(validatedUser);
   user.updateDashboardBackgroundImage(data.dashboardBackgroundImage);
   await context.updateUser(userToDto(user));
-  //figure out how to transfer this to toast
-  //error happens here
 }

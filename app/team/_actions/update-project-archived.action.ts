@@ -25,7 +25,7 @@ export async function updateProjectArchivedAction(form: Form) {
         projectId: form.projectId,
       }
     );
-    revalidatePath("/PROJECTS-CLEAN/[slug]/page");
+    revalidatePath(`/project/${form.projectId}`);
   } catch (error: any) {
     console.error(error);
   }

@@ -21,7 +21,7 @@ export async function createNewTeamAction(form: Form) {
         name: form.name,
       }
     );
-    revalidatePath("/TEAMS-CLEAN/[slug]");
+    revalidatePath("/dashboard/[slug]");
     return { form: { name: "" } };
   } catch (error: any) {
     console.error(error);

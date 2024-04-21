@@ -1,9 +1,6 @@
 import { UserEntity } from "@/entities/User";
 import { GetUser, GetUserSession, UpdateUser } from "@/use-cases/user/types";
 import { userToDto } from "./utils";
-import { GetTeam, UpdateTeam } from "../team/types";
-import { TeamEntity } from "@/entities/Team";
-import { teamToDto } from "../team/utils";
 import { ProjectEntity } from "@/entities/Project";
 import { GetProject, UpdateProject } from "../project/types";
 import { projectToDto } from "../project/utils";

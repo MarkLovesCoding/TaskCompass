@@ -25,7 +25,7 @@ export async function updateTeamUsersAction(
         updatedUsers: updatedUsers,
       }
     );
-    revalidatePath(`/TEAMS-CLEAN/${teamId}/page`);
+    revalidatePath(`/team/${teamId}`);
 
     //for toasts, not yet implemented
     return { success: true };

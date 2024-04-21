@@ -24,7 +24,6 @@ export async function updateTeamUserRoleUseCase(
   if (teamCreatedBy == data.teamUserId)
     //figure out how to transfer this to toast
     throw new Error("Team Creator can't be changed");
-  //error happens here
   else {
     const teamUser = await context.getUserObject(data.teamUserId);
     const validatedTeamUser = new UserEntity(teamUser);

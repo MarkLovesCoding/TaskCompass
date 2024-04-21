@@ -28,7 +28,7 @@ export async function updateTaskUsersAction(
         removedAssignees: removedAssignees,
       }
     );
-    revalidatePath("/PROJECTS-CLEAN/[slug]");
+    revalidatePath("/project/[slug]");
     //pertains to toasts, not yet implemented
     return {
       success: true,

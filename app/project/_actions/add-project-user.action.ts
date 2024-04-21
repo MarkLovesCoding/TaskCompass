@@ -13,11 +13,7 @@ export async function addProjectUserAction(
   projectUserId: string
 ) {
   const { getUser } = await getUserFromSession();
-  console.log(
-    ">>>>>>>>>>>>>>>>useraction::addProjectUserAction",
-    projectId,
-    projectUserId
-  );
+
   try {
     await addProjectUserUseCase(
       {
@@ -32,7 +28,7 @@ export async function addProjectUserAction(
         projectUserId: projectUserId,
       }
     );
-    revalidatePath("/project/[slug]/page");
+    revalidatePath(`/project/${projectId}`);
 
     //for toasts, not yet implemented
     return { success: true };

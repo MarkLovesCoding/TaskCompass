@@ -23,7 +23,7 @@ export async function addTeamUserAction(teamId: string, teamUserId: string) {
         teamUserId: teamUserId,
       }
     );
-    revalidatePath("/team/[slug]/page");
+    revalidatePath(`/team/${teamId}`);
 
     //for toasts, not yet implemented
     return { success: true };

@@ -25,24 +25,15 @@ export async function updateTaskArchivedAction(formData: FormData) {
       {
         id: formData.id,
         project: formData.projectId,
-        // assignees: formData.assignees,
         archived: formData.archived,
-        // label: formData.label,
       }
     );
-    revalidatePath(`/PROJECTS-CLEAN/${formData.projectId}`);
-    // revalidatePath("/PROJECTS-CLEAN/[slug]");
+    revalidatePath(`/project/${formData.projectId}`);
+
     return {
       id: formData.id,
 
       project: formData.projectId,
-      // assignees: formData.assignees,
-      // dueDate: formData.dueDate,
-      // startDate: formData.startDate,
-      // complete: formData.complete,
-      // category: formData.category,
-      // priority: formData.priority,
-      // status: formData.status,
       archived: formData.archived,
     };
   } catch (error: any) {

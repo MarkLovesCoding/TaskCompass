@@ -28,7 +28,7 @@ export async function UpdateProjectUserRoleAction(
         updateType: updateType,
       }
     );
-    revalidatePath("/project/[slug]");
+    revalidatePath(`/project/${projectId}`);
 
     //for toasts, not yet implemented
     return { success: true };

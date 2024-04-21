@@ -24,7 +24,6 @@ export async function updateProjectUserRoleUseCase(
   if (projectCreatedBy == data.projectUserId)
     //figure out how to transfer this to toast
     throw new Error("Project Creator can't be changed");
-  //error happens here
   else {
     const projectUser = await context.getUserObject(data.projectUserId);
     const validatedProjectUser = new UserEntity(projectUser);

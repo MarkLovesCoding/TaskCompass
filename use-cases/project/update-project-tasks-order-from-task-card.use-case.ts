@@ -16,11 +16,6 @@ export async function updateProjectTasksOrderFromTaskCardUseCase(
 ) {
   const user = context.getUser();
   if (!user) throw new Error("User not found");
-  // const retrievedTask = await context.getTask(data.id);
-
-  // const taskAsEntity = new TaskEntity({ ...retrievedTask });
-
-  // console.log("updatedTaskEntity w name", taskAsEntity);
   //perform validation on data access layer to prevent many db calls
   const project = await context.getProject(data.projectId);
   const projectAsEntity = new ProjectEntity({ ...project });

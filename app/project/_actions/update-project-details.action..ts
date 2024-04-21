@@ -30,7 +30,7 @@ export async function updateProjectDetailsAction(
         projectId: projectId,
       }
     );
-    revalidatePath("/project/[slug]");
+    revalidatePath(`/project/${projectId}`);
   } catch (error: any) {
     console.error(error);
   }

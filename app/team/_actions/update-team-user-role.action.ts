@@ -26,7 +26,7 @@ export async function UpdateTeamUserRoleAction(
         updateType: updateType,
       }
     );
-    revalidatePath("/TEAMS-CLEAN/[slug]/page");
+    revalidatePath(`/team/${teamId}`);
 
     //for toasts, not yet implemented
     return { success: true };

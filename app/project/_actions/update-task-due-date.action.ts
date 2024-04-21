@@ -27,7 +27,8 @@ export async function updateTaskDueDateAction(formData: FormData) {
       }
     );
     // revalidatePath(`/PROJECTS-CLEAN/${formData.projectId}`);
-    revalidatePath("/PROJECTS-CLEAN/[slug]");
+    revalidatePath(`/project/[slug]`);
+
     return {
       id: formData.id,
     };

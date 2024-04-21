@@ -28,7 +28,8 @@ export async function removeProjectUserAction(
         projectUserId: projectUserId,
       }
     );
-    revalidatePath("/project/[slug]/page");
+
+    revalidatePath(`/project/${projectId}`);
 
     //for toasts, not yet implemented
     return { success: true };

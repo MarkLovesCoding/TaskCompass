@@ -27,7 +27,8 @@ export async function updateTaskDescriptionAction(formData: FormData) {
         description: formData.description,
       }
     );
-    revalidatePath(`/PROJECTS-CLEAN/${formData.projectId}`);
+    revalidatePath(`/project/${formData.projectId}`);
+
     return {
       id: formData.id,
     };

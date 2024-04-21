@@ -1,5 +1,4 @@
 import { ProjectEntity } from "@/entities/Project";
-
 import { GetUserSession } from "@/use-cases/user/types";
 import { ProjectDto, UpdateProject } from "./types";
 import { projectToDto } from "./utils";

@@ -30,7 +30,7 @@ export async function updateProjectTasksOrderAction(
       }
     );
 
-    revalidatePath("/TEAMS-CLEAN/[slug]/page");
+    revalidatePath(`/project/${projectId}`);
 
     //for toasts, not yet implemented
     // return { success: true };

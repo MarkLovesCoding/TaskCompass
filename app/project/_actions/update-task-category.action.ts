@@ -26,8 +26,7 @@ export async function updateTaskCategoryAction(formData: FormData) {
         category: formData.category,
       }
     );
-    // revalidatePath(`/PROJECTS-CLEAN/${formData.projectId}`);
-    revalidatePath("/PROJECTS-CLEAN/[slug]/page");
+    revalidatePath("/project/[slug]");
   } catch (error: any) {
     console.error(error);
   }
