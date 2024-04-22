@@ -3,6 +3,8 @@ import { GetUser, GetUserSession, UpdateUser } from "@/use-cases/user/types";
 import { userToDto } from "./utils";
 import { GetTeam } from "../team/types";
 import { TeamEntity } from "@/entities/Team";
+import { AuthenticationError } from "../utils";
+
 export async function updateTeamUserRoleUseCase(
   context: {
     getTeam: GetTeam;
@@ -16,8 +18,9 @@ export async function updateTeamUserRoleUseCase(
     teamUserId: string;
   }
 ) {
-  const { userId } = context.getUser()!;
-  if (!userId) throw new Error("User not found");
+  const user = context.getUser()!;
+  if (!user) throw new AuthenticationError();
+
   const team = await context.getTeam(data.teamId);
   const validatedTeam = new TeamEntity(team);
   const teamCreatedBy = validatedTeam.getCreatedBy();

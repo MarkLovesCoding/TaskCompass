@@ -4,7 +4,7 @@ import { userToDto } from "./utils";
 import { ProjectEntity } from "@/entities/Project";
 import { GetProject, UpdateProject } from "../project/types";
 import { projectToDto } from "../project/utils";
-
+import { AuthenticationError } from "../utils";
 export async function removeProjectUserUseCase(
   context: {
     getProject: GetProject;
@@ -18,8 +18,8 @@ export async function removeProjectUserUseCase(
     projectUserId: string;
   }
 ) {
-  const { userId } = context.getUser()!;
-  if (!userId) throw new Error("User not found");
+  const user = context.getUser()!;
+  if (!user) throw new AuthenticationError();
   //update Team
   const retrievedProject = await context.getProject(data.projectId);
   const validatedProject = new ProjectEntity(retrievedProject);

@@ -3,6 +3,8 @@ import { GetUser, GetUserSession, UpdateUser } from "@/use-cases/user/types";
 import { userToDto } from "./utils";
 import { GetProject } from "../project/types";
 import { ProjectEntity } from "@/entities/Project";
+import { AuthenticationError } from "../utils";
+
 export async function updateProjectUserRoleUseCase(
   context: {
     getProject: GetProject;
@@ -16,8 +18,9 @@ export async function updateProjectUserRoleUseCase(
     projectUserId: string;
   }
 ) {
-  const { userId } = context.getUser()!;
-  if (!userId) throw new Error("User not found");
+  const user = context.getUser()!;
+  if (!user) throw new AuthenticationError();
+
   const project = await context.getProject(data.projectId);
   const validatedProject = new ProjectEntity(project);
   const projectCreatedBy = validatedProject.getCreatedBy();

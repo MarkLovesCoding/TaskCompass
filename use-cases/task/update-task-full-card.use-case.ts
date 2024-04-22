@@ -2,7 +2,7 @@ import { TaskEntity } from "@/entities/Task";
 import { UpdateTaskFullCard, GetTask } from "@/use-cases/task/types";
 import { GetUserSession } from "@/use-cases/user/types";
 import { taskToDto } from "@/use-cases/task/utils";
-
+import { AuthenticationError } from "../utils";
 export async function updateTaskFullCardUseCase(
   context: {
     updateTaskFullCard: UpdateTaskFullCard;
@@ -25,7 +25,8 @@ export async function updateTaskFullCardUseCase(
   }
 ) {
   const user = context.getUser();
-  if (!user) throw new Error("User not found");
+  if (!user) throw new AuthenticationError();
+
   const task = await context.getTask(data.id);
   if (!task) throw new Error("Task not found");
   const taskAsEntity = new TaskEntity({

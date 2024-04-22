@@ -1,7 +1,7 @@
 import { TaskEntity } from "@/entities/Task";
 import { UpdateTask, GetTask, UpdateTaskUsers } from "@/use-cases/task/types";
 import { GetUserSession, UpdateUser } from "@/use-cases/user/types";
-
+import { AuthenticationError } from "../utils";
 export async function updateTaskUsersUseCase(
   context: {
     updateTask: UpdateTask;
@@ -17,7 +17,7 @@ export async function updateTaskUsersUseCase(
 ) {
   const user = context.getUser();
 
-  if (!user) throw new Error("User not found");
+  if (!user) throw new AuthenticationError();
 
   const dataTask = await context.getTask(data.taskId);
   const task = new TaskEntity(dataTask);
@@ -25,7 +25,6 @@ export async function updateTaskUsersUseCase(
   task.addAssignees(data.addedAssignees);
   task.removeAssignees(data.removedAssignees);
 
-  // await context.updateTask(taskToDto(task));
   await context.updateTaskUsers(
     data.taskId,
     data.removedAssignees,

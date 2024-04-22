@@ -2,6 +2,8 @@ import { GetProject, UpdateProject } from "@/use-cases/project/types";
 import { GetUserSession } from "@/use-cases/user/types";
 import { ProjectEntity } from "@/entities/Project";
 import { projectToDto } from "./utils";
+import { AuthenticationError } from "../utils";
+
 export async function updateProjectTasksOrderFromTaskCardUseCase(
   context: {
     updateProject: UpdateProject;
@@ -15,7 +17,7 @@ export async function updateProjectTasksOrderFromTaskCardUseCase(
   }
 ) {
   const user = context.getUser();
-  if (!user) throw new Error("User not found");
+  if (!user) throw new AuthenticationError();
   //perform validation on data access layer to prevent many db calls
   const project = await context.getProject(data.projectId);
   const projectAsEntity = new ProjectEntity({ ...project });

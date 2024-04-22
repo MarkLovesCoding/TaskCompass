@@ -2,6 +2,7 @@ import { ProjectEntity } from "@/entities/Project";
 import { CreateNewProject } from "@/use-cases/project/types";
 import { GetUserSession } from "@/use-cases/user/types";
 import { projectToCreateProjectDto } from "@/use-cases/project/utils";
+import { AuthenticationError } from "../utils";
 
 export async function createNewProjectUseCase(
   context: {
@@ -15,7 +16,7 @@ export async function createNewProjectUseCase(
   }
 ) {
   const user = context.getUser();
-  if (!user) throw new Error("User not found");
+  if (!user) throw new AuthenticationError();
 
   const newProject = new ProjectEntity({
     name: data.name,
