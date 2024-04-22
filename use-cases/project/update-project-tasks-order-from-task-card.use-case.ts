@@ -1,8 +1,11 @@
 import { GetProject, UpdateProject } from "@/use-cases/project/types";
 import { GetUserSession } from "@/use-cases/user/types";
-import { ProjectEntity } from "@/entities/Project";
+import {
+  ProjectEntity,
+  ProjectEntityValidationError,
+} from "@/entities/Project";
 import { projectToDto } from "./utils";
-import { AuthenticationError } from "../utils";
+import { AuthenticationError, ValidationError } from "../utils";
 
 export async function updateProjectTasksOrderFromTaskCardUseCase(
   context: {
@@ -18,15 +21,22 @@ export async function updateProjectTasksOrderFromTaskCardUseCase(
 ) {
   const user = context.getUser();
   if (!user) throw new AuthenticationError();
-  //perform validation on data access layer to prevent many db calls
+
   const project = await context.getProject(data.projectId);
-  const projectAsEntity = new ProjectEntity({ ...project });
-  const { type, newSubType, existingSubType } = data.taskOrderChanges;
-  projectAsEntity.updateTasksOrder(
-    data.taskId,
-    type,
-    newSubType,
-    existingSubType
-  );
-  await context.updateProject(projectToDto(projectAsEntity));
+  if (!project) throw new Error("Project not found");
+
+  try {
+    const projectAsEntity = new ProjectEntity({ ...project });
+    const { type, newSubType, existingSubType } = data.taskOrderChanges;
+    projectAsEntity.updateTasksOrder(
+      data.taskId,
+      type,
+      newSubType,
+      existingSubType
+    );
+    await context.updateProject(projectToDto(projectAsEntity));
+  } catch (err) {
+    const error = err as ProjectEntityValidationError;
+    throw new ValidationError(error.getErrors());
+  }
 }
