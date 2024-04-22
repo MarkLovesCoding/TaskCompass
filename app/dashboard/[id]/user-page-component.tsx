@@ -33,6 +33,7 @@ import {
 } from "@/components/ui/accordion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { updateUserDashboardBackgroundAction } from "./_actions/update-user-dashboard-background.action";
+import { Skeleton } from "@/components/ui/skeleton";
 // get teams
 // get projects
 
@@ -280,8 +281,19 @@ export function UserPageComponent({
                                   );
                                 })
                               ) : (
-                                <div className="flex justify-center">
-                                  <p>Loading Images...</p>
+                                <div className="flex justify-center w-full h-fit flex-wrap scroll-none">
+                                  <Skeleton className="w-[120px] m-1 h-[80px] rounded-none bg-nav-background" />
+                                  <Skeleton className="w-[120px] m-1 h-[80px] rounded-none bg-nav-background" />
+                                  <Skeleton className="w-[120px] m-1 h-[80px] rounded-none bg-nav-background" />
+                                  <Skeleton className="w-[120px] m-1 h-[80px] rounded-none bg-nav-background" />
+                                  <Skeleton className="w-[120px] m-1 h-[80px] rounded-none bg-nav-background" />
+                                  <Skeleton className="w-[120px] m-1 h-[80px] rounded-none bg-nav-background" />
+                                  <Skeleton className="w-[120px] m-1 h-[80px] rounded-none bg-nav-background" />
+                                  <Skeleton className="w-[120px] m-1 h-[80px] rounded-none bg-nav-background" />
+                                  <Skeleton className="w-[120px] m-1 h-[80px] rounded-none bg-nav-background" />
+                                  <Skeleton className="w-[120px] m-1 h-[80px] rounded-none bg-nav-background" />
+                                  <Skeleton className="w-[120px] m-1 h-[80px] rounded-none bg-nav-background" />
+                                  <Skeleton className="w-[120px] m-1 h-[80px] rounded-none bg-nav-background" />
                                 </div>
                               )}
                               <div className="min-w-full py-4 flex justify-center">
