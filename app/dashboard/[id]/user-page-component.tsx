@@ -32,8 +32,9 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { updateUserDashboardBackgroundAction } from "./_actions/update-user-dashboard-background.action";
+import { updateUserBackgroundAction } from "./_actions/update-user-background.action";
 import { Skeleton } from "@/components/ui/skeleton";
+import BackgroundImageMenu from "./BackgroundImageMenu";
 // get teams
 // get projects
 
@@ -66,89 +67,94 @@ export function UserPageComponent({
   };
 
   //Background Image
-  const [dashboardBackgroundImage, setDashboardBackgroundImage] =
-    useState<string>(user.dashboardBackgroundImage);
-  const PER_PAGE = 12;
-  const [selectedImages, setSelectedImages] = useState<any[]>([]);
-  const [imagesLoadPage, setImagesLoadPage] = useState<number>(1);
+  const [backgroundImage, setBackgroundImage] = useState<string>(
+    user.backgroundImage
+  );
 
-  const loadImageSetonOpen = async (bool: boolean) => {
-    // isImagesDialogOpen = bool;
-    if (bool) {
-      await loadNextImageSet();
-    }
-  };
-
-  const loadNextImageSet = async () => {
-    const nextPage = imagesLoadPage + 1;
-    const showPage = imagesLoadPage == 1 ? 1 : nextPage;
-    // await apiSearchNext(nextPage);
-    await fetch("/api/unsplash", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ page: showPage, perPage: PER_PAGE }),
-      cache: "no-cache",
-    })
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        setSelectedImages((prev) => {
-          return [...prev, ...data];
-        });
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-    setImagesLoadPage(nextPage);
-  };
-  type TUrls = {
-    full: string;
-    large: string;
-    regular: string;
-    raw: string;
-    small: string;
-    thumb: string;
-  };
-  const setNewBackground = async (urls: TUrls) => {
-    setDashboardBackgroundImage(urls.full);
-    await updateUserDashboardBackgroundAction(user.id, urls.full);
-  };
-  const imageContainerRef = useRef<HTMLDivElement>(null);
-  const handleScroll = () => {
-    if (!imageContainerRef.current) {
-      console.log("Ref is not attached");
-      return;
-    }
-    const { scrollTop, scrollHeight, clientHeight } = imageContainerRef.current;
-    console.log(scrollTop, scrollHeight, clientHeight);
-    if (scrollTop + clientHeight >= scrollHeight) {
-      console.log("You have reached the bottom!");
-      // loadNextImageSet(); // Uncomment this to load more content
-    }
-  };
   useEffect(() => {
-    const scrollContainer = imageContainerRef.current;
-    if (scrollContainer) {
-      scrollContainer.addEventListener("scroll", handleScroll);
-    }
+    setBackgroundImage(user.backgroundImage);
+  }, [user.backgroundImage]);
+  // const PER_PAGE = 12;
+  // const [selectedImages, setSelectedImages] = useState<any[]>([]);
+  // const [imagesLoadPage, setImagesLoadPage] = useState<number>(1);
 
-    return () => {
-      if (scrollContainer) {
-        scrollContainer.removeEventListener("scroll", handleScroll);
-      }
-    };
-  }, []); // Empty dependencies array indicates this runs only once after mounting
+  // const loadImageSetonOpen = async (bool: boolean) => {
+  //   // isImagesDialogOpen = bool;
+  //   if (bool) {
+  //     await loadNextImageSet();
+  //   }
+  // };
+
+  // const loadNextImageSet = async () => {
+  //   const nextPage = imagesLoadPage + 1;
+  //   const showPage = imagesLoadPage == 1 ? 1 : nextPage;
+  //   // await apiSearchNext(nextPage);
+  //   await fetch("/api/unsplash", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({ page: showPage, perPage: PER_PAGE }),
+  //     cache: "no-cache",
+  //   })
+  //     .then((response) => {
+  //       return response.json();
+  //     })
+  //     .then((data) => {
+  //       setSelectedImages((prev) => {
+  //         return [...prev, ...data];
+  //       });
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error:", error);
+  //     });
+  //   setImagesLoadPage(nextPage);
+  // };
+  // type TUrls = {
+  //   full: string;
+  //   large: string;
+  //   regular: string;
+  //   raw: string;
+  //   small: string;
+  //   thumb: string;
+  // };
+  // const setNewBackground = async (urls: TUrls) => {
+  //   setDashboardBackgroundImage(urls.full);
+  //   await updateUserDashboardBackgroundAction(user.id, urls.full);
+  // };
+  // const imageContainerRef = useRef<HTMLDivElement>(null);
+  // const handleScroll = () => {
+  //   if (!imageContainerRef.current) {
+  //     console.log("Ref is not attached");
+  //     return;
+  //   }
+  //   const { scrollTop, scrollHeight, clientHeight } = imageContainerRef.current;
+  //   console.log(scrollTop, scrollHeight, clientHeight);
+  //   if (scrollTop + clientHeight >= scrollHeight) {
+  //     console.log("You have reached the bottom!");
+  //     // loadNextImageSet(); // Uncomment this to load more content
+  //   }
+  // };
+  // useEffect(() => {
+  //   const scrollContainer = imageContainerRef.current;
+  //   if (scrollContainer) {
+  //     scrollContainer.addEventListener("scroll", handleScroll);
+  //   }
+
+  //   return () => {
+  //     if (scrollContainer) {
+  //       scrollContainer.removeEventListener("scroll", handleScroll);
+  //     }
+  //   };
+  // }, []); // Empty dependencies array indicates this runs only once after mounting
 
   return (
     <div className="absolute flex flex-col top-[2em] md:top-[3em] w-full h-[calc(100vh-2em)] md:h-[calc(100vh-3em)]">
       <main
         style={
-          dashboardBackgroundImage
+          backgroundImage
             ? {
-                backgroundImage: "url(" + dashboardBackgroundImage + ")",
+                backgroundImage: "url(" + backgroundImage + ")",
                 backgroundSize: "cover",
                 backgroundPosition: " center",
                 backgroundRepeat: "no-repeat",
@@ -221,7 +227,8 @@ export function UserPageComponent({
 
                   <div className="">
                     <div className="mb-4 md:w-1/6">
-                      <Dialog onOpenChange={loadImageSetonOpen}>
+                      <BackgroundImageMenu type={"User"} object={user} />
+                      {/* <Dialog onOpenChange={loadImageSetonOpen}>
                         <DialogTrigger asChild>
                           <Button
                             variant="outline"
@@ -266,7 +273,6 @@ export function UserPageComponent({
                                             : "w-[120px] h-auto"
                                         }  overflow-clip rounded cursor-pointer z-40 `}
                                       />
-                                      {/* <div className="w-full h-full absolute top-0 left-0 z-30 bg-black/10 group-hover:bg-black/0"></div> */}
                                       <Link
                                         href={image.user.links.html}
                                         className=" w-full absolute h-[20px]  bg-black/30 z-40 hover:bg-black/60 top-[60px] left-[0px]  truncate text-ellipsis "
@@ -276,7 +282,6 @@ export function UserPageComponent({
                                           {image.user.name}
                                         </p>
                                       </Link>
-                                      {/* <p>{image.url.full}</p> */}
                                     </div>
                                   );
                                 })
@@ -307,7 +312,7 @@ export function UserPageComponent({
                             </div>
                           </div>
                         </DialogContent>
-                      </Dialog>
+                      </Dialog> */}
                     </div>
                   </div>
                 </div>

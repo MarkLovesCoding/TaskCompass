@@ -34,7 +34,8 @@ import type { TaskDto } from "@/use-cases/task/types";
 import type { UserDto } from "@/use-cases/user/types";
 import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
-
+import BackgroundImageMenu from "@/app/dashboard/[id]/BackgroundImageMenu";
+import { useEffect } from "react";
 export function ProjectPage({
   userId,
   user,
@@ -56,58 +57,62 @@ export function ProjectPage({
   const [projectBackgroundImage, setProjectBackgroundImage] = useState<string>(
     project.backgroundImage
   );
-  const PER_PAGE = 12;
-  const [selectedImages, setSelectedImages] = useState<any[]>([]);
-  const [imagesLoadPage, setImagesLoadPage] = useState<number>(1);
 
-  const loadImageSetonOpen = async (bool: boolean) => {
-    if (bool) {
-      await loadNextImageSet();
-    }
-  };
+  useEffect(() => {
+    setProjectBackgroundImage(project.backgroundImage);
+  }, [project.backgroundImage]);
+  // const PER_PAGE = 12;
+  // const [selectedImages, setSelectedImages] = useState<any[]>([]);
+  // const [imagesLoadPage, setImagesLoadPage] = useState<number>(1);
 
-  const loadNextImageSet = async () => {
-    const nextPage = imagesLoadPage + 1;
-    const showPage = imagesLoadPage == 1 ? 1 : nextPage;
+  // const loadImageSetonOpen = async (bool: boolean) => {
+  //   if (bool) {
+  //     await loadNextImageSet();
+  //   }
+  // };
 
-    await fetch("/api/unsplash", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ page: showPage, perPage: PER_PAGE }),
-    })
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        setSelectedImages((prev) => {
-          return [...prev, ...data];
-        });
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-    setImagesLoadPage(nextPage);
-  };
-  type TUnsplashUrls = {
-    full: string;
-    large: string;
-    regular: string;
-    raw: string;
-    small: string;
-    thumb: string;
-  };
-  const setNewBackground = async (urls: TUnsplashUrls) => {
-    setProjectBackgroundImage(urls.full);
-    try {
-      await updateProjectBackgroundAction(project.id, urls.full, urls.small);
-      toast.success("Background Updated Successfully!");
-    } catch (error: any) {
-      toast.error("Error Updating Background");
-      console.error("Error:", error);
-    }
-  };
+  // const loadNextImageSet = async () => {
+  //   const nextPage = imagesLoadPage + 1;
+  //   const showPage = imagesLoadPage == 1 ? 1 : nextPage;
+
+  //   await fetch("/api/unsplash", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({ page: showPage, perPage: PER_PAGE }),
+  //   })
+  //     .then((response) => {
+  //       return response.json();
+  //     })
+  //     .then((data) => {
+  //       setSelectedImages((prev) => {
+  //         return [...prev, ...data];
+  //       });
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error:", error);
+  //     });
+  //   setImagesLoadPage(nextPage);
+  // };
+  // type TUnsplashUrls = {
+  //   full: string;
+  //   large: string;
+  //   regular: string;
+  //   raw: string;
+  //   small: string;
+  //   thumb: string;
+  // };
+  // const setNewBackground = async (urls: TUnsplashUrls) => {
+  //   setProjectBackgroundImage(urls.full);
+  //   try {
+  //     await updateProjectBackgroundAction(project.id, urls.full, urls.small);
+  //     toast.success("Background Updated Successfully!");
+  //   } catch (error: any) {
+  //     toast.error("Error Updating Background");
+  //     console.error("Error:", error);
+  //   }
+  // };
   const isCurrentUserAdmin =
     project && user.projectsAsAdmin.some((id) => id === project.id);
   const uniqueProjectUsers = [...projectUsers];
@@ -215,10 +220,10 @@ export function ProjectPage({
             </Popover>
           </div>
           <div title="Change Background" className="p-1">
-            <Dialog onOpenChange={loadImageSetonOpen}>
+            <BackgroundImageMenu type={"Project"} object={project} />
+            {/* <Dialog onOpenChange={loadImageSetonOpen}>
               <DialogTrigger asChild>
                 <Button variant="outline" className="group hover:bg-accent p-2">
-                  {/* <Label className="hidden md:flex ">Change Background</Label> */}
                   <ImageIcon className="w-6 h-6 self-center group-hover:text-primary" />
                   <span className="sr-only">Change Background Button</span>
                 </Button>
@@ -248,7 +253,6 @@ export function ProjectPage({
                                   : "w-[120px] h-auto"
                               }  overflow-clip rounded cursor-pointer z-40 `}
                             />
-                            {/* <div className="w-full h-full absolute top-0 left-0 z-30 bg-black/10 group-hover:bg-black/0"></div> */}
                             <Link
                               href={image.user.links.html}
                               className=" w-full absolute h-[20px]  bg-black/30 z-40 hover:bg-black/60 top-[60px] left-[0px]  truncate text-ellipsis "
@@ -258,7 +262,6 @@ export function ProjectPage({
                                 {image.user.name}
                               </p>
                             </Link>
-                            {/* <p>{image.url.full}</p> */}
                           </div>
                         );
                       })
@@ -286,7 +289,7 @@ export function ProjectPage({
                   </div>
                 </div>
               </DialogContent>
-            </Dialog>
+            </Dialog> */}
           </div>
           {/* )} */}
         </div>
