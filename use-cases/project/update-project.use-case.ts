@@ -1,8 +1,11 @@
-import { ProjectEntity } from "@/entities/Project";
+import {
+  ProjectEntity,
+  ProjectEntityValidationError,
+} from "@/entities/Project";
 import { GetUserSession } from "@/use-cases/user/types";
 import { ProjectDto, UpdateProject } from "./types";
 import { projectToDto } from "./utils";
-import { AuthenticationError } from "../utils";
+import { AuthenticationError, ValidationError } from "../utils";
 
 export async function updateProjectUseCase(
   context: {
@@ -16,6 +19,11 @@ export async function updateProjectUseCase(
   const user = context.getUser()!;
   if (!user) throw new AuthenticationError();
 
-  const validatedProject = new ProjectEntity(data.project);
-  await context.updateProject(projectToDto(validatedProject));
+  try {
+    const validatedProject = new ProjectEntity(data.project);
+    await context.updateProject(projectToDto(validatedProject));
+  } catch (err) {
+    const error = err as ProjectEntityValidationError;
+    throw new ValidationError(error.getErrors());
+  }
 }

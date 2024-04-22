@@ -1,8 +1,11 @@
-import { ProjectEntity } from "@/entities/Project";
+import {
+  ProjectEntity,
+  ProjectEntityValidationError,
+} from "@/entities/Project";
 import { GetUserSession } from "@/use-cases/user/types";
 import { GetProject, UpdateProject, UpdateProjectUsers } from "./types";
 import { projectToDto } from "./utils";
-import { AuthenticationError } from "../utils";
+import { AuthenticationError, ValidationError } from "../utils";
 
 export async function updateProjectUsersUseCase(
   context: {
@@ -20,13 +23,20 @@ export async function updateProjectUsersUseCase(
   if (!user) throw new AuthenticationError();
 
   const project = await context.getProject(data.projectId);
-  const validatedProject = new ProjectEntity(project);
-  validatedProject.updateUsers(data.updatedUsers);
-  const updatedproject = projectToDto(validatedProject);
-  await context.updateProject(updatedproject);
-  await context.updateManyProjectUsers(
-    data.projectId,
-    project.users,
-    updatedproject.users
-  );
+  if (!project) throw new Error("Project not found");
+
+  try {
+    const validatedProject = new ProjectEntity(project);
+    validatedProject.updateUsers(data.updatedUsers);
+    const updatedproject = projectToDto(validatedProject);
+    await context.updateProject(updatedproject);
+    await context.updateManyProjectUsers(
+      data.projectId,
+      project.users,
+      updatedproject.users
+    );
+  } catch (err) {
+    const error = err as ProjectEntityValidationError;
+    throw new ValidationError(error.getErrors());
+  }
 }
