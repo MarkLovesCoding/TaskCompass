@@ -28,7 +28,6 @@ export async function updateProjectArchivedUseCase(
     const validatedProject = new ProjectEntity({
       ...project,
     });
-
     validatedProject.updateArchived(data.archived);
     await context.updateProject(projectToDto(validatedProject));
   } catch (err) {

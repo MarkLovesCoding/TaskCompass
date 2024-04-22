@@ -15,9 +15,14 @@ export async function updateProjectColumnOrderUseCase(
 ) {
   const user = context.getUser();
   if (!user) throw new AuthenticationError();
-  await context.updateProjectColumnOrder(
-    data.projectId,
-    data.type,
-    data.columnOrder
-  );
+
+  try {
+    await context.updateProjectColumnOrder(
+      data.projectId,
+      data.type,
+      data.columnOrder
+    );
+  } catch (err) {
+    throw new Error("Error updating project column order. Please try again.");
+  }
 }
