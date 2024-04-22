@@ -7,7 +7,7 @@ import { updateProjectAction } from "../_actions/update-project.action";
 import { updateTasksAction } from "../_actions/update-tasks.action";
 import { Droppable, DragDropContext } from "@hello-pangea/dnd";
 import CardColumn from "./CardColumn";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 interface Columns {
   [key: string]: {
     taskIds: string[];
@@ -36,9 +36,7 @@ const CardView = ({
     type: string
   ): TaskDto[] {
     const updatedTasks = [...tasksToUpdate]; // Create a copy of the original array
-    console.log("updatedTasks in updateTasksinArray function:", updatedTasks);
     const index = updatedTasks.findIndex((task) => task.id === taskIdToUpdate); // Find the index of the task with the specified ID
-    console.log("index in updateTasksinArray function:", index);
     // const existingTasksData = { ...tasksList };
     if (index !== -1) {
       const updatedTask = updatedTasks.find(
@@ -52,7 +50,6 @@ const CardView = ({
       // If the task with the specified ID is found
       updatedTasks[index] = updatedTask; // Replace the task at that index with the new task
     }
-    console.log("Returned Updated Tasks, updateTasksInArray:", updatedTasks);
     return updatedTasks; // Return the updated array
   }
 
@@ -107,7 +104,7 @@ const CardView = ({
       await updateProjectAction(projectData);
     } catch (error: any) {
       setProjectData(existingProjectData);
-      console.log("error updating project, reverting to existing data");
+      toast.error("Error updating project, reverting to existing data");
       console.error(error);
     }
   };
@@ -137,6 +134,7 @@ const CardView = ({
         await updateProjectAction(projectData);
       } catch (error: any) {
         setProjectData(existingProjectData);
+        toast.error("Error updating project, reverting to existing data");
         console.error(error);
       }
     } else if (sourceDroppableId !== destinationDroppableId) {
@@ -159,7 +157,6 @@ const CardView = ({
       newDestinationTaskOrder.splice(destinationIndex, 0, draggableId);
       newProjectData.tasksOrder[viewType][sourceDroppableId] =
         newSourceTaskOrder;
-      console.log("updated2 newProjectData", newProjectData);
       newProjectData.tasksOrder[viewType][destinationDroppableId] =
         newDestinationTaskOrder;
 
@@ -228,7 +225,6 @@ const CardView = ({
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      {/* <div className="flex md:flex-row  justify-center flex-col w-min-full overflow-x"> */}
       <Droppable droppableId="all-columns" direction="horizontal" type="column">
         {(provided, snapshot) => (
           <div

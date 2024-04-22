@@ -1,18 +1,6 @@
 "use client";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardFooter,
-} from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-} from "@/components/ui/popover";
 import {
   Dialog,
   DialogTrigger,
@@ -22,6 +10,7 @@ import React from "react";
 import { Button } from "@/components/ui/button-alert";
 import { updateProjectArchivedAction } from "../_actions/update-project-archived.action";
 import { ProjectDto } from "@/use-cases/project/types";
+import { toast } from "sonner";
 
 const UnarchiveProjectPopover = ({
   project,
@@ -35,7 +24,16 @@ const UnarchiveProjectPopover = ({
     projectId: project.id,
   };
   const [isOpen, setIsOpen] = React.useState(false);
-
+  const handleArchivedSubmit = async () => {
+    try {
+      await updateProjectArchivedAction(archiveProjectFormObject);
+      toast.success(`Project: ${project.name} Activated Successfully!`);
+      setIsOpen(false);
+    } catch (err) {
+      console.error(err);
+      toast.error(`Error Activating Project: ${project.name}`);
+    }
+  };
   return (
     <>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -56,8 +54,10 @@ const UnarchiveProjectPopover = ({
                 className="text-sm "
                 variant="default"
                 onClick={() => {
-                  updateProjectArchivedAction(archiveProjectFormObject);
-                  setIsOpen(false);
+                  handleArchivedSubmit();
+                  // updateProjectArchivedAction(archiveProjectFormObject);
+                  // toast.success("Project Activated Successfully!");
+                  // setIsOpen(false);
                   // handleArchivedSubmit();
                 }}
               >

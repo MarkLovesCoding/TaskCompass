@@ -5,8 +5,6 @@ import { UserSearchIcon } from "lucide-react";
 import { ProjectDto } from "@/use-cases/project/types";
 import { UserDto } from "@/use-cases/user/types";
 
-import { z } from "zod";
-
 import {
   Dialog,
   DialogContent,

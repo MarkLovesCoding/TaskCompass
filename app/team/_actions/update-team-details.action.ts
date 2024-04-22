@@ -23,7 +23,7 @@ export async function updateTeamDetailsAction(form: Form, teamId: string) {
         teamId: teamId,
       }
     );
-    revalidatePath(`/TEAMS-CLEAN/${teamId}`);
+    revalidatePath(`/team/${teamId}`);
   } catch (error: any) {
     console.error(error);
   }

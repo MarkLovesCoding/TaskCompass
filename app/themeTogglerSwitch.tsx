@@ -6,6 +6,7 @@ import { useTheme } from "next-themes";
 import { Switch } from "@/components/ui/switch-theme";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -38,8 +39,10 @@ export function ModeToggle() {
 
     if (newValue) {
       setTheme("light"); // If the new value is false, set the theme to "light"
+      toast.success("Light Mode Activated");
     } else {
       setTheme("dark"); // If the new value is true, set the theme to "dark"
+      toast.success("Dark Mode Activated");
     }
     // setChecked(newValue)
     setTimeout(() => setChecked(newValue), 10); // Set the state with the new value

@@ -7,7 +7,7 @@ import getTeamUsers from "@/data-access/users/get-team-users.persistence";
 import getProjectTasks from "@/data-access/tasks/get-project-tasks.persistence";
 import getProjectUsers from "@/data-access/users/get-project-users.persistence";
 import { ProjectPage } from "@/app/project/[id]/MainProjectComponent";
-import { Toaster } from "react-hot-toast";
+import { Toaster } from "sonner";
 import { sessionAuth } from "@/lib/sessionAuth";
 import getUserObject from "@/data-access/users/get-user.persistence";
 

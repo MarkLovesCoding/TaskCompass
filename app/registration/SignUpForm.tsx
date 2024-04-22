@@ -18,6 +18,7 @@ import {
 import * as z from "zod";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
 const formSchema = z.object({
   name: z.string().min(5).max(30),
   email: z.string().email().min(5),
@@ -50,15 +51,23 @@ const SignUpForm = () => {
       },
     });
     if (res.ok) {
-      await signIn("credentials", {
-        email: values.email,
-        password: values.password,
-      });
+      try {
+        await signIn("credentials", {
+          email: values.email,
+          password: values.password,
+        });
+        toast.success("User Created Successfully!");
+      } catch (error) {
+        console.error(error);
+        toast.error("Error Signing In User");
+      }
       // console.log("RESPONSE AND FORM SUBMITTION:", await res.json());
       // router.refresh();
+      // toast.success("User Signed Up Successfully!");
       router.push("/");
     } else {
       const response = await res.json();
+      toast.error(response.message);
       setErrorMessage(response.message);
     }
   };
@@ -72,27 +81,33 @@ const SignUpForm = () => {
   // };
   const handleGoogleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-
+    toast("Signing In through Google...");
     const loginResponse = await signIn("google", { redirect: false });
     // Successful login
-    if (loginResponse && loginResponse.error)
+    if (loginResponse && loginResponse.error) {
+      toast.error(loginResponse.error);
       setErrorMessage(loginResponse.error);
-    else {
+    } else {
       // Successful login
+      toast.success("User Signed In Through Google Successfully!");
       router.push("/");
     }
   };
 
   const handleGithubSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    toast("Signing In through GitHub...");
 
     const loginResponse = await signIn("github");
     // Successful login
 
-    if (loginResponse && loginResponse.error)
+    if (loginResponse && loginResponse.error) {
+      toast.error(loginResponse.error);
       setErrorMessage(loginResponse.error);
-    else {
+    } else {
       // Successful login
+      toast.success("User Signed In Through GitHub Successfully!");
+
       router.push("/");
     }
   };

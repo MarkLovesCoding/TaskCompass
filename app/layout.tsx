@@ -6,6 +6,7 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 import Navigation from "./Navigation";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import Provider from "./(providers)/Providers";
+import { Toaster } from "sonner";
 
 config.autoAddCss = false;
 
@@ -37,6 +38,7 @@ export default function RootLayout({
             <Navigation />
             <div>{children}</div>
           </ThemeProvider>
+          <Toaster />
         </body>
       </Provider>
     </html>

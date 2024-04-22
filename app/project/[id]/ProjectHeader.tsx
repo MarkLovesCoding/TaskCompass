@@ -17,10 +17,11 @@ import { useForm, useController } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { updateProjectDetailsAction } from "@/app/project/_actions/update-project-details.action.";
 import { useState } from "react";
+import { toast } from "sonner";
 
 const formSchema = z.object({
-  name: z.string().min(3).max(25),
-  description: z.string().min(3).max(80),
+  name: z.string().min(3).max(30),
+  description: z.string().min(0).max(250),
 });
 
 export function ProjectHeader({ project }: { project: ProjectDto }) {
@@ -100,13 +101,18 @@ export function ProjectHeader({ project }: { project: ProjectDto }) {
     },
   });
   const onNewProjectFormSubmit = async (values: z.infer<typeof formSchema>) => {
-    await updateProjectDetailsAction(values, project.id);
-    setButtonShow(false);
-    console.log("values", values);
-    router.refresh();
+    try {
+      await updateProjectDetailsAction(values, project.id);
+      toast.success("Project updated successfully");
+      setButtonShow(false);
+      router.refresh();
+    } catch (err: any) {
+      toast.error(err);
+      console.log(err);
+    }
   };
   return (
-    <div className="flex items-start    ">
+    <div className="flex items-start">
       <Form {...form}>
         <form
           className=" mr-2 "
