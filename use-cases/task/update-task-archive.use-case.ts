@@ -1,8 +1,8 @@
-import { TaskEntity } from "@/entities/Task";
+import { TaskEntity, TaskEntityValidationError } from "@/entities/Task";
 import { UpdateTask, GetTask } from "@/use-cases/task/types";
 import { GetUserSession } from "@/use-cases/user/types";
 import { taskToDto } from "@/use-cases/task/utils";
-import { AuthenticationError } from "../utils";
+import { AuthenticationError, ValidationError } from "../utils";
 export async function updateTaskArchivedUseCase(
   context: {
     updateTask: UpdateTask;
@@ -18,8 +18,13 @@ export async function updateTaskArchivedUseCase(
   const user = context.getUser();
   if (!user) throw new AuthenticationError();
 
-  const retrievedTask = await context.getTask(data.id);
-  const taskAsEntity = new TaskEntity({ ...retrievedTask });
-  taskAsEntity.updateArchived(data.archived);
-  await context.updateTask(taskToDto(taskAsEntity));
+  try {
+    const retrievedTask = await context.getTask(data.id);
+    const taskAsEntity = new TaskEntity({ ...retrievedTask });
+    taskAsEntity.updateArchived(data.archived);
+    await context.updateTask(taskToDto(taskAsEntity));
+  } catch (err) {
+    const error = err as TaskEntityValidationError;
+    throw new ValidationError(error.getErrors());
+  }
 }

@@ -14,5 +14,9 @@ export async function updateTasksUseCase(
 ) {
   const user = context.getUser();
   if (!user) throw new AuthenticationError();
-  await context.updateTasks(data.tasks);
+  try {
+    await context.updateTasks(data.tasks);
+  } catch (err) {
+    throw new Error("Error updating tasks");
+  }
 }
