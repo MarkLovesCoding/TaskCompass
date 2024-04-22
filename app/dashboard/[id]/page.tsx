@@ -1,4 +1,5 @@
-import React from "react";
+import React, { Suspense } from "react";
+
 import { UserPageComponent } from "@/app/dashboard/[id]/user-page-component";
 import getUser from "@/data-access/users/get-user.persistence";
 import type { UserDto } from "@/use-cases/user/types";
@@ -10,6 +11,8 @@ import getUserProjectsAsMember from "@/data-access/projects/get-user-projects-as
 import getUserTeamsAsAdmin from "@/data-access/teams/get-user-teams-as-admin";
 import getUserProjectsAsAdmin from "@/data-access/projects/get-user-projects-as-admin";
 import getUserTasks from "@/data-access/tasks/get-user-tasks.persistence";
+import { DashboardSkeleton } from "./DashboardSkeleton";
+import { TeamPageSkeleton } from "../../team/[id]/TeamSkeleton";
 type ParamsType = {
   id: string;
 };
@@ -42,14 +45,18 @@ const UserPage = async ({ params }: { params: ParamsType }) => {
   // const userId = params.userData.id;
   return (
     <div>
-      <UserPageComponent
-        user={user}
-        usersTeamsAsMember={usersTeamsAsMember}
-        usersTeamsAsAdmin={usersTeamsAsAdmin}
-        usersProjectsAsAdmin={usersProjectsAsAdmin}
-        usersProjectsAsMember={usersProjectsAsMember}
-        userTasks={userTasks}
-      />
+      {/* <DashboardSkeleton /> */}
+      {/* <TeamPageSkeleton /> */}
+      <Suspense fallback={<DashboardSkeleton />}>
+        <UserPageComponent
+          user={user}
+          usersTeamsAsMember={usersTeamsAsMember}
+          usersTeamsAsAdmin={usersTeamsAsAdmin}
+          usersProjectsAsAdmin={usersProjectsAsAdmin}
+          usersProjectsAsMember={usersProjectsAsMember}
+          userTasks={userTasks}
+        />
+      </Suspense>
     </div>
   );
 };

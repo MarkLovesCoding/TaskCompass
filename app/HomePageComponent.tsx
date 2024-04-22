@@ -24,6 +24,7 @@ import FullUsers from "../public/full-users.png";
 import MoveTask from "../public/move-task.png";
 import PriorityView from "../public/priority-view.png";
 import SWCard from "../public/sw-card.png";
+import { DashboardSkeleton } from "./dashboard/[id]/DashboardSkeleton";
 
 function interpolateColors(color1: string, color2: string, progress: number) {
   const rgba1 = color1.match(/\d+/g)!;
@@ -67,7 +68,8 @@ const HomePageComponent = () => {
 
   if (session) {
     // Render loading screen tbd
-    return <div>Loading...</div>;
+    // return <div>Loading...</div>;
+    return <DashboardSkeleton />;
   } else
     return (
       <motion.div

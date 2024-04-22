@@ -1,6 +1,6 @@
 import React from "react";
 import { unstable_noStore } from "next/cache";
-
+import { Suspense } from "react";
 import getProject from "@/data-access/projects/get-project.persistence";
 import getTeam from "@/data-access/teams/get-team.persistence";
 import getTeamUsers from "@/data-access/users/get-team-users.persistence";
@@ -10,6 +10,7 @@ import { ProjectPage } from "@/app/project/[id]/MainProjectComponent";
 import { Toaster } from "react-hot-toast";
 import { sessionAuth } from "@/lib/sessionAuth";
 import getUserObject from "@/data-access/users/get-user.persistence";
+import { ProjectPageSkeleton } from "./ProjectPageSkeleton";
 
 type ParamsType = {
   id: string;
@@ -30,20 +31,29 @@ const Projects = async ({ params }: { params: ParamsType }) => {
   const projectUsers = await getProjectUsers(project.users);
 
   if (!project) {
-    return <p>No project found.</p>;
+    return (
+      <div className="flex w-full h-full justify-center items-center">
+        <p className="text-3xl font-bold text-center">
+          No project found. Please go back and try again.
+        </p>
+        ;
+      </div>
+    );
   }
 
   return (
     <div className="absolute top-[3rem] left-0 flex align-baseline max-h-[calc(100vh-3rem)]">
-      <ProjectPage
-        user={user}
-        userId={session?.user.id!}
-        project={project}
-        teamUsers={teamUsers}
-        projectUsers={projectUsers}
-        tasks={tasks}
-        team={team}
-      />
+      <Suspense fallback={<ProjectPageSkeleton />}>
+        <ProjectPage
+          user={user}
+          userId={session?.user.id!}
+          project={project}
+          teamUsers={teamUsers}
+          projectUsers={projectUsers}
+          tasks={tasks}
+          team={team}
+        />
+      </Suspense>
       <Toaster />
     </div>
   );
