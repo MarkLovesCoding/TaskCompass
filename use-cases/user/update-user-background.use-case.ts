@@ -3,7 +3,7 @@ import { GetUser, GetUserSession, UpdateUser } from "@/use-cases/user/types";
 import { userToDto } from "./utils";
 import { AuthenticationError, ValidationError } from "../utils";
 
-export async function updateUserDashboardBackgroundUseCase(
+export async function updateUserBackgroundUseCase(
   context: {
     updateUser: UpdateUser;
     getUser: GetUserSession;
@@ -11,7 +11,7 @@ export async function updateUserDashboardBackgroundUseCase(
   },
   data: {
     userId: string;
-    dashboardBackgroundImage: string;
+    backgroundImage: string;
   }
 ) {
   const user = context.getUser()!;
@@ -22,7 +22,7 @@ export async function updateUserDashboardBackgroundUseCase(
 
   try {
     const validatedUser = new UserEntity(retrieveUser);
-    validatedUser.updateDashboardBackgroundImage(data.dashboardBackgroundImage);
+    validatedUser.updateBackgroundImage(data.backgroundImage);
     await context.updateUser(userToDto(validatedUser));
   } catch (err) {
     const error = err as UserEntityValidationError;

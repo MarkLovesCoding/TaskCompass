@@ -14,7 +14,7 @@ const UserSchema = new Schema(
     tasks: [{ type: Schema.Types.ObjectId, ref: "Task" }],
     avatar: { type: String, default: "default_avatar.png" },
     role: String,
-    dashboardBackgroundImage: { type: String, default: "" },
+    backgroundImage: { type: String, default: "" },
     resetToken: { type: String || undefined, required: false },
     resetTokenExpiry: { type: Number || undefined, required: false },
   },

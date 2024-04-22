@@ -8,13 +8,10 @@ import Team from "@/db/(models)/Team";
 export async function POST(req: Request, res: Response): Promise<any> {
   try {
     await connectDB();
-    console.log("CONNECTE TO DB");
-    console.log("IN API req___________:", req);
 
     const body = await req.json();
     const userData: UserType = body;
     //confirm Data exists
-    console.log("IN API USER DATA___________:", userData);
 
     if (!userData?.email || !userData.password) {
       return NextResponse.json(
@@ -38,7 +35,6 @@ export async function POST(req: Request, res: Response): Promise<any> {
     const hashPassword: string = await bcrypt.hash(userData.password, 12);
     userData.password = hashPassword;
     let newUser = await User.create(userData);
-    console.log("IN API NEW USER___________:", newUser);
 
     const newUserId: string = newUser._id;
 

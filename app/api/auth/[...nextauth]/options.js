@@ -8,9 +8,7 @@ import connectDB from "@/db/connectDB";
 import User from "@/db/(models)/User";
 import Project from "@/db/(models)/Project";
 import Team from "@/db/(models)/Team";
-import Task from "@/db/(models)/Task";
 
-import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 
 // let newUser;
@@ -64,12 +62,6 @@ export const options = {
         }).exec();
 
         if (existingUser && existingUser.role !== "Google User") {
-          console.log(
-            existingUser.role,
-            "User with the same email already exists",
-
-            ". Signing In Via Linked Account."
-          );
           // throw new Error("User With The same Email ALready Exists");
           // return true; // Return null to prevent the registration
           return {
@@ -120,8 +112,6 @@ export const options = {
 
           if (foundUser) {
             console.log("User Exists");
-            console.log("credentials.password,", credentials.password);
-            console.log("foundUser.password", foundUser.password);
             const match = await bcrypt.compare(
               credentials.password,
               foundUser.password
@@ -221,6 +211,7 @@ export const options = {
           teamsAsAdmin: [],
           teamsAsMember: [],
           avatar: "default_avatar.png",
+          backgroundImage: "",
         });
 
         //CREATE NEW TEAM WITH FILLER NAME

@@ -8,5 +8,5 @@ export type UserModelType = {
   teamsAsMember: string[];
   tasks: string[];
   avatar: string;
-  dashboardBackgroundImage: string;
+  backgroundImage: string;
 };

@@ -14,6 +14,6 @@ export function userToDto(user: UserEntity): UserDto {
     teamsAsMember: user.getTeamsAsMember(),
     tasks: user.getTasks(),
     avatar: user.getAvatar(),
-    dashboardBackgroundImage: user.getDashboardBackgroundImage(),
+    backgroundImage: user.getBackgroundImage(),
   };
 }
