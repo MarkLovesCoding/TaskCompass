@@ -20,6 +20,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { updateTeamDetailsAction } from "../_actions/update-team-details.action";
 import { useState } from "react";
 import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
+
 const formSchema = z.object({
   name: z.string().min(4).max(25),
 });
@@ -76,11 +78,17 @@ export function TeamHeader({
   const router = useRouter();
 
   const onTeamHeaderFormSubmit = async (values: z.infer<typeof formSchema>) => {
-    await updateTeamDetailsAction(values, team.id);
-    setButtonShow(false);
+    try {
+      await updateTeamDetailsAction(values, team.id);
+      toast.success(`Team: ${values.name} Updated Successfully!`);
+      setButtonShow(false);
 
-    console.log("values", values, team.id);
-    router.refresh();
+      console.log("values", values, team.id);
+      router.refresh();
+    } catch (err: any) {
+      toast.error(err);
+      console.log(err);
+    }
   };
   return (
     <div className="flex w-full justify-start flex-row my-2 space-x-3 ">

@@ -14,7 +14,7 @@ import {
   DialogTrigger,
   DialogContent,
 } from "@/components/ui/dialog-user-search";
-
+import { toast } from "sonner";
 import { ArchiveIcon } from "lucide-react";
 const ArchiveProjectPopover = ({ project }: { project: ProjectDto }) => {
   const archiveProjectFormObject = {
@@ -23,7 +23,18 @@ const ArchiveProjectPopover = ({ project }: { project: ProjectDto }) => {
   };
   const router = useRouter();
   const [isOpen, setIsOpen] = React.useState(false);
-
+  const handleArchivedSubmit = async () => {
+    try {
+      await updateProjectArchivedAction(archiveProjectFormObject);
+      toast.success(`Project: ${project.name} Archived Successfully!`);
+      setIsOpen(false);
+      router.push(`/team/${project.team}`);
+    } catch (error) {
+      console.error(error);
+      toast.error(`Error Archiving Project: ${project.name}`);
+    }
+    // handleArchivedSubmit();
+  };
   return (
     <>
       {/* <div className="flex justify-center my-auto"> */}
@@ -60,9 +71,13 @@ const ArchiveProjectPopover = ({ project }: { project: ProjectDto }) => {
                 className="text-sm "
                 variant="destructive"
                 onClick={() => {
-                  updateProjectArchivedAction(archiveProjectFormObject);
-                  setIsOpen(false);
-                  router.push(`/team/${project.team}`);
+                  handleArchivedSubmit();
+                  // updateProjectArchivedAction(archiveProjectFormObject);
+                  // toast.success(
+                  //   `Project: ${project.name} Archived Successfully!`
+                  // );
+                  // setIsOpen(false);
+                  // router.push(`/team/${project.team}`);
                   // handleArchivedSubmit();
                 }}
               >

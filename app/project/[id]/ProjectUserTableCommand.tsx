@@ -10,20 +10,18 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { PlusIcon, XIcon } from "lucide-react";
-import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
+import { AvatarFallback, Avatar } from "@/components/ui/avatar";
 import { getInitials } from "@/lib/utils/getInitials";
 import { ProjectDto } from "@/use-cases/project/types";
 import { UserDto } from "@/use-cases/user/types";
 import { addProjectUserAction } from "@/app/project/_actions/add-project-user.action";
 import { removeProjectUserAction } from "@/app/project/_actions/remove-project-user.action";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { Label } from "@/components/ui/label";
 
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 import ProjectUserPermissionsSelect from "./ProjectUserPermissionsSelect";
-import { ProjectHeader } from "./ProjectHeader";
 const capitalizeFirstLetter = (string: string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
 };
@@ -41,10 +39,7 @@ export function ProjectUserTableCommand({
   isCurrentUserAdmin: boolean;
 }) {
   const userData = projectUsers.filter((user) => user.id === userId)[0];
-  // const userPermission = userData.projectsAsAdmin.includes(project.id)
-  //   ? "admin"
-  //   : "member";
-  console.log("userData", userData);
+
   const filteredTeamUsers = teamUsers.filter(
     (user) => !projectUsers.some((pUser) => pUser.id === user.id)
   );
@@ -75,24 +70,6 @@ export function ProjectUserTableCommand({
   };
   const onRemoveProjectUserSubmit = async (user: UserDto) => {
     await removeProjectUserAction(project.id, user.id);
-  };
-
-  const toastOptions = {
-    duration: 3000,
-    position: "top-center",
-
-    // Styling
-    style: {},
-    className: "",
-
-    // Custom Icon
-    icon: "🧐",
-
-    // Aria
-    ariaProps: {
-      role: "status",
-      "aria-live": "polite",
-    },
   };
 
   const getUserStatus = (user: UserDto, project: ProjectDto) => {

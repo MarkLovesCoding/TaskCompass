@@ -19,6 +19,7 @@ import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createNewProjectAction } from "../_actions/create-new-project.action";
 import { useState } from "react";
+import { toast } from "sonner";
 const formSchema = z.object({
   name: z.string().min(4),
   description: z.string().min(4).max(100),
@@ -56,7 +57,13 @@ const AddProjectCard = ({ teamId }: { teamId: string }) => {
   };
   const onNewProjectFormSubmit = async (values: z.infer<typeof formSchema>) => {
     console.log("values", values, "teamId", teamId);
-    await createNewProjectAction(values, teamId);
+    try {
+      await createNewProjectAction(values, teamId);
+      toast.success(`Project: ${values.name} Created Successfully!`);
+    } catch (err: any) {
+      toast.error(err);
+      // console.log(err);
+    }
     router.refresh();
   };
   return (

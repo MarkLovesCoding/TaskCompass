@@ -32,6 +32,7 @@ import type { TeamDto } from "@/use-cases/team/types";
 import type { ProjectDto } from "@/use-cases/project/types";
 import type { TaskDto } from "@/use-cases/task/types";
 import type { UserDto } from "@/use-cases/user/types";
+import { toast } from "sonner";
 
 export function ProjectPage({
   userId,
@@ -98,7 +99,13 @@ export function ProjectPage({
   };
   const setNewBackground = async (urls: TUnsplashUrls) => {
     setProjectBackgroundImage(urls.full);
-    await updateProjectBackgroundAction(project.id, urls.full, urls.small);
+    try {
+      await updateProjectBackgroundAction(project.id, urls.full, urls.small);
+      toast.success("Background Updated Successfully!");
+    } catch (error: any) {
+      toast.error("Error Updating Background");
+      console.error("Error:", error);
+    }
   };
   const isCurrentUserAdmin =
     project && user.projectsAsAdmin.some((id) => id === project.id);

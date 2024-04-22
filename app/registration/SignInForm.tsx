@@ -18,6 +18,8 @@ import {
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
+
 const formSchema = z.object({
   email: z.string().email().min(5),
   password: z.string().min(6),
@@ -55,9 +57,14 @@ const SignInForm = () => {
 
     if (loginResponse?.error && loginResponse.error == "CredentialsSignin") {
       setErrorMessage("Incorrect Credentials. ");
+      // toast.error("Incorrect Credentials.");
     } else if (loginResponse?.error) {
       setErrorMessage(loginResponse?.error);
+      // toast.error(loginResponse?.error);
     } else {
+      console.log("loginResponse", loginResponse);
+      setErrorMessage("");
+      toast.success("Successfully Logged In");
       // Successful login
       router.push("/");
     }
@@ -67,10 +74,13 @@ const SignInForm = () => {
 
     const loginResponse = await signIn("google", { redirect: false });
     // Successful login
-    if (loginResponse && loginResponse.error)
+    if (loginResponse && loginResponse.error) {
       setErrorMessage(loginResponse.error);
-    else {
+      toast.error(loginResponse.error);
+    } else {
       // Successful login
+      toast.success("Successfully Logged In");
+
       router.push("/");
     }
   };
@@ -82,10 +92,12 @@ const SignInForm = () => {
     const loginResponse = await signIn("github");
     // Successful login
 
-    if (loginResponse && loginResponse.error)
+    if (loginResponse && loginResponse.error) {
       setErrorMessage(loginResponse.error);
-    else {
+      toast.error(loginResponse.error);
+    } else {
       // Successful login
+      toast.success("Successfully Logged In");
       router.push("/");
     }
 
@@ -94,7 +106,16 @@ const SignInForm = () => {
 
   return (
     <div>
-      <h2 className="text-3xl font-extrabold mb-6">Sign In</h2>
+      <div className="flex flex-row justify-between">
+        <h2 className="text-3xl font-extrabold mb-6">Sign In</h2>
+        <div
+          className={`w-fit ${
+            errorMessage == "" ? "hidden" : "flex"
+          }bg-accent p-4 justify-center`}
+        >
+          <p className={`text-red-500`}>{errorMessage}</p>
+        </div>
+      </div>
 
       <Form {...form}>
         <form
@@ -169,7 +190,6 @@ const SignInForm = () => {
           </Button>
         </form>
       </div>
-      <p className="text-red-500">{errorMessage}</p>
     </div>
   );
 };
