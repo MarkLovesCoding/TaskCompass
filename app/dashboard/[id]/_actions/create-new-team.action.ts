@@ -3,12 +3,12 @@ import { createNewTeam } from "@/data-access/teams/create-new-team.persistence";
 import { createNewTeamUseCase } from "@/use-cases/team/create-new-team.use-case";
 import { revalidatePath } from "next/cache";
 import { getUserFromSession } from "@/lib/sessionAuth";
+import { ValidationError } from "@/use-cases/utils";
 type Form = {
   name: string;
 };
 
 export async function createNewTeamAction(form: Form) {
-  console.log("form", form);
   const { getUser } = await getUserFromSession();
 
   try {
@@ -22,8 +22,13 @@ export async function createNewTeamAction(form: Form) {
       }
     );
     revalidatePath("/dashboard/[slug]");
-    return { form: { name: "" } };
-  } catch (error: any) {
-    console.error(error);
+    return { status: "success" };
+  } catch (err) {
+    const error = err as Error;
+    if (error instanceof ValidationError) {
+      return { status: "field-errors", errors: error.getErrors() };
+    } else {
+      return { status: "error", errors: error.message };
+    }
   }
 }

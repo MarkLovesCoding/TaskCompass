@@ -18,6 +18,8 @@ import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createNewTeamAction } from "./_actions/create-new-team.action";
 import { useState } from "react";
+import { toast } from "sonner";
+import { ValidationError } from "@/use-cases/utils";
 
 const formSchema = z.object({
   name: z.string().min(4),
@@ -47,8 +49,19 @@ const AddTeamCard = () => {
   };
 
   const onNewTeamFormSubmit = async (values: z.infer<typeof formSchema>) => {
-    await createNewTeamAction(values);
-    router.refresh();
+    try {
+      await createNewTeamAction(values);
+      toast.success("Team created successfully");
+      router.refresh();
+    } catch (err: any) {
+      if (err instanceof ValidationError) {
+        toast.error("Validation error: " + err.message);
+      } else if (err instanceof Error) {
+        toast.error(err.message);
+      } else {
+        toast.error("An error occurred creating Team. Please try again.");
+      }
+    }
   };
   return (
     <Form {...form}>
