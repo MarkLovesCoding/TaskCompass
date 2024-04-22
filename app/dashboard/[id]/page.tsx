@@ -18,7 +18,7 @@ const UserPage = async ({ params }: { params: ParamsType }) => {
   unstable_noStore();
   const { id } = params;
 
-  const session = await sessionAuth(`USERPAGE-CLEAN/${id}`);
+  const session = await sessionAuth(`/dashboard/${id}`);
 
   // if (!session) {
   //   redirect(`/api/auth/signin?callbackUrl=/USERPAGE-CLEAN/${id}`);
