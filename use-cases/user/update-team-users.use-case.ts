@@ -1,8 +1,13 @@
-import { TeamEntity } from "@/entities/Team";
-import { GetTeam, UpdateTeam, UpdateTeamUsers } from "@/use-cases/team/types";
+import { TeamEntity, TeamEntityValidationError } from "@/entities/Team";
+import {
+  GetTeam,
+  TeamDto,
+  UpdateTeam,
+  UpdateTeamUsers,
+} from "@/use-cases/team/types";
 import { GetUserSession } from "@/use-cases/user/types";
 import { teamToDto } from "@/use-cases/team/utils";
-import { AuthenticationError } from "../utils";
+import { AuthenticationError, ValidationError } from "../utils";
 
 export async function updateTeamUsersUseCase(
   context: {
@@ -20,11 +25,24 @@ export async function updateTeamUsersUseCase(
   if (!user) throw new AuthenticationError();
 
   const team = await context.getTeam(data.teamId);
-
-  const validatedTeam = new TeamEntity(team);
-  validatedTeam.updateUsers(data.updatedUsers);
-  const updatedTeam = teamToDto(validatedTeam);
-  await context.updateTeam(updatedTeam);
-
-  await context.updateManyTeamUsers(data.teamId, team.users, updatedTeam.users);
+  if (!team) throw new Error("Team not found");
+  let updatedTeam: TeamDto;
+  try {
+    const validatedTeam = new TeamEntity(team);
+    validatedTeam.updateUsers(data.updatedUsers);
+    const updatedTeam = teamToDto(validatedTeam);
+    await context.updateTeam(updatedTeam);
+    try {
+      await context.updateManyTeamUsers(
+        data.teamId,
+        team.users,
+        updatedTeam.users
+      );
+    } catch (err) {
+      throw new Error("Error updating team users");
+    }
+  } catch (err) {
+    const error = err as TeamEntityValidationError;
+    throw new ValidationError(error.getErrors());
+  }
 }

@@ -1,7 +1,7 @@
-import { UserEntity } from "@/entities/User";
+import { UserEntity, UserEntityValidationError } from "@/entities/User";
 import { GetUser, GetUserSession, UpdateUser } from "@/use-cases/user/types";
 import { userToDto } from "./utils";
-import { AuthenticationError } from "../utils";
+import { AuthenticationError, ValidationError } from "../utils";
 
 export async function updateUserDashboardBackgroundUseCase(
   context: {
@@ -18,7 +18,14 @@ export async function updateUserDashboardBackgroundUseCase(
   if (!user) throw new AuthenticationError();
 
   const retrieveUser = await context.getUserObject(data.userId);
-  const validatedUser = new UserEntity(retrieveUser);
-  validatedUser.updateDashboardBackgroundImage(data.dashboardBackgroundImage);
-  await context.updateUser(userToDto(validatedUser));
+  if (!retrieveUser) throw new Error("User not found");
+
+  try {
+    const validatedUser = new UserEntity(retrieveUser);
+    validatedUser.updateDashboardBackgroundImage(data.dashboardBackgroundImage);
+    await context.updateUser(userToDto(validatedUser));
+  } catch (err) {
+    const error = err as UserEntityValidationError;
+    throw new ValidationError(error.getErrors());
+  }
 }

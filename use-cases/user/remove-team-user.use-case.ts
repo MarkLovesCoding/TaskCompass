@@ -1,10 +1,10 @@
-import { UserEntity } from "@/entities/User";
+import { UserEntity, UserEntityValidationError } from "@/entities/User";
 import { GetUser, GetUserSession, UpdateUser } from "@/use-cases/user/types";
 import { userToDto } from "./utils";
 import { GetTeam, UpdateTeam } from "../team/types";
-import { TeamEntity } from "@/entities/Team";
+import { TeamEntity, TeamEntityValidationError } from "@/entities/Team";
 import { teamToDto } from "../team/utils";
-import { AuthenticationError } from "../utils";
+import { AuthenticationError, ValidationError } from "../utils";
 export async function removeTeamUserUseCase(
   context: {
     getTeam: GetTeam;
@@ -22,14 +22,28 @@ export async function removeTeamUserUseCase(
   if (!user) throw new AuthenticationError();
 
   const getTeam = await context.getTeam(data.teamId);
-  const validatedTeam = new TeamEntity(getTeam);
-  validatedTeam.removeUser(data.teamUserId);
-  const updatedTeam = teamToDto(validatedTeam);
+  if (!getTeam) throw new Error("Team not found");
 
-  await context.updateTeam(updatedTeam);
+  try {
+    const validatedTeam = new TeamEntity(getTeam);
+    validatedTeam.removeUser(data.teamUserId);
+    const updatedTeam = teamToDto(validatedTeam);
+
+    await context.updateTeam(updatedTeam);
+  } catch (err) {
+    const error = err as TeamEntityValidationError;
+    throw new ValidationError(error.getErrors());
+  }
+
   const teamUser = await context.getUserObject(data.teamUserId);
-  const validatedTeamUser = new UserEntity(teamUser);
-  validatedTeamUser.removeTeamAsMember(data.teamId);
-  validatedTeamUser.removeTeamAsAdmin(data.teamId);
-  await context.updateUser(userToDto(validatedTeamUser));
+  if (!teamUser) throw new Error("User not found");
+  try {
+    const validatedTeamUser = new UserEntity(teamUser);
+    validatedTeamUser.removeTeamAsMember(data.teamId);
+    validatedTeamUser.removeTeamAsAdmin(data.teamId);
+    await context.updateUser(userToDto(validatedTeamUser));
+  } catch (err) {
+    const error = err as UserEntityValidationError;
+    throw new ValidationError(error.getErrors());
+  }
 }

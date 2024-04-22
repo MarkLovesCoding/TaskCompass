@@ -1,10 +1,13 @@
-import { UserEntity } from "@/entities/User";
+import { UserEntity, UserEntityValidationError } from "@/entities/User";
 import { GetUser, GetUserSession, UpdateUser } from "@/use-cases/user/types";
 import { userToDto } from "./utils";
-import { ProjectEntity } from "@/entities/Project";
+import {
+  ProjectEntity,
+  ProjectEntityValidationError,
+} from "@/entities/Project";
 import { GetProject, UpdateProject } from "../project/types";
 import { projectToDto } from "../project/utils";
-import { AuthenticationError } from "../utils";
+import { AuthenticationError, ValidationError } from "../utils";
 export async function removeProjectUserUseCase(
   context: {
     getProject: GetProject;
@@ -22,15 +25,29 @@ export async function removeProjectUserUseCase(
   if (!user) throw new AuthenticationError();
   //update Team
   const retrievedProject = await context.getProject(data.projectId);
-  const validatedProject = new ProjectEntity(retrievedProject);
-  validatedProject.removeUser(data.projectUserId);
-  const updatedProject = projectToDto(validatedProject);
-  await context.updateProject(updatedProject);
+  if (!retrievedProject) throw new Error("Project not found");
+
+  try {
+    const validatedProject = new ProjectEntity(retrievedProject);
+    validatedProject.removeUser(data.projectUserId);
+    const updatedProject = projectToDto(validatedProject);
+    await context.updateProject(updatedProject);
+  } catch (err) {
+    const error = err as ProjectEntityValidationError;
+    throw new ValidationError(error.getErrors());
+  }
 
   //update User
   const projectUser = await context.getUserObject(data.projectUserId);
-  const validatedProjectUser = new UserEntity(projectUser);
-  validatedProjectUser.removeProjectAsAdmin(data.projectId);
-  validatedProjectUser.removeProjectAsMember(data.projectId);
-  await context.updateUser(userToDto(validatedProjectUser));
+  if (!projectUser) throw new Error("User not found");
+
+  try {
+    const validatedProjectUser = new UserEntity(projectUser);
+    validatedProjectUser.removeProjectAsAdmin(data.projectId);
+    validatedProjectUser.removeProjectAsMember(data.projectId);
+    await context.updateUser(userToDto(validatedProjectUser));
+  } catch (err) {
+    const error = err as UserEntityValidationError;
+    throw new ValidationError(error.getErrors());
+  }
 }
