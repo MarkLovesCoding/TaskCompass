@@ -15,6 +15,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { set } from "mongoose";
 
 const passwordSchema = z
   .string()
@@ -38,15 +39,19 @@ const formSchema = z
     path: ["passwordConfirm"],
   });
 
-// import { useSession } from "next-auth/react";
 interface FormData {
   userId: string;
   password: string;
   passwordConfirm: string;
 }
+type ErrorType = "Error" | "Success";
+
 const ResetPasswordForm = ({ token }: { token: string }) => {
   const [userId, setUserId] = useState<string>("");
   const router = useRouter();
+  const [message, setMessage] = useState<string>("");
+  const [messageType, setMessageType] = useState<ErrorType>("Error");
+
   useEffect(() => {
     const verifyToken = async () => {
       try {
@@ -59,18 +64,21 @@ const ResetPasswordForm = ({ token }: { token: string }) => {
         });
         // const temp = await res.json();
         if (res.status === 400) {
-          setErrorMessage("Token is invalid or has expired.");
+          setMessageType("Error");
+          setMessage("Token is invalid or has expired.");
 
           router.push("/forgot-password");
         }
         if (res.status === 200) {
           const user = await res.json();
-          setErrorMessage(`Hi ${user.name}. Please reset your password.`);
+          setMessageType("Success");
+          setMessage(`Hi ${user.name}. Please reset your password.`);
           setUserId(user._id);
           // router.push("/registration");
         }
       } catch (error) {
-        setErrorMessage("Token is invalid or has expired.");
+        setMessageType("Error");
+        setMessage("Token is invalid or has expired.");
         console.log(error);
       }
     };
@@ -89,8 +97,6 @@ const ResetPasswordForm = ({ token }: { token: string }) => {
     form.setValue("userId", userId);
   }, [userId]);
 
-  const [errorMessage, setErrorMessage] = useState<string>("");
-
   const handleResetPasswordSubmit = async (values: FormData) => {
     try {
       const res = await fetch("/api/auth/reset-password", {
@@ -101,10 +107,13 @@ const ResetPasswordForm = ({ token }: { token: string }) => {
         body: JSON.stringify(values),
       });
       if (res.status == 400) {
-        setErrorMessage("Error resetting password.");
+        setMessageType("Error");
+        setMessage("Error resetting password.");
       }
       if (res.status === 200) {
-        setErrorMessage("Password reset successfully.");
+        setMessageType("Success");
+
+        setMessage("Password reset successfully.");
         router.push("/registration");
       }
     } catch (error) {
@@ -114,7 +123,24 @@ const ResetPasswordForm = ({ token }: { token: string }) => {
 
   return (
     <div>
-      <h2 className="text-3xl font-extrabold mb-6">Reset your password</h2>
+      <div className="flex flex-row justify-between">
+        <h2 className="text-3xl font-extrabold mb-6">Reset your password</h2>
+        <div
+          className={`w-fit items-center mb-4 ${
+            !message ? " hidden" : "flex "
+          } ${
+            messageType == "Error" ? "bg-red-500/20 " : "bg-green-500/20 "
+          }bg-accent justify-center`}
+        >
+          <p
+            className={`px-2 ${
+              messageType == "Error" ? "text-red-500" : "text-green-500"
+            }`}
+          >
+            {message}
+          </p>
+        </div>
+      </div>
       <Form {...form}>
         <form
           className="mb-4"
@@ -169,7 +195,6 @@ const ResetPasswordForm = ({ token }: { token: string }) => {
         </form>
       </Form>
 
-      <p className="text-red-500">{errorMessage}</p>
       <div>
         <Link href="/forgot-password">
           <p className="text-center text-sm font-medium text-primary hover:text-primary-dark">

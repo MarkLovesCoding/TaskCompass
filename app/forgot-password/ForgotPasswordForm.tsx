@@ -19,13 +19,15 @@ import {
 interface FormData {
   email: string;
 }
+type ErrorType = "Error" | "Success";
 
 const formSchema = z.object({
   email: z.string().email().min(5),
 });
 
 const ForgotPasswordForm = () => {
-  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [message, setMessage] = useState<string>("");
+  const [messageType, setMessageType] = useState<ErrorType>("Error");
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -44,10 +46,15 @@ const ForgotPasswordForm = () => {
         body: JSON.stringify(values),
       });
       if (res.status == 400) {
-        setErrorMessage("User with this email is not registered.");
+        setMessageType("Error");
+        setMessage("User with this email is not registered.");
       }
       if (res.status === 200) {
-        setErrorMessage("Password reset link sent to your email.");
+        setMessageType("Success");
+        setMessage("Password reset link sent to your email.");
+      } else {
+        setMessageType("Error");
+        setMessage("Something went wrong. Please try again in a minute.");
       }
     } catch (error) {
       console.log(error);
@@ -60,6 +67,19 @@ const ForgotPasswordForm = () => {
       <h3 className="text-xl font-bold mb-4">
         {`   No prob! We'll send you a link to the email associated with the account.`}
       </h3>
+      <div
+        className={`w-fit items-center mb-4 ${!message ? " hidden" : "flex "} ${
+          messageType == "Error" ? "bg-red-500/20 " : "bg-green-500/20 "
+        }bg-accent justify-center`}
+      >
+        <p
+          className={`px-2 ${
+            messageType == "Error" ? "text-red-500" : "text-green-500"
+          }`}
+        >
+          {message}
+        </p>
+      </div>
 
       <Form {...form}>
         <form
@@ -96,7 +116,6 @@ const ForgotPasswordForm = () => {
         </form>
       </Form>
 
-      <p className="text-red-500">{errorMessage}</p>
       <div>
         <Link href="/registration">
           <p className="text-center text-sm font-medium text-primary hover:text-primary-dark">

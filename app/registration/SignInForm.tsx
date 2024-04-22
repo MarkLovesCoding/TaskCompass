@@ -33,11 +33,12 @@ interface FormData {
   role: string;
   firstLogIn: boolean;
 }
-
+type ErrorType = "Error" | "Success";
 const SignInForm = () => {
   const router = useRouter();
 
-  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [message, setMessage] = useState<string>("");
+  const [messageType, setMessageType] = useState<ErrorType>("Error");
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -56,15 +57,20 @@ const SignInForm = () => {
     });
 
     if (loginResponse?.error && loginResponse.error == "CredentialsSignin") {
-      setErrorMessage("Incorrect Credentials. ");
+      setMessage("Incorrect Credentials.");
+      setMessageType("Error");
       // toast.error("Incorrect Credentials.");
     } else if (loginResponse?.error) {
-      setErrorMessage(loginResponse?.error);
+      setMessage(loginResponse?.error);
+      setMessageType("Error");
+
       // toast.error(loginResponse?.error);
     } else {
       console.log("loginResponse", loginResponse);
-      setErrorMessage("");
-      toast.success("Successfully Logged In");
+      setMessage("Success!");
+      setMessageType("Success");
+
+      toast.success("Successfully Logged In. Loading profile...");
       // Successful login
       router.push("/");
     }
@@ -73,14 +79,16 @@ const SignInForm = () => {
     e.preventDefault();
 
     const loginResponse = await signIn("google", { redirect: false });
-    // Successful login
+    // Check for login error
     if (loginResponse && loginResponse.error) {
-      setErrorMessage(loginResponse.error);
+      setMessage(loginResponse?.error);
+      setMessageType("Error");
+
       toast.error(loginResponse.error);
     } else {
       // Successful login
-      toast.success("Successfully Logged In");
-
+      toast.success("Logging in through Google...");
+      setMessageType("Success");
       router.push("/");
     }
   };
@@ -90,14 +98,16 @@ const SignInForm = () => {
 
     // Attempt to sign in with GitHub
     const loginResponse = await signIn("github");
-    // Successful login
+    // Check for login error
 
     if (loginResponse && loginResponse.error) {
-      setErrorMessage(loginResponse.error);
+      setMessage(loginResponse?.error);
+      setMessageType("Error");
       toast.error(loginResponse.error);
     } else {
       // Successful login
-      toast.success("Successfully Logged In");
+
+      toast.success("Logging in through GitHub...");
       router.push("/");
     }
 
@@ -109,11 +119,19 @@ const SignInForm = () => {
       <div className="flex flex-row justify-between">
         <h2 className="text-3xl font-extrabold mb-6">Sign In</h2>
         <div
-          className={`w-fit ${
-            errorMessage == "" ? "hidden" : "flex"
-          }bg-accent p-4 justify-center`}
+          className={`w-fit items-center mb-4 ${
+            !message ? " hidden" : "flex "
+          } ${
+            messageType == "Error" ? "bg-red-500/20 " : "bg-green-500/20 "
+          }bg-accent justify-center`}
         >
-          <p className={`text-red-500`}>{errorMessage}</p>
+          <p
+            className={`px-2 ${
+              messageType == "Error" ? "text-red-500" : "text-green-500"
+            }`}
+          >
+            {message}
+          </p>
         </div>
       </div>
 
@@ -128,8 +146,11 @@ const SignInForm = () => {
             name="email"
             render={({ field }) => {
               return (
-                <FormItem className="mt-2">
-                  <FormLabel>Email</FormLabel>
+                <FormItem className="mt-1">
+                  <div className="flex mt-1 flex-row justify-start space-x-4 items-center">
+                    <FormLabel>Email</FormLabel>
+                    <FormMessage />
+                  </div>
                   <FormControl>
                     <Input
                       placeholder="Type in email"
@@ -137,7 +158,6 @@ const SignInForm = () => {
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
                 </FormItem>
               );
             }}
@@ -147,8 +167,11 @@ const SignInForm = () => {
             name="password"
             render={({ field }) => {
               return (
-                <FormItem className="mt-2">
-                  <FormLabel>Password</FormLabel>
+                <FormItem className="mt-4">
+                  <div className="flex mt-1 flex-row justify-start space-x-4 items-center">
+                    <FormLabel>Password</FormLabel>
+                    <FormMessage />
+                  </div>
                   <FormControl>
                     <Input
                       placeholder="Type in password"
@@ -156,7 +179,6 @@ const SignInForm = () => {
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
                 </FormItem>
               );
             }}

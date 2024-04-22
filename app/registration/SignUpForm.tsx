@@ -26,11 +26,12 @@ const formSchema = z.object({
   role: z.string().min(1),
   firstLogIn: z.boolean(),
 });
-
+type ErrorType = "Error" | "Success";
 const SignUpForm = () => {
   const router = useRouter();
 
-  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [message, setMessage] = useState<string>("");
+  const [messageType, setMessageType] = useState<ErrorType>("Error");
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -56,9 +57,13 @@ const SignUpForm = () => {
           email: values.email,
           password: values.password,
         });
+        setMessage("SIgning in...");
+        setMessageType("Success");
         toast.success("User Created Successfully!");
-      } catch (error) {
+      } catch (error: any) {
         console.error(error);
+        setMessage(error);
+        setMessageType("Error");
         toast.error("Error Signing In User");
       }
       // console.log("RESPONSE AND FORM SUBMITTION:", await res.json());
@@ -68,28 +73,25 @@ const SignUpForm = () => {
     } else {
       const response = await res.json();
       toast.error(response.message);
-      setErrorMessage(response.message);
+      setMessage(response.message);
+      setMessageType("Error");
     }
   };
-  // const handleGoogleSubmit = async (e: FormEvent) => {
-  //   e.preventDefault();
-  //   signIn("google");
-  // };
-  // const handleGithubSubmit = async (e: FormEvent) => {
-  //   e.preventDefault();
-  //   signIn("github");
-  // };
+
   const handleGoogleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    toast("Signing In through Google...");
+
     const loginResponse = await signIn("google", { redirect: false });
-    // Successful login
+    // Check for login error
     if (loginResponse && loginResponse.error) {
+      setMessage(loginResponse?.error);
+      setMessageType("Error");
+
       toast.error(loginResponse.error);
-      setErrorMessage(loginResponse.error);
     } else {
       // Successful login
-      toast.success("User Signed In Through Google Successfully!");
+      toast.success("Logging in through Google...");
+      setMessageType("Success");
       router.push("/");
     }
   };
@@ -99,21 +101,39 @@ const SignUpForm = () => {
     toast("Signing In through GitHub...");
 
     const loginResponse = await signIn("github");
-    // Successful login
+    // Check for login error
 
     if (loginResponse && loginResponse.error) {
+      setMessage(loginResponse?.error);
+      setMessageType("Error");
       toast.error(loginResponse.error);
-      setErrorMessage(loginResponse.error);
     } else {
       // Successful login
-      toast.success("User Signed In Through GitHub Successfully!");
 
+      toast.success("Logging in through GitHub...");
       router.push("/");
     }
   };
   return (
     <div className="max-w-[100%]">
-      <h2 className="text-3xl font-extrabold mb-6">Register</h2>
+      <div className="flex flex-row justify-between">
+        <h2 className="text-3xl font-extrabold mb-6">Register</h2>
+        <div
+          className={`w-fit items-center mb-4 ${
+            !message ? " hidden" : "flex "
+          } ${
+            messageType == "Error" ? "bg-red-500/20 " : "bg-green-500/20 "
+          }bg-accent justify-center`}
+        >
+          <p
+            className={`px-2 ${
+              messageType == "Error" ? "text-red-500" : "text-green-500"
+            }`}
+          >
+            {message}
+          </p>
+        </div>
+      </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSignUpSubmit)} method="post">
           <FormField
@@ -121,8 +141,11 @@ const SignUpForm = () => {
             name="name"
             render={({ field }) => {
               return (
-                <FormItem className="mt-2">
-                  <FormLabel>Username</FormLabel>
+                <FormItem className="mt-1">
+                  <div className="flex mt-1 flex-row justify-start space-x-4 items-center">
+                    <FormLabel>Username</FormLabel>
+                    <FormMessage />
+                  </div>
                   <FormControl>
                     <Input
                       placeholder="Type in username"
@@ -130,7 +153,6 @@ const SignUpForm = () => {
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
                 </FormItem>
               );
             }}
@@ -140,8 +162,11 @@ const SignUpForm = () => {
             name="email"
             render={({ field }) => {
               return (
-                <FormItem className="mt-2">
-                  <FormLabel>Email</FormLabel>
+                <FormItem className="mt-4">
+                  <div className="flex  flex-row justify-start space-x-4 items-center">
+                    <FormLabel>Email</FormLabel>
+                    <FormMessage />
+                  </div>
                   <FormControl>
                     <Input
                       placeholder="Type in email"
@@ -149,7 +174,6 @@ const SignUpForm = () => {
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
                 </FormItem>
               );
             }}
@@ -159,8 +183,11 @@ const SignUpForm = () => {
             name="password"
             render={({ field }) => {
               return (
-                <FormItem className="mt-2">
-                  <FormLabel>Password</FormLabel>
+                <FormItem className="mt-4">
+                  <div className="flex flex-row justify-start space-x-4 items-center">
+                    <FormLabel>Password</FormLabel>
+                    <FormMessage />
+                  </div>
                   <FormControl>
                     <Input
                       placeholder="Type in password"
@@ -168,7 +195,6 @@ const SignUpForm = () => {
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
                 </FormItem>
               );
             }}
@@ -242,7 +268,6 @@ const SignUpForm = () => {
           </Button>
         </form>
       </div>
-      <p className="text-red-500">{errorMessage}</p>
     </div>
   );
 };
