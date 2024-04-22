@@ -4,7 +4,7 @@ import { unstable_noStore } from "next/cache";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { RadioGroupItem, RadioGroup } from "@/components/ui/radio-group";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 import { Label } from "@/components/ui/label";
 import {
   SelectValue,
@@ -13,7 +13,7 @@ import {
   SelectContent,
   Select,
 } from "@/components/ui/select";
-import { ArchiveIcon, UserPlus2Icon, UserSearchIcon } from "lucide-react";
+import { ArchiveIcon, UserPlus2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button-alert";
 import {
   Form,
@@ -28,13 +28,7 @@ import {
   DialogTrigger,
   DialogContent,
 } from "@/components/ui/dialog-user-search";
-import {
-  Card,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+
 import {
   PopoverTrigger,
   PopoverContent,
@@ -48,7 +42,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
+import { AvatarFallback, Avatar } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils/utils";
 import { Calendar } from "@/components/ui/calendar";
 import * as z from "zod";
@@ -83,7 +77,7 @@ const archivedFormSchema = z.object({
   archived: z.boolean(),
   projectId: z.string().length(24),
 });
-let renderCount = 0;
+
 export const TaskCard = ({
   task,
   project,
@@ -105,11 +99,9 @@ export const TaskCard = ({
   useEffect(() => {
     if (isTaskOpen === true) {
       setIsTaskSelected(true);
-      console.log("isTaskSelected", isTaskSelected);
     }
     if (isTaskOpen === false && isTaskSelected === true) {
       setIsTaskSelected(false);
-      console.log("isTaskSelected", isTaskSelected);
       if (formRef.current) {
         formRef.current.requestSubmit();
       }
@@ -196,7 +188,6 @@ export const TaskCard = ({
     if (taskOrderChanges.length !== 0) {
       try {
         for (let i = 0; i < taskOrderChanges.length; i++) {
-          console.log("updating task Order Changes: ", i + 1);
           await updateProjectTasksOrderFromTaskCardAction(
             values.projectId,
             values.id,
@@ -253,8 +244,14 @@ export const TaskCard = ({
   const onArchivedFormSubmit = async (
     values: z.infer<typeof archivedFormSchema>
   ) => {
-    await updateTaskArchivedAction(values);
-    router.refresh();
+    try {
+      await updateTaskArchivedAction(values);
+      toast.success(`Task Archived Successfully!`);
+      router.refresh();
+    } catch (error) {
+      console.error(error);
+      toast.error(`Error Archiving Task`);
+    }
   };
   const handleNameBlur = () => {
     // nameField.onBlur();

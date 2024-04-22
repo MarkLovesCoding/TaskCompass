@@ -1,22 +1,19 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import { unstable_noStore } from "next/cache";
-import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AddProjectCard from "./AddProjectCard";
 import { TeamUserSearchTable } from "./TeamUserSearchTable";
 import { TeamHeader } from "@/app/team/[id]/TeamHeader";
 import UnarchiveProjectPopover from "./UnarchiveProjectPopover";
 import { TeamUserCardWithPermissions } from "./TeamUserCardWithPermissions";
+
 import { getInitials } from "@/lib/utils/getInitials";
 
-import {
-  UserIcon,
-  UserCog,
-  ArchiveIcon,
-  Scroll,
-  ImageIcon,
-} from "lucide-react";
+import { updateTeamBackgroundAction } from "../_actions/update-team-background.action";
+
+import { UserIcon, UserCog, ArchiveIcon, ImageIcon } from "lucide-react";
 import {
   CardTitle,
   CardDescription,
@@ -25,45 +22,27 @@ import {
 } from "@/components/ui/dashboard-card";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuPortal,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
-import { ScrollArea, ScrollBar } from "@/components/ui/avatar-scroll-area";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ScrollArea } from "@/components/ui/avatar-scroll-area";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import Image from "next/image";
-import { CircleEllipsisIcon, PlusIcon } from "lucide-react";
-// import UpdateTeamMembersCard from "./UpdateTeamUsersCard";
-import getTeam from "@/data-access/teams/get-team.persistence";
-import getAllUsers from "@/data-access/users/get-all-users.persistence";
-import getTeamUsers from "@/data-access/users/get-team-users.persistence";
-import getTeamProjects from "@/data-access/projects/get-team-projects";
-import getUserObject from "@/data-access/users/get-user.persistence";
-import { Badge } from "@/components/ui/badge";
-import type { TeamDto } from "@/use-cases/team/types";
-import type { UserDto } from "@/use-cases/user/types";
-import type { ProjectDto } from "@/use-cases/project/types";
 import {
   Accordion,
   AccordionItem,
   AccordionTrigger,
   AccordionContent,
 } from "@/components/ui/accordion";
-import { updateTeamBackgroundAction } from "../_actions/update-team-background.action";
 import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { PlusIcon } from "lucide-react";
+import type { TeamDto } from "@/use-cases/team/types";
+import type { UserDto } from "@/use-cases/user/types";
+import type { ProjectDto } from "@/use-cases/project/types";
+import { toast } from "sonner";
 
 export function TeamPageComponent({
   team,
@@ -144,7 +123,13 @@ export function TeamPageComponent({
   };
   const setNewBackground = async (urls: TUrls) => {
     setTeamBackgroundImage(urls.full);
-    await updateTeamBackgroundAction(team.id, urls.full, urls.small);
+    // add try catch with toast errors.
+    try {
+      await updateTeamBackgroundAction(team.id, urls.full, urls.small);
+      toast.success("Background Image Updated Successfully!");
+    } catch (err: any) {
+      toast.error(err);
+    }
   };
 
   return (

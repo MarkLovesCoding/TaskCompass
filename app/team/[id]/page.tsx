@@ -1,12 +1,12 @@
-import React from "react";
 import { unstable_noStore } from "next/cache";
-
+import { Suspense } from "react";
 import { sessionAuth } from "@/lib/sessionAuth";
 
 import { TeamPageComponent } from "./TeamPageComponent";
 
 import type { TeamDto } from "@/use-cases/team/types";
-import toast, { Toaster } from "react-hot-toast";
+// import { Toaster } from "react-hot-toast";
+import { Toaster } from "sonner";
 
 import getTeam from "@/data-access/teams/get-team.persistence";
 import getAllUsers from "@/data-access/users/get-all-users.persistence";
@@ -15,6 +15,7 @@ import getTeamProjects from "@/data-access/projects/get-team-projects";
 import getUserObject from "@/data-access/users/get-user.persistence";
 
 import type { UserDto } from "@/use-cases/user/types";
+import { TeamPageSkeleton } from "@/app/team/[id]/TeamSkeleton";
 
 type ParamsType = {
   id: string;
@@ -39,18 +40,20 @@ const Projects = async ({ params }: { params: ParamsType }) => {
     );
   }
   if (!session) {
-    return <p>Session not found</p>;
+    return <TeamPageSkeleton />;
   }
   return (
     <div className=" flex justify-center flex-col items-center">
-      <TeamPageComponent
-        team={team}
-        user={user}
-        userId={session?.user.id}
-        projects={projects}
-        usersList={usersList}
-        teamUsers={teamUsers}
-      />
+      <Suspense fallback={<TeamPageSkeleton />}>
+        <TeamPageComponent
+          team={team}
+          user={user}
+          userId={session?.user.id}
+          projects={projects}
+          usersList={usersList}
+          teamUsers={teamUsers}
+        />
+      </Suspense>
       <Toaster />
     </div>
   );

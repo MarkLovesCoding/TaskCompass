@@ -18,7 +18,7 @@ import { removeTeamUserAction } from "@/app/team/_actions/remove-team-user.actio
 import { useEffect, useState } from "react";
 
 import { Label } from "@/components/ui/label";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 
 import TeamMemberCardPermissionsSelect from "./TeamUserCardPermissionsSelect";
 import { TeamDto } from "@/use-cases/team/types";

@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { UserDto } from "@/use-cases/user/types";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 import { UpdateTeamUserRoleAction } from "../_actions/update-team-user-role.action";
 import { TeamDto } from "@/use-cases/team/types";
 type TeamUserBlockProps = {

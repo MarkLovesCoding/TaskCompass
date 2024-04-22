@@ -24,6 +24,7 @@ import FullUsers from "../public/full-users.png";
 import MoveTask from "../public/move-task.png";
 import PriorityView from "../public/priority-view.png";
 import SWCard from "../public/sw-card.png";
+import { DashboardSkeleton } from "./dashboard/[id]/DashboardSkeleton";
 
 function interpolateColors(color1: string, color2: string, progress: number) {
   const rgba1 = color1.match(/\d+/g)!;
@@ -67,7 +68,8 @@ const HomePageComponent = () => {
 
   if (session) {
     // Render loading screen tbd
-    return <div>Loading...</div>;
+    // return <div>Loading...</div>;
+    return <DashboardSkeleton />;
   } else
     return (
       <motion.div
@@ -84,7 +86,9 @@ const HomePageComponent = () => {
             // width={80}
             // height={80}
           />{" "}
-          <h1 className="text-base md:text-2xl font-bold">TaskCompass</h1>
+          <h1 className="text-base text-white md:text-2xl font-bold">
+            TaskCompass
+          </h1>
         </div>
         <div className=" absolute top-[36px] right-[20px] md:top-[50px] md:right-[50px] flex justify-center">
           <Link href="/registration">
@@ -184,8 +188,8 @@ const HomePageComponent = () => {
 
         <div className="  bg-black border-t-accent border-t self-center flex flex-row  text-center w-full justify-center items-center h-[50vh] min-h-[150px] ">
           <div className="flex min-w-[50%] flex-col">
-            <h2 className="text-2xl text-left">Task Compass</h2>
-            <h2 className="text-lg text-left">
+            <h2 className="text-2xl text-left text-white">Task Compass</h2>
+            <h2 className="text-lg text-left text-white">
               <Link href={`https://www.markhalstead.dev`}>
                 markhalstead.dev
               </Link>{" "}

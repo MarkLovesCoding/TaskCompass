@@ -11,7 +11,7 @@ import { ProjectDto } from "@/use-cases/project/types";
 import { UserDto } from "@/use-cases/user/types";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 import { UpdateProjectUserRoleAction } from "../_actions/update-project-user-role.action";
 type ProjectUserBlockProps = {
   user: UserDto;
@@ -42,19 +42,21 @@ const ProjectUserPermissionsSelect = ({
   }, [selectedRole, existingRole]);
   const handleRoleChange = (value: string) => {
     setSelectedRole(value as "admin" | "member");
-    // You can perform additional actions here if needed
   };
   const handleRoleChangeSubmit = async () => {
-    // You can perform additional actions here if needed
-    await UpdateProjectUserRoleAction(
-      user.id,
-      project.id,
-      selectedRole as "admin" | "member"
-    );
-    // updateProjectUserRoleAction(user, project, selectedRole);
-    toast.success(`User role updated to ${selectedRole}`);
-    setShowSubmitButton(false);
-    router.refresh();
+    try {
+      await UpdateProjectUserRoleAction(
+        user.id,
+        project.id,
+        selectedRole as "admin" | "member"
+      );
+      // updateProjectUserRoleAction(user, project, selectedRole);
+      toast.success(`User role updated to ${selectedRole}`);
+      setShowSubmitButton(false);
+      router.refresh();
+    } catch (error) {
+      toast.error(`Error updating user role: ${error}`);
+    }
   };
 
   const router = useRouter();

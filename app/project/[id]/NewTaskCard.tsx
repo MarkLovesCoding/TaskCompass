@@ -16,6 +16,7 @@ import { ProjectDto } from "@/use-cases/project/types";
 import { createNewTaskAction } from "../_actions/create-new-task.action";
 import { useRouter } from "next/navigation";
 import { PopoverClose } from "@radix-ui/react-popover";
+import { toast } from "sonner";
 type TaskFormProps = {
   project: ProjectDto;
 };
@@ -49,12 +50,16 @@ export const NewTaskCard: React.FC<TaskFormProps> = ({ project }) => {
   });
 
   const { register, control } = form;
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsSubmitting(true);
-
-    createNewTaskAction(values);
-
-    router.refresh();
+    try {
+      await createNewTaskAction(values);
+      toast.success("Task created successfully");
+      router.refresh();
+    } catch (error) {
+      toast.error("Error creating task");
+      console.error(error);
+    }
   };
 
   return (

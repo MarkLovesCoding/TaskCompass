@@ -1,5 +1,4 @@
 "use server";
-import getProject from "@/data-access/projects/get-project.persistence";
 import { revalidatePath } from "next/cache";
 import { updateProjectUseCase } from "@/use-cases/project/update-project.use-case";
 import { updateProject } from "@/data-access/projects/update-project.persistence";
