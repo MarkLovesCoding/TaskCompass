@@ -1,5 +1,27 @@
 import { ZodError, z } from "zod";
 
+type ValidatedFields =
+  | "id"
+  | "name"
+  | "users"
+  | "projects"
+  | "createdBy"
+  | "backgroundImage"
+  | "backgroundImageThumbnail";
+
+export class TeamEntityValidationError extends Error {
+  private errors: Record<ValidatedFields, string | undefined>;
+
+  constructor(errors: Record<ValidatedFields, string | undefined>) {
+    super("An error occured validating an team entity");
+    this.errors = errors;
+  }
+
+  getErrors() {
+    return this.errors;
+  }
+}
+
 export class TeamEntity {
   private id?: string;
   private name: string;
@@ -118,7 +140,15 @@ export class TeamEntity {
     } catch (err) {
       const error = err as ZodError;
       const errors = error.flatten().fieldErrors;
-      throw new Error(JSON.stringify(errors));
+      throw new TeamEntityValidationError({
+        id: errors.id?.[0],
+        name: errors.name?.[0],
+        users: errors.users?.[0],
+        projects: errors.projects?.[0],
+        createdBy: errors.createdBy?.[0],
+        backgroundImage: errors.backgroundImage?.[0],
+        backgroundImageThumbnail: errors.backgroundImageThumbnail?.[0],
+      });
     }
   }
 }

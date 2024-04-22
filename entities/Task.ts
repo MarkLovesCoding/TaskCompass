@@ -1,4 +1,30 @@
 import { ZodError, z } from "zod";
+type ValidatedFields =
+  | "id"
+  | "name"
+  | "description"
+  | "project"
+  | "assignees"
+  | "dueDate"
+  | "startDate"
+  | "archived"
+  | "priority"
+  | "category"
+  | "status";
+
+export class TaskEntityValidationError extends Error {
+  private errors: Record<ValidatedFields, string | undefined>;
+
+  constructor(errors: Record<ValidatedFields, string | undefined>) {
+    super("An error occured validating an task entity");
+    this.errors = errors;
+  }
+
+  getErrors() {
+    return this.errors;
+  }
+}
+
 export type OrderInLists = Record<string, [string, number]>;
 
 export class TaskEntity {
@@ -162,13 +188,26 @@ export class TaskEntity {
       archived: z.boolean(),
       priority: z.string(),
       status: z.string(),
+      category: z.string(),
     });
     try {
       taskSchema.parse(this);
     } catch (err) {
       const error = err as ZodError;
       const errors = error.flatten().fieldErrors;
-      throw new Error(JSON.stringify(errors));
+      throw new TaskEntityValidationError({
+        id: errors.id?.[0],
+        name: errors.name?.[0],
+        description: errors.description?.[0],
+        project: errors.project?.[0],
+        assignees: errors.assignees?.[0],
+        dueDate: errors.dueDate?.[0],
+        startDate: errors.startDate?.[0],
+        archived: errors.archived?.[0],
+        priority: errors.priority?.[0],
+        status: errors.status?.[0],
+        category: errors.category?.[0],
+      });
     }
   }
 }

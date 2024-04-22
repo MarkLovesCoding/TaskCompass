@@ -1,5 +1,28 @@
 import { ZodError, z } from "zod";
 
+type ValidatedFields =
+  | "id"
+  | "name"
+  | "email"
+  | "projects"
+  | "teams"
+  | "tasks"
+  | "avatar"
+  | "dashboardBackgroundImage";
+
+export class UserEntityValidationError extends Error {
+  private errors: Record<ValidatedFields, string | undefined>;
+
+  constructor(errors: Record<ValidatedFields, string | undefined>) {
+    super("An error occured validating an user entity");
+    this.errors = errors;
+  }
+
+  getErrors() {
+    return this.errors;
+  }
+}
+
 export class UserEntity {
   private id: string;
   private name: string;
@@ -176,7 +199,7 @@ export class UserEntity {
       projects: z.array(z.string()).optional(),
       teams: z.array(z.string()).optional(),
       tasks: z.array(z.string()).optional(),
-      avatar: z.string().min(3),
+      avatar: z.string().min(0),
       dashboardBackgroundImage: z.string().optional(),
     });
     try {
@@ -184,7 +207,16 @@ export class UserEntity {
     } catch (err) {
       const error = err as ZodError;
       const errors = error.flatten().fieldErrors;
-      throw new Error(JSON.stringify(errors));
+      throw new UserEntityValidationError({
+        id: errors.id?.[0],
+        name: errors.name?.[0],
+        email: errors.email?.[0],
+        projects: errors.projects?.[0],
+        teams: errors.teams?.[0],
+        tasks: errors.tasks?.[0],
+        avatar: errors.avatar?.[0],
+        dashboardBackgroundImage: errors.dashboardBackgroundImage?.[0],
+      });
     }
   }
 }

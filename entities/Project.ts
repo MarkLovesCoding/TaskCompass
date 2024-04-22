@@ -1,4 +1,31 @@
 import { ZodError, z } from "zod";
+type ValidatedFields =
+  | "id"
+  | "name"
+  | "description"
+  | "users"
+  | "tasks"
+  | "team"
+  | "createdBy"
+  | "archived"
+  | "columnOrder"
+  | "tasksOrder"
+  | "backgroundImage"
+  | "backgroundImageThumbnail";
+
+export class ProjectEntityValidationError extends Error {
+  private errors: Record<ValidatedFields, string | undefined>;
+
+  constructor(errors: Record<ValidatedFields, string | undefined>) {
+    super("An error occured validating an project entity");
+    this.errors = errors;
+  }
+
+  getErrors() {
+    return this.errors;
+  }
+}
+
 export type ListsNextAvailable = Record<string, Record<string, number>>;
 export type TasksOrder = Record<string, Record<string, string[]>>;
 export type ColumnOrder = Record<string, string[]>;
@@ -221,7 +248,21 @@ export class ProjectEntity {
     } catch (err) {
       const error = err as ZodError;
       const errors = error.flatten().fieldErrors;
-      throw new Error(JSON.stringify(errors));
+      // throw new Error(JSON.stringify(errors));
+      throw new ProjectEntityValidationError({
+        id: errors.id?.[0],
+        name: errors.name?.[0],
+        description: errors.description?.[0],
+        users: errors.users?.[0],
+        tasks: errors.tasks?.[0],
+        team: errors.team?.[0],
+        createdBy: errors.createdBy?.[0],
+        archived: errors.archived?.[0],
+        backgroundImage: errors.backgroundImage?.[0],
+        backgroundImageThumbnail: errors.backgroundImageThumbnail?.[0],
+        columnOrder: errors.columnOrder?.[0],
+        tasksOrder: errors.tasksOrder?.[0],
+      });
     }
   }
 }
