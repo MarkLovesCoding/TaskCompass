@@ -3,7 +3,8 @@ import { UpdateTeam, GetTeam } from "@/use-cases/team/types";
 
 import { GetUserSession } from "@/use-cases/user/types";
 import { teamToDto } from "@/use-cases/team/utils";
-import { AuthenticationError } from "../utils";
+import { AuthenticationError, ValidationError } from "../utils";
+import { ProjectEntityValidationError } from "@/entities/Project";
 export async function updateTeamBackgroundUseCase(
   context: {
     updateTeam: UpdateTeam;
@@ -20,11 +21,16 @@ export async function updateTeamBackgroundUseCase(
   if (!user) throw new AuthenticationError();
 
   const team = await context.getTeam(data.teamId);
-
   if (!team) throw new Error("Team not found");
-  const validatedTeam = new TeamEntity(team);
-  validatedTeam.updateBackgroundImage(data.backgroundImage);
-  validatedTeam.updateBackgroundImageThumbnail(data.backgroundImageThumbnail);
 
-  await context.updateTeam(teamToDto(validatedTeam));
+  try {
+    const validatedTeam = new TeamEntity(team);
+    validatedTeam.updateBackgroundImage(data.backgroundImage);
+    validatedTeam.updateBackgroundImageThumbnail(data.backgroundImageThumbnail);
+
+    await context.updateTeam(teamToDto(validatedTeam));
+  } catch (err) {
+    const error = err as ProjectEntityValidationError;
+    throw new ValidationError(error.getErrors());
+  }
 }
