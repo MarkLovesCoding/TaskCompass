@@ -1,4 +1,5 @@
 import type { TaskModelType } from "./types";
+
 export function taskModelToTaskDto(task: TaskModelType) {
   const convertedAssignees =
     task.assignees.length > 0

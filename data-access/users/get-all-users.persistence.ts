@@ -1,11 +1,9 @@
-import "server-only";
-
+"use server";
 import connectDB from "@/db/connectDB";
-
+import { userModelToUserDto } from "./utils";
 import User from "@/db/(models)/User";
 
-import { UserDto } from "@/use-cases/user/types";
-import { userModelToUserDto } from "./utils";
+import type { UserDto } from "@/use-cases/user/types";
 
 async function getAllUsers(): Promise<UserDto[]> {
   try {

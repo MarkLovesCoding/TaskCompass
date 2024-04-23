@@ -1,9 +1,8 @@
-import "server-only";
-
+"use server";
 import connectDB from "@/db/connectDB";
-
 import Task from "@/db/(models)/Task";
-import { TaskDto } from "@/use-cases/task/types";
+
+import type { TaskDto } from "@/use-cases/task/types";
 
 export async function updateTask(task: TaskDto): Promise<void> {
   try {

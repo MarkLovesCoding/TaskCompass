@@ -1,7 +1,5 @@
-import "server-only";
-
+"use server";
 import connectDB from "@/db/connectDB";
-
 import User from "@/db/(models)/User";
 
 async function updateManyProjectMembers(
@@ -30,7 +28,7 @@ async function updateManyProjectMembers(
       User.findByIdAndUpdate(user, { $push: { projectsAsMember: projectId } });
     }
   } catch (error) {
-    throw new Error("Error updating Project users" + error);
+    throw new Error("Error updating project members" + error);
   }
 }
 export default updateManyProjectMembers;

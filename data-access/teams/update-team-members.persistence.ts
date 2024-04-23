@@ -1,9 +1,9 @@
-import "server-only";
-
+"use server";
 import connectDB from "@/db/connectDB";
 import Team from "@/db/(models)/Team";
 
 import type { TeamDto } from "@/use-cases/team/types";
+
 export async function updateTeamMembers(
   team: TeamDto,
   addedMembers: string[],

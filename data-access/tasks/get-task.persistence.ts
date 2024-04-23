@@ -1,11 +1,9 @@
-import "server-only";
-
+"use server";
 import connectDB from "@/db/connectDB";
-
+import { taskModelToTaskDto } from "./utils";
 import Task from "@/db/(models)/Task";
 
-import { TaskDto } from "@/use-cases/task/types";
-import { taskModelToTaskDto } from "./utils";
+import type { TaskDto } from "@/use-cases/task/types";
 
 async function getTask(taskId: string): Promise<TaskDto> {
   try {
@@ -16,7 +14,6 @@ async function getTask(taskId: string): Promise<TaskDto> {
   }
 
   try {
-    // Find the user by ID
     const retrievedTask = await Task.findById(taskId);
     return taskModelToTaskDto(retrievedTask);
   } catch (error) {

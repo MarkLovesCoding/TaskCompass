@@ -1,11 +1,10 @@
 // import "use server";
 "use server";
 import connectDB from "@/db/connectDB";
-
+import { projectModelToProjectDto } from "./utils";
 import Project from "@/db/(models)/Project";
 
-import { ProjectDto } from "@/use-cases/project/types";
-import { projectModelToProjectDto } from "./utils";
+import type { ProjectDto } from "@/use-cases/project/types";
 
 // May require refactpr to get by ID
 async function getProject(projectId: string): Promise<ProjectDto> {

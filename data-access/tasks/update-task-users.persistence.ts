@@ -1,7 +1,5 @@
-import "server-only";
-
+"use server";
 import connectDB from "@/db/connectDB";
-
 import User from "@/db/(models)/User";
 
 export async function updateTaskUsers(
@@ -26,9 +24,7 @@ export async function updateTaskUsers(
         await User.findByIdAndUpdate(userId, { $pull: { tasks: taskId } });
       });
     }
-
-    console.log("Users tasks lists updated");
   } catch (error) {
-    throw new Error("Error updating task lists for users :" + error);
+    throw new Error("Error updating task assignees :" + error);
   }
 }

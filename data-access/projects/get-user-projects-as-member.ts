@@ -1,13 +1,11 @@
-import "server-only";
-
+"use server";
 import connectDB from "@/db/connectDB";
-
+import { projectModelToProjectDto } from "./utils";
 import Project from "@/db/(models)/Project";
 
 import type { ProjectDto } from "@/use-cases/project/types";
 import type { UserDto } from "@/use-cases/user/types";
-import { projectModelToProjectDto } from "./utils";
-// May require refactpr to get by ID
+
 async function getUserProjectsAsMember(user: UserDto): Promise<ProjectDto[]> {
   try {
     await connectDB();

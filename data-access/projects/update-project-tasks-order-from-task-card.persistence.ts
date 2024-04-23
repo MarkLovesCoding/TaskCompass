@@ -1,9 +1,7 @@
 "use server";
 import connectDB from "@/db/connectDB";
-
 import Project from "@/db/(models)/Project";
 
-// May require refactpr to get by ID
 export async function updateProjectTasksOrder(
   projectId: string
 ): Promise<void> {
@@ -17,6 +15,8 @@ export async function updateProjectTasksOrder(
   try {
     const project = await Project.findById(projectId);
   } catch (error) {
-    throw new Error("Error udpating project :" + error);
+    throw new Error(
+      "Error updating project tasks order from card change:" + error
+    );
   }
 }

@@ -1,5 +1,4 @@
-import "server-only";
-
+"use server";
 import connectDB from "@/db/connectDB";
 import User from "@/db/(models)/User";
 
@@ -35,7 +34,7 @@ async function updateManyTeamUsers(
       await User.findByIdAndUpdate(user, { $push: { teamsAsMember: teamId } });
     }
   } catch (error) {
-    throw new Error("Error updating team users" + error);
+    throw new Error("Error updating team users data" + error);
   }
 }
 export default updateManyTeamUsers;

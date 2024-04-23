@@ -1,9 +1,9 @@
 "use server";
 import connectDB from "@/db/connectDB";
 import Project from "@/db/(models)/Project";
-import { TasksOrder } from "./types";
 
-// May require refactpr to get by ID
+import type { TasksOrder } from "./types";
+
 export async function updateProjectTasksOrder(
   projectId: string,
   tasksOrder: TasksOrder
@@ -28,6 +28,6 @@ export async function updateProjectTasksOrder(
       }
     );
   } catch (error) {
-    throw new Error("Error udpating project :" + error);
+    throw new Error("Error udpating project tasks order:" + error);
   }
 }

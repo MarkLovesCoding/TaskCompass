@@ -1,5 +1,6 @@
 import type { UserModelType } from "./types";
 import type { UserDto } from "@/use-cases/user/types";
+
 export function userModelToUserDto(user: UserModelType): UserDto {
   const convertedProjectsAsAdmin =
     user.projectsAsAdmin && user.projectsAsAdmin.length > 0

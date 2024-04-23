@@ -1,10 +1,9 @@
-import "server-only";
-
+"use server";
 import connectDB from "@/db/connectDB";
-
 import Task from "@/db/(models)/Task";
 import User from "@/db/(models)/User";
-import { TaskDto } from "@/use-cases/task/types";
+
+import type { TaskDto } from "@/use-cases/task/types";
 
 export async function updateTaskFullCard(
   task: TaskDto,
@@ -31,6 +30,6 @@ export async function updateTaskFullCard(
       });
     }
   } catch (error) {
-    throw new Error("Error creating project:" + error);
+    throw new Error("Error updating task from card:" + error);
   }
 }

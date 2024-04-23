@@ -1,17 +1,16 @@
 "use server";
 
 import connectDB from "@/db/connectDB";
-import User from "@/db/(models)/User";
-import Project from "@/db/(models)/Project";
-import Team from "@/db/(models)/Team";
-import { UserDto } from "@/use-cases/user/types";
-import { ProjectDto } from "@/use-cases/project/types";
 import { userModelToUserDto } from "./utils";
 import { projectModelToProjectDto } from "../projects/utils";
 import { teamModelToTeamDto } from "../teams/utils";
-import { TeamDto } from "@/use-cases/team/types";
+import User from "@/db/(models)/User";
+import Project from "@/db/(models)/Project";
+import Team from "@/db/(models)/Team";
 
-// May require refactpr to get by ID
+import type { ProjectDto } from "@/use-cases/project/types";
+import type { TeamDto } from "@/use-cases/team/types";
+
 type UserDataForNavType = {
   projects: ProjectDto[];
   teams: TeamDto[];

@@ -1,7 +1,5 @@
-import "server-only";
-
+"use server";
 import connectDB from "@/db/connectDB";
-
 import User from "@/db/(models)/User";
 
 async function updateManyProjectUsers(
@@ -34,7 +32,7 @@ async function updateManyProjectUsers(
       });
     }
   } catch (error) {
-    throw new Error("Error updating Project users" + error);
+    throw new Error("Error updating project's users" + error);
   }
 }
 export default updateManyProjectUsers;

@@ -1,11 +1,9 @@
-import "server-only";
-
+"use server";
 import connectDB from "@/db/connectDB";
-
+import { teamModelToTeamDto } from "./utils";
 import Team from "@/db/(models)/Team";
 
-import { TeamDto } from "@/use-cases/team/types";
-import { teamModelToTeamDto } from "./utils";
+import type { TeamDto } from "@/use-cases/team/types";
 
 async function getTeam(teamId: string): Promise<TeamDto> {
   try {
@@ -16,7 +14,6 @@ async function getTeam(teamId: string): Promise<TeamDto> {
   }
 
   try {
-    // Find the user by ID
     const team = await Team.findById(teamId);
     return teamModelToTeamDto(team);
   } catch (error) {

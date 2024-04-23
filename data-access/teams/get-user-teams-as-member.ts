@@ -1,12 +1,10 @@
-import "server-only";
-
+"use server";
 import connectDB from "@/db/connectDB";
-
+import { teamModelToTeamDto } from "./utils";
 import Team from "@/db/(models)/Team";
 
 import type { TeamDto } from "@/use-cases/team/types";
 import type { UserDto } from "@/use-cases/user/types";
-import { teamModelToTeamDto } from "./utils";
 
 export async function getUserTeamsAsMember(user: UserDto): Promise<TeamDto[]> {
   try {
@@ -19,13 +17,12 @@ export async function getUserTeamsAsMember(user: UserDto): Promise<TeamDto[]> {
   const teamIds = user.teamsAsMember;
   const teams: TeamDto[] = [];
   try {
-    // Find the user by ID
     for (let teamId of teamIds) {
       const team = await Team.findById(teamId);
       teams.push(teamModelToTeamDto(team));
     }
   } catch (error) {
-    throw new Error("Error retrieving team:" + error);
+    throw new Error("Error retrieving user's teams as member:" + error);
   }
   return teams;
 }

@@ -1,5 +1,4 @@
-import "server-only";
-
+"use server";
 import connectDB from "@/db/connectDB";
 import User from "@/db/(models)/User";
 
@@ -15,9 +14,7 @@ async function updateManyTeamAdmins(
     throw new Error("Error connecting to the database:" + error);
   }
 
-  // const userId = user.id;
   try {
-    // Find the user by ID
     const addedAdmins = updatedAdmins.filter(
       (member) => !initialAdmins.includes(member)
     );
@@ -31,7 +28,7 @@ async function updateManyTeamAdmins(
       User.findByIdAndUpdate(user, { $push: { teamsAsAdmin: projectId } });
     }
   } catch (error) {
-    throw new Error("Error updating Project users" + error);
+    throw new Error("Error updating team admins user data" + error);
   }
 }
 export default updateManyTeamAdmins;

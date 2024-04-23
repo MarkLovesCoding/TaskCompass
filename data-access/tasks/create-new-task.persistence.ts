@@ -1,11 +1,10 @@
-import "server-only";
-
+"use server";
 import connectDB from "@/db/connectDB";
-
 import Task from "@/db/(models)/Task";
 import Project from "@/db/(models)/Project";
-import { TaskModelType } from "./types";
-import { CreateTaskDto } from "@/use-cases/task/types";
+
+import type { TaskModelType } from "./types";
+import type { CreateTaskDto } from "@/use-cases/task/types";
 
 export async function createNewTask(task: CreateTaskDto): Promise<void> {
   try {
@@ -34,6 +33,6 @@ export async function createNewTask(task: CreateTaskDto): Promise<void> {
 
     await updateProject.save();
   } catch (error) {
-    throw new Error("Error creating project:" + error);
+    throw new Error("Error creating new task:" + error);
   }
 }

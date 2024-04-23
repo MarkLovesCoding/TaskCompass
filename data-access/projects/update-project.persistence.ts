@@ -1,12 +1,9 @@
-import "server-only";
-
+"use server";
 import connectDB from "@/db/connectDB";
-
 import Project from "@/db/(models)/Project";
 
-import { ProjectDto } from "@/use-cases/project/types";
+import type { ProjectDto } from "@/use-cases/project/types";
 
-// May require refactpr to get by ID
 export async function updateProject(project: ProjectDto): Promise<void> {
   try {
     await connectDB();
@@ -26,6 +23,6 @@ export async function updateProject(project: ProjectDto): Promise<void> {
       { new: true }
     );
   } catch (error) {
-    throw new Error("Errorudpating project :" + error);
+    throw new Error("Error updating project :" + error);
   }
 }

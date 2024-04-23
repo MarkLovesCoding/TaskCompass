@@ -1,13 +1,11 @@
-// import "server-only";
 "use server";
 import connectDB from "@/db/connectDB";
-
+import { taskModelToTaskDto } from "./utils";
 import Task from "@/db/(models)/Task";
 
 import type { UserDto } from "@/use-cases/user/types";
 import type { TaskDto } from "@/use-cases/task/types";
-import { taskModelToTaskDto } from "./utils";
-// May require refactpr to get by ID
+
 async function getUserTasks(user: UserDto): Promise<TaskDto[]> {
   try {
     await connectDB();
@@ -16,7 +14,6 @@ async function getUserTasks(user: UserDto): Promise<TaskDto[]> {
     throw new Error("Error connecting to the database:" + error);
   }
 
-  // const teamId = team.id;
   const taskIds = user.tasks;
 
   const tasks: TaskDto[] = [];
@@ -28,7 +25,7 @@ async function getUserTasks(user: UserDto): Promise<TaskDto[]> {
       tasks.push(taskModelToTaskDto(task));
     }
   } catch (error) {
-    throw new Error("Error retrieving team:" + error);
+    throw new Error("Error retrieving user's tasks:" + error);
   }
   return tasks;
 }

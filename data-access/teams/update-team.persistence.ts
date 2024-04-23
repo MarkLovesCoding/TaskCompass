@@ -1,9 +1,9 @@
-import "server-only";
-
+"use server";
 import connectDB from "@/db/connectDB";
 import Team from "@/db/(models)/Team";
 
 import type { TeamDto } from "@/use-cases/team/types";
+
 export async function updateTeam(team: TeamDto): Promise<void> {
   try {
     await connectDB();
@@ -20,6 +20,6 @@ export async function updateTeam(team: TeamDto): Promise<void> {
       }
     );
   } catch (error) {
-    throw new Error("Error adding user to task:" + error);
+    throw new Error("Error updating team:" + error);
   }
 }

@@ -1,12 +1,10 @@
-import "server-only";
-
+"use server";
 import connectDB from "@/db/connectDB";
-
+import { teamModelToTeamDto } from "./utils";
 import Team from "@/db/(models)/Team";
 
 import type { TeamDto } from "@/use-cases/team/types";
 import type { UserDto } from "@/use-cases/user/types";
-import { teamModelToTeamDto } from "./utils";
 
 export async function getUserTeamsAsAdmin(user: UserDto): Promise<TeamDto[]> {
   try {
@@ -15,18 +13,15 @@ export async function getUserTeamsAsAdmin(user: UserDto): Promise<TeamDto[]> {
     // Handle connectDB error
     throw new Error("Error connecting to the database:" + error);
   }
-
   const teamIds = user.teamsAsAdmin;
-
   const teams: TeamDto[] = [];
   try {
-    // Find the user by ID
     for (let teamId of teamIds) {
       const team = await Team.findById(teamId);
       teams.push(teamModelToTeamDto(team));
     }
   } catch (error) {
-    throw new Error("Error retrieving team:" + error);
+    throw new Error("Error retrieving user's teams as admin:" + error);
   }
   return teams;
 }

@@ -1,11 +1,10 @@
-import "server-only";
-
+"use server";
 import connectDB from "@/db/connectDB";
-
 import Project from "@/db/(models)/Project";
-import { CreateProjectDto } from "@/use-cases/project/types";
 import Team from "@/db/(models)/Team";
 import User from "@/db/(models)/User";
+
+import type { CreateProjectDto } from "@/use-cases/project/types";
 
 export async function createNewProject(
   project: CreateProjectDto,
@@ -25,7 +24,6 @@ export async function createNewProject(
     await User.findByIdAndUpdate(user, {
       $push: { projectsAsAdmin: newProject.id },
     });
-
   } catch (error) {
     throw new Error("Error creating project:" + error);
   }

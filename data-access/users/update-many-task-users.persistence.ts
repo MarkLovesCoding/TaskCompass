@@ -1,7 +1,5 @@
-import "server-only";
-
+"use server";
 import connectDB from "@/db/connectDB";
-
 import User from "@/db/(models)/User";
 
 async function updateManyTaskUsers(
@@ -24,7 +22,7 @@ async function updateManyTaskUsers(
       await User.findByIdAndUpdate(user, { $push: { tasks: taskId } });
     }
   } catch (error) {
-    throw new Error("Error updating task users" + error);
+    throw new Error("Error updating assigned tasks for users" + error);
   }
 }
 export default updateManyTaskUsers;

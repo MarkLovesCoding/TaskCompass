@@ -1,12 +1,12 @@
-import "server-only";
-
+"use server";
 import connectDB from "@/db/connectDB";
-
+import { taskToDto } from "@/use-cases/task/utils";
 import Task from "@/db/(models)/Task";
 import { TaskEntity } from "@/entities/Task";
-import { OrderInLists } from "@/data-access/tasks/types";
-import { TaskDto } from "@/use-cases/task/types";
-import { taskToDto } from "@/use-cases/task/utils";
+import { ValidationError } from "@/use-cases/utils";
+
+import type { TaskDto } from "@/use-cases/task/types";
+
 export async function updateTasks(tasks: TaskDto[]): Promise<void> {
   try {
     await connectDB();
@@ -26,7 +26,13 @@ export async function updateTasks(tasks: TaskDto[]): Promise<void> {
     validatedTasks.forEach(async (task) => {
       await Task.findByIdAndUpdate(task.id, task);
     });
-  } catch (error) {
-    throw new Error("Error updating task lists orders:" + error);
+    //handle validation errors in data access layer to avoid many db calls
+  } catch (err) {
+    const error = err as Error;
+    if (error instanceof ValidationError) {
+      throw new ValidationError(error.getErrors());
+    } else {
+      throw new Error(error.message);
+    }
   }
 }

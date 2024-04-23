@@ -1,12 +1,10 @@
-import "server-only";
-
+"use server";
 import connectDB from "@/db/connectDB";
-
+import { userModelToUserDto } from "./utils";
 import User from "@/db/(models)/User";
 
-import { UserDto } from "@/use-cases/user/types";
-import { userModelToUserDto } from "./utils";
-import { UserModelType } from "./types";
+import type { UserDto } from "@/use-cases/user/types";
+import type { UserModelType } from "./types";
 
 async function getProjectAdmins(adminIds: string[]): Promise<UserDto[]> {
   try {
@@ -25,7 +23,7 @@ async function getProjectAdmins(adminIds: string[]): Promise<UserDto[]> {
     });
     return validatedAdmins;
   } catch (error) {
-    throw new Error("Error retrieving users:" + error);
+    throw new Error("Error retrieving project admins:" + error);
   }
 }
 

@@ -1,11 +1,9 @@
-import "server-only";
-
+"use server";
 import connectDB from "@/db/connectDB";
-
 import Team from "@/db/(models)/Team";
 import User from "@/db/(models)/User";
 
-import { CreateTeamDto } from "@/use-cases/team/types";
+import type { CreateTeamDto } from "@/use-cases/team/types";
 
 export async function createNewTeam(
   team: CreateTeamDto,
@@ -20,7 +18,6 @@ export async function createNewTeam(
   try {
     const newTeam = await Team.create(team);
     const newTeamId = newTeam.id;
-
     await User.findByIdAndUpdate(userId, {
       $push: { teamsAsAdmin: newTeamId },
     });

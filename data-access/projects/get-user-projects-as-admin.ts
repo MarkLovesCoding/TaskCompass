@@ -1,13 +1,11 @@
-import "server-only";
-
+"use server";
 import connectDB from "@/db/connectDB";
-
+import { projectModelToProjectDto } from "./utils";
 import Project from "@/db/(models)/Project";
 
 import type { ProjectDto } from "@/use-cases/project/types";
 import type { UserDto } from "@/use-cases/user/types";
-import { projectModelToProjectDto } from "./utils";
-// May require refactpr to get by ID
+
 async function getUserProjectsAsAdmin(user: UserDto): Promise<ProjectDto[]> {
   try {
     await connectDB();
@@ -16,7 +14,6 @@ async function getUserProjectsAsAdmin(user: UserDto): Promise<ProjectDto[]> {
     throw new Error("Error connecting to the database:" + error);
   }
 
-  // const teamId = team.id;
   const projectIds = user.projectsAsAdmin;
   const projects: ProjectDto[] = [];
   try {

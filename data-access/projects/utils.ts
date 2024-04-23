@@ -1,6 +1,7 @@
 import type { ProjectModelType } from "./types";
 import type { ProjectDto } from "@/use-cases/project/types";
-//explicitly convert bson objects to strings for prop injection
+
+//This explicitly converts bson objects to strings for prop injection
 export function projectModelToProjectDto(
   project: ProjectModelType
 ): ProjectDto {

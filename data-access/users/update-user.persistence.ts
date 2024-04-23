@@ -1,8 +1,8 @@
-import "server-only";
-
+"use server";
 import connectDB from "@/db/connectDB";
 import User from "@/db/(models)/User";
-import { UserDto } from "@/use-cases/user/types";
+
+import type { UserDto } from "@/use-cases/user/types";
 
 export async function updateUser(user: UserDto): Promise<void> {
   try {

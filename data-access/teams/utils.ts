@@ -1,4 +1,5 @@
-import { TeamModelType } from "./types";
+import type { TeamModelType } from "./types";
+
 export function teamModelToTeamDto(team: TeamModelType) {
   const convertedProjects =
     team.projects.length > 0

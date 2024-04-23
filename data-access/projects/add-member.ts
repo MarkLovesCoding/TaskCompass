@@ -1,10 +1,9 @@
-// import "server-only";
-
+"use server";
 import connectDB from "@/db/connectDB";
 import Project from "@/db/(models)/Project";
 
 import type { ProjectDto } from "@/use-cases/project/types";
-import { UserDto } from "@/use-cases/user/types";
+import type { UserDto } from "@/use-cases/user/types";
 
 export async function addMemberToProject(
   project: ProjectDto,

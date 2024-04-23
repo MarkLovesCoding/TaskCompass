@@ -1,13 +1,11 @@
-import "server-only";
-
+"use server";
 import connectDB from "@/db/connectDB";
-
+import { taskModelToTaskDto } from "./utils";
 import Task from "@/db/(models)/Task";
 
 import type { ProjectDto } from "@/use-cases/project/types";
 import type { TaskDto } from "@/use-cases/task/types";
-import { taskModelToTaskDto } from "./utils";
-// May require refactpr to get by ID
+
 async function getProjectArchivedTasks(
   project: ProjectDto
 ): Promise<TaskDto[]> {
@@ -17,9 +15,7 @@ async function getProjectArchivedTasks(
     // Handle connectDB error
     throw new Error("Error connecting to the database:" + error);
   }
-
   const taskIds = project.tasks;
-
   const archivedtasks: TaskDto[] = [];
   try {
     // Find the user by ID
@@ -30,7 +26,7 @@ async function getProjectArchivedTasks(
       }
     }
   } catch (error) {
-    throw new Error("Error retrieving team:" + error);
+    throw new Error("Error retrieving archived tasks:" + error);
   }
   return archivedtasks;
 }

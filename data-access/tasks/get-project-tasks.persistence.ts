@@ -1,13 +1,10 @@
-// import "server-only";
 "use server";
 import connectDB from "@/db/connectDB";
-
+import { taskModelToTaskDto } from "./utils";
 import Task from "@/db/(models)/Task";
 
 import type { ProjectDto } from "@/use-cases/project/types";
 import type { TaskDto } from "@/use-cases/task/types";
-import { taskModelToTaskDto } from "./utils";
-// May require refactor to get by ID
 async function getProjectTasks(project: ProjectDto): Promise<TaskDto[]> {
   try {
     await connectDB();
@@ -15,10 +12,7 @@ async function getProjectTasks(project: ProjectDto): Promise<TaskDto[]> {
     // Handle connectDB error
     throw new Error("Error connecting to the database:" + error);
   }
-
-  // const teamId = team.id;
   const taskIds = project.tasks;
-
   const tasks: TaskDto[] = [];
   try {
     // Find the user by ID
@@ -28,7 +22,7 @@ async function getProjectTasks(project: ProjectDto): Promise<TaskDto[]> {
       tasks.push(taskModelToTaskDto(task));
     }
   } catch (error) {
-    throw new Error("Error retrieving team:" + error);
+    throw new Error("Error retrieving project tasks:" + error);
   }
   return tasks;
 }

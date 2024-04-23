@@ -1,10 +1,8 @@
-import "server-only";
+"use server";
 
 import connectDB from "@/db/connectDB";
-
 import Project from "@/db/(models)/Project";
 
-// May require refactpr to get by ID
 export async function updateProjectColumnOrder(
   projectId: string,
   type: string,
@@ -33,6 +31,6 @@ export async function updateProjectColumnOrder(
       }
     );
   } catch (error) {
-    throw new Error("Errorudpating project :" + error);
+    throw new Error("Error Updating projectcolumn order:" + error);
   }
 }

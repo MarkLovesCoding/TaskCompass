@@ -1,5 +1,4 @@
-import "server-only";
-
+"use server";
 import connectDB from "@/db/connectDB";
 import User from "@/db/(models)/User";
 
@@ -29,7 +28,7 @@ async function updateManyProjectAdmins(
       User.findByIdAndUpdate(user, { $push: { projectsAsAdmin: projectId } });
     }
   } catch (error) {
-    throw new Error("Error updating Project users" + error);
+    throw new Error("Error updating project admins" + error);
   }
 }
 export default updateManyProjectAdmins;
