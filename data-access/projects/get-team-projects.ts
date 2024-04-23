@@ -6,7 +6,7 @@ import Project from "@/db/(models)/Project";
 import type { ProjectDto } from "@/use-cases/project/types";
 import type { TeamDto } from "@/use-cases/team/types";
 
-export async function getTeamProjects(team: TeamDto): Promise<ProjectDto[]> {
+async function getTeamProjects(team: TeamDto): Promise<ProjectDto[]> {
   try {
     await connectDB();
   } catch (error) {

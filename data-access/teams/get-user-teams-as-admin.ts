@@ -6,7 +6,7 @@ import Team from "@/db/(models)/Team";
 import type { TeamDto } from "@/use-cases/team/types";
 import type { UserDto } from "@/use-cases/user/types";
 
-export async function getUserTeamsAsAdmin(user: UserDto): Promise<TeamDto[]> {
+async function getUserTeamsAsAdmin(user: UserDto): Promise<TeamDto[]> {
   try {
     await connectDB();
   } catch (error) {
