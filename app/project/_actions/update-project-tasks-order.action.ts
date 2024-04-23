@@ -1,11 +1,12 @@
 "use server";
 import { revalidatePath } from "next/cache";
-import { updateProjectTasksOrder } from "@/data-access/projects/update-project-tasks-order.persistence";
-import { getUserFromSession } from "@/lib/sessionAuth";
-import { updateProjectTasksOrderUseCase } from "@/use-cases/project/update-project-tasks-order.use-case";
 
-import { TasksOrder } from "@/entities/Project";
+import { getUserFromSession } from "@/lib/sessionAuth";
+import { updateProjectTasksOrder } from "@/data-access/projects/update-project-tasks-order.persistence";
+import { updateProjectTasksOrderUseCase } from "@/use-cases/project/update-project-tasks-order.use-case";
 import { ValidationError } from "@/use-cases/utils";
+import { TasksOrder } from "@/entities/Project";
+
 export async function updateProjectTasksOrderAction(
   projectId: string,
 

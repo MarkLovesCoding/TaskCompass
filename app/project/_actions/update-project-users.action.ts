@@ -1,12 +1,13 @@
 "use server";
-import { updateProject } from "@/data-access/projects/update-project.persistence";
-import getProject from "@/data-access/projects/get-project.persistence";
-import updateManyProjectMembers from "@/data-access/users/update-many-project-members.persistence";
-import updateManyProjectUsers from "@/data-access/users/update-many-project-users.persistence";
 import { revalidatePath } from "next/cache";
-import { updateProjectUsersUseCase } from "@/use-cases/project/update-project-users.use-case";
+
+import { updateProject } from "@/data-access/projects/update-project.persistence";
 import { getUserFromSession } from "@/lib/sessionAuth";
+import getProject from "@/data-access/projects/get-project.persistence";
+import updateManyProjectUsers from "@/data-access/users/update-many-project-users.persistence";
+import { updateProjectUsersUseCase } from "@/use-cases/project/update-project-users.use-case";
 import { ValidationError } from "@/use-cases/utils";
+
 export async function updateProjectUsersAction(
   projectId: string,
   updatedUsers: string[]

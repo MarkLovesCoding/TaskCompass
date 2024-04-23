@@ -1,9 +1,11 @@
 "use server";
+import { revalidatePath } from "next/cache";
+
+import { getUserFromSession } from "@/lib/sessionAuth";
 import { createNewProject } from "@/data-access/projects/create-new-project.persistence";
 import { createNewProjectUseCase } from "@/use-cases/project/create-new-project.use-case";
-import { revalidatePath } from "next/cache";
-import { getUserFromSession } from "@/lib/sessionAuth";
 import { ValidationError } from "@/use-cases/utils";
+
 type Form = {
   name: string;
   description: string;

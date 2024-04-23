@@ -1,13 +1,14 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
+
+import { getUserFromSession } from "@/lib/sessionAuth";
 import { updateTasks } from "@/data-access/tasks/update-tasks.persistence";
 import getTask from "@/data-access/tasks/get-task.persistence";
-
 import { updateTasksUseCase } from "@/use-cases/task/update-tasks.use-case";
-import { getUserFromSession } from "@/lib/sessionAuth";
-import { revalidatePath } from "next/cache";
-import { TaskDto } from "@/use-cases/task/types";
 import { ValidationError } from "@/use-cases/utils";
+
+import type { TaskDto } from "@/use-cases/task/types";
 
 export async function updateTasksAction(projectId: string, tasks: TaskDto[]) {
   const { getUser } = await getUserFromSession();

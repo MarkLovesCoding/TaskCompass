@@ -1,9 +1,10 @@
 "use server";
-import { updateTeamBackgroundUseCase } from "@/use-cases/team/update-team-background.use-case";
+import { revalidatePath } from "next/cache";
+
+import { getUserFromSession } from "@/lib/sessionAuth";
 import { updateTeam } from "@/data-access/teams/update-team.persistence";
 import getTeam from "@/data-access/teams/get-team.persistence";
-import { revalidatePath } from "next/cache";
-import { getUserFromSession } from "@/lib/sessionAuth";
+import { updateTeamBackgroundUseCase } from "@/use-cases/team/update-team-background.use-case";
 import { ValidationError } from "@/use-cases/utils";
 
 export async function updateTeamBackgroundAction(

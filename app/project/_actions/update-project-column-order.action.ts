@@ -1,9 +1,11 @@
 "use server";
 import { revalidatePath } from "next/cache";
-import { updateProjectColumnOrder } from "@/data-access/projects/update-project-column-order.persistence";
+
 import { getUserFromSession } from "@/lib/sessionAuth";
+import { updateProjectColumnOrder } from "@/data-access/projects/update-project-column-order.persistence";
 import { updateProjectColumnOrderUseCase } from "@/use-cases/project/update-project-column-order.use-case";
 import { ValidationError } from "@/use-cases/utils";
+
 export async function updateProjectColumnOrderAction(
   projectId: string,
   type: string,

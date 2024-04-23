@@ -1,14 +1,14 @@
 "use server";
-import getUserObject from "@/data-access/users/get-user.persistence";
-import getTeam from "@/data-access/teams/get-team.persistence";
-import { updateTeam } from "@/data-access/teams/update-team.persistence";
-import { updateUser } from "@/data-access/users/update-user.persistence";
-import { removeProjectUserUseCase } from "@/use-cases/user/remove-project-user.use-case";
-import getProject from "@/data-access/projects/get-project.persistence";
-import { updateProject } from "@/data-access/projects/update-project.persistence";
 import { revalidatePath } from "next/cache";
+
 import { getUserFromSession } from "@/lib/sessionAuth";
+import { updateProject } from "@/data-access/projects/update-project.persistence";
+import { updateUser } from "@/data-access/users/update-user.persistence";
+import getUserObject from "@/data-access/users/get-user.persistence";
+import getProject from "@/data-access/projects/get-project.persistence";
+import { removeProjectUserUseCase } from "@/use-cases/user/remove-project-user.use-case";
 import { ValidationError } from "@/use-cases/utils";
+
 export async function removeProjectUserAction(
   projectId: string,
   projectUserId: string

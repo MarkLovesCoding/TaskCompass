@@ -1,10 +1,12 @@
 "use server";
+import { revalidatePath } from "next/cache";
+
+import { getUserFromSession } from "@/lib/sessionAuth";
 import { updateProject } from "@/data-access/projects/update-project.persistence";
 import getProject from "@/data-access/projects/get-project.persistence";
-import { revalidatePath } from "next/cache";
 import { updateProjectBackgroundUseCase } from "@/use-cases/project/update-project-background.use-case";
-import { getUserFromSession } from "@/lib/sessionAuth";
 import { ValidationError } from "@/use-cases/utils";
+
 export async function updateProjectBackgroundAction(
   projectId: string,
   projectBackgroundImage: string,

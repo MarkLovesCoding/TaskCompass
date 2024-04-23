@@ -1,12 +1,12 @@
 "use server";
-import { updateProjectDetailsUseCase } from "@/use-cases/project/update-project-details.use-case";
+import { revalidatePath } from "next/cache";
 
+import { getUserFromSession } from "@/lib/sessionAuth";
 import { updateProject } from "@/data-access/projects/update-project.persistence";
 import getProject from "@/data-access/projects/get-project.persistence";
-
-import { revalidatePath } from "next/cache";
-import { getUserFromSession } from "@/lib/sessionAuth";
+import { updateProjectDetailsUseCase } from "@/use-cases/project/update-project-details.use-case";
 import { ValidationError } from "@/use-cases/utils";
+
 type Form = {
   name: string;
   description: string;

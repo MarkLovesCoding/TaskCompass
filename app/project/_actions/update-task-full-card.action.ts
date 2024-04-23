@@ -1,9 +1,10 @@
 "use server";
+import { revalidatePath } from "next/cache";
+
+import { getUserFromSession } from "@/lib/sessionAuth";
 import { updateTaskFullCard } from "@/data-access/tasks/update-task-full-card.persistence";
 import getTask from "@/data-access/tasks/get-task.persistence";
 import { updateTaskFullCardUseCase } from "@/use-cases/task/update-task-full-card.use-case";
-import { getUserFromSession } from "@/lib/sessionAuth";
-import { revalidatePath } from "next/cache";
 import { ValidationError } from "@/use-cases/utils";
 
 type FormData = {
