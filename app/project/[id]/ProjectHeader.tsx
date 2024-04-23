@@ -1,8 +1,12 @@
-import { ProjectDto } from "@/use-cases/project/types";
-import { Button } from "@/components/ui/button";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Input } from "@/components/ui/input";
 
+import * as z from "zod";
+import { useForm, useController } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Form,
   FormControl,
@@ -12,13 +16,11 @@ import {
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import { LayoutIcon } from "lucide-react";
-import * as z from "zod";
-import { useForm, useController } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+
 import { updateProjectDetailsAction } from "@/app/project/_actions/update-project-details.action.";
-import { useState } from "react";
-import { toast } from "sonner";
 import { ValidationError } from "@/use-cases/utils";
+
+import type { ProjectDto } from "@/use-cases/project/types";
 
 const formSchema = z.object({
   name: z.string().min(3).max(30),

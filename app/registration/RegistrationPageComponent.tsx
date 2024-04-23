@@ -1,18 +1,15 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
+import Image from "next/image";
+import Link from "next/link";
+
 import SignUpForm from "./SignUpForm";
 import SignInForm from "./SignInForm";
-import Link from "next/link";
-import { Skeleton } from "@/components/ui/skeleton";
-
-import Image from "next/image";
-import LogoPng from "../../public/compass.png";
 import { DashboardSkeleton } from "../dashboard/[id]/DashboardSkeleton";
-import { TeamPageSkeleton } from "../team/[id]/TeamSkeleton";
+import LogoPng from "../../public/compass.png";
+
 const RegistrationPageComponent = () => {
   const { data: session } = useSession();
   const router = useRouter();

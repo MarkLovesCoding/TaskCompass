@@ -1,20 +1,17 @@
 "use client";
-import {
-  PopoverTrigger,
-  PopoverContent,
-  Popover,
-} from "@/components/ui/popover";
-import { Search, UserSearchIcon } from "lucide-react";
-import { ProjectDto } from "@/use-cases/project/types";
-import { UserDto } from "@/use-cases/user/types";
-// import { updateProjectAdminsAction } from "@/app/PROJECTS-CLEAN/_actions/update-project-admins.action";
-import { TeamUserTableCommand } from "./TeamUserTableCommand";
+
 import {
   Dialog,
   DialogTrigger,
   DialogContent,
 } from "@/components/ui/dialog-user-search";
-import { TeamDto } from "@/use-cases/team/types";
+import { UserSearchIcon } from "lucide-react";
+
+import { TeamUserTableCommand } from "./TeamUserTableCommand";
+
+import type { ProjectDto } from "@/use-cases/project/types";
+import type { UserDto } from "@/use-cases/user/types";
+import type { TeamDto } from "@/use-cases/team/types";
 
 export function TeamUserSearchTable({
   userId,

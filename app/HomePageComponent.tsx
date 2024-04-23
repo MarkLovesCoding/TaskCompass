@@ -1,22 +1,15 @@
 "use client";
 
+import { useState, useEffect, forwardRef } from "react";
 import { useSession } from "next-auth/react";
-import {
-  useRef,
-  useState,
-  useEffect,
-  useLayoutEffect,
-  forwardRef,
-} from "react";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import debounce from "lodash/debounce";
-
-import { motion, useAnimation } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-import LogoPng from "../public/compass.png";
 
+import { motion, useAnimation } from "framer-motion";
+import { Button } from "@/components/ui/button";
+
+import { DashboardSkeleton } from "./dashboard/[id]/DashboardSkeleton";
 import GroguCard from "../public/grogu-card.png";
 import ArchiveTaskCard from "../public/archive-task-card.png";
 import DashboardTeams from "../public/dashboard-teams.png";
@@ -24,7 +17,7 @@ import FullUsers from "../public/full-users.png";
 import MoveTask from "../public/move-task.png";
 import PriorityView from "../public/priority-view.png";
 import SWCard from "../public/sw-card.png";
-import { DashboardSkeleton } from "./dashboard/[id]/DashboardSkeleton";
+import LogoPng from "../public/compass.png";
 
 function interpolateColors(color1: string, color2: string, progress: number) {
   const rgba1 = color1.match(/\d+/g)!;

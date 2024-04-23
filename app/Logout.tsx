@@ -1,7 +1,9 @@
 "use client";
 import React from "react";
 import { signOut } from "next-auth/react";
+
 import { toast } from "sonner";
+
 const handleSignOut = async () => {
   try {
     await signOut({ redirect: true, callbackUrl: "/" }); // Set the desired callbackUrl

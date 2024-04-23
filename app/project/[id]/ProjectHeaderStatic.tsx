@@ -1,6 +1,7 @@
-import { ProjectDto } from "@/use-cases/project/types";
 import { LayoutIcon } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+
+import { ProjectDto } from "@/use-cases/project/types";
+
 export function ProjectHeaderStatic({ project }: { project: ProjectDto }) {
   return (
     <div className="flex items-center gap-4 cursor-grab">

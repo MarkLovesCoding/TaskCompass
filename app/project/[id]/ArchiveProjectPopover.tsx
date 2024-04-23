@@ -1,22 +1,21 @@
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-} from "@/components/ui/popover";
-import { Label } from "@/components/ui/label";
 import React from "react";
-import { Button } from "@/components/ui/button-alert";
-import { updateProjectArchivedAction } from "../../team/_actions/update-project-archived.action";
-import { ProjectDto } from "@/use-cases/project/types";
 import { useRouter } from "next/navigation";
+
+import { toast } from "sonner";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button-alert";
 import {
   Dialog,
   DialogTrigger,
   DialogContent,
 } from "@/components/ui/dialog-user-search";
-import { toast } from "sonner";
 import { ArchiveIcon } from "lucide-react";
+
+import { updateProjectArchivedAction } from "../../team/_actions/update-project-archived.action";
 import { ValidationError } from "@/use-cases/utils";
+
+import type { ProjectDto } from "@/use-cases/project/types";
+
 const ArchiveProjectPopover = ({ project }: { project: ProjectDto }) => {
   const archiveProjectFormObject = {
     archived: true,

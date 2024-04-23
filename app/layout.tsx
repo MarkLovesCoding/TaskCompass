@@ -1,12 +1,13 @@
-import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import type { Metadata, Viewport } from "next";
 
-import { config } from "@fortawesome/fontawesome-svg-core";
+import { Toaster } from "sonner";
 import "@fortawesome/fontawesome-svg-core/styles.css";
-import Navigation from "./Navigation";
+import { config } from "@fortawesome/fontawesome-svg-core";
+
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import Provider from "./(providers)/Providers";
-import { Toaster } from "sonner";
+import Navigation from "./Navigation";
 
 config.autoAddCss = false;
 

@@ -1,13 +1,7 @@
 "use client";
-import { Suspense, useState } from "react";
-import Image from "next/image";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import CardView from "./CardView";
-import { NewTaskCard } from "./NewTaskCard";
-import ProjectDrawer from "./ProjectDrawer";
-import { updateProjectBackgroundAction } from "../_actions/update-project-background.action";
-import { cn } from "@/lib/utils/utils";
-import { capitalizeEachWord } from "./utils";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -23,19 +17,23 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea, ScrollBar } from "@/components/ui/card-scroll-area";
 import { Label } from "@/components/ui/label";
 import { PlusIcon, FolderKanbanIcon, ArrowLeft, ImageIcon } from "lucide-react";
+
+import CardView from "./CardView";
+import { NewTaskCard } from "./NewTaskCard";
+import ProjectDrawer from "./ProjectDrawer";
+import BackgroundImageMenu from "@/app/dashboard/[id]/BackgroundImageMenu";
+import { cn } from "@/lib/utils/utils";
+import { capitalizeEachWord } from "./utils";
+
 import type { TeamDto } from "@/use-cases/team/types";
 import type { ProjectDto } from "@/use-cases/project/types";
 import type { TaskDto } from "@/use-cases/task/types";
 import type { UserDto } from "@/use-cases/user/types";
-import { toast } from "sonner";
-import { Skeleton } from "@/components/ui/skeleton";
-import BackgroundImageMenu from "@/app/dashboard/[id]/BackgroundImageMenu";
-import { useEffect } from "react";
+
 export function ProjectPage({
   userId,
   user,

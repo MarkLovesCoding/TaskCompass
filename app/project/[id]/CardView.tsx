@@ -1,14 +1,18 @@
 "use client";
 import { useState, useEffect } from "react";
-import { ProjectDto } from "@/use-cases/project/types";
-import { TaskDto } from "@/use-cases/task/types";
-import { UserDto } from "@/use-cases/user/types";
+
+import { toast } from "sonner";
+import { Droppable, DragDropContext } from "@hello-pangea/dnd";
+
+import CardColumn from "./CardColumn";
 import { updateProjectAction } from "../_actions/update-project.action";
 import { updateTasksAction } from "../_actions/update-tasks.action";
-import { Droppable, DragDropContext } from "@hello-pangea/dnd";
-import CardColumn from "./CardColumn";
-import { toast } from "sonner";
 import { ValidationError } from "@/use-cases/utils";
+
+import type { ProjectDto } from "@/use-cases/project/types";
+import type { TaskDto } from "@/use-cases/task/types";
+import type { UserDto } from "@/use-cases/user/types";
+
 interface Columns {
   [key: string]: {
     taskIds: string[];

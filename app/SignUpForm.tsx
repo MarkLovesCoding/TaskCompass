@@ -1,10 +1,12 @@
-import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
-import { faGoogle, faGithub } from "@fortawesome/free-brands-svg-icons";
+import { useRouter } from "next/navigation";
+
+import * as z from "zod";
+import { useForm, useWatch } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Input } from "@/components/ui/input";
 import {
   Form,
@@ -15,9 +17,9 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import * as z from "zod";
-import { useForm, useWatch } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { faGoogle, faGithub } from "@fortawesome/free-brands-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 const formSchema = z.object({
   name: z.string().min(5).max(30),
   email: z.string().email().min(5),

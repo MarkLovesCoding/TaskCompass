@@ -1,22 +1,19 @@
-import { unstable_noStore } from "next/cache";
 import { Suspense } from "react";
-import { sessionAuth } from "@/lib/sessionAuth";
+import { unstable_noStore } from "next/cache";
 
-import { TeamPageComponent } from "./TeamPageComponent";
-
-import type { TeamDto } from "@/use-cases/team/types";
-// import { Toaster } from "react-hot-toast";
 import { Toaster } from "sonner";
 
+import { sessionAuth } from "@/lib/sessionAuth";
+import { TeamPageComponent } from "./TeamPageComponent";
 import getTeam from "@/data-access/teams/get-team.persistence";
 import getAllUsers from "@/data-access/users/get-all-users.persistence";
 import getTeamUsers from "@/data-access/users/get-team-users.persistence";
 import getTeamProjects from "@/data-access/projects/get-team-projects";
 import getUserObject from "@/data-access/users/get-user.persistence";
-
 import type { UserDto } from "@/use-cases/user/types";
 import { TeamPageSkeleton } from "@/app/team/[id]/TeamSkeleton";
 
+import type { TeamDto } from "@/use-cases/team/types";
 type ParamsType = {
   id: string;
 };

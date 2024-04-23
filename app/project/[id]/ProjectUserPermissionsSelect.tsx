@@ -1,3 +1,7 @@
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+
+import { toast } from "sonner";
 import {
   SelectValue,
   SelectTrigger,
@@ -5,15 +9,14 @@ import {
   SelectContent,
   Select,
 } from "@/components/ui/select-user-permissions";
-import React, { useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { ProjectDto } from "@/use-cases/project/types";
-import { UserDto } from "@/use-cases/user/types";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { toast } from "sonner";
+
 import { UpdateProjectUserRoleAction } from "../_actions/update-project-user-role.action";
 import { ValidationError } from "@/use-cases/utils";
+
+import type { UserDto } from "@/use-cases/user/types";
+import type { ProjectDto } from "@/use-cases/project/types";
+
 type ProjectUserBlockProps = {
   user: UserDto;
   project: ProjectDto;

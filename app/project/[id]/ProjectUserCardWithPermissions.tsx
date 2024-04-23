@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import {
   AvatarImage,
   AvatarFallback,
@@ -5,15 +7,16 @@ import {
 } from "@/components/ui/avatar-card";
 import { Badge } from "@/components/ui/badge";
 import { CardHeader, CardContent, Card } from "@/components/ui/card-user";
-import Link from "next/link";
-
 import { MailIcon, KeyIcon, CheckIcon, ClockIcon } from "lucide-react";
-import { ProjectDto } from "@/use-cases/project/types";
-import { UserDto } from "@/use-cases/user/types";
+
 import { getInitials } from "@/lib/utils/getInitials";
-import { TaskDto } from "@/use-cases/task/types";
 import ProjectUserPermissionsSelect from "./ProjectUserPermissionsSelect";
-import { TeamDto } from "@/use-cases/team/types";
+
+import type { ProjectDto } from "@/use-cases/project/types";
+import type { UserDto } from "@/use-cases/user/types";
+import type { TaskDto } from "@/use-cases/task/types";
+import type { TeamDto } from "@/use-cases/team/types";
+
 type ProjectUserCardWithPermissionsProps = {
   user: UserDto;
   project: ProjectDto;

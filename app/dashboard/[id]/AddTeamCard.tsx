@@ -1,8 +1,13 @@
 "use client";
-import { Button } from "@/components/ui/button";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Input } from "@/components/ui/input";
 
+import * as z from "zod";
+import { useForm, useWatch } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Form,
   FormControl,
@@ -13,12 +18,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { DialogFooter, DialogClose } from "@/components/ui/dialog";
-import * as z from "zod";
-import { useForm, useWatch } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+
 import { createNewTeamAction } from "./_actions/create-new-team.action";
-import { useState } from "react";
-import { toast } from "sonner";
 import { ValidationError } from "@/use-cases/utils";
 
 const formSchema = z.object({
@@ -59,7 +60,9 @@ const AddTeamCard = () => {
       } else if (err instanceof Error) {
         toast.error(err.message);
       } else {
-        toast.error("An error occurred creating Team. Please try again.");
+        toast.error(
+          "An unknown error occurred while creating Team. Please try again."
+        );
       }
     }
   };

@@ -1,4 +1,8 @@
 "use client";
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+
+import { toast } from "sonner";
 import {
   SelectValue,
   SelectTrigger,
@@ -6,15 +10,14 @@ import {
   SelectContent,
   Select,
 } from "@/components/ui/select-user-permissions";
-import React, { useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { UserDto } from "@/use-cases/user/types";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { toast } from "sonner";
-import { UpdateTeamUserRoleAction } from "../_actions/update-team-user-role.action";
-import { TeamDto } from "@/use-cases/team/types";
+
 import { ValidationError } from "@/use-cases/utils";
+import { UpdateTeamUserRoleAction } from "../_actions/update-team-user-role.action";
+
+import type { UserDto } from "@/use-cases/user/types";
+import type { TeamDto } from "@/use-cases/team/types";
+
 type TeamUserBlockProps = {
   user: UserDto;
   team: TeamDto;

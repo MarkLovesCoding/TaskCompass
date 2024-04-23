@@ -1,19 +1,8 @@
 "use client";
 import Link from "next/link";
-import Image from "next/image";
-import { unstable_noStore } from "next/cache";
 import { useEffect, useState } from "react";
-import AddProjectCard from "./AddProjectCard";
-import { TeamUserSearchTable } from "./TeamUserSearchTable";
-import { TeamHeader } from "@/app/team/[id]/TeamHeader";
-import UnarchiveProjectPopover from "./UnarchiveProjectPopover";
-import { TeamUserCardWithPermissions } from "./TeamUserCardWithPermissions";
+import { unstable_noStore } from "next/cache";
 
-import { getInitials } from "@/lib/utils/getInitials";
-
-import { updateTeamBackgroundAction } from "../_actions/update-team-background.action";
-
-import { UserIcon, UserCog, ArchiveIcon, ImageIcon } from "lucide-react";
 import {
   CardTitle,
   CardDescription,
@@ -38,13 +27,26 @@ import {
 } from "@/components/ui/accordion";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { PlusIcon } from "lucide-react";
+import {
+  UserIcon,
+  UserCog,
+  ArchiveIcon,
+  ImageIcon,
+  PlusIcon,
+} from "lucide-react";
+
+import { getInitials } from "@/lib/utils/getInitials";
+import BackgroundImageMenu from "@/app/dashboard/[id]/BackgroundImageMenu";
+import AddProjectCard from "./AddProjectCard";
+import { TeamUserSearchTable } from "./TeamUserSearchTable";
+import { TeamHeader } from "@/app/team/[id]/TeamHeader";
+import UnarchiveProjectPopover from "./UnarchiveProjectPopover";
+import { TeamUserCardWithPermissions } from "./TeamUserCardWithPermissions";
+
 import type { TeamDto } from "@/use-cases/team/types";
 import type { UserDto } from "@/use-cases/user/types";
 import type { ProjectDto } from "@/use-cases/project/types";
-import { toast } from "sonner";
-import { Skeleton } from "@/components/ui/skeleton";
-import BackgroundImageMenu from "@/app/dashboard/[id]/BackgroundImageMenu";
+
 export function TeamPageComponent({
   team,
   user,
@@ -81,60 +83,6 @@ export function TeamPageComponent({
   useEffect(() => {
     setTeamBackgroundImage(team.backgroundImage);
   }, [team.backgroundImage]);
-  // const PER_PAGE = 12;
-  // const [selectedImages, setSelectedImages] = useState<any[]>([]);
-  // const [imagesLoadPage, setImagesLoadPage] = useState<number>(1);
-
-  // const loadImageSetonOpen = async (bool: boolean) => {
-  //   // isImagesDialogOpen = bool;
-  //   if (bool) {
-  //     await loadNextImageSet();
-  //   }
-  // };
-
-  // const loadNextImageSet = async () => {
-  //   const nextPage = imagesLoadPage + 1;
-  //   const showPage = imagesLoadPage == 1 ? 1 : nextPage;
-  //   // await apiSearchNext(nextPage);
-  //   await fetch("/api/unsplash", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({ page: showPage, perPage: PER_PAGE }),
-  //     cache: "no-cache",
-  //   })
-  //     .then((response) => {
-  //       return response.json();
-  //     })
-  //     .then((data) => {
-  //       setSelectedImages((prev) => {
-  //         return [...prev, ...data];
-  //       });
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error:", error);
-  //     });
-  //   setImagesLoadPage(nextPage);
-  // };
-  // type TUrls = {
-  //   full: string;
-  //   large: string;
-  //   regular: string;
-  //   raw: string;
-  //   small: string;
-  //   thumb: string;
-  // };
-  // const setNewBackground = async (urls: TUrls) => {
-  //   setTeamBackgroundImage(urls.full);
-  //   // add try catch with toast errors.
-  //   try {
-  //     await updateTeamBackgroundAction(team.id, urls.full, urls.small);
-  //     toast.success("Background Image Updated Successfully!");
-  //   } catch (err: any) {
-  //     toast.error(err);
-  //   }
-  // };
 
   return (
     <div className=" absolute flex flex-col w-full  items-center top-8 md:top-12 min-h-[calc(100vh-2rem)] md:min-h-[calc(100vh-3rem)] overflow-x-hidden">

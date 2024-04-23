@@ -1,10 +1,14 @@
-import { cn } from "@/lib/utils/utils";
-import { ProjectDto } from "@/use-cases/project/types";
-import { TaskDto } from "@/use-cases/task/types";
-import { UserDto } from "@/use-cases/user/types";
-import { Draggable, Droppable } from "@hello-pangea/dnd";
 import React from "react";
+
+import { Draggable, Droppable } from "@hello-pangea/dnd";
+
 import TaskCardSmallDialog from "./TaskCardSmallDialog";
+import { cn } from "@/lib/utils/utils";
+
+import type { ProjectDto } from "@/use-cases/project/types";
+import type { TaskDto } from "@/use-cases/task/types";
+import type { UserDto } from "@/use-cases/user/types";
+
 type CardColumnProps = {
   tasksList: TaskDto[];
   projectData: ProjectDto;

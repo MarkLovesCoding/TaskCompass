@@ -1,14 +1,8 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { updateUserBackgroundAction } from "./_actions/update-user-background.action";
-import { updateProjectBackgroundAction } from "@/app/project/_actions/update-project-background.action";
-import { updateTeamBackgroundAction } from "@/app/team/_actions/update-team-background.action";
-import { UserDto } from "@/use-cases/user/types";
-import { ProjectDto } from "@/use-cases/project/types";
-import { TeamDto } from "@/use-cases/team/types";
-import { toast } from "sonner";
 
+import { toast } from "sonner";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -21,8 +15,17 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { ImageIcon } from "lucide-react";
+
 import { capitalizeEachWord } from "@/app/project/[id]/utils";
 import { ValidationError } from "@/use-cases/utils";
+import { updateUserBackgroundAction } from "./_actions/update-user-background.action";
+import { updateProjectBackgroundAction } from "@/app/project/_actions/update-project-background.action";
+import { updateTeamBackgroundAction } from "@/app/team/_actions/update-team-background.action";
+
+import type { ProjectDto } from "@/use-cases/project/types";
+import type { TeamDto } from "@/use-cases/team/types";
+import type { UserDto } from "@/use-cases/user/types";
+
 export type TImageCategories =
   | "nature"
   | "dogs"

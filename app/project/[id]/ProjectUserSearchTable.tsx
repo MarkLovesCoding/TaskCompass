@@ -1,16 +1,17 @@
 "use client";
+
 import { Button } from "@/components/ui/button";
-
 import { UserSearchIcon } from "lucide-react";
-import { ProjectDto } from "@/use-cases/project/types";
-import { UserDto } from "@/use-cases/user/types";
-
 import {
   Dialog,
   DialogContent,
   DialogTrigger,
 } from "@/components/ui/dialog-user-search";
+
 import { ProjectUserTableCommand } from "./ProjectUserTableCommand";
+
+import type { ProjectDto } from "@/use-cases/project/types";
+import type { UserDto } from "@/use-cases/user/types";
 
 export function ProjectUserSearchTable({
   userId,

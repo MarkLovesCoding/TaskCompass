@@ -1,33 +1,9 @@
-import { ProjectDto } from "@/use-cases/project/types";
-import { TaskDto } from "@/use-cases/task/types";
-import { UserDto } from "@/use-cases/user/types";
-
 import { AvatarFallback, Avatar } from "@/components/ui/avatar";
-import { ProjectUserCardWithPermissions } from "./ProjectUserCardWithPermissions";
-import { ProjectHeader } from "./ProjectHeader";
-import {
-  ArrowRightCircle,
-  ArrowLeftCircleIcon,
-  ArchiveIcon,
-} from "lucide-react";
-
-// import UpdateProjectUsersCard from "./UpdateProjectUsersCard";
-import { ProjectUserSearchTable } from "./ProjectUserSearchTable";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { UserIcon, UserCog, CheckIcon, ClockIcon } from "lucide-react";
-import { getAvatarColorBasedOnPermissions } from "./utils";
-
-import { Separator } from "@/components/ui/separator";
-import { ScrollArea, ScrollBar } from "@/components/ui/card-scroll-area";
-import UnarchiveTaskPopover from "./UnarchiveTaskPopover";
-import ArchiveProjectPopover from "./ArchiveProjectPopover";
-
-import { getInitials } from "@/lib/utils/getInitials";
-
 import {
   Drawer,
   DrawerClose,
@@ -35,8 +11,32 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { Label } from "@/components/ui/label";
-import { TeamDto } from "@/use-cases/team/types";
+import { Separator } from "@/components/ui/separator";
+import { ScrollArea, ScrollBar } from "@/components/ui/card-scroll-area";
+import {
+  ArrowRightCircle,
+  ArrowLeftCircleIcon,
+  ArchiveIcon,
+  UserIcon,
+  UserCog,
+  CheckIcon,
+  ClockIcon,
+} from "lucide-react";
+
+import { ProjectUserSearchTable } from "./ProjectUserSearchTable";
+import UnarchiveTaskPopover from "./UnarchiveTaskPopover";
+import ArchiveProjectPopover from "./ArchiveProjectPopover";
+import { ProjectHeader } from "./ProjectHeader";
+import { ProjectUserCardWithPermissions } from "./ProjectUserCardWithPermissions";
 import { ProjectHeaderStatic } from "./ProjectHeaderStatic";
+import { getAvatarColorBasedOnPermissions } from "./utils";
+import { getInitials } from "@/lib/utils/getInitials";
+
+import type { TeamDto } from "@/use-cases/team/types";
+import type { ProjectDto } from "@/use-cases/project/types";
+import type { TaskDto } from "@/use-cases/task/types";
+import type { UserDto } from "@/use-cases/user/types";
+
 type ProjectDrawerProps = {
   userId: string;
   team: TeamDto;

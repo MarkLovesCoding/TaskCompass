@@ -1,18 +1,19 @@
 import React, { Suspense } from "react";
+import { notFound } from "next/navigation";
+import { unstable_noStore } from "next/cache";
 
+import { DashboardSkeleton } from "./DashboardSkeleton";
+import { sessionAuth } from "@/lib/sessionAuth";
 import { UserPageComponent } from "@/app/dashboard/[id]/user-page-component";
 import getUser from "@/data-access/users/get-user.persistence";
-import type { UserDto } from "@/use-cases/user/types";
-import { unstable_noStore } from "next/cache";
-import { sessionAuth } from "@/lib/sessionAuth";
-import { notFound } from "next/navigation";
 import getUserTeamsAsMember from "@/data-access/teams/get-user-teams-as-member";
 import getUserProjectsAsMember from "@/data-access/projects/get-user-projects-as-member";
 import getUserTeamsAsAdmin from "@/data-access/teams/get-user-teams-as-admin";
 import getUserProjectsAsAdmin from "@/data-access/projects/get-user-projects-as-admin";
 import getUserTasks from "@/data-access/tasks/get-user-tasks.persistence";
-import { DashboardSkeleton } from "./DashboardSkeleton";
-import { TeamPageSkeleton } from "../../team/[id]/TeamSkeleton";
+
+import type { UserDto } from "@/use-cases/user/types";
+
 type ParamsType = {
   id: string;
 };

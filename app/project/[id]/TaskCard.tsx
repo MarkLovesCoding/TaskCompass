@@ -1,10 +1,17 @@
 "use client";
 import React, { Fragment, useState, useEffect } from "react";
 import { unstable_noStore } from "next/cache";
+import { useRouter } from "next/navigation";
+
+import { toast } from "sonner";
+import * as z from "zod";
+import { useController, useWatch } from "react-hook-form";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { format } from "date-fns";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { RadioGroupItem, RadioGroup } from "@/components/ui/radio-group";
-import { toast } from "sonner";
 import { Label } from "@/components/ui/label";
 import {
   SelectValue,
@@ -13,7 +20,6 @@ import {
   SelectContent,
   Select,
 } from "@/components/ui/select";
-import { ArchiveIcon, UserPlus2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button-alert";
 import {
   Form,
@@ -28,7 +34,6 @@ import {
   DialogTrigger,
   DialogContent,
 } from "@/components/ui/dialog-user-search";
-
 import {
   PopoverTrigger,
   PopoverContent,
@@ -43,24 +48,21 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { AvatarFallback, Avatar } from "@/components/ui/avatar";
-import { cn } from "@/lib/utils/utils";
 import { Calendar } from "@/components/ui/calendar";
-import * as z from "zod";
-import { useController, useWatch } from "react-hook-form";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { ProjectDto } from "@/use-cases/project/types";
-import { TaskDto } from "@/use-cases/task/types";
-import { format } from "date-fns";
-import { useRouter } from "next/navigation";
+import { ArchiveIcon, UserPlus2Icon } from "lucide-react";
 
+import { cn } from "@/lib/utils/utils";
 import { getAvatarColorBasedOnPermissions } from "./utils";
+import { getInitials } from "@/lib/utils/getInitials";
 import { updateTaskArchivedAction } from "../_actions/update-task-archived.action";
 import { updateTaskAction } from "../_actions/update-task.action";
-import { UserDto } from "@/use-cases/user/types";
-import { getInitials } from "@/lib/utils/getInitials";
 import { updateProjectTasksOrderFromTaskCardAction } from "../_actions/update-project-tasks-order-from-task-card.action";
+import { ProjectDto } from "@/use-cases/project/types";
+import { TaskDto } from "@/use-cases/task/types";
 import { ValidationError } from "@/use-cases/utils";
+
+import type { UserDto } from "@/use-cases/user/types";
+
 const taskFormSchema = z.object({
   id: z.string(),
   name: z.string().min(3).max(25),

@@ -1,16 +1,17 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { unstable_noStore } from "next/cache";
-import { Suspense } from "react";
+
+import { Toaster } from "sonner";
+
+import { ProjectPage } from "@/app/project/[id]/MainProjectComponent";
+import { ProjectPageSkeleton } from "./ProjectPageSkeleton";
+import { sessionAuth } from "@/lib/sessionAuth";
 import getProject from "@/data-access/projects/get-project.persistence";
 import getTeam from "@/data-access/teams/get-team.persistence";
 import getTeamUsers from "@/data-access/users/get-team-users.persistence";
 import getProjectTasks from "@/data-access/tasks/get-project-tasks.persistence";
 import getProjectUsers from "@/data-access/users/get-project-users.persistence";
-import { ProjectPage } from "@/app/project/[id]/MainProjectComponent";
-import { Toaster } from "sonner";
-import { sessionAuth } from "@/lib/sessionAuth";
 import getUserObject from "@/data-access/users/get-user.persistence";
-import { ProjectPageSkeleton } from "./ProjectPageSkeleton";
 
 type ParamsType = {
   id: string;

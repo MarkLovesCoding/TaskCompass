@@ -7,16 +7,10 @@ export function ProjectPageSkeleton({}) {
     <div className={`flex flex-col justify-start items-center min-h-full `}>
       <div className="z-70">
         <div className="fixed z-50 group top-[2rem] md:top-[3rem] left-0 w-6 md:w-8 h-[calc(100vh-2rem)] md:h-[calc(100vh-3rem)] bg-nav-background  border-r-2 border-t-2 rounded-tr-lg rounded-br-lg border-b-2 border-nav-background  "></div>
-
-        {/* <ArrowLeft className="w-4 h-4 cursor-pointer rounded-full " /> */}
-        {/* <Skeleton className="w-12 h-8 rounded-none bg-nav-background" /> */}
       </div>
       <div className="fixed h-16 z-40 shadow-md left-0 top-8 md:top-12 flex-row flex p-2 border-b-slate-50 w-full bg-accordion-background backdrop-filter backdrop-blur ">
         <div className="min-w-fit p-1 pl-8 h-full justify-evenly flex flex-col">
-          {/* <ArrowLeft className="w-4 h-4 cursor-pointer rounded-full " />
-            <ArrowLeft className="w-4 h-4 cursor-pointer rounded-full " /> */}
           <Skeleton className="w-12 h-8 rounded-none bg-nav-background" />
-          {/* </Link> */}
           <div className="flex items-center m-2 mt-0 h-full justify-between max-w-[20ch]   md:max-w-md">
             <Skeleton className="w-20 h-8 rounded-none bg-nav-background" />
 
@@ -27,14 +21,12 @@ export function ProjectPageSkeleton({}) {
           <div title="Change View" className="p-1 ">
             <Skeleton className="w-8 h-8 bg-nav-background" />
           </div>
-          {/* {isUserAdmin && ( */}
           <div title="Create New Task" className="p-1">
             <Skeleton className="w-8 h-8 bg-nav-background" />
           </div>
           <div title="Change Background" className="p-1">
             <Skeleton className="w-8 h-8 bg-nav-background" />
           </div>
-          {/* )} */}
         </div>
       </div>
       <main

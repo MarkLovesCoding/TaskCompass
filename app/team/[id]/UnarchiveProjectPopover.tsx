@@ -1,17 +1,19 @@
 "use client";
-import { Label } from "@/components/ui/label";
+import React from "react";
 
+import { toast } from "sonner";
+import { Label } from "@/components/ui/label";
 import {
   Dialog,
   DialogTrigger,
   DialogContent,
 } from "@/components/ui/dialog-user-search";
-import React from "react";
 import { Button } from "@/components/ui/button-alert";
+
 import { updateProjectArchivedAction } from "../_actions/update-project-archived.action";
-import { ProjectDto } from "@/use-cases/project/types";
-import { toast } from "sonner";
 import { ValidationError } from "@/use-cases/utils";
+
+import type { ProjectDto } from "@/use-cases/project/types";
 
 const UnarchiveProjectPopover = ({
   project,

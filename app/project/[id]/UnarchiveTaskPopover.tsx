@@ -1,15 +1,18 @@
-import { TaskDto } from "@/use-cases/task/types";
 import React from "react";
+
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button-alert";
 import { Label } from "@/components/ui/label";
-import { updateTaskArchivedAction } from "../_actions/update-task-archived.action";
 import {
   Dialog,
   DialogTrigger,
   DialogContent,
 } from "@/components/ui/dialog-user-search";
-import { toast } from "sonner";
+
+import { updateTaskArchivedAction } from "../_actions/update-task-archived.action";
 import { ValidationError } from "@/use-cases/utils";
+
+import type { TaskDto } from "@/use-cases/task/types";
 
 const UnarchiveTaskPopover = ({
   task,

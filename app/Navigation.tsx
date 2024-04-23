@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Logout from "./Logout";
+import Image from "next/image";
 
 import {
   DropdownMenu,
@@ -14,17 +14,8 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import LogoPng from "../public/compass_small.png";
-import Image from "next/image";
-
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ModeToggle } from "./themeTogglerSwitch";
-import getUserProjectsAndTeams from "@/data-access/users/get-user-full-nav.persistence";
-import { sessionAuth } from "@/lib/sessionAuth";
-import { ProjectDto } from "@/use-cases/project/types";
-import { TeamDto } from "@/use-cases/team/types";
-import { UserDto } from "@/use-cases/user/types";
 import {
   CompassIcon,
   KanbanIcon,
@@ -32,6 +23,16 @@ import {
   Menu,
   UsersIcon,
 } from "lucide-react";
+
+import { sessionAuth } from "@/lib/sessionAuth";
+import { ModeToggle } from "./themeTogglerSwitch";
+import getUserProjectsAndTeams from "@/data-access/users/get-user-full-nav.persistence";
+import Logout from "./Logout";
+import LogoPng from "../public/compass_small.png";
+
+import type { ProjectDto } from "@/use-cases/project/types";
+import type { TeamDto } from "@/use-cases/team/types";
+import type { UserDto } from "@/use-cases/user/types";
 
 const Navigation: React.FC = async () => {
   const session = await sessionAuth();

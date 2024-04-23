@@ -1,13 +1,16 @@
+import Link from "next/link";
+
 import { AvatarFallback, Avatar } from "@/components/ui/avatar-card";
 import { Badge } from "@/components/ui/badge";
 import { CardHeader, CardContent, Card } from "@/components/ui/card";
-import Link from "next/link";
-
 import { MailIcon, KeyIcon } from "lucide-react";
-import { UserDto } from "@/use-cases/user/types";
+
 import { getInitials } from "@/lib/utils/getInitials";
 import TeamUserCardPermissionsSelect from "./TeamUserCardPermissionsSelect";
-import { TeamDto } from "@/use-cases/team/types";
+
+import type { UserDto } from "@/use-cases/user/types";
+import type { TeamDto } from "@/use-cases/team/types";
+
 type TeamUserCardWithPermissionsProps = {
   user: UserDto;
   team: TeamDto;

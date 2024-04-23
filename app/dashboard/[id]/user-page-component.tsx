@@ -1,28 +1,13 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import AddTeamCard from "./AddTeamCard";
 
-import { Button } from "@/components/ui/button";
 import {
   CardTitle,
   CardDescription,
   CardHeader,
   Card,
 } from "@/components/ui/dashboard-card";
-
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-
-import { PlusIcon } from "lucide-react";
-import ArchivedProjectCardWithUnarchiveAction from "./UnarchiveProjectCard";
-import type { UserDto } from "@/use-cases/user/types";
-import type { ProjectDto } from "@/use-cases/project/types";
-import type { TeamDto } from "@/use-cases/team/types";
-import { Label } from "@/components/ui/label";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { getInitials } from "@/lib/utils/getInitials";
-import { Badge } from "@/components/ui/badge";
-import { TaskDto } from "@/use-cases/task/types";
 
 import {
   Accordion,
@@ -31,7 +16,22 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { PlusIcon } from "lucide-react";
+
+import { getInitials } from "@/lib/utils/getInitials";
+import AddTeamCard from "./AddTeamCard";
+import ArchivedProjectCardWithUnarchiveAction from "./UnarchiveProjectCard";
 import BackgroundImageMenu from "./BackgroundImageMenu";
+
+import type { TaskDto } from "@/use-cases/task/types";
+import type { UserDto } from "@/use-cases/user/types";
+import type { ProjectDto } from "@/use-cases/project/types";
+import type { TeamDto } from "@/use-cases/team/types";
 
 export function UserPageComponent({
   user,

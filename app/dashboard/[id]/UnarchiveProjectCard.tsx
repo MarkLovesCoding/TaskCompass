@@ -1,21 +1,23 @@
 "use client";
+import React from "react";
 import {
   Card,
   CardHeader,
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
 import {
   Dialog,
   DialogTrigger,
   DialogContent,
 } from "@/components/ui/dialog-user-search";
-import React from "react";
+import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button-alert";
-import { updateProjectArchivedAction } from "../../team/_actions/update-project-archived.action";
-import { ProjectDto } from "@/use-cases/project/types";
 import { Badge } from "@/components/ui/badge";
+
+import { updateProjectArchivedAction } from "../../team/_actions/update-project-archived.action";
+
+import type { ProjectDto } from "@/use-cases/project/types";
 
 const ArchivedProjectCardWithUnarchiveAction = ({
   project,

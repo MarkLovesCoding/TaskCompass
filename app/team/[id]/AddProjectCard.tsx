@@ -1,8 +1,12 @@
 "use client";
-import { Button } from "@/components/ui/button";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Input } from "@/components/ui/input";
 
+import * as z from "zod";
+import { useForm, useWatch } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
+import { Input } from "@/components/ui/input";
 import {
   Form,
   FormControl,
@@ -11,16 +15,13 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-
 import { DialogFooter, DialogClose } from "@/components/ui/dialog";
-import * as z from "zod";
-import { useForm, useWatch } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+
 import { createNewProjectAction } from "../_actions/create-new-project.action";
-import { useState } from "react";
-import { toast } from "sonner";
 import { ValidationError } from "@/use-cases/utils";
+
 const formSchema = z.object({
   name: z.string().min(4),
   description: z.string().min(4).max(100),

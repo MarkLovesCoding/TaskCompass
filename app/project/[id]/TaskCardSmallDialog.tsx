@@ -1,11 +1,14 @@
+import { useState } from "react";
+
+import styled from "styled-components";
+import { Draggable } from "@hello-pangea/dnd";
+import { formatDistanceStrict } from "date-fns";
 import {
   Card,
   CardHeader,
   CardTitle,
   CardDescription,
 } from "@/components/ui/small-task-card";
-import { cn } from "@/lib/utils/utils";
-import { TaskDto } from "@/use-cases/task/types";
 import {
   Dialog,
   DialogTrigger,
@@ -13,16 +16,16 @@ import {
 } from "@/components/ui/dialog-task-card";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
-import { TaskCard } from "./TaskCard";
-import { ProjectDto } from "@/use-cases/project/types";
-import { UserDto } from "@/use-cases/user/types";
-import { Draggable } from "@hello-pangea/dnd";
-import styled from "styled-components";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Clock2Icon, UsersIcon } from "lucide-react";
-import { ScrollArea } from "@radix-ui/react-scroll-area";
-import { ScrollBar } from "@/components/ui/scroll-area";
-import { formatDistanceStrict } from "date-fns";
+
+import { cn } from "@/lib/utils/utils";
+import { TaskCard } from "./TaskCard";
+
+import type { TaskDto } from "@/use-cases/task/types";
+import type { ProjectDto } from "@/use-cases/project/types";
+import type { UserDto } from "@/use-cases/user/types";
+
 const Container = styled.div``;
 const TaskCardSmallDialog = ({
   isDraggingOver,

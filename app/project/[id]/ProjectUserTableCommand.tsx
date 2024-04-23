@@ -1,6 +1,8 @@
 "use client";
-import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
 
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 import {
   CommandInput,
   CommandItem,
@@ -9,23 +11,20 @@ import {
 } from "@/components/ui/command-user-search";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { PlusIcon, XIcon } from "lucide-react";
+import { Label } from "@/components/ui/label";
 import { AvatarFallback, Avatar } from "@/components/ui/avatar";
-import { getInitials } from "@/lib/utils/getInitials";
-import { ProjectDto } from "@/use-cases/project/types";
-import { UserDto } from "@/use-cases/user/types";
+import { PlusIcon, XIcon } from "lucide-react";
+
+import ProjectUserPermissionsSelect from "./ProjectUserPermissionsSelect";
 import { addProjectUserAction } from "@/app/project/_actions/add-project-user.action";
 import { removeProjectUserAction } from "@/app/project/_actions/remove-project-user.action";
-import { useEffect, useState } from "react";
-
-import { Label } from "@/components/ui/label";
-
-import { toast } from "sonner";
-import ProjectUserPermissionsSelect from "./ProjectUserPermissionsSelect";
+import { getInitials } from "@/lib/utils/getInitials";
 import { ValidationError } from "@/use-cases/utils";
-const capitalizeFirstLetter = (string: string) => {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-};
+import { capitalizeEachWord } from "./utils";
+
+import type { ProjectDto } from "@/use-cases/project/types";
+import type { UserDto } from "@/use-cases/user/types";
+
 export function ProjectUserTableCommand({
   userId,
   project,
@@ -198,7 +197,7 @@ export function ProjectUserTableCommand({
                                   project
                                 )}`}
                               >
-                                {capitalizeFirstLetter(
+                                {capitalizeEachWord(
                                   getUserStatus(user, project)
                                 )}
                               </Badge>

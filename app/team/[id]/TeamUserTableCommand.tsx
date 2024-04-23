@@ -1,4 +1,8 @@
 "use client";
+import { useEffect, useState } from "react";
+
+import { toast } from "sonner";
+import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import {
   CommandInput,
@@ -8,21 +12,18 @@ import {
 } from "@/components/ui/command-user-search";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { PlusIcon, Search, XIcon } from "lucide-react";
 import { AvatarFallback, Avatar } from "@/components/ui/avatar";
+import { PlusIcon, XIcon } from "lucide-react";
+
 import { getInitials } from "@/lib/utils/getInitials";
-import { ProjectDto } from "@/use-cases/project/types";
-import { UserDto } from "@/use-cases/user/types";
+import TeamMemberCardPermissionsSelect from "./TeamUserCardPermissionsSelect";
 import { addTeamUserAction } from "@/app/team/_actions/add-team-user.action";
 import { removeTeamUserAction } from "@/app/team/_actions/remove-team-user.action";
-import { useEffect, useState } from "react";
-
-import { Label } from "@/components/ui/label";
-import { toast } from "sonner";
-
-import TeamMemberCardPermissionsSelect from "./TeamUserCardPermissionsSelect";
-import { TeamDto } from "@/use-cases/team/types";
 import { ValidationError } from "@/use-cases/utils";
+
+import type { TeamDto } from "@/use-cases/team/types";
+import type { ProjectDto } from "@/use-cases/project/types";
+import type { UserDto } from "@/use-cases/user/types";
 
 const capitalizeFirstLetter = (string: string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
