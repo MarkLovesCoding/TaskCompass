@@ -1,8 +1,10 @@
-import { TaskEntity, TaskEntityValidationError } from "@/entities/Task";
-import { CreateTask } from "@/use-cases/task/types";
-import { GetUserSession } from "@/use-cases/user/types";
 import { taskToCreateTaskDto } from "@/use-cases/task/utils";
+import { TaskEntity, TaskEntityValidationError } from "@/entities/Task";
 import { AuthenticationError, ValidationError } from "../utils";
+
+import type { CreateTask } from "@/use-cases/task/types";
+import type { GetUserSession } from "@/use-cases/user/types";
+
 export async function createNewTaskUseCase(
   context: {
     createNewTask: CreateTask;

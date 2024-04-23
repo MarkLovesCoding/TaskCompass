@@ -1,6 +1,8 @@
-import { GetTask, TaskDto, UpdateTasks } from "@/use-cases/task/types";
-import { GetUserSession } from "@/use-cases/user/types";
 import { AuthenticationError } from "../utils";
+
+import type { GetUserSession } from "@/use-cases/user/types";
+import type { GetTask, TaskDto, UpdateTasks } from "@/use-cases/task/types";
+
 export async function updateTasksUseCase(
   context: {
     updateTasks: UpdateTasks;

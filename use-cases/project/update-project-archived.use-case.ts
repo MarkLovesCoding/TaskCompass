@@ -1,11 +1,12 @@
+import { projectToDto } from "@/use-cases/project/utils";
 import {
   ProjectEntity,
   ProjectEntityValidationError,
 } from "@/entities/Project";
-import { UpdateProject, GetProject } from "@/use-cases/project/types";
-import { GetUserSession } from "@/use-cases/user/types";
-import { projectToDto } from "@/use-cases/project/utils";
 import { AuthenticationError, ValidationError } from "../utils";
+
+import type { UpdateProject, GetProject } from "@/use-cases/project/types";
+import type { GetUserSession } from "@/use-cases/user/types";
 
 export async function updateProjectArchivedUseCase(
   context: {

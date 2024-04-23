@@ -1,10 +1,16 @@
-import { TaskEntity, TaskEntityValidationError } from "@/entities/Task";
-import { UpdateTask, GetTask } from "@/use-cases/task/types";
-import { GetUserSession, UpdateUser, GetUser } from "@/use-cases/user/types";
-import { taskToDto } from "@/use-cases/task/utils";
 import { userToDto } from "../user/utils";
+import { taskToDto } from "@/use-cases/task/utils";
+import { TaskEntity, TaskEntityValidationError } from "@/entities/Task";
 import { UserEntity, UserEntityValidationError } from "@/entities/User";
 import { AuthenticationError, ValidationError } from "../utils";
+
+import type { UpdateTask, GetTask } from "@/use-cases/task/types";
+import type {
+  GetUserSession,
+  UpdateUser,
+  GetUser,
+} from "@/use-cases/user/types";
+
 export async function updateTaskUseCase(
   context: {
     updateTask: UpdateTask;

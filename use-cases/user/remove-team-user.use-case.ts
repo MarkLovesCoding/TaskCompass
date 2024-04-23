@@ -1,10 +1,16 @@
-import { UserEntity, UserEntityValidationError } from "@/entities/User";
-import { GetUser, GetUserSession, UpdateUser } from "@/use-cases/user/types";
 import { userToDto } from "./utils";
-import { GetTeam, UpdateTeam } from "../team/types";
-import { TeamEntity, TeamEntityValidationError } from "@/entities/Team";
 import { teamToDto } from "../team/utils";
+import { UserEntity, UserEntityValidationError } from "@/entities/User";
+import { TeamEntity, TeamEntityValidationError } from "@/entities/Team";
 import { AuthenticationError, ValidationError } from "../utils";
+
+import type {
+  GetUser,
+  GetUserSession,
+  UpdateUser,
+} from "@/use-cases/user/types";
+import type { GetTeam, UpdateTeam } from "../team/types";
+
 export async function removeTeamUserUseCase(
   context: {
     getTeam: GetTeam;

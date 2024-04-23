@@ -1,7 +1,13 @@
 import { TaskEntity } from "@/entities/Task";
-import { UpdateTask, GetTask, UpdateTaskUsers } from "@/use-cases/task/types";
-import { GetUserSession, UpdateUser } from "@/use-cases/user/types";
 import { AuthenticationError } from "../utils";
+
+import type {
+  UpdateTask,
+  GetTask,
+  UpdateTaskUsers,
+} from "@/use-cases/task/types";
+import type { GetUserSession } from "@/use-cases/user/types";
+
 export async function updateTaskUsersUseCase(
   context: {
     updateTask: UpdateTask;

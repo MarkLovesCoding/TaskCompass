@@ -1,5 +1,5 @@
 import { TeamEntity } from "@/entities/Team";
-import { TeamDto, CreateTeamDto } from "@/use-cases/team/types";
+import type { TeamDto, CreateTeamDto } from "@/use-cases/team/types";
 
 export function teamToDto(team: TeamEntity): TeamDto {
   const teamId = team.getId();

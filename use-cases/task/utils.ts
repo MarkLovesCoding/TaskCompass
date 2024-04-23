@@ -1,5 +1,6 @@
 import { TaskEntity } from "@/entities/Task";
-import { TaskDto, CreateTaskDto } from "@/use-cases/task/types";
+
+import type { TaskDto, CreateTaskDto } from "@/use-cases/task/types";
 
 export function taskToDto(task: TaskEntity): TaskDto {
   const taskId = task.getId();

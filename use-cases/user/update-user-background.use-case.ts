@@ -1,7 +1,12 @@
-import { UserEntity, UserEntityValidationError } from "@/entities/User";
-import { GetUser, GetUserSession, UpdateUser } from "@/use-cases/user/types";
 import { userToDto } from "./utils";
+import { UserEntity, UserEntityValidationError } from "@/entities/User";
 import { AuthenticationError, ValidationError } from "../utils";
+
+import type {
+  GetUser,
+  GetUserSession,
+  UpdateUser,
+} from "@/use-cases/user/types";
 
 export async function updateUserBackgroundUseCase(
   context: {

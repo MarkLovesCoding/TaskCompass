@@ -1,10 +1,11 @@
-import { TeamEntity } from "@/entities/Team";
-import { UpdateTeam, GetTeam } from "@/use-cases/team/types";
-
-import { GetUserSession } from "@/use-cases/user/types";
 import { teamToDto } from "@/use-cases/team/utils";
-import { AuthenticationError, ValidationError } from "../utils";
+import { TeamEntity } from "@/entities/Team";
 import { ProjectEntityValidationError } from "@/entities/Project";
+import { AuthenticationError, ValidationError } from "../utils";
+
+import type { GetUserSession } from "@/use-cases/user/types";
+import type { UpdateTeam, GetTeam } from "@/use-cases/team/types";
+
 export async function updateTeamBackgroundUseCase(
   context: {
     updateTeam: UpdateTeam;

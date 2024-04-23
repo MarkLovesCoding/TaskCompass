@@ -1,8 +1,10 @@
-import { TaskEntity, TaskEntityValidationError } from "@/entities/Task";
-import { UpdateTask, GetTask } from "@/use-cases/task/types";
-import { GetUserSession } from "@/use-cases/user/types";
 import { taskToDto } from "@/use-cases/task/utils";
+import { TaskEntity, TaskEntityValidationError } from "@/entities/Task";
 import { AuthenticationError, ValidationError } from "../utils";
+
+import type { UpdateTask, GetTask } from "@/use-cases/task/types";
+import type { GetUserSession } from "@/use-cases/user/types";
+
 export async function updateTaskArchivedUseCase(
   context: {
     updateTask: UpdateTask;

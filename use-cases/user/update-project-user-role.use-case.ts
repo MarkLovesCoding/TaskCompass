@@ -1,12 +1,17 @@
-import { UserEntity } from "@/entities/User";
-import { GetUser, GetUserSession, UpdateUser } from "@/use-cases/user/types";
 import { userToDto } from "./utils";
-import { GetProject } from "../project/types";
+import { UserEntity } from "@/entities/User";
 import {
   ProjectEntity,
   ProjectEntityValidationError,
 } from "@/entities/Project";
 import { AuthenticationError, ValidationError } from "../utils";
+
+import type {
+  GetUser,
+  GetUserSession,
+  UpdateUser,
+} from "@/use-cases/user/types";
+import type { GetProject } from "../project/types";
 
 export async function updateProjectUserRoleUseCase(
   context: {

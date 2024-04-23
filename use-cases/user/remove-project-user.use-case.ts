@@ -1,13 +1,19 @@
-import { UserEntity, UserEntityValidationError } from "@/entities/User";
-import { GetUser, GetUserSession, UpdateUser } from "@/use-cases/user/types";
 import { userToDto } from "./utils";
+import { projectToDto } from "../project/utils";
+import { UserEntity, UserEntityValidationError } from "@/entities/User";
 import {
   ProjectEntity,
   ProjectEntityValidationError,
 } from "@/entities/Project";
-import { GetProject, UpdateProject } from "../project/types";
-import { projectToDto } from "../project/utils";
 import { AuthenticationError, ValidationError } from "../utils";
+
+import type { GetProject, UpdateProject } from "../project/types";
+import type {
+  GetUser,
+  GetUserSession,
+  UpdateUser,
+} from "@/use-cases/user/types";
+
 export async function removeProjectUserUseCase(
   context: {
     getProject: GetProject;

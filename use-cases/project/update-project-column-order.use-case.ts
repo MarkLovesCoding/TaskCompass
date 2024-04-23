@@ -1,6 +1,6 @@
-import { UpdateProjectColumnOrder } from "@/use-cases/project/types";
-import { GetUserSession } from "@/use-cases/user/types";
 import { AuthenticationError } from "../utils";
+import type { UpdateProjectColumnOrder } from "@/use-cases/project/types";
+import type { GetUserSession } from "@/use-cases/user/types";
 
 export async function updateProjectColumnOrderUseCase(
   context: {

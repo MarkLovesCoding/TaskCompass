@@ -1,11 +1,12 @@
-import { GetProject, UpdateProject } from "@/use-cases/project/types";
-import { GetUserSession } from "@/use-cases/user/types";
+import { projectToDto } from "./utils";
 import {
   ProjectEntity,
   ProjectEntityValidationError,
 } from "@/entities/Project";
-import { projectToDto } from "./utils";
 import { AuthenticationError, ValidationError } from "../utils";
+
+import type { GetUserSession } from "@/use-cases/user/types";
+import type { GetProject, UpdateProject } from "@/use-cases/project/types";
 
 export async function updateProjectTasksOrderFromTaskCardUseCase(
   context: {

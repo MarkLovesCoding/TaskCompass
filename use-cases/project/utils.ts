@@ -1,5 +1,6 @@
 import { ProjectEntity } from "@/entities/Project";
-import { ProjectDto, CreateProjectDto } from "@/use-cases/project/types";
+
+import type { ProjectDto, CreateProjectDto } from "@/use-cases/project/types";
 
 export function projectToDto(project: ProjectEntity): ProjectDto {
   const projectId = project.getId();

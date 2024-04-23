@@ -1,7 +1,7 @@
-import { UpdateTasksOrder } from "@/use-cases/project/types";
-import { GetUserSession } from "@/use-cases/user/types";
-import { TasksOrder } from "@/use-cases/project/types";
 import { AuthenticationError } from "../utils";
+import type { GetUserSession } from "@/use-cases/user/types";
+import type { TasksOrder } from "@/use-cases/project/types";
+import type { UpdateTasksOrder } from "@/use-cases/project/types";
 
 export async function updateProjectTasksOrderUseCase(
   context: {

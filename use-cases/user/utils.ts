@@ -1,4 +1,5 @@
 import { UserEntity } from "@/entities/User";
+
 import type { UserDto } from "@/use-cases/user/types";
 
 export function userToDto(user: UserEntity): UserDto {

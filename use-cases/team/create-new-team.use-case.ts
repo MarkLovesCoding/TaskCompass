@@ -1,8 +1,9 @@
-import { TeamEntity, TeamEntityValidationError } from "@/entities/Team";
-import { CreateNewTeam } from "@/use-cases/team/types";
-import { GetUserSession } from "@/use-cases/user/types";
 import { teamToCreateTeamDto } from "@/use-cases/team/utils";
+import { TeamEntity, TeamEntityValidationError } from "@/entities/Team";
 import { AuthenticationError, ValidationError } from "../utils";
+
+import type { CreateNewTeam } from "@/use-cases/team/types";
+import type { GetUserSession } from "@/use-cases/user/types";
 
 export async function createNewTeamUseCase(
   context: {
