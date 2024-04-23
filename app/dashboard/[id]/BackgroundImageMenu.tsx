@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-
 import { updateUserBackgroundAction } from "./_actions/update-user-background.action";
 import { updateProjectBackgroundAction } from "@/app/project/_actions/update-project-background.action";
 import { updateTeamBackgroundAction } from "@/app/team/_actions/update-team-background.action";
@@ -66,9 +65,6 @@ const BackgroundImageMenu = ({
   type: "User" | "Project" | "Team";
   object: UserDto | ProjectDto | TeamDto;
 }) => {
-  //   const [backgroundImage, setBackgroundImage] = useState<string>(
-  //     object.backgroundImage
-  //   );
   const PER_PAGE = 12;
   const [selectedImages, setSelectedImages] = useState<any[]>([]);
   const [imagesLoadPage, setImagesLoadPage] = useState<number>(1);
@@ -78,7 +74,6 @@ const BackgroundImageMenu = ({
   );
 
   const loadImageSetonOpen = async (bool: boolean) => {
-    // isImagesDialogOpen = bool;
     if (bool) {
       await loadNextImageSet(photoCategory);
     }
@@ -124,8 +119,8 @@ const BackgroundImageMenu = ({
 
   type TUrls = {
     full: string;
-    large: string;
-    regular: string;
+    large?: string;
+    regular?: string;
     raw: string;
     small: string;
     thumb: string;
@@ -143,7 +138,11 @@ const BackgroundImageMenu = ({
     }
     if (type === "Project") {
       try {
-        await updateProjectBackgroundAction(object.id, urls.full, urls.small);
+        await updateProjectBackgroundAction(
+          object.id,
+          urls.full,
+          urls.small || urls.thumb
+        );
         toast.success("Project background image updating...");
       } catch (err) {
         toast.error("Error updating project background image");
@@ -153,7 +152,11 @@ const BackgroundImageMenu = ({
 
     if (type === "Team") {
       try {
-        await updateTeamBackgroundAction(object.id, urls.full, urls.small);
+        await updateTeamBackgroundAction(
+          object.id,
+          urls.full,
+          urls.small || urls.thumb
+        );
         toast.success("Team background image updating...");
       } catch (err) {
         toast.error("Error updating team background image");
@@ -182,9 +185,9 @@ const BackgroundImageMenu = ({
                 onValueChange={onCategoryChange}
                 defaultValue={IMAGE_CATEGORIES[0]}
               >
-                <SelectTrigger className=" w-[100px]">
+                <SelectTrigger className=" w-fit">
                   <SelectValue
-                    className="text-lg font-bold text-center self-center"
+                    className="text-lg font-bold text-center self-center pr-2 "
                     placeholder={IMAGE_CATEGORIES[0]}
                   />
                 </SelectTrigger>
@@ -213,7 +216,7 @@ const BackgroundImageMenu = ({
                       <Image
                         onClick={() => setNewBackground(image.urls)}
                         src={image.urls.thumb}
-                        alt="Background Image"
+                        alt={image.alt_description}
                         width={120}
                         height={80}
                         className={`${
@@ -225,13 +228,16 @@ const BackgroundImageMenu = ({
                       {/* <div className="w-full h-full absolute top-0 left-0 z-30 bg-black/10 group-hover:bg-black/0"></div> */}
                       <Link
                         href={image.user.links.html}
-                        className=" w-full absolute h-[25px]  bg-black/30 z-40 hover:bg-black/60 top-[55px] left-[0px]  truncate text-ellipsis "
-                        title={`${image.user.name} - unsplash.com`}
+                        className=" w-full absolute h-[25px] group/user bg-black/30 z-40 hover:bg-black/60 top-[55px] left-[0px]  truncate text-ellipsis "
+                        title={`${image.user.name} on unsplash.com`}
                       >
-                        <div className="flex flex-col">
-                          <p className="  px-2 text-xs truncate text-ellipsis">
+                        <div className="flex flex-col relative">
+                          <p className="  px-2 text-[11px] truncate group-hover/user:underline text-ellipsis">
                             {image.user.name}
                           </p>
+                          {/* <p className="underline text-gray-300 text-[9px] text-end">
+                            unsplash.com
+                          </p> */}
                         </div>
                       </Link>
                       {/* <p>{image.url.full}</p> */}
