@@ -1,6 +1,7 @@
+import { redirect } from "next/navigation";
+
 import { getServerSession } from "next-auth";
 import { options } from "@/app/api/auth/[...nextauth]/options";
-import { redirect } from "next/navigation";
 
 type Session = {
   user: {

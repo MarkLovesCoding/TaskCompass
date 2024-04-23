@@ -2,16 +2,11 @@
 import mongoose from "mongoose";
 
 const connectDB = async () => {
-  console.log("start connectDB");
   if (process.env.ENVIRONMENT == "production") {
     console.log("start connectDB in prod");
 
     try {
-      //@ts-expect-error
-      await mongoose.connect(process.env.MONGODB_PROD_URI, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      });
+      await mongoose.connect(process.env.MONGODB_PROD_URI as string);
       console.log("Connected to MongoDB in Production");
     } catch (error: any) {
       console.error("Error connecting to MongoDB:", error.message);
@@ -19,9 +14,8 @@ const connectDB = async () => {
   } else if (process.env.ENVIRONMENT == "development") {
     console.log("start connectDB in dev");
     try {
-      //@ts-expect-error
-
-      await mongoose.connect(process.env.MONGODB_DEV_URI);
+      //
+      await mongoose.connect(process.env.MONGODB_DEV_URI as string);
       mongoose.Promise = global.Promise;
       console.log("Connected to MongoDB in Development");
     } catch (error: any) {

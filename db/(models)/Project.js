@@ -1,10 +1,4 @@
-// import mongoose, { Schema } from "mongoose";
-// mongoose.connect(process.env.MONGODB_URI);
-// mongoose.Promise = global.Promise;
-
-import mongoose from "mongoose";
-
-const { Schema } = mongoose;
+import mongoose, { Schema } from "mongoose";
 
 const ProjectSchema = new Schema(
   {
