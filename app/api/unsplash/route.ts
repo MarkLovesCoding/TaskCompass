@@ -1,23 +1,27 @@
 import { NextResponse } from "next/server";
 import { createApi } from "unsplash-js";
-
+import { TImageCategories } from "@/app/dashboard/[id]/BackgroundImageMenu";
+type TBodyRequest = {
+  category: TImageCategories;
+  page: number;
+  perPage: number;
+};
 export async function POST(req: Request): Promise<any> {
-  const body = await req.json();
-  const { page = 1, perPage = 12 } = body;
+  const body: TBodyRequest = await req.json();
+  const { category = "nature", page = 1, perPage = 12 } = body;
   const api = createApi({
     accessKey: process.env.UNSPLASH_ACCESS_KEY as string,
   });
 
   const data = await api.search
     .getPhotos({
-      query: "nature",
+      query: category,
       page: page,
       perPage: perPage,
       orientation: "landscape",
     })
     .then((result) => {
       const data = result!.response!.results;
-      console.log("DATA_SERVER22", [...data]);
       return data;
     })
     .catch((err: any) => {

@@ -1,12 +1,7 @@
-import React from "react";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { ImageIcon } from "lucide-react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import { useState } from "react";
+
 import { updateUserBackgroundAction } from "./_actions/update-user-background.action";
 import { updateProjectBackgroundAction } from "@/app/project/_actions/update-project-background.action";
 import { updateTeamBackgroundAction } from "@/app/team/_actions/update-team-background.action";
@@ -14,6 +9,56 @@ import { UserDto } from "@/use-cases/user/types";
 import { ProjectDto } from "@/use-cases/project/types";
 import { TeamDto } from "@/use-cases/team/types";
 import { toast } from "sonner";
+
+import { Label } from "@/components/ui/label";
+import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+  SelectValue,
+  SelectTrigger,
+  SelectItem,
+  SelectContent,
+  Select,
+} from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { ImageIcon } from "lucide-react";
+import { capitalizeEachWord } from "@/app/project/[id]/utils";
+export type TImageCategories =
+  | "nature"
+  | "dogs"
+  | "animals"
+  | "people"
+  | "food"
+  | "technology"
+  | "space"
+  | "architecture"
+  | "business"
+  | "health"
+  | "music"
+  | "sports"
+  | "spirituality"
+  | "travel"
+  | "textures"
+  | "3D renders";
+
+const IMAGE_CATEGORIES: TImageCategories[] = [
+  "nature",
+  "dogs",
+  "animals",
+  "people",
+  "food",
+  "technology",
+  "space",
+  "architecture",
+  "business",
+  "health",
+  "music",
+  "sports",
+  "spirituality",
+  "travel",
+  "textures",
+  "3D renders",
+];
 const BackgroundImageMenu = ({
   type,
   object,
@@ -21,21 +66,25 @@ const BackgroundImageMenu = ({
   type: "User" | "Project" | "Team";
   object: UserDto | ProjectDto | TeamDto;
 }) => {
-  const [backgroundImage, setBackgroundImage] = useState<string>(
-    object.backgroundImage
-  );
+  //   const [backgroundImage, setBackgroundImage] = useState<string>(
+  //     object.backgroundImage
+  //   );
   const PER_PAGE = 12;
   const [selectedImages, setSelectedImages] = useState<any[]>([]);
   const [imagesLoadPage, setImagesLoadPage] = useState<number>(1);
 
+  const [photoCategory, setPhotoCategory] = useState<TImageCategories>(
+    IMAGE_CATEGORIES[0]
+  );
+
   const loadImageSetonOpen = async (bool: boolean) => {
     // isImagesDialogOpen = bool;
     if (bool) {
-      await loadNextImageSet();
+      await loadNextImageSet(photoCategory);
     }
   };
 
-  const loadNextImageSet = async () => {
+  const loadNextImageSet = async (category: TImageCategories) => {
     const nextPage = imagesLoadPage + 1;
     const showPage = imagesLoadPage == 1 ? 1 : nextPage;
     // await apiSearchNext(nextPage);
@@ -44,7 +93,11 @@ const BackgroundImageMenu = ({
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ page: showPage, perPage: PER_PAGE }),
+      body: JSON.stringify({
+        category: category,
+        page: showPage,
+        perPage: PER_PAGE,
+      }),
       cache: "no-cache",
     })
       .then((response) => {
@@ -60,6 +113,15 @@ const BackgroundImageMenu = ({
       });
     setImagesLoadPage(nextPage);
   };
+
+  const onCategoryChange = async (category: TImageCategories) => {
+    setPhotoCategory(category);
+    setImagesLoadPage(1);
+    setSelectedImages([]);
+    console.log("photoCategory, category", photoCategory, category);
+    await loadNextImageSet(category);
+  };
+
   type TUrls = {
     full: string;
     large: string;
@@ -69,7 +131,7 @@ const BackgroundImageMenu = ({
     thumb: string;
   };
   const setNewBackground = async (urls: TUrls) => {
-    setBackgroundImage(urls.full);
+    // setBackgroundImage(urls.full);
     if (type === "User") {
       try {
         await updateUserBackgroundAction(object.id, urls.full);
@@ -110,11 +172,36 @@ const BackgroundImageMenu = ({
             <span className="sr-only">Change Background Button</span>
           </Button>
         </DialogTrigger>
-        <DialogContent className="border-2 w-[80%]  bg-drawer-background backdrop-blur  p-4 border-nav-background">
+        <DialogContent className="border-2 w-[80%]  bg-drawer-background backdrop-blur  p-4  border-nav-background">
           <div className="flex flex-col h-fit overflow-auto">
-            <h1 className="font-bold text-lg w-full text-center">
-              Customize Background
-            </h1>
+            <div className="flex flex-row items-center justify-evenly mx-16 mt-1">
+              <h1 className="font-bold text-lg w-full text-center ">
+                Customize Background
+              </h1>
+              <Select
+                onValueChange={onCategoryChange}
+                defaultValue={IMAGE_CATEGORIES[0]}
+              >
+                <SelectTrigger className=" w-[100px]">
+                  <SelectValue
+                    className="text-lg font-bold text-center self-center"
+                    placeholder={IMAGE_CATEGORIES[0]}
+                  />
+                </SelectTrigger>
+                <SelectContent>
+                  {IMAGE_CATEGORIES?.map((category, _index) => (
+                    <SelectItem
+                      className="text-sm "
+                      key={_index}
+                      value={category}
+                    >
+                      {capitalizeEachWord(category)}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
             <div className="flex flex-wrap justify-center h-[300px] p-2">
               {selectedImages.length > 0 ? (
                 selectedImages.map((image: any, index) => {
@@ -138,12 +225,14 @@ const BackgroundImageMenu = ({
                       {/* <div className="w-full h-full absolute top-0 left-0 z-30 bg-black/10 group-hover:bg-black/0"></div> */}
                       <Link
                         href={image.user.links.html}
-                        className=" w-full absolute h-[20px]  bg-black/30 z-40 hover:bg-black/60 top-[60px] left-[0px]  truncate text-ellipsis "
-                        title={image.user.name}
+                        className=" w-full absolute h-[25px]  bg-black/30 z-40 hover:bg-black/60 top-[55px] left-[0px]  truncate text-ellipsis "
+                        title={`${image.user.name} - unsplash.com`}
                       >
-                        <p className="  px-2 text-xs truncate text-ellipsis">
-                          {image.user.name}
-                        </p>
+                        <div className="flex flex-col">
+                          <p className="  px-2 text-xs truncate text-ellipsis">
+                            {image.user.name}
+                          </p>
+                        </div>
                       </Link>
                       {/* <p>{image.url.full}</p> */}
                     </div>
@@ -166,7 +255,12 @@ const BackgroundImageMenu = ({
                 </div>
               )}
               <div className="min-w-full py-4 flex justify-center">
-                <Button onClick={loadNextImageSet} className="w-28 px-1 ">
+                <Button
+                  onClick={async () => {
+                    await loadNextImageSet(photoCategory);
+                  }}
+                  className="w-28 px-1 "
+                >
                   More Images...
                 </Button>
               </div>
