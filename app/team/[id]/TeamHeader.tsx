@@ -29,9 +29,11 @@ const formSchema = z.object({
 export function TeamHeader({
   team,
   isCurrentUserAdmin,
+  userId,
 }: {
   team: TeamDto;
   isCurrentUserAdmin: boolean;
+  userId: string;
 }) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -91,7 +93,7 @@ export function TeamHeader({
     }
   };
   return (
-    <div className="flex w-full justify-start flex-row my-2 space-x-3 ">
+    <div className="flex w-full justify-between flex-row my-2 space-x-3 pr-4 ">
       <Form {...form}>
         <form
           className="w-full flex items-center md:w-[500px] md:flex-row flex-col "
@@ -105,13 +107,6 @@ export function TeamHeader({
                   <Label className="text-base font-bold text-left mr-2">
                     Team
                   </Label>
-                  <Badge
-                    className={`min-w-fit text-xs px-2 py-[0.2em] m-1 ${
-                      isCurrentUserAdmin ? "bg-badgeRed" : "bg-badgeBlue"
-                    } `}
-                  >
-                    {isCurrentUserAdmin ? `Admin` : `Member`}
-                  </Badge>
                 </div>
               </div>
               <div>
@@ -152,6 +147,9 @@ export function TeamHeader({
                 className="m-1  text-xs  h-8 px-4 "
                 type="submit"
                 variant="default"
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
               >
                 Save
               </Button>
@@ -159,7 +157,10 @@ export function TeamHeader({
                 className="m-1 text-xs d h-8 px-4 "
                 type="button"
                 variant="ghost"
-                onClick={handleCancel}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleCancel();
+                }}
               >
                 Cancel
               </Button>
@@ -168,6 +169,24 @@ export function TeamHeader({
         </form>
         {/* <DevTool control={form.control} placement="top-left" /> */}
       </Form>
+
+      <Badge
+        title="Team Permission Level"
+        className={` min-w-fit h-fit self-center mr-16
+         text-xs px-2 py-[0.2em] m-1 ${
+           team.createdBy == userId
+             ? "bg-badgePurple"
+             : isCurrentUserAdmin
+             ? "bg-badgeRed"
+             : "bg-badgeBlue"
+         } `}
+      >
+        {team.createdBy == userId
+          ? "Creator"
+          : isCurrentUserAdmin
+          ? `Admin`
+          : `Member`}
+      </Badge>
     </div>
   );
 }

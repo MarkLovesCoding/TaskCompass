@@ -61,58 +61,7 @@ export function ProjectPage({
   useEffect(() => {
     setProjectBackgroundImage(project.backgroundImage);
   }, [project.backgroundImage]);
-  // const PER_PAGE = 12;
-  // const [selectedImages, setSelectedImages] = useState<any[]>([]);
-  // const [imagesLoadPage, setImagesLoadPage] = useState<number>(1);
 
-  // const loadImageSetonOpen = async (bool: boolean) => {
-  //   if (bool) {
-  //     await loadNextImageSet();
-  //   }
-  // };
-
-  // const loadNextImageSet = async () => {
-  //   const nextPage = imagesLoadPage + 1;
-  //   const showPage = imagesLoadPage == 1 ? 1 : nextPage;
-
-  //   await fetch("/api/unsplash", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({ page: showPage, perPage: PER_PAGE }),
-  //   })
-  //     .then((response) => {
-  //       return response.json();
-  //     })
-  //     .then((data) => {
-  //       setSelectedImages((prev) => {
-  //         return [...prev, ...data];
-  //       });
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error:", error);
-  //     });
-  //   setImagesLoadPage(nextPage);
-  // };
-  // type TUnsplashUrls = {
-  //   full: string;
-  //   large: string;
-  //   regular: string;
-  //   raw: string;
-  //   small: string;
-  //   thumb: string;
-  // };
-  // const setNewBackground = async (urls: TUnsplashUrls) => {
-  //   setProjectBackgroundImage(urls.full);
-  //   try {
-  //     await updateProjectBackgroundAction(project.id, urls.full, urls.small);
-  //     toast.success("Background Updated Successfully!");
-  //   } catch (error: any) {
-  //     toast.error("Error Updating Background");
-  //     console.error("Error:", error);
-  //   }
-  // };
   const isCurrentUserAdmin =
     project && user.projectsAsAdmin.some((id) => id === project.id);
   const uniqueProjectUsers = [...projectUsers];
@@ -153,21 +102,6 @@ export function ProjectPage({
             <h4 className="text-xs md:text-sm font-bold mr-2 lg:text-md text-ellipsis truncate">
               {project.name}
             </h4>
-            <Badge
-              className={` min-w-fit text-xs px-2 py-[0.2em] m-1 ${
-                project.createdBy == userId
-                  ? "bg-badgePurple"
-                  : isCurrentUserAdmin
-                  ? "bg-badgeRed"
-                  : "bg-badgeBlue"
-              } `}
-            >
-              {project.createdBy == userId
-                ? "Creator"
-                : isCurrentUserAdmin
-                ? `Admin`
-                : `Member`}
-            </Badge>
           </div>
         </div>
         <div className="flex flex-row w-full   justify-center align-middle ">
@@ -291,8 +225,24 @@ export function ProjectPage({
               </DialogContent>
             </Dialog> */}
           </div>
+
           {/* )} */}
         </div>
+        <Badge
+          className={` min-w-fit h-fit self-center text-xs px-2 py-[0.2em] m-1 ${
+            project.createdBy == userId
+              ? "bg-badgePurple"
+              : isCurrentUserAdmin
+              ? "bg-badgeRed"
+              : "bg-badgeBlue"
+          } `}
+        >
+          {project.createdBy == userId
+            ? "Creator"
+            : isCurrentUserAdmin
+            ? `Admin`
+            : `Member`}
+        </Badge>
       </div>
       <main
         style={

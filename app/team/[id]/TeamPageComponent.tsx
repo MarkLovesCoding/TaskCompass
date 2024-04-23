@@ -159,6 +159,7 @@ export function TeamPageComponent({
                   <TeamHeader
                     team={team}
                     isCurrentUserAdmin={isCurrentUserAdmin}
+                    userId={userId}
                   />
                 </div>
               </AccordionTrigger>
@@ -319,87 +320,6 @@ export function TeamPageComponent({
                   </div>
                   <div className="flex justify-center w-full mb-4 md:w-fit">
                     <BackgroundImageMenu type={"Team"} object={team} />
-
-                    {/* <Dialog onOpenChange={loadImageSetonOpen}>
-                      <DialogTrigger asChild>
-                        <Button
-                          variant="outline"
-                          className="group hover:bg-accent justify-center flex "
-                        >
-                          <Label className=" flex ">Change Background</Label>
-                          <ImageIcon className="w-6 h-6 ml-3 self-center group-hover:text-primary" />
-                          <span className="sr-only">
-                            Change Background Button
-                          </span>
-                        </Button>
-                      </DialogTrigger>
-                      <DialogContent className="border-2 w-[80%]  bg-drawer-background backdrop-blur  p-4 border-nav-background">
-                        <div className="flex flex-col h-fit overflow-auto">
-                          <h1 className="font-bold text-lg w-full text-center">
-                            Customize Background
-                          </h1>
-                          <div className="flex flex-wrap justify-center h-[300px] p-2">
-                            {selectedImages.length > 0 ? (
-                              selectedImages.map((image: any, index) => {
-                                return (
-                                  <div
-                                    key={index}
-                                    className="relative max-w-[120px] max-h-[80px] m-1 overflow-y-clip cursor-pointer hover:border-white border-2 truncate text-ellipsis group"
-                                  >
-                                    <Image
-                                      onClick={() =>
-                                        setNewBackground(image.urls)
-                                      }
-                                      src={image.urls.thumb}
-                                      alt="Background Image"
-                                      width={120}
-                                      height={80}
-                                      className={`${
-                                        image.width / image.height > 1.5
-                                          ? "w-auto h-[80px]"
-                                          : "w-[120px] h-auto"
-                                      }  overflow-clip rounded cursor-pointer z-40 `}
-                                    />
-                                    <Link
-                                      href={image.user.links.html}
-                                      className=" w-full absolute h-[20px]  bg-black/30 z-40 hover:bg-black/60 top-[60px] left-[0px]  truncate text-ellipsis "
-                                      title={image.user.name}
-                                    >
-                                      <p className="  px-2 text-xs truncate text-ellipsis">
-                                        {image.user.name}
-                                      </p>
-                                    </Link>
-                                  </div>
-                                );
-                              })
-                            ) : (
-                              <div className="flex justify-center w-full h-fit flex-wrap scroll-none">
-                                <Skeleton className="w-[120px] m-1 h-[80px] rounded-none bg-nav-background" />
-                                <Skeleton className="w-[120px] m-1 h-[80px] rounded-none bg-nav-background" />
-                                <Skeleton className="w-[120px] m-1 h-[80px] rounded-none bg-nav-background" />
-                                <Skeleton className="w-[120px] m-1 h-[80px] rounded-none bg-nav-background" />
-                                <Skeleton className="w-[120px] m-1 h-[80px] rounded-none bg-nav-background" />
-                                <Skeleton className="w-[120px] m-1 h-[80px] rounded-none bg-nav-background" />
-                                <Skeleton className="w-[120px] m-1 h-[80px] rounded-none bg-nav-background" />
-                                <Skeleton className="w-[120px] m-1 h-[80px] rounded-none bg-nav-background" />
-                                <Skeleton className="w-[120px] m-1 h-[80px] rounded-none bg-nav-background" />
-                                <Skeleton className="w-[120px] m-1 h-[80px] rounded-none bg-nav-background" />
-                                <Skeleton className="w-[120px] m-1 h-[80px] rounded-none bg-nav-background" />
-                                <Skeleton className="w-[120px] m-1 h-[80px] rounded-none bg-nav-background" />
-                              </div>
-                            )}
-                            <div className="min-w-full py-4 flex justify-center">
-                              <Button
-                                onClick={loadNextImageSet}
-                                className="w-28 px-1 "
-                              >
-                                More Images...
-                              </Button>
-                            </div>
-                          </div>
-                        </div>
-                      </DialogContent>
-                    </Dialog> */}
                   </div>
                 </div>
               </AccordionContent>
