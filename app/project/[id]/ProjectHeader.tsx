@@ -18,6 +18,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { updateProjectDetailsAction } from "@/app/project/_actions/update-project-details.action.";
 import { useState } from "react";
 import { toast } from "sonner";
+import { ValidationError } from "@/use-cases/utils";
 
 const formSchema = z.object({
   name: z.string().min(3).max(30),
@@ -107,8 +108,15 @@ export function ProjectHeader({ project }: { project: ProjectDto }) {
       setButtonShow(false);
       router.refresh();
     } catch (err: any) {
-      toast.error(err);
-      console.log(err);
+      if (err instanceof ValidationError) {
+        toast.error("Validation error: " + err.message);
+      } else if (err instanceof Error) {
+        toast.error(err.message);
+      } else {
+        toast.error(
+          "An unknown error occurred while adding user to team. Please try again."
+        );
+      }
     }
   };
   return (

@@ -27,7 +27,6 @@ export async function updateTaskNameAction(formData: FormData) {
         name: formData.name,
       }
     );
-    // revalidatePath(`/PROJECTS-CLEAN/${formData.projectId}`);
     revalidatePath("/project/[slug]");
     return {
       id: formData.id,

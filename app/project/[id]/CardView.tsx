@@ -8,6 +8,7 @@ import { updateTasksAction } from "../_actions/update-tasks.action";
 import { Droppable, DragDropContext } from "@hello-pangea/dnd";
 import CardColumn from "./CardColumn";
 import { toast } from "sonner";
+import { ValidationError } from "@/use-cases/utils";
 interface Columns {
   [key: string]: {
     taskIds: string[];
@@ -102,10 +103,18 @@ const CardView = ({
     setProjectData(newProjectData);
     try {
       await updateProjectAction(projectData);
-    } catch (error: any) {
+    } catch (err: any) {
       setProjectData(existingProjectData);
-      toast.error("Error updating project, reverting to existing data");
-      console.error(error);
+
+      if (err instanceof ValidationError) {
+        toast.error("Validation error: " + err.message);
+      } else if (err instanceof Error) {
+        toast.error(err.message);
+      } else {
+        toast.error(
+          "An unknown error occurred while updating project. Please try again."
+        );
+      }
     }
   };
 
@@ -132,10 +141,17 @@ const CardView = ({
 
       try {
         await updateProjectAction(projectData);
-      } catch (error: any) {
+      } catch (err: any) {
         setProjectData(existingProjectData);
-        toast.error("Error updating project, reverting to existing data");
-        console.error(error);
+        if (err instanceof ValidationError) {
+          toast.error("Validation error: " + err.message);
+        } else if (err instanceof Error) {
+          toast.error(err.message);
+        } else {
+          toast.error(
+            "An unknown error occurred while updating project. Please try again."
+          );
+        }
       }
     } else if (sourceDroppableId !== destinationDroppableId) {
       //error happens in UI here when not refreshed.
@@ -165,28 +181,28 @@ const CardView = ({
 
       try {
         await updateTasksAction(projectData.id, tasksList);
-      } catch (error: any) {
+      } catch (err: any) {
         setTasksList(existingTasksData);
         console.log(
-          "error updating tasks , reverting to existing data for task "
+          "error updating project, reverting to existing data for task and project"
         );
-        toast.error("Error updating tasks, reverting to existing data");
-        throw error;
+        toast.error("Error updating project, reverting to existing data");
+        throw err;
       }
 
       try {
         await updateProjectAction(projectData);
-      } catch (error: any) {
+        toast.success(
+          `Task moved from ${sourceDroppableId} to ${destinationDroppableId} `
+        );
+      } catch (err: any) {
         setProjectData(existingProjectData);
         console.log(
           "error updating project, reverting to existing data for task and project"
         );
         toast.error("Error updating project, reverting to existing data");
-        throw error;
+        throw err;
       }
-      toast.success(
-        `Task moved from ${sourceDroppableId} to ${destinationDroppableId} `
-      );
     }
   };
   const onDragEnd = (result: any) => {

@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/dialog-user-search";
 import { toast } from "sonner";
 import { ArchiveIcon } from "lucide-react";
+import { ValidationError } from "@/use-cases/utils";
 const ArchiveProjectPopover = ({ project }: { project: ProjectDto }) => {
   const archiveProjectFormObject = {
     archived: true,
@@ -29,9 +30,16 @@ const ArchiveProjectPopover = ({ project }: { project: ProjectDto }) => {
       toast.success(`Project: ${project.name} Archived Successfully!`);
       setIsOpen(false);
       router.push(`/team/${project.team}`);
-    } catch (error) {
-      console.error(error);
-      toast.error(`Error Archiving Project: ${project.name}`);
+    } catch (err: any) {
+      if (err instanceof ValidationError) {
+        toast.error("Validation error: " + err.message);
+      } else if (err instanceof Error) {
+        toast.error(err.message);
+      } else {
+        toast.error(
+          "An unknown error occurred while archiving project. Please try again."
+        );
+      }
     }
     // handleArchivedSubmit();
   };

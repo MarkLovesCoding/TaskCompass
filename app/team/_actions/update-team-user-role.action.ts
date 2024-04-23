@@ -5,6 +5,7 @@ import { updateUser } from "@/data-access/users/update-user.persistence";
 import { updateTeamUserRoleUseCase } from "@/use-cases/user/update-team-user-role.use-case";
 import { revalidatePath } from "next/cache";
 import { getUserFromSession } from "@/lib/sessionAuth";
+import { ValidationError } from "@/use-cases/utils";
 export async function UpdateTeamUserRoleAction(
   teamUserId: string,
   teamId: string,
@@ -30,7 +31,12 @@ export async function UpdateTeamUserRoleAction(
 
     //for toasts, not yet implemented
     return { success: true };
-  } catch (error: any) {
-    console.error(error);
+  } catch (err) {
+    const error = err as Error;
+    if (error instanceof ValidationError) {
+      throw new ValidationError(error.getErrors());
+    } else {
+      throw new Error(error.message);
+    }
   }
 }

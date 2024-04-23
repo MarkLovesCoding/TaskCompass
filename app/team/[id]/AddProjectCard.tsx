@@ -20,6 +20,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { createNewProjectAction } from "../_actions/create-new-project.action";
 import { useState } from "react";
 import { toast } from "sonner";
+import { ValidationError } from "@/use-cases/utils";
 const formSchema = z.object({
   name: z.string().min(4),
   description: z.string().min(4).max(100),
@@ -61,8 +62,15 @@ const AddProjectCard = ({ teamId }: { teamId: string }) => {
       await createNewProjectAction(values, teamId);
       toast.success(`Project: ${values.name} Created Successfully!`);
     } catch (err: any) {
-      toast.error(err);
-      // console.log(err);
+      if (err instanceof ValidationError) {
+        toast.error("Validation error: " + err.message);
+      } else if (err instanceof Error) {
+        toast.error(err.message);
+      } else {
+        toast.error(
+          "An unknown error occurred while adding project. Please try again."
+        );
+      }
     }
     router.refresh();
   };

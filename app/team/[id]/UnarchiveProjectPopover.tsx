@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button-alert";
 import { updateProjectArchivedAction } from "../_actions/update-project-archived.action";
 import { ProjectDto } from "@/use-cases/project/types";
 import { toast } from "sonner";
+import { ValidationError } from "@/use-cases/utils";
 
 const UnarchiveProjectPopover = ({
   project,
@@ -29,9 +30,16 @@ const UnarchiveProjectPopover = ({
       await updateProjectArchivedAction(archiveProjectFormObject);
       toast.success(`Project: ${project.name} Activated Successfully!`);
       setIsOpen(false);
-    } catch (err) {
-      console.error(err);
-      toast.error(`Error Activating Project: ${project.name}`);
+    } catch (err: any) {
+      if (err instanceof ValidationError) {
+        toast.error("Validation error: " + err.message);
+      } else if (err instanceof Error) {
+        toast.error(err.message);
+      } else {
+        toast.error(
+          "An unknown error occurred while unarchiving project. Please try again."
+        );
+      }
     }
   };
   return (

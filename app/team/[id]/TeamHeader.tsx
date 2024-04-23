@@ -21,6 +21,7 @@ import { updateTeamDetailsAction } from "../_actions/update-team-details.action"
 import { useState } from "react";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import { ValidationError } from "@/use-cases/utils";
 
 const formSchema = z.object({
   name: z.string().min(4).max(25),
@@ -37,15 +38,14 @@ export function TeamHeader({
 }) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    // mode: "onChange",
     defaultValues: {
       name: team.name,
     },
   });
   const { field, fieldState } = useController({
-    name: "name", // Name of the field you want to control
-    control: form.control, // Pass the form control from useForm
-    defaultValue: team.name, // Default value for the field
+    name: "name",
+    control: form.control,
+    defaultValue: team.name,
     rules: {
       minLength: 4,
       maxLength: 25,
@@ -53,7 +53,6 @@ export function TeamHeader({
   });
 
   const [buttonShow, setButtonShow] = useState(false);
-  // const [headerText, setHeaderText] = useState(team.name);
   const [isHeaderEditing, setIsHeaderEditing] = useState(false);
   const originalName = team.name;
 
@@ -85,11 +84,17 @@ export function TeamHeader({
       toast.success(`Team: ${values.name} Updated Successfully!`);
       setButtonShow(false);
 
-      console.log("values", values, team.id);
       router.refresh();
     } catch (err: any) {
-      toast.error(err);
-      console.log(err);
+      if (err instanceof ValidationError) {
+        toast.error("Validation error: " + err.message);
+      } else if (err instanceof Error) {
+        toast.error(err.message);
+      } else {
+        toast.error(
+          "An unknown error occurred while updating team details. Please try again."
+        );
+      }
     }
   };
   return (
@@ -167,7 +172,6 @@ export function TeamHeader({
             </div>
           )}
         </form>
-        {/* <DevTool control={form.control} placement="top-left" /> */}
       </Form>
 
       <Badge

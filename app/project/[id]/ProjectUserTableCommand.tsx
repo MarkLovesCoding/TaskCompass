@@ -22,6 +22,7 @@ import { Label } from "@/components/ui/label";
 
 import { toast } from "sonner";
 import ProjectUserPermissionsSelect from "./ProjectUserPermissionsSelect";
+import { ValidationError } from "@/use-cases/utils";
 const capitalizeFirstLetter = (string: string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
 };
@@ -66,10 +67,36 @@ export function ProjectUserTableCommand({
   };
 
   const onAddProjectUserSubmit = async (user: UserDto) => {
-    await addProjectUserAction(project.id, user.id);
+    try {
+      await addProjectUserAction(project.id, user.id);
+      toast.success("User added to project");
+    } catch (err: any) {
+      if (err instanceof ValidationError) {
+        toast.error("Validation error: " + err.message);
+      } else if (err instanceof Error) {
+        toast.error(err.message);
+      } else {
+        toast.error(
+          "An unknown error occurred while adding user to project. Please try again."
+        );
+      }
+    }
   };
   const onRemoveProjectUserSubmit = async (user: UserDto) => {
-    await removeProjectUserAction(project.id, user.id);
+    try {
+      await removeProjectUserAction(project.id, user.id);
+      toast.success("User removed from project");
+    } catch (err: any) {
+      if (err instanceof ValidationError) {
+        toast.error("Validation error: " + err.message);
+      } else if (err instanceof Error) {
+        toast.error(err.message);
+      } else {
+        toast.error(
+          "An unknown error occurred while removing user from project. Please try again."
+        );
+      }
+    }
   };
 
   const getUserStatus = (user: UserDto, project: ProjectDto) => {

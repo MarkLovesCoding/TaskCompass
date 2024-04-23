@@ -22,13 +22,13 @@ export async function createNewTeamAction(form: Form) {
       }
     );
     revalidatePath("/dashboard/[slug]");
-    return { status: "success" };
+    // return { status: "success" };
   } catch (err) {
     const error = err as Error;
     if (error instanceof ValidationError) {
-      return { status: "field-errors", errors: error.getErrors() };
+      throw new ValidationError(error.getErrors());
     } else {
-      return { status: "error", errors: error.message };
+      throw new Error(error.message);
     }
   }
 }

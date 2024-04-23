@@ -6,6 +6,7 @@ import updateManyProjectUsers from "@/data-access/users/update-many-project-user
 import { revalidatePath } from "next/cache";
 import { updateProjectUsersUseCase } from "@/use-cases/project/update-project-users.use-case";
 import { getUserFromSession } from "@/lib/sessionAuth";
+import { ValidationError } from "@/use-cases/utils";
 export async function updateProjectUsersAction(
   projectId: string,
   updatedUsers: string[]
@@ -26,10 +27,12 @@ export async function updateProjectUsersAction(
       }
     );
     revalidatePath(`/project/${projectId}`);
-
-    //for toasts, not yet implemented
-    return { success: true };
-  } catch (error: any) {
-    console.error(error);
+  } catch (err) {
+    const error = err as Error;
+    if (error instanceof ValidationError) {
+      throw new ValidationError(error.getErrors());
+    } else {
+      throw new Error(error.message);
+    }
   }
 }

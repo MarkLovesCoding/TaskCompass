@@ -60,6 +60,7 @@ import { updateTaskAction } from "../_actions/update-task.action";
 import { UserDto } from "@/use-cases/user/types";
 import { getInitials } from "@/lib/utils/getInitials";
 import { updateProjectTasksOrderFromTaskCardAction } from "../_actions/update-project-tasks-order-from-task-card.action";
+import { ValidationError } from "@/use-cases/utils";
 const taskFormSchema = z.object({
   id: z.string(),
   name: z.string().min(3).max(25),
@@ -195,18 +196,33 @@ export const TaskCard = ({
             taskOrderChanges[i]
           );
         }
-      } catch (error) {
-        toast.error("Error updating task order");
+      } catch (err: any) {
+        if (err instanceof ValidationError) {
+          toast.error("Validation error: " + err.message);
+        } else if (err instanceof Error) {
+          toast.error(err.message);
+        } else {
+          toast.error(
+            "An unknown error occurred while updating task. Please try again."
+          );
+        }
       }
     }
     try {
       await updateTaskAction(values, task.assignees);
-    } catch (error) {
-      toast.error("Error updating task");
+      toast.success("Task updated");
+      router.refresh();
+    } catch (err: any) {
+      if (err instanceof ValidationError) {
+        toast.error("Validation error: " + err.message);
+      } else if (err instanceof Error) {
+        toast.error(err.message);
+      } else {
+        toast.error(
+          "An unknown error occurred while updating task. Please try again."
+        );
+      }
     }
-    toast.success("Task updated");
-
-    router.refresh();
   };
   const { field: archivedField, fieldState: archivedFieldState } =
     useController({
@@ -248,9 +264,16 @@ export const TaskCard = ({
       await updateTaskArchivedAction(values);
       toast.success(`Task Archived Successfully!`);
       router.refresh();
-    } catch (error) {
-      console.error(error);
-      toast.error(`Error Archiving Task`);
+    } catch (err: any) {
+      if (err instanceof ValidationError) {
+        toast.error("Validation error: " + err.message);
+      } else if (err instanceof Error) {
+        toast.error(err.message);
+      } else {
+        toast.error(
+          "An unknown error occurred while archiving task. Please try again."
+        );
+      }
     }
   };
   const handleNameBlur = () => {

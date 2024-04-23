@@ -14,6 +14,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { UpdateTeamUserRoleAction } from "../_actions/update-team-user-role.action";
 import { TeamDto } from "@/use-cases/team/types";
+import { ValidationError } from "@/use-cases/utils";
 type TeamUserBlockProps = {
   user: UserDto;
   team: TeamDto;
@@ -42,15 +43,28 @@ const TeamUserPermissionsSelect = ({ user, team }: TeamUserBlockProps) => {
     setSelectedRole(value as "admin" | "member");
   };
   const handleRoleChangeSubmit = async () => {
-    await UpdateTeamUserRoleAction(
-      user.id,
-      team.id,
-      selectedRole as "admin" | "member"
-    );
+    try {
+      await UpdateTeamUserRoleAction(
+        user.id,
+        team.id,
+        selectedRole as "admin" | "member"
+      );
+      toast.success(`User role updated to ${selectedRole}`);
+      setShowSubmitButton(false);
+
+      router.refresh();
+    } catch (err: any) {
+      if (err instanceof ValidationError) {
+        toast.error("Validation error: " + err.message);
+      } else if (err instanceof Error) {
+        toast.error(err.message);
+      } else {
+        toast.error(
+          "An unknown error occurred while updating user role. Please try again."
+        );
+      }
+    }
     // updateProjectUserRoleAction(user, project, selectedRole);
-    toast.success(`User role updated to ${selectedRole}`);
-    setShowSubmitButton(false);
-    router.refresh();
   };
 
   const router = useRouter();

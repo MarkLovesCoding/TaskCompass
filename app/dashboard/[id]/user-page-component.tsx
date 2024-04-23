@@ -1,7 +1,6 @@
 "use client";
 import Link from "next/link";
-import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import AddTeamCard from "./AddTeamCard";
 
 import { Button } from "@/components/ui/button";
@@ -14,7 +13,7 @@ import {
 
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
-import { ImageIcon, PlusIcon } from "lucide-react";
+import { PlusIcon } from "lucide-react";
 import ArchivedProjectCardWithUnarchiveAction from "./UnarchiveProjectCard";
 import type { UserDto } from "@/use-cases/user/types";
 import type { ProjectDto } from "@/use-cases/project/types";
@@ -32,11 +31,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { updateUserBackgroundAction } from "./_actions/update-user-background.action";
-import { Skeleton } from "@/components/ui/skeleton";
 import BackgroundImageMenu from "./BackgroundImageMenu";
-// get teams
-// get projects
 
 export function UserPageComponent({
   user,
@@ -74,79 +69,6 @@ export function UserPageComponent({
   useEffect(() => {
     setBackgroundImage(user.backgroundImage);
   }, [user.backgroundImage]);
-  // const PER_PAGE = 12;
-  // const [selectedImages, setSelectedImages] = useState<any[]>([]);
-  // const [imagesLoadPage, setImagesLoadPage] = useState<number>(1);
-
-  // const loadImageSetonOpen = async (bool: boolean) => {
-  //   // isImagesDialogOpen = bool;
-  //   if (bool) {
-  //     await loadNextImageSet();
-  //   }
-  // };
-
-  // const loadNextImageSet = async () => {
-  //   const nextPage = imagesLoadPage + 1;
-  //   const showPage = imagesLoadPage == 1 ? 1 : nextPage;
-  //   // await apiSearchNext(nextPage);
-  //   await fetch("/api/unsplash", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({ page: showPage, perPage: PER_PAGE }),
-  //     cache: "no-cache",
-  //   })
-  //     .then((response) => {
-  //       return response.json();
-  //     })
-  //     .then((data) => {
-  //       setSelectedImages((prev) => {
-  //         return [...prev, ...data];
-  //       });
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error:", error);
-  //     });
-  //   setImagesLoadPage(nextPage);
-  // };
-  // type TUrls = {
-  //   full: string;
-  //   large: string;
-  //   regular: string;
-  //   raw: string;
-  //   small: string;
-  //   thumb: string;
-  // };
-  // const setNewBackground = async (urls: TUrls) => {
-  //   setDashboardBackgroundImage(urls.full);
-  //   await updateUserDashboardBackgroundAction(user.id, urls.full);
-  // };
-  // const imageContainerRef = useRef<HTMLDivElement>(null);
-  // const handleScroll = () => {
-  //   if (!imageContainerRef.current) {
-  //     console.log("Ref is not attached");
-  //     return;
-  //   }
-  //   const { scrollTop, scrollHeight, clientHeight } = imageContainerRef.current;
-  //   console.log(scrollTop, scrollHeight, clientHeight);
-  //   if (scrollTop + clientHeight >= scrollHeight) {
-  //     console.log("You have reached the bottom!");
-  //     // loadNextImageSet(); // Uncomment this to load more content
-  //   }
-  // };
-  // useEffect(() => {
-  //   const scrollContainer = imageContainerRef.current;
-  //   if (scrollContainer) {
-  //     scrollContainer.addEventListener("scroll", handleScroll);
-  //   }
-
-  //   return () => {
-  //     if (scrollContainer) {
-  //       scrollContainer.removeEventListener("scroll", handleScroll);
-  //     }
-  //   };
-  // }, []); // Empty dependencies array indicates this runs only once after mounting
 
   return (
     <div className="absolute flex flex-col top-[2em] md:top-[3em] w-full h-[calc(100vh-2em)] md:h-[calc(100vh-3em)]">
@@ -163,9 +85,7 @@ export function UserPageComponent({
         }
         className="flex  items-center bg-gradient-background-light dark:bg-gradient-background-dark overflow-x-hidden flex-col  h-[calc(100vh-2em)] md:h-[calc(100vh-3em)]  md:gap-8 "
       >
-        {/* <div className="w-full h-[15vh] bg-card-background absolute top-0 left-0 "></div> */}
         <div className="z-20   w-full flex flex-col items-center self-center  pl-8 p-1 bg-accordion-background backdrop-blur shadow-md space-y-4  ">
-          {/* <div className="bg-gray-100 p-4 rounded-lg shadow-md"> */}
           <Accordion type="single" collapsible className="w-full">
             <AccordionItem value="summary">
               <AccordionTrigger>
@@ -181,11 +101,7 @@ export function UserPageComponent({
                 </div>
               </AccordionTrigger>
               <AccordionContent>
-                {/* <div className="flex flex-col  md:flex-row md:flex-wrap md:justify-between md:space-x-4  "> */}
                 <div className="flex flex-row bg-transparent justify-between">
-                  {/* <div className="mb-4 md:w-1/4"> */}
-
-                  {/* </div> */}
                   <div className="flex flex-col md:flex-row md:flex-wrap md:justify-stretch md:mx-[12%] ">
                     <div className="mb-4 md:w-1/3">
                       <div className="ml-auto flex flex-wrap items-center ">
@@ -219,100 +135,13 @@ export function UserPageComponent({
                       </div>
                       <div className="ml-auto flex flex-wrap items-center ">
                         <Badge className=" min-w-fit text-xs px-2 py-[0.2em] m-1  bg-badgeRed ">{` Admin: ${usersProjectsAsAdmin.length}`}</Badge>
-
                         <Badge className=" min-w-fit text-xs px-2 py-[0.2em] m-1  bg-badgeBlue">{` Member: ${usersProjectsAsMember.length}`}</Badge>
                       </div>
                     </div>
                   </div>
-
                   <div className="">
                     <div className="mb-4 md:w-1/6">
                       <BackgroundImageMenu type={"User"} object={user} />
-                      {/* <Dialog onOpenChange={loadImageSetonOpen}>
-                        <DialogTrigger asChild>
-                          <Button
-                            variant="outline"
-                            className="group hover:bg-accent px-2 mr-3"
-                          >
-                            <Label className="hidden md:flex ">
-                              Change Background
-                            </Label>
-                            <ImageIcon className="w-6 h-6 md:ml-3 self-center group-hover:text-primary" />
-                            <span className="sr-only">
-                              Change Background Button
-                            </span>
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent className="border-2 w-[80%]  bg-drawer-background backdrop-blur  p-4 border-nav-background">
-                          <div
-                            className="flex flex-col h-fit overflow-auto"
-                            ref={imageContainerRef}
-                          >
-                            <h1 className="font-bold text-lg w-full text-center">
-                              Customize Background
-                            </h1>
-                            <div className="flex flex-wrap justify-center h-[300px] p-2">
-                              {selectedImages.length > 0 ? (
-                                selectedImages.map((image: any, index) => {
-                                  return (
-                                    <div
-                                      key={index}
-                                      className="relative max-w-[120px] max-h-[80px] m-1 overflow-y-clip cursor-pointer hover:border-white border-2 truncate text-ellipsis group"
-                                    >
-                                      <Image
-                                        onClick={() =>
-                                          setNewBackground(image.urls)
-                                        }
-                                        src={image.urls.thumb}
-                                        alt="Background Image"
-                                        width={120}
-                                        height={80}
-                                        className={`${
-                                          image.width / image.height > 1.5
-                                            ? "w-auto h-[80px]"
-                                            : "w-[120px] h-auto"
-                                        }  overflow-clip rounded cursor-pointer z-40 `}
-                                      />
-                                      <Link
-                                        href={image.user.links.html}
-                                        className=" w-full absolute h-[20px]  bg-black/30 z-40 hover:bg-black/60 top-[60px] left-[0px]  truncate text-ellipsis "
-                                        title={image.user.name}
-                                      >
-                                        <p className="  px-2 text-xs truncate text-ellipsis">
-                                          {image.user.name}
-                                        </p>
-                                      </Link>
-                                    </div>
-                                  );
-                                })
-                              ) : (
-                                <div className="flex justify-center w-full h-fit flex-wrap scroll-none">
-                                  <Skeleton className="w-[120px] m-1 h-[80px] rounded-none bg-nav-background" />
-                                  <Skeleton className="w-[120px] m-1 h-[80px] rounded-none bg-nav-background" />
-                                  <Skeleton className="w-[120px] m-1 h-[80px] rounded-none bg-nav-background" />
-                                  <Skeleton className="w-[120px] m-1 h-[80px] rounded-none bg-nav-background" />
-                                  <Skeleton className="w-[120px] m-1 h-[80px] rounded-none bg-nav-background" />
-                                  <Skeleton className="w-[120px] m-1 h-[80px] rounded-none bg-nav-background" />
-                                  <Skeleton className="w-[120px] m-1 h-[80px] rounded-none bg-nav-background" />
-                                  <Skeleton className="w-[120px] m-1 h-[80px] rounded-none bg-nav-background" />
-                                  <Skeleton className="w-[120px] m-1 h-[80px] rounded-none bg-nav-background" />
-                                  <Skeleton className="w-[120px] m-1 h-[80px] rounded-none bg-nav-background" />
-                                  <Skeleton className="w-[120px] m-1 h-[80px] rounded-none bg-nav-background" />
-                                  <Skeleton className="w-[120px] m-1 h-[80px] rounded-none bg-nav-background" />
-                                </div>
-                              )}
-                              <div className="min-w-full py-4 flex justify-center">
-                                <Button
-                                  onClick={loadNextImageSet}
-                                  className="w-28 px-1 "
-                                >
-                                  More Images...
-                                </Button>
-                              </div>
-                            </div>
-                          </div>
-                        </DialogContent>
-                      </Dialog> */}
                     </div>
                   </div>
                 </div>
@@ -367,7 +196,6 @@ export function UserPageComponent({
                                     "url('" +
                                     team.backgroundImageThumbnail +
                                     "')",
-
                                   backgroundSize: "cover",
                                   backgroundPosition: " center",
                                   backgroundRepeat: "no-repeat",
@@ -415,9 +243,6 @@ export function UserPageComponent({
                                     "url('" +
                                     team.backgroundImageThumbnail +
                                     "')",
-                                  // +
-                                  // ", linear-gradient(215deg, rgba(255,255,255,0.2),rgba(255,255,255,0.1))",
-                                  // backgroundBlendMode: "overlay",
                                   backgroundSize: "cover",
                                   backgroundPosition: " center",
                                   backgroundRepeat: "no-repeat",
@@ -482,9 +307,6 @@ export function UserPageComponent({
                                     "url('" +
                                     project.backgroundImageThumbnail +
                                     "')",
-                                  // +
-                                  // ", linear-gradient(215deg, rgba(255,255,255,0.2),rgba(255,255,255,0.1))",
-                                  // backgroundBlendMode: "overlay",
                                   backgroundSize: "cover",
                                   backgroundPosition: " center",
                                   backgroundRepeat: "no-repeat",
@@ -542,9 +364,6 @@ export function UserPageComponent({
                                     "url('" +
                                     project.backgroundImageThumbnail +
                                     "')",
-                                  // +
-                                  // ", linear-gradient(215deg, rgba(255,255,255,0.2),rgba(255,255,255,0.1))",
-                                  // backgroundBlendMode: "overlay",
                                   backgroundSize: "cover",
                                   backgroundPosition: " center",
                                   backgroundRepeat: "no-repeat",
@@ -572,7 +391,6 @@ export function UserPageComponent({
                                 {project.name}
                               </CardTitle>
                               <CardDescription className="text-xs text-ellipsis text-imageThumbText">
-                                {/* <p className="truncate">{project.description}</p> */}
                                 <Badge className="  min-w-fit text-xs px-2 py-[0.2em] m-1 self-end bg-badgeYellow ">
                                   {`Users:  ${project.users.length}`}
                                 </Badge>

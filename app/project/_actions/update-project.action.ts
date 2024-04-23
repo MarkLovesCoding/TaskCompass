@@ -4,6 +4,7 @@ import { updateProjectUseCase } from "@/use-cases/project/update-project.use-cas
 import { updateProject } from "@/data-access/projects/update-project.persistence";
 import { getUserFromSession } from "@/lib/sessionAuth";
 import { ProjectDto } from "@/use-cases/project/types";
+import { ValidationError } from "@/use-cases/utils";
 export async function updateProjectAction(project: ProjectDto) {
   const { getUser } = await getUserFromSession();
   try {
@@ -18,10 +19,12 @@ export async function updateProjectAction(project: ProjectDto) {
     );
 
     revalidatePath(`/project/${project.id}`);
-
-    //for toasts, not yet implemented
-    // return { success: true };
-  } catch (error: any) {
-    console.error(error);
+  } catch (err) {
+    const error = err as Error;
+    if (error instanceof ValidationError) {
+      throw new ValidationError(error.getErrors());
+    } else {
+      throw new Error(error.message);
+    }
   }
 }

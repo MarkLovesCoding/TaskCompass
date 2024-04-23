@@ -7,6 +7,7 @@ import { updateUser } from "@/data-access/users/update-user.persistence";
 import { updateProjectUserRoleUseCase } from "@/use-cases/user/update-project-user-role.use-case";
 import { revalidatePath } from "next/cache";
 import { getUserFromSession } from "@/lib/sessionAuth";
+import { ValidationError } from "@/use-cases/utils";
 export async function UpdateProjectUserRoleAction(
   projectUserId: string,
   projectId: string,
@@ -29,10 +30,12 @@ export async function UpdateProjectUserRoleAction(
       }
     );
     revalidatePath(`/project/${projectId}`);
-
-    //for toasts, not yet implemented
-    return { success: true };
-  } catch (error: any) {
-    console.error(error);
+  } catch (err) {
+    const error = err as Error;
+    if (error instanceof ValidationError) {
+      throw new ValidationError(error.getErrors());
+    } else {
+      throw new Error(error.message);
+    }
   }
 }

@@ -16,6 +16,7 @@ import { UpdateTeamUserRoleAction } from "../_actions/update-team-user-role.acti
 import { TeamDto } from "@/use-cases/team/types";
 import { ProjectDto } from "@/use-cases/project/types";
 import { UpdateProjectUserRoleAction } from "@/app/project/_actions/update-project-user-role.action";
+import { ValidationError } from "@/use-cases/utils";
 type ObjectType = TeamDto | ProjectDto;
 type MemberCardSearchUserBlockProps = {
   user: UserDto;
@@ -62,23 +63,35 @@ const GenericMemberCardPermissionsSelect = ({
     setSelectedRole(value as "admin" | "member");
   };
   const handleRoleChangeSubmit = async () => {
-    if (cardType === "team") {
-      await UpdateTeamUserRoleAction(
-        user.id,
-        object.id,
-        selectedRole as "admin" | "member"
-      );
-    } else {
-      await UpdateProjectUserRoleAction(
-        user.id,
-        object.id,
-        selectedRole as "admin" | "member"
-      );
+    try {
+      if (cardType === "team") {
+        await UpdateTeamUserRoleAction(
+          user.id,
+          object.id,
+          selectedRole as "admin" | "member"
+        );
+      } else {
+        await UpdateProjectUserRoleAction(
+          user.id,
+          object.id,
+          selectedRole as "admin" | "member"
+        );
+      }
+      // updateProjectUserRoleAction(user, project, selectedRole);
+      toast.success(`User role updated to ${selectedRole}`);
+      setShowSubmitButton(false);
+      router.refresh();
+    } catch (err: any) {
+      if (err instanceof ValidationError) {
+        toast.error("Validation error: " + err.message);
+      } else if (err instanceof Error) {
+        toast.error(err.message);
+      } else {
+        toast.error(
+          "An unknown error occurred while updating user role. Please try again."
+        );
+      }
     }
-    // updateProjectUserRoleAction(user, project, selectedRole);
-    toast.success(`User role updated to ${selectedRole}`);
-    setShowSubmitButton(false);
-    router.refresh();
   };
 
   const router = useRouter();

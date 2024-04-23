@@ -3,6 +3,7 @@ import { createNewProject } from "@/data-access/projects/create-new-project.pers
 import { createNewProjectUseCase } from "@/use-cases/project/create-new-project.use-case";
 import { revalidatePath } from "next/cache";
 import { getUserFromSession } from "@/lib/sessionAuth";
+import { ValidationError } from "@/use-cases/utils";
 type Form = {
   name: string;
   description: string;
@@ -26,7 +27,12 @@ export async function createNewProjectAction(form: Form, teamId: string) {
     revalidatePath(`/team/${teamId}`);
 
     return { form: { name: "" } };
-  } catch (error: any) {
-    console.error(error);
+  } catch (err) {
+    const error = err as Error;
+    if (error instanceof ValidationError) {
+      throw new ValidationError(error.getErrors());
+    } else {
+      throw new Error(error.message);
+    }
   }
 }

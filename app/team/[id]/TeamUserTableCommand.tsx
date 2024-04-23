@@ -22,6 +22,7 @@ import { toast } from "sonner";
 
 import TeamMemberCardPermissionsSelect from "./TeamUserCardPermissionsSelect";
 import { TeamDto } from "@/use-cases/team/types";
+import { ValidationError } from "@/use-cases/utils";
 
 const capitalizeFirstLetter = (string: string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -87,10 +88,36 @@ export function TeamUserTableCommand({
   };
 
   const onAddTeamUserSubmit = async (user: UserDto) => {
-    await addTeamUserAction(team.id, user.id);
+    try {
+      await addTeamUserAction(team.id, user.id);
+      toast.success(user.name + " added to Team");
+    } catch (err: any) {
+      if (err instanceof ValidationError) {
+        toast.error("Validation error: " + err.message);
+      } else if (err instanceof Error) {
+        toast.error(err.message);
+      } else {
+        toast.error(
+          "An unknown error occurred while adding user to team. Please try again."
+        );
+      }
+    }
   };
   const onRemoveTeamUserSubmit = async (user: UserDto) => {
-    await removeTeamUserAction(team.id, user.id);
+    try {
+      await removeTeamUserAction(team.id, user.id);
+      toast.success(user.name + " removed from Team");
+    } catch (err: any) {
+      if (err instanceof ValidationError) {
+        toast.error("Validation error: " + err.message);
+      } else if (err instanceof Error) {
+        toast.error(err.message);
+      } else {
+        toast.error(
+          "An unknown error occurred while removing team user. Please try again."
+        );
+      }
+    }
   };
 
   const getUserStatus = (user: UserDto, team: TeamDto) => {

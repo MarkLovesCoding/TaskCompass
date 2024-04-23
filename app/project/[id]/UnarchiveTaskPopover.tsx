@@ -9,6 +9,7 @@ import {
   DialogContent,
 } from "@/components/ui/dialog-user-search";
 import { toast } from "sonner";
+import { ValidationError } from "@/use-cases/utils";
 
 const UnarchiveTaskPopover = ({
   task,
@@ -29,9 +30,16 @@ const UnarchiveTaskPopover = ({
       await updateTaskArchivedAction(unarchiveFormObject);
       toast.success(`Task: ${task.name} Activated Successfully!`);
       setIsOpen(false);
-    } catch (error) {
-      console.error(error);
-      toast.error(`Error Activating Task: ${task.name}`);
+    } catch (err: any) {
+      if (err instanceof ValidationError) {
+        toast.error("Validation error: " + err.message);
+      } else if (err instanceof Error) {
+        toast.error(err.message);
+      } else {
+        toast.error(
+          "An unknown error occurred while activating task. Please try again."
+        );
+      }
     }
   };
 

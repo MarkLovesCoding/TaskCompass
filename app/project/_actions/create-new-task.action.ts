@@ -3,6 +3,7 @@ import { createNewTask } from "@/data-access/tasks/create-new-task.persistence";
 import { createNewTaskUseCase } from "@/use-cases/task/create-new-task.use-case";
 import { getUserFromSession } from "@/lib/sessionAuth";
 import { revalidatePath } from "next/cache";
+import { ValidationError } from "@/use-cases/utils";
 
 type FormData = {
   name: string;
@@ -25,7 +26,12 @@ export async function createNewTaskAction(formData: FormData) {
       }
     );
     revalidatePath(`/project/[slug]`);
-  } catch (error: any) {
-    console.error(error);
+  } catch (err) {
+    const error = err as Error;
+    if (error instanceof ValidationError) {
+      throw new ValidationError(error.getErrors());
+    } else {
+      throw new Error(error.message);
+    }
   }
 }

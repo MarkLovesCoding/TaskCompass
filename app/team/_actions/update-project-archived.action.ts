@@ -4,6 +4,7 @@ import { updateProject } from "@/data-access/projects/update-project.persistence
 import getProject from "@/data-access/projects/get-project.persistence";
 import { revalidatePath } from "next/cache";
 import { getUserFromSession } from "@/lib/sessionAuth";
+import { ValidationError } from "@/use-cases/utils";
 
 type Form = {
   archived: boolean;
@@ -26,7 +27,12 @@ export async function updateProjectArchivedAction(form: Form) {
       }
     );
     revalidatePath(`/project/${form.projectId}`);
-  } catch (error: any) {
-    console.error(error);
+  } catch (err) {
+    const error = err as Error;
+    if (error instanceof ValidationError) {
+      throw new ValidationError(error.getErrors());
+    } else {
+      throw new Error(error.message);
+    }
   }
 }

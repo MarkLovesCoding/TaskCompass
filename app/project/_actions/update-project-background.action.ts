@@ -4,13 +4,13 @@ import getProject from "@/data-access/projects/get-project.persistence";
 import { revalidatePath } from "next/cache";
 import { updateProjectBackgroundUseCase } from "@/use-cases/project/update-project-background.use-case";
 import { getUserFromSession } from "@/lib/sessionAuth";
+import { ValidationError } from "@/use-cases/utils";
 export async function updateProjectBackgroundAction(
   projectId: string,
   projectBackgroundImage: string,
   projectBackgroundImageThumbnail: string
 ) {
   const { getUser } = await getUserFromSession();
-  console.log("updateProjectBackground", projectId, projectBackgroundImage);
   try {
     await updateProjectBackgroundUseCase(
       {
@@ -25,10 +25,12 @@ export async function updateProjectBackgroundAction(
       }
     );
     revalidatePath(`/project/${projectId}`);
-
-    //for toasts, not yet implemented
-    return { success: true };
-  } catch (error: any) {
-    console.error(error);
+  } catch (err) {
+    const error = err as Error;
+    if (error instanceof ValidationError) {
+      throw new ValidationError(error.getErrors());
+    } else {
+      throw new Error(error.message);
+    }
   }
 }

@@ -5,6 +5,7 @@ import getTeam from "@/data-access/teams/get-team.persistence";
 import { updateTeamUsersUseCase } from "@/use-cases/team/update-team-users.use-case";
 import { revalidatePath } from "next/cache";
 import { getUserFromSession } from "@/lib/sessionAuth";
+import { ValidationError } from "@/use-cases/utils";
 
 export async function updateTeamUsersAction(
   teamId: string,
@@ -29,7 +30,12 @@ export async function updateTeamUsersAction(
 
     //for toasts, not yet implemented
     return { success: true };
-  } catch (error: any) {
-    console.error(error);
+  } catch (err) {
+    const error = err as Error;
+    if (error instanceof ValidationError) {
+      throw new ValidationError(error.getErrors());
+    } else {
+      throw new Error(error.message);
+    }
   }
 }

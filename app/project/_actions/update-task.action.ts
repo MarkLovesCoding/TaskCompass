@@ -6,6 +6,7 @@ import getTask from "@/data-access/tasks/get-task.persistence";
 import { updateTaskUseCase } from "@/use-cases/task/update-task.use-case";
 import { getUserFromSession } from "@/lib/sessionAuth";
 import { revalidatePath } from "next/cache";
+import { ValidationError } from "@/use-cases/utils";
 
 type FormData = {
   id: string;
@@ -24,7 +25,6 @@ export async function updateTaskAction(
   formData: FormData,
   originalAssignees: string[]
 ) {
-  console.log("updatingformData", formData);
   const { getUser } = await getUserFromSession();
 
   try {
@@ -51,7 +51,12 @@ export async function updateTaskAction(
       }
     );
     revalidatePath(`/project/${formData.projectId}`);
-  } catch (error: any) {
-    console.error(error);
+  } catch (err) {
+    const error = err as Error;
+    if (error instanceof ValidationError) {
+      throw new ValidationError(error.getErrors());
+    } else {
+      throw new Error(error.message);
+    }
   }
 }

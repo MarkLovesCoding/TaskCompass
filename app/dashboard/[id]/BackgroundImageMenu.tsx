@@ -22,6 +22,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { ImageIcon } from "lucide-react";
 import { capitalizeEachWord } from "@/app/project/[id]/utils";
+import { ValidationError } from "@/use-cases/utils";
 export type TImageCategories =
   | "nature"
   | "dogs"
@@ -104,6 +105,7 @@ const BackgroundImageMenu = ({
         });
       })
       .catch((error) => {
+        toast.error("Error loading images from unsplash.com");
         console.error("Error:", error);
       });
     setImagesLoadPage(nextPage);
@@ -113,7 +115,6 @@ const BackgroundImageMenu = ({
     setPhotoCategory(category);
     setImagesLoadPage(1);
     setSelectedImages([]);
-    console.log("photoCategory, category", photoCategory, category);
     await loadNextImageSet(category);
   };
 
@@ -131,9 +132,16 @@ const BackgroundImageMenu = ({
       try {
         await updateUserBackgroundAction(object.id, urls.full);
         toast.success("Dashboard background image updating...");
-      } catch (err) {
-        toast.error("Error updating dashboad background image");
-        console.error(err);
+      } catch (err: any) {
+        if (err instanceof ValidationError) {
+          toast.error("Validation error: " + err.message);
+        } else if (err instanceof Error) {
+          toast.error(err.message);
+        } else {
+          toast.error(
+            "An error occurred updating backdoung. Please try again."
+          );
+        }
       }
     }
     if (type === "Project") {
@@ -158,8 +166,8 @@ const BackgroundImageMenu = ({
           urls.small || urls.thumb
         );
         toast.success("Team background image updating...");
-      } catch (err) {
-        toast.error("Error updating team background image");
+      } catch (err: any) {
+        toast.error("Error updating team background image.", err.message);
         console.error(err);
       }
     }

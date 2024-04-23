@@ -23,7 +23,7 @@ type ParamsType = {
 
 const Projects = async ({ params }: { params: ParamsType }) => {
   unstable_noStore();
-  const session = await sessionAuth(`TEAMS-CLEAN/${params.id}`);
+  const session = await sessionAuth(`team/${params.id}`);
 
   const teamId = params.id;
   const team: TeamDto = await getTeam(teamId);

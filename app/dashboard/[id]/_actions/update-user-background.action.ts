@@ -4,6 +4,8 @@ import { updateUser } from "@/data-access/users/update-user.persistence";
 import { updateUserBackgroundUseCase } from "@/use-cases/user/update-user-background.use-case";
 import { revalidatePath } from "next/cache";
 import { getUserFromSession } from "@/lib/sessionAuth";
+import { ValidationError } from "@/use-cases/utils";
+
 export async function updateUserBackgroundAction(
   userId: string,
   backgroundImage: string
@@ -24,7 +26,12 @@ export async function updateUserBackgroundAction(
     revalidatePath(`/dashboard/${userId}/page`);
 
     return { success: true };
-  } catch (error: any) {
-    console.error(error);
+  } catch (err) {
+    const error = err as Error;
+    if (error instanceof ValidationError) {
+      throw new ValidationError(error.getErrors());
+    } else {
+      throw new Error(error.message);
+    }
   }
 }

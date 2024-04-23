@@ -17,6 +17,7 @@ import { createNewTaskAction } from "../_actions/create-new-task.action";
 import { useRouter } from "next/navigation";
 import { PopoverClose } from "@radix-ui/react-popover";
 import { toast } from "sonner";
+import { ValidationError } from "@/use-cases/utils";
 type TaskFormProps = {
   project: ProjectDto;
 };
@@ -54,11 +55,18 @@ export const NewTaskCard: React.FC<TaskFormProps> = ({ project }) => {
     setIsSubmitting(true);
     try {
       await createNewTaskAction(values);
-      toast.success("Task created successfully");
+      toast.success("New task: " + values.name + " created successfully");
       router.refresh();
-    } catch (error) {
-      toast.error("Error creating task");
-      console.error(error);
+    } catch (err: any) {
+      if (err instanceof ValidationError) {
+        toast.error("Validation error: " + err.message);
+      } else if (err instanceof Error) {
+        toast.error(err.message);
+      } else {
+        toast.error(
+          "An unknown error occurred while creating new task. Please try again."
+        );
+      }
     }
   };
 

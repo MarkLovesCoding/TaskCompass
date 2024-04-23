@@ -4,6 +4,7 @@ import getTask from "@/data-access/tasks/get-task.persistence";
 import { updateTaskFullCardUseCase } from "@/use-cases/task/update-task-full-card.use-case";
 import { getUserFromSession } from "@/lib/sessionAuth";
 import { revalidatePath } from "next/cache";
+import { ValidationError } from "@/use-cases/utils";
 
 type FormData = {
   id: string;
@@ -13,11 +14,9 @@ type FormData = {
   assignees: string[];
   dueDate: Date;
   startDate: Date;
-  // archived: boolean;
   category: string;
   priority: string;
   status: string;
-  // label?: string | undefined;
 };
 
 export async function updateTaskFullCardAction(
@@ -49,7 +48,12 @@ export async function updateTaskFullCardAction(
       }
     );
     revalidatePath(`/project/${formData.projectId}`);
-  } catch (error: any) {
-    console.error(error);
+  } catch (err) {
+    const error = err as Error;
+    if (error instanceof ValidationError) {
+      throw new ValidationError(error.getErrors());
+    } else {
+      throw new Error(error.message);
+    }
   }
 }

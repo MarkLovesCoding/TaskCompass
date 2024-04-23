@@ -7,6 +7,7 @@ import { updateTasksUseCase } from "@/use-cases/task/update-tasks.use-case";
 import { getUserFromSession } from "@/lib/sessionAuth";
 import { revalidatePath } from "next/cache";
 import { TaskDto } from "@/use-cases/task/types";
+import { ValidationError } from "@/use-cases/utils";
 
 export async function updateTasksAction(projectId: string, tasks: TaskDto[]) {
   const { getUser } = await getUserFromSession();
@@ -24,7 +25,12 @@ export async function updateTasksAction(projectId: string, tasks: TaskDto[]) {
       }
     );
     revalidatePath(`/project/${projectId}/page`);
-  } catch (error: any) {
-    console.error(error);
+  } catch (err) {
+    const error = err as Error;
+    if (error instanceof ValidationError) {
+      throw new ValidationError(error.getErrors());
+    } else {
+      throw new Error(error.message);
+    }
   }
 }

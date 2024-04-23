@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import { UpdateProjectUserRoleAction } from "../_actions/update-project-user-role.action";
+import { ValidationError } from "@/use-cases/utils";
 type ProjectUserBlockProps = {
   user: UserDto;
   project: ProjectDto;
@@ -54,8 +55,16 @@ const ProjectUserPermissionsSelect = ({
       toast.success(`User role updated to ${selectedRole}`);
       setShowSubmitButton(false);
       router.refresh();
-    } catch (error) {
-      toast.error(`Error updating user role: ${error}`);
+    } catch (err: any) {
+      if (err instanceof ValidationError) {
+        toast.error("Validation error: " + err.message);
+      } else if (err instanceof Error) {
+        toast.error(err.message);
+      } else {
+        toast.error(
+          "An unknown error occurred while changing user role. Please try again."
+        );
+      }
     }
   };
 
