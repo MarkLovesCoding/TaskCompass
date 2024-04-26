@@ -5,7 +5,7 @@ import Team from "@/db/(models)/Team";
 
 import type { TeamDto } from "@/use-cases/team/types";
 
-async function getTeam(teamId: string): Promise<TeamDto> {
+export async function getTeam(teamId: string): Promise<TeamDto> {
   try {
     await connectDB();
   } catch (error) {
@@ -20,5 +20,3 @@ async function getTeam(teamId: string): Promise<TeamDto> {
     throw new Error("Error retrieving team:" + error);
   }
 }
-
-export default getTeam;

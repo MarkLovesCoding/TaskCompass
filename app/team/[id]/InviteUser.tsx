@@ -31,6 +31,11 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 
+<<<<<<< Updated upstream
+=======
+import { inviteUserByEmailAction } from "../_actions/invite-user-by-email.action";
+import { sendInviteEmailAction } from "../_actions/send-invite-email.action";
+>>>>>>> Stashed changes
 import { ValidationError } from "@/use-cases/utils";
 import { UserDto } from "@/use-cases/user/types";
 import { TeamDto } from "@/use-cases/team/types";
@@ -39,14 +44,14 @@ import { UserPlus } from "lucide-react";
 interface FormData {
   email: string;
   role: string;
-  teamName: string;
+  // teamName: string;
   teamId: string;
   inviterName: string;
 }
 const formSchema = z.object({
   email: z.string().email(),
   role: z.union([z.literal("member"), z.literal("admin")]),
-  teamName: z.string(),
+  // teamName: z.string(),
   teamId: z.string(),
   inviterName: z.string(),
 });
@@ -60,7 +65,6 @@ const InviteUser = ({ team, inviter }: { team: TeamDto; inviter: UserDto }) => {
     defaultValues: {
       email: "",
       role: "member",
-      teamName: team.name,
       teamId: team.id,
       inviterName: inviter.name,
     },
@@ -91,55 +95,55 @@ const InviteUser = ({ team, inviter }: { team: TeamDto; inviter: UserDto }) => {
     setInviteRole(value);
   };
 
-  // const onNewInviteUserFormSubmit = async (
-  //   values: z.infer<typeof formSchema>
-  // ) => {
-  //   try {
-  //     await inviteUserByEmailAction(values.email, values.role, team, inviter);
-  //     toast.success(`Invite sent to: ${values.email}!`);
-  //   } catch (err: any) {
-  //     if (err instanceof ValidationError) {
-  //       toast.error("Validation error: " + err.message);
-  //     } else if (err instanceof Error) {
-  //       toast.error(err.message);
-  //     } else {
-  //       toast.error(
-  //         "An unknown error occurred while sending user invite. Please try again."
-  //       );
-  //     }
-  //   }
-  //   router.refresh();
-  // };
-
-  const handleinviteEmailSubmit = async (values: FormData) => {
+  const handleinviteEmailSubmit = async (
+    values: z.infer<typeof formSchema>
+  ) => {
     try {
-      const res = await fetch("/api/auth/invite-user", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
-      });
-      // if (res.status == 400) {
-      //   setMessageType("Error");
-      //   setMessage("User with this email is not registered.");
-      // }
-      if (res.status === 200) {
-        setMessageType("Success");
-        setMessage(`invite sent to users email`);
-        toast.success(`Invite sent to: ${values.email}!`);
-        //expand later
+      await inviteUserByEmailAction(values.email, values.role, team, inviter);
+      toast.success(`Invite sent to: ${values.email}!`);
+    } catch (err: any) {
+      if (err instanceof ValidationError) {
+        toast.error("Validation error: " + err.message);
+      } else if (err instanceof Error) {
+        toast.error(err.message);
       } else {
-        toast.error("Response Error: " + res.status);
-        setMessageType("Error");
-        setMessage("Something went wrong. Please try again in a minute.");
+        toast.error(
+          "An unknown error occurred while sending user invite. Please try again."
+        );
       }
-    } catch (error) {
-      toast.error("Error sending invite email: " + error);
-
-      console.log(error);
     }
+    router.refresh();
   };
+
+  // const handleinviteEmailSubmit = async (values: FormData) => {
+  //   try {
+  //     const res = await fetch("/api/auth/invite-user", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(values),
+  //     });
+  //     // if (res.status == 400) {
+  //     //   setMessageType("Error");
+  //     //   setMessage("User with this email is not registered.");
+  //     // }
+  //     if (res.status === 200) {
+  //       setMessageType("Success");
+  //       setMessage(`invite sent to users email`);
+  //       toast.success(`Invite sent to: ${values.email}!`);
+  //       //expand later
+  //     } else {
+  //       toast.error("Response Error: " + res.status);
+  //       setMessageType("Error");
+  //       setMessage("Something went wrong. Please try again in a minute.");
+  //     }
+  //   } catch (error) {
+  //     toast.error("Error sending invite email: " + error);
+
+  //     console.log(error);
+  //   }
+  // };
   return (
     <Form {...form}>
       <form
