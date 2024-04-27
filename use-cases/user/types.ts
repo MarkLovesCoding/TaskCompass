@@ -16,6 +16,7 @@ export type UserTeamsAsMember = string[];
 
 export type UpdateUser = (user: UserDto) => Promise<void>;
 export type GetUser = (userId: string) => Promise<UserDto>;
+export type GetUserByEmail = (email: string) => Promise<UserDto>;
 export type GetProjectUsers = (userIds: string[]) => Promise<UserDto[]>;
 export type GetUserSession = () => User | undefined;
 export type GetUserTeamsAsAdmin = (

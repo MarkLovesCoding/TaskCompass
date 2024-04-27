@@ -7,7 +7,7 @@ import { ProjectPage } from "@/app/project/[id]/MainProjectComponent";
 import { ProjectPageSkeleton } from "./ProjectPageSkeleton";
 import { sessionAuth } from "@/lib/sessionAuth";
 import getProject from "@/data-access/projects/get-project.persistence";
-import getTeam from "@/data-access/teams/get-team.persistence";
+import { getTeam } from "@/data-access/teams/get-team.persistence";
 import getTeamUsers from "@/data-access/users/get-team-users.persistence";
 import getProjectTasks from "@/data-access/tasks/get-project-tasks.persistence";
 import getProjectUsers from "@/data-access/users/get-project-users.persistence";

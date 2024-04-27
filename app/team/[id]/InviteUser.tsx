@@ -31,11 +31,8 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 
-<<<<<<< Updated upstream
-=======
-import { inviteUserByEmailAction } from "../_actions/invite-user-by-email.action";
+// import { inviteUserByEmailAction } from "../_actions/invite-user-by-email.action";
 import { sendInviteEmailAction } from "../_actions/send-invite-email.action";
->>>>>>> Stashed changes
 import { ValidationError } from "@/use-cases/utils";
 import { UserDto } from "@/use-cases/user/types";
 import { TeamDto } from "@/use-cases/team/types";
@@ -48,17 +45,37 @@ interface FormData {
   teamId: string;
   inviterName: string;
 }
-const formSchema = z.object({
-  email: z.string().email(),
-  role: z.union([z.literal("member"), z.literal("admin")]),
-  // teamName: z.string(),
-  teamId: z.string(),
-  inviterName: z.string(),
-});
 
 type TRole = "member" | "admin";
-const InviteUser = ({ team, inviter }: { team: TeamDto; inviter: UserDto }) => {
+const InviteUser = ({
+  team,
+  inviter,
+  teamUsers,
+}: {
+  team: TeamDto;
+  teamUsers: UserDto[];
+  inviter: UserDto;
+}) => {
+  const emailsOfTeamUsers = teamUsers.map((user: UserDto) => user.email);
   const router = useRouter();
+  const formSchema = z.object({
+    email: z
+      .string()
+      .email()
+      .refine(
+        (value) => {
+          // Check if the email exists in the list of team user emails
+          const teamUserEmails = teamUsers.map((user: UserDto) => user.email);
+          return !teamUserEmails.includes(value);
+        },
+        {
+          message: "User already in this team.",
+        }
+      ),
+    role: z.union([z.literal("member"), z.literal("admin")]),
+    teamId: z.string(),
+    inviterName: z.string(),
+  });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -92,14 +109,14 @@ const InviteUser = ({ team, inviter }: { team: TeamDto; inviter: UserDto }) => {
   };
 
   const handleRoleChange = (value: TRole) => {
-    setInviteRole(value);
+    setInviteRole((prev) => value);
   };
 
   const handleinviteEmailSubmit = async (
     values: z.infer<typeof formSchema>
   ) => {
     try {
-      await inviteUserByEmailAction(values.email, values.role, team, inviter);
+      await sendInviteEmailAction(values);
       toast.success(`Invite sent to: ${values.email}!`);
     } catch (err: any) {
       if (err instanceof ValidationError) {
@@ -115,153 +132,131 @@ const InviteUser = ({ team, inviter }: { team: TeamDto; inviter: UserDto }) => {
     router.refresh();
   };
 
-  // const handleinviteEmailSubmit = async (values: FormData) => {
-  //   try {
-  //     const res = await fetch("/api/auth/invite-user", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify(values),
-  //     });
-  //     // if (res.status == 400) {
-  //     //   setMessageType("Error");
-  //     //   setMessage("User with this email is not registered.");
-  //     // }
-  //     if (res.status === 200) {
-  //       setMessageType("Success");
-  //       setMessage(`invite sent to users email`);
-  //       toast.success(`Invite sent to: ${values.email}!`);
-  //       //expand later
-  //     } else {
-  //       toast.error("Response Error: " + res.status);
-  //       setMessageType("Error");
-  //       setMessage("Something went wrong. Please try again in a minute.");
-  //     }
-  //   } catch (error) {
-  //     toast.error("Error sending invite email: " + error);
-
-  //     console.log(error);
-  //   }
-  // };
   return (
-    <Form {...form}>
-      <form
-        className="mt-4 mr-2 "
-        onSubmit={form.handleSubmit(handleinviteEmailSubmit)}
-      >
-        <div className="mb-8">
-          <h2 className=" text-lg font-bold mb-4 ">Send Invite Email</h2>
-          <p> Invite User to join the team</p>
-        </div>
-        <div className="mb-8 flex flex-row ">
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => {
-              return (
-                <FormItem className="mt-2">
-                  <FormLabel className="">Email:</FormLabel>
-                  <FormControl>
-                    <Input
-                      className={`header-input text-md max-w-[75%] ${
-                        isEmailEditing ? "editing" : ""
-                      }`}
-                      placeholder=""
-                      type="email"
-                      spellCheck="false"
-                      {...field}
-                      onClick={handleEmailClick}
-                      onChange={field.onChange}
-                      onBlur={handleEmailBlur}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              );
-            }}
-          />
-          <FormField
-            control={form.control}
-            name="role"
-            render={({ field }) => {
-              return (
-                <FormItem className="mt-2">
-                  <FormLabel className="">User Role</FormLabel>
-                  <FormControl>
-                    <Select
-                      onValueChange={(value) =>
-                        handleRoleChange(value as TRole)
-                      }
-                      onOpenChange={(isOpen) => {
-                        if (!isOpen) {
-                          setDisableButtons(true);
-                        }
-                      }}
-                      defaultValue={inviteRole}
-                    >
-                      <SelectTrigger
-                        className="pointer-events-none"
-                        onClick={(event) => {
-                          event.stopPropagation();
-                          event.preventDefault();
-                        }}
-                      >
-                        <SelectValue placeholder="User Role" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem
-                          onClick={(event) => {
-                            event.stopPropagation();
-                            event.preventDefault();
-                          }}
-                          value="admin"
-                          className="pointer-events-none"
-                        >
-                          Admin
-                        </SelectItem>
-                        <SelectItem
-                          onClick={(event) => {
-                            event.stopPropagation();
-                            event.preventDefault();
-                          }}
-                          value="member"
-                          className="pointer-events-none"
-                        >
-                          Member
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              );
-            }}
-          />
-        </div>
-
-        <div className="flex flex-row justify-between items-center mt-8">
-          <Button
-            disabled={!isEmailValid || disableButtons}
-            type="submit"
-            value="Invite User"
-            className="  py-2 rounded-md "
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button className="py-2 rounded-md">Invite User</Button>
+      </DialogTrigger>
+      <DialogContent>
+        <Form {...form}>
+          <form
+            className="mt-4 mr-2 "
+            onSubmit={form.handleSubmit(handleinviteEmailSubmit)}
           >
-            Send Invite {/* <FontAwesomeIcon icon={faPlus} /> */}
-          </Button>
-          <DialogFooter className="">
-            <DialogClose asChild>
-              <Button disabled={disableButtons}>Cancel</Button>
-              {/* <Button type="button" value="Cancel" className="  py-2 rounded-md ">
+            <div className="mb-8">
+              <h2 className=" text-lg font-bold mb-4 ">Send Invite Email</h2>
+              <p> Invite User to join the team</p>
+            </div>
+            <div className="mb-8 flex flex-row ">
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => {
+                  return (
+                    <FormItem className="mt-2">
+                      <FormLabel className="">Email:</FormLabel>
+                      <FormControl>
+                        <Input
+                          className={`header-input text-md max-w-[75%] ${
+                            isEmailEditing ? "editing" : ""
+                          }`}
+                          placeholder=""
+                          type="email"
+                          spellCheck="false"
+                          {...field}
+                          onClick={handleEmailClick}
+                          onChange={field.onChange}
+                          onBlur={handleEmailBlur}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  );
+                }}
+              />
+              <FormField
+                control={form.control}
+                name="role"
+                render={({ field }) => {
+                  return (
+                    <FormItem className="mt-2">
+                      <FormLabel className="">User Role</FormLabel>
+                      <FormControl>
+                        <Select
+                          onValueChange={(value) =>
+                            handleRoleChange(value as TRole)
+                          }
+                          onOpenChange={(isOpen) => {
+                            if (isOpen) {
+                              setDisableButtons(true);
+                            } else {
+                              setDisableButtons(false);
+                            }
+                          }}
+                          defaultValue={inviteRole}
+                        >
+                          <SelectTrigger
+                            // className="pointer-events-none"
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              // event.preventDefault();
+                            }}
+                          >
+                            <SelectValue placeholder="User Role" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem
+                              onClick={(event) => {
+                                event.stopPropagation();
+                                // event.preventDefault();
+                              }}
+                              value="admin"
+                              // className="pointer-events-none"
+                            >
+                              Admin
+                            </SelectItem>
+                            <SelectItem
+                              onClick={(event) => {
+                                event.stopPropagation();
+                                // event.preventDefault();
+                              }}
+                              value="member"
+                              // className="pointer-events-none"
+                            >
+                              Member
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  );
+                }}
+              />
+            </div>
+
+            <div className="flex flex-row justify-between items-center mt-8">
+              <Button
+                disabled={!isEmailValid || disableButtons}
+                type="submit"
+                value="Invite User"
+                className="  py-2 rounded-md "
+              >
+                Send Invite {/* <FontAwesomeIcon icon={faPlus} /> */}
+              </Button>
+              <DialogFooter className="">
+                <DialogClose asChild>
+                  <Button disabled={disableButtons}>Cancel</Button>
+                  {/* <Button type="button" value="Cancel" className="  py-2 rounded-md ">
               Cancel 
             </Button> */}
-            </DialogClose>
-          </DialogFooter>
-        </div>
-      </form>
-    </Form>
-
-    // </Dialog>
+                </DialogClose>
+              </DialogFooter>
+            </div>
+          </form>
+        </Form>
+      </DialogContent>
+    </Dialog>
   );
 };
 

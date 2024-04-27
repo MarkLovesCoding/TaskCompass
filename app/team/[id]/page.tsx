@@ -5,7 +5,7 @@ import { Toaster } from "sonner";
 
 import { sessionAuth } from "@/lib/sessionAuth";
 import { TeamPageComponent } from "./TeamPageComponent";
-import getTeam from "@/data-access/teams/get-team.persistence";
+import { getTeam } from "@/data-access/teams/get-team.persistence";
 import getAllUsers from "@/data-access/users/get-all-users.persistence";
 import getTeamUsers from "@/data-access/users/get-team-users.persistence";
 import getTeamProjects from "@/data-access/projects/get-team-projects";

@@ -6,7 +6,7 @@ import { getUserFromSession } from "@/lib/sessionAuth";
 import { getTeam } from "@/data-access/teams/get-team.persistence";
 import { getUserByEmail } from "@/data-access/users/get-user-by-email.persistence";
 import { updateTeam } from "@/data-access/teams/update-team.persistence";
-
+import { updateTeamInvitedUsers } from "@/data-access/teams/update-team-invited-users";
 import { sendInviteEmailUseCase } from "@/use-cases/team/send-invite-email.use-case";
 import { ValidationError } from "@/use-cases/utils";
 import type { TeamDto } from "@/use-cases/team/types";
@@ -29,6 +29,7 @@ export async function sendInviteEmailAction(form: Form) {
         getUser,
         getTeam,
         updateTeam,
+        updateTeamInvitedUsers,
       },
       {
         email: form.email,

@@ -42,6 +42,7 @@ import { TeamUserSearchTable } from "./TeamUserSearchTable";
 import { TeamHeader } from "@/app/team/[id]/TeamHeader";
 import UnarchiveProjectPopover from "./UnarchiveProjectPopover";
 import { TeamUserCardWithPermissions } from "./TeamUserCardWithPermissions";
+import InviteUser from "./InviteUser";
 
 import type { TeamDto } from "@/use-cases/team/types";
 import type { UserDto } from "@/use-cases/user/types";
@@ -183,6 +184,11 @@ export function TeamPageComponent({
                         globalUsers={usersList}
                         projects={projects}
                         isCurrentUserAdmin={isCurrentUserAdmin}
+                      />
+                      <InviteUser
+                        team={team}
+                        inviter={user}
+                        teamUsers={teamUsers}
                       />
                     </div>
                     <div className=" flex flex-col  ">

@@ -13,8 +13,14 @@ import type {
   UpdateUser,
   UserDto,
 } from "@/use-cases/user/types";
-import type { GetTeam, TeamDto, UpdateTeam } from "../team/types";
+import type {
+  GetTeam,
+  TeamDto,
+  UpdateTeam,
+  UpdateTeamInvitedUsers,
+} from "../team/types";
 import Team from "@/db/(models)/Team";
+import { updateTeamInvitedUsers } from "@/data-access/teams/update-team-invited-users";
 
 export async function sendInviteEmailUseCase(
   context: {
@@ -22,6 +28,7 @@ export async function sendInviteEmailUseCase(
     getTeam: GetTeam;
     updateTeam: UpdateTeam;
     getUser: GetUserSession;
+    updateTeamInvitedUsers: UpdateTeamInvitedUsers;
   },
   inviteData: {
     email: string;
@@ -59,14 +66,15 @@ export async function sendInviteEmailUseCase(
   const inviteUserObject = {
     email: inviteData.email,
     role: inviteData.role,
+    newUser: newUser,
     inviteUserToken: inviteUserToken,
     inviteUserTokenExpires: Date.now() + 3600000 * 24, // 24 hours from now
   };
-
+  // try{
+  //   // updateTeamInvite()
+  // }
   try {
-    await Team.findByIdAndUpdate(teamId, {
-      $addToSet: { invitedUsers: inviteUserObject },
-    });
+    await context.updateTeamInvitedUsers(teamId, inviteUserObject, "add");
   } catch (error) {
     console.log("Error updating team object: ", error);
     throw new Error("Error updating team with inviteUserToken");
@@ -87,12 +95,7 @@ export async function sendInviteEmailUseCase(
   const { data, error } = await resend.emails.send(msg);
   if (error) {
     try {
-      await Team.findOneAndUpdate(
-        { _id: teamId },
-        {
-          $pull: { invitedUsers: { email: inviteUserObject.email } },
-        }
-      );
+      await context.updateTeamInvitedUsers(teamId, inviteUserObject, "remove");
     } catch (error) {
       console.log("Error resetting invite tokens from team", error);
       throw new Error("Error resetting invite tokens from team");

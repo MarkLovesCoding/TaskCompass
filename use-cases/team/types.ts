@@ -1,3 +1,10 @@
+export type TInviteUser = {
+  email: string;
+  role: string;
+  newUser: boolean;
+  inviteUserToken: string;
+  inviteUserTokenExpires: number;
+};
 export type TeamDto = {
   id: string;
   name: string;
@@ -19,6 +26,11 @@ export type UpdateTeamUsers = (
   teamId: string,
   initialUsers: string[],
   updatedUsers: string[]
+) => Promise<void>;
+export type UpdateTeamInvitedUsers = (
+  teamId: string,
+  invitedUser: TInviteUser,
+  updateType: "add" | "remove"
 ) => Promise<void>;
 export type GetTeam = (teamId: string) => Promise<TeamDto>;
 export type CreateNewTeam = (
