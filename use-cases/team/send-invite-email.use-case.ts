@@ -20,7 +20,7 @@ import type {
   UpdateTeamInvitedUsers,
 } from "../team/types";
 import Team from "@/db/(models)/Team";
-import { updateTeamInvitedUsers } from "@/data-access/teams/update-team-invited-users";
+import { updateTeamInvitedUsers } from "@/data-access/teams/update-team-invited-users.persistence";
 
 export async function sendInviteEmailUseCase(
   context: {
@@ -39,11 +39,17 @@ export async function sendInviteEmailUseCase(
 ) {
   const user = context.getUser()!;
   if (!user) throw new AuthenticationError();
-
+  let newUser = true;
   //get user by email
-  const invitee = await context.getUserByEmail(inviteData.email);
+  try {
+    await context.getUserByEmail(inviteData.email);
+
+    newUser: false;
+  } catch (error) {
+    newUser: true;
+    // throw new Error("Error getting user by email");
+  }
   // if (!invitee) toggle newUser boolean
-  const newUser: boolean = !invitee;
 
   //get Team
   const getTeam = await context.getTeam(inviteData.teamId);

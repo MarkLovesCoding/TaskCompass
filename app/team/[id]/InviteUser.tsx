@@ -36,7 +36,7 @@ import { sendInviteEmailAction } from "../_actions/send-invite-email.action";
 import { ValidationError } from "@/use-cases/utils";
 import { UserDto } from "@/use-cases/user/types";
 import { TeamDto } from "@/use-cases/team/types";
-import { UserPlus } from "lucide-react";
+import { UserPlus, UserPlus2 } from "lucide-react";
 
 interface FormData {
   email: string;
@@ -65,13 +65,23 @@ const InviteUser = ({
       .refine(
         (value) => {
           // Check if the email exists in the list of team user emails
+          return !(inviter.email === value);
+        },
+        {
+          message: "You're already on this team.",
+        }
+      )
+      .refine(
+        (value) => {
+          // Check if the email exists in the list of team user emails
           const teamUserEmails = teamUsers.map((user: UserDto) => user.email);
           return !teamUserEmails.includes(value);
         },
         {
-          message: "User already in this team.",
+          message: "User already on this team.",
         }
       ),
+
     role: z.union([z.literal("member"), z.literal("admin")]),
     teamId: z.string(),
     inviterName: z.string(),
@@ -135,7 +145,9 @@ const InviteUser = ({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="py-2 rounded-md">Invite User</Button>
+        <Button className="  rounded-full">
+          <UserPlus2 aria-label="Invite User" className="w-6 h-6" />
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <Form {...form}>
