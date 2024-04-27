@@ -3,7 +3,7 @@ import { revalidatePath } from "next/cache";
 
 import { getUserFromSession } from "@/lib/sessionAuth";
 import getUserObject from "@/data-access/users/get-user.persistence";
-import getTeam from "@/data-access/teams/get-team.persistence";
+import { getTeam } from "@/data-access/teams/get-team.persistence";
 import { updateTeam } from "@/data-access/teams/update-team.persistence";
 import { updateUser } from "@/data-access/users/update-user.persistence";
 import { removeTeamUserUseCase } from "@/use-cases/user/remove-team-user.use-case";
