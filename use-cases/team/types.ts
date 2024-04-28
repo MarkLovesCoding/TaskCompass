@@ -13,6 +13,7 @@ export type TeamDto = {
   createdBy: string;
   backgroundImage: string;
   backgroundImageThumbnail: string;
+  invitedUsers?: TInviteUser[];
 };
 export type CreateTeamDto = {
   name: string;

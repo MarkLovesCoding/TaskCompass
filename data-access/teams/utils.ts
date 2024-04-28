@@ -15,5 +15,6 @@ export function teamModelToTeamDto(team: TeamModelType) {
     createdBy: team.createdBy.toString(),
     backgroundImage: team.backgroundImage,
     backgroundImageThumbnail: team.backgroundImageThumbnail,
+    // invitedUsers: team.invitedUsers,
   };
 }

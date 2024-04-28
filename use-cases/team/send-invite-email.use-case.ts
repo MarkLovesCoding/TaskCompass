@@ -63,11 +63,17 @@ export async function sendInviteEmailUseCase(
   //update Team
 
   const resetToken = crypto.randomBytes(20).toString("hex");
-
+  console.log("Reset Token: ", resetToken);
   const inviteUserToken = crypto
     .createHash("sha256")
     .update(resetToken)
     .digest("hex");
+  console.log("Invite User Token: ", inviteUserToken);
+  const tempinviteUserToken = crypto
+    .createHash("sha256")
+    .update(inviteUserToken)
+    .digest("hex");
+  console.log("Temp Invite User Token: ", tempinviteUserToken);
   const inviteUserExpires = Date.now() + 3600000; // 1 hour from now
   const inviteUserObject = {
     email: inviteData.email,
@@ -86,8 +92,14 @@ export async function sendInviteEmailUseCase(
     throw new Error("Error updating team with inviteUserToken");
   }
   const resetURL = newUser
-    ? "http://localhost:3000/inviteNewUser/" + teamId + "/" + resetToken
-    : "http://localhost:3000/inviteUser/" + teamId + "/" + resetToken;
+    ? "http://localhost:3000/registration/inviteNewToTeam/" +
+      teamId +
+      "/" +
+      resetToken
+    : "http://localhost:3000/registration/inviteToTeam/" +
+      teamId +
+      "/" +
+      resetToken;
   const body = `${inviterName} has invited you to join their TaskCompass team: ${teamName}. Join by clicking on following link:  + ${resetURL}`;
   const msg = {
     to: inviteData.email, // Change to your recipient

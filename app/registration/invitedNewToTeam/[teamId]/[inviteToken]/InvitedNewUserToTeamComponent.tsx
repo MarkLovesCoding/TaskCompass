@@ -6,9 +6,15 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { DashboardSkeleton } from "@/app/dashboard/[id]/DashboardSkeleton";
-import LogoPng from "../../public/compass.png";
+import LogoPng from "@/public/compass.png";
 
-const InvitedToTeamComponent = () => {
+const InvitedNewUserToTeamComponent = ({
+  teamId,
+  inviteToken,
+}: {
+  teamId: string;
+  inviteToken: string;
+}) => {
   //  const { data: session } = useSession();
   //const router = useRouter();
 
@@ -39,4 +45,4 @@ const InvitedToTeamComponent = () => {
     </div>
   );
 };
-export default InvitedToTeamComponent;
+export default InvitedNewUserToTeamComponent;

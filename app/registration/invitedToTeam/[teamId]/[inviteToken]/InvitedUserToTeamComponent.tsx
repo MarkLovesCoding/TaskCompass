@@ -8,10 +8,9 @@ import Link from "next/link";
 import { DashboardSkeleton } from "@/app/dashboard/[id]/DashboardSkeleton";
 import LogoPng from "../../public/compass.png";
 
-const InvitedNewComponent = () => {
+const InvitedUserToTeamComponent = (teamName: string, errStatus: boolean) => {
   //  const { data: session } = useSession();
   //const router = useRouter();
-
   return (
     <div className="absolute bg-gradient-background-light justify-center dark:bg-gradient-background-dark  top-0 left-0 flex flex-col  w-full lg:flex-row min-h-[100vh] h-auto">
       {/* Left side (announcement or other content) */}
@@ -31,12 +30,21 @@ const InvitedNewComponent = () => {
       <div className="lg:flex-1  p-10">
         {/* <div className="lg:flex-1 bg-gradient-to-r from-gray-800 to-gray-600 p-10"> */}
         <div className="mx-auto flex flex-col h-[100%] max-w-[500px] justify-center mt-4">
-          {/* <h2 className="text-3xl font-extrabold text-white mb-6">Sign In</h2> */}
-
-          {/* Conditional rendering based on authentication status */}
+          {errStatus == false ? (
+            <h2>
+              You have successfully been added to team:{teamName}. Please sign
+              in to access team.
+            </h2>
+          ) : (
+            <h2>
+              There was an error adding you to the team. Please contact the team
+              owner for assistance.
+            </h2>
+          )}
         </div>
+        {/* Conditional rendering based on authentication status */}
       </div>
     </div>
   );
 };
-export default InvitedNewComponent;
+export default InvitedUserToTeamComponent;
