@@ -4,9 +4,12 @@ import crypto from "crypto";
 import { Resend } from "resend";
 
 import { teamToDto } from "../team/utils";
+import Team from "@/db/(models)/Team";
 import { UserEntity, UserEntityValidationError } from "@/entities/User";
 import { TeamEntity, TeamEntityValidationError } from "@/entities/Team";
 import { AuthenticationError, ValidationError } from "../utils";
+import { updateTeamInvitedUsers } from "@/data-access/teams/update-team-invited-users.persistence";
+
 import type {
   GetUserByEmail,
   GetUserSession,
@@ -19,8 +22,6 @@ import type {
   UpdateTeam,
   UpdateTeamInvitedUsers,
 } from "../team/types";
-import Team from "@/db/(models)/Team";
-import { updateTeamInvitedUsers } from "@/data-access/teams/update-team-invited-users.persistence";
 
 export async function sendInviteEmailUseCase(
   context: {
@@ -37,12 +38,13 @@ export async function sendInviteEmailUseCase(
     inviterName: string;
   }
 ) {
+  console.log("Email: ", inviteData.email);
   const user = context.getUser()!;
   if (!user) throw new AuthenticationError();
   let newUser = true;
   //get user by email
   try {
-    await context.getUserByEmail(inviteData.email);
+    const retrievedUser = await context.getUserByEmail(inviteData.email);
 
     newUser: false;
   } catch (error) {

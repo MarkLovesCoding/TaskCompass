@@ -13,6 +13,7 @@ export function teamToDto(team: TeamEntity): TeamDto {
     createdBy: team.getCreatedBy(),
     backgroundImage: team.getBackgroundImage(),
     backgroundImageThumbnail: team.getBackgroundImageThumbnail(),
+    invitedUsers: team.getInvitedUsers(),
   };
 }
 export function teamToCreateTeamDto(team: TeamEntity): CreateTeamDto {
@@ -23,5 +24,6 @@ export function teamToCreateTeamDto(team: TeamEntity): CreateTeamDto {
     createdBy: team.getCreatedBy(),
     backgroundImage: team.getBackgroundImage(),
     backgroundImageThumbnail: team.getBackgroundImageThumbnail(),
+    invitedUsers: team.getInvitedUsers(),
   };
 }

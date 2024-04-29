@@ -1,5 +1,13 @@
 import { ZodError, z } from "zod";
 
+export type TInvitedUser = {
+  teamId: string;
+  email: string;
+  role: string;
+  // newUser: boolean;
+  inviteUserToken: string;
+  inviteUserTokenExpires: number;
+};
 type ValidatedFields =
   | "id"
   | "name"
@@ -7,7 +15,8 @@ type ValidatedFields =
   | "projects"
   | "createdBy"
   | "backgroundImage"
-  | "backgroundImageThumbnail";
+  | "backgroundImageThumbnail"
+  | "invitedUsers";
 
 export class TeamEntityValidationError extends Error {
   private errors: Record<ValidatedFields, string | undefined>;
@@ -30,6 +39,7 @@ export class TeamEntity {
   private createdBy: string;
   private backgroundImage: string;
   private backgroundImageThumbnail: string;
+  private invitedUsers: TInvitedUser[];
 
   constructor({
     id,
@@ -39,6 +49,7 @@ export class TeamEntity {
     createdBy,
     backgroundImage,
     backgroundImageThumbnail,
+    invitedUsers,
   }: {
     id?: string;
     name: string;
@@ -47,6 +58,7 @@ export class TeamEntity {
     createdBy: string;
     backgroundImage: string;
     backgroundImageThumbnail: string;
+    invitedUsers: TInvitedUser[];
   }) {
     this.id = id;
     this.name = name;
@@ -55,6 +67,7 @@ export class TeamEntity {
     this.createdBy = createdBy;
     this.backgroundImage = backgroundImage;
     this.backgroundImageThumbnail = backgroundImageThumbnail;
+    this.invitedUsers = invitedUsers;
     this.validate();
   }
 
@@ -82,6 +95,28 @@ export class TeamEntity {
   }
   getBackgroundImageThumbnail() {
     return this.backgroundImageThumbnail;
+  }
+  getInvitedUsers() {
+    return this.invitedUsers;
+  }
+  removeExpiredInvitedUsers() {
+    this.invitedUsers = this.invitedUsers?.filter(
+      (invitedUser) => invitedUser.inviteUserTokenExpires > Date.now()
+    );
+  }
+  addInvitedUser(invitedUser: TInvitedUser) {
+    //check if user is already invited
+    const existingInvitedUser = this.invitedUsers?.find(
+      (invitedUser) => invitedUser.email === invitedUser.email
+    );
+    if (existingInvitedUser) {
+      //update the existing invited user
+      existingInvitedUser.inviteUserToken = invitedUser.inviteUserToken;
+      existingInvitedUser.inviteUserTokenExpires =
+        invitedUser.inviteUserTokenExpires;
+    } else {
+      this.invitedUsers?.push(invitedUser);
+    }
   }
   addUser(user: string) {
     this.users.push(user);
@@ -148,6 +183,7 @@ export class TeamEntity {
         createdBy: errors.createdBy?.[0],
         backgroundImage: errors.backgroundImage?.[0],
         backgroundImageThumbnail: errors.backgroundImageThumbnail?.[0],
+        invitedUsers: errors.invitedUsers?.[0],
       });
     }
   }

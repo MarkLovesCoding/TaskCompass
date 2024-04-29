@@ -9,6 +9,20 @@ const TeamSchema = new Schema(
     createdBy: { type: Schema.Types.ObjectId, ref: "User" },
     backgroundImage: { type: String, default: "" },
     backgroundImageThumbnail: { type: String, default: "" },
+    invitedUsers: [
+      {
+        id: false,
+        type: {
+          teamId: String,
+          email: String,
+          role: String,
+          inviteUserToken: String,
+          inviteUserTokenExpires: Number,
+        },
+        default: [],
+        required: false,
+      },
+    ],
   },
   {
     timestamps: true,

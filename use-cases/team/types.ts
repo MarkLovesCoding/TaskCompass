@@ -1,10 +1,4 @@
-export type TInviteUser = {
-  email: string;
-  role: string;
-  newUser: boolean;
-  inviteUserToken: string;
-  inviteUserTokenExpires: number;
-};
+import type { TInvitedUser } from "@/entities/Team";
 export type TeamDto = {
   id: string;
   name: string;
@@ -13,7 +7,7 @@ export type TeamDto = {
   createdBy: string;
   backgroundImage: string;
   backgroundImageThumbnail: string;
-  invitedUsers?: TInviteUser[];
+  invitedUsers: TInvitedUser[];
 };
 export type CreateTeamDto = {
   name: string;
@@ -22,6 +16,7 @@ export type CreateTeamDto = {
   createdBy: string;
   backgroundImage: string;
   backgroundImageThumbnail: string;
+  invitedUsers: TInvitedUser[];
 };
 export type UpdateTeamUsers = (
   teamId: string,
@@ -30,7 +25,7 @@ export type UpdateTeamUsers = (
 ) => Promise<void>;
 export type UpdateTeamInvitedUsers = (
   teamId: string,
-  invitedUser: TInviteUser,
+  invitedUser: TInvitedUser,
   updateType: "add" | "remove"
 ) => Promise<void>;
 export type GetTeam = (teamId: string) => Promise<TeamDto>;

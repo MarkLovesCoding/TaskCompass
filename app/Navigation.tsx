@@ -39,12 +39,17 @@ const Navigation: React.FC = async () => {
   const sessionUserId = session?.user.id;
   console.log("session", session);
   //move into usecase?
-  let userObject: UserDto,
-    userProjectsAndTeams: { projects: ProjectDto[]; teams: TeamDto[] };
+  // let userObject: UserDto,
+  let userProjectsAndTeams: { projects: ProjectDto[]; teams: TeamDto[] };
   if (session !== null) {
     userProjectsAndTeams = await getUserProjectsAndTeams(sessionUserId!);
+    console.log("session", session);
   } else return <div></div>;
+  console.log("UserProjectsAndTeams", userProjectsAndTeams);
   const { teams, projects } = userProjectsAndTeams;
+  console.log("Teams", teams);
+  console.log("Projects", projects);
+  // console.log("UserObject", userObject);
 
   return (
     <>

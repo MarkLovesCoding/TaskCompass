@@ -4,10 +4,11 @@ import Team from "@/db/(models)/Team";
 import { Resend } from "resend";
 
 import type { TeamDto } from "@/use-cases/team/types";
-import { TInviteUser } from "@/use-cases/team/types";
+import type { TInvitedUser } from "@/entities/Team";
+
 export async function updateTeamInvitedUsers(
   teamId: string,
-  invitedUser: TInviteUser,
+  invitedUser: TInvitedUser,
   updateType: "add" | "remove"
 ): Promise<void> {
   try {

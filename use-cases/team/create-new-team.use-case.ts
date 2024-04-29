@@ -25,6 +25,7 @@ export async function createNewTeamUseCase(
       createdBy: user.userId,
       backgroundImage: "",
       backgroundImageThumbnail: "",
+      invitedUsers: [],
     });
     await context.createNewTeam(teamToCreateTeamDto(newTeam), user.userId);
   } catch (err) {

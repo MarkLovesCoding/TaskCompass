@@ -7,6 +7,15 @@ export function teamModelToTeamDto(team: TeamModelType) {
       : [];
   const convertedUsers =
     team.users.length > 0 ? team.users.map((user) => user.toString()) : [];
+  const convertedInvitedUsers = team.invitedUsers.map((invitedUser) => {
+    return {
+      email: invitedUser.email,
+      role: invitedUser.role,
+      teamId: invitedUser.teamId?.toString(),
+      inviteUserToken: invitedUser.inviteUserToken,
+      inviteUserTokenExpires: invitedUser.inviteUserTokenExpires,
+    };
+  });
   return {
     id: team._id.toString(),
     name: team.name,
@@ -15,6 +24,6 @@ export function teamModelToTeamDto(team: TeamModelType) {
     createdBy: team.createdBy.toString(),
     backgroundImage: team.backgroundImage,
     backgroundImageThumbnail: team.backgroundImageThumbnail,
-    // invitedUsers: team.invitedUsers,
+    invitedUsers: convertedInvitedUsers,
   };
 }
