@@ -71,16 +71,12 @@ export async function sendInviteEmailUseCase(
     .update(resetToken)
     .digest("hex");
   console.log("Invite User Token: ", inviteUserToken);
-  const tempinviteUserToken = crypto
-    .createHash("sha256")
-    .update(inviteUserToken)
-    .digest("hex");
-  console.log("Temp Invite User Token: ", tempinviteUserToken);
+
   const inviteUserExpires = Date.now() + 3600000; // 1 hour from now
   const inviteUserObject = {
     email: inviteData.email,
     role: inviteData.role,
-    newUser: newUser,
+    teamId: inviteData.teamId,
     inviteUserToken: inviteUserToken,
     inviteUserTokenExpires: Date.now() + 3600000 * 24, // 24 hours from now
   };

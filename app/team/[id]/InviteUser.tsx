@@ -37,6 +37,7 @@ import { ValidationError } from "@/use-cases/utils";
 import { UserDto } from "@/use-cases/user/types";
 import { TeamDto } from "@/use-cases/team/types";
 import { UserPlus, UserPlus2 } from "lucide-react";
+import { TInvitedUser } from "@/entities/Team";
 
 interface FormData {
   email: string;
@@ -57,6 +58,17 @@ const InviteUser = ({
   inviter: UserDto;
 }) => {
   const emailsOfTeamUsers = teamUsers.map((user: UserDto) => user.email);
+  const emailsOfPendingInvites = team.invitedUsers.map(
+    (invitedUser: TInvitedUser) => invitedUser.email
+  );
+  const [emailPendingInvites, setEmailPendingInvites] = useState(
+    emailsOfPendingInvites
+  );
+  useEffect(() => {
+    setEmailPendingInvites(
+      team.invitedUsers.map((invitedUser: TInvitedUser) => invitedUser.email)
+    );
+  }, [team.invitedUsers]);
   const router = useRouter();
   const formSchema = z.object({
     email: z
@@ -79,6 +91,15 @@ const InviteUser = ({
         },
         {
           message: "User already on this team.",
+        }
+      )
+      .refine(
+        (value) => {
+          // Check if the email exists in the list of team user emails
+          return !emailPendingInvites.includes(value);
+        },
+        {
+          message: "User invite already sent! Please wait for response.",
         }
       ),
 
@@ -126,8 +147,10 @@ const InviteUser = ({
     values: z.infer<typeof formSchema>
   ) => {
     try {
+      setDisableButtons(true);
       await sendInviteEmailAction(values);
       toast.success(`Invite sent to: ${values.email}!`);
+      setDisableButtons(false);
     } catch (err: any) {
       if (err instanceof ValidationError) {
         toast.error("Validation error: " + err.message);
