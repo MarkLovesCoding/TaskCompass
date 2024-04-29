@@ -1,5 +1,5 @@
 import React from "react";
-import InvitedNewComponent from "./InvitedNewUserToTeamComponent";
+import InvitedNewUserToTeamComponent from "./InvitedNewUserToTeamComponent";
 import { Toaster } from "sonner";
 // import { validateInviteTokenAction } from "@/app/registration/invitedToTeam/[teamId]/[inviteToken]/_actions/validate-token-set-up-user.action";
 
@@ -19,7 +19,7 @@ const page = async ({ params }: ParamsType) => {
 
   return (
     <div>
-      <InvitedNewComponent
+      <InvitedNewUserToTeamComponent
         teamId={params.teamId}
         inviteToken={params.inviteToken}
       />
