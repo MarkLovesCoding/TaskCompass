@@ -6,9 +6,14 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { DashboardSkeleton } from "@/app/dashboard/[id]/DashboardSkeleton";
-import LogoPng from "../../public/compass.png";
+import { Button } from "@/components/ui/button";
+import LogoPng from "@/public/compass.png";
 
-const InvitedUserToTeamComponent = (teamName: string, errStatus: boolean) => {
+type ParamsType = {
+  teamName: string;
+  errStatus: boolean;
+};
+const InvitedUserToTeamComponent = ({ teamName, errStatus }: ParamsType) => {
   //  const { data: session } = useSession();
   //const router = useRouter();
   return (
@@ -31,15 +36,25 @@ const InvitedUserToTeamComponent = (teamName: string, errStatus: boolean) => {
         {/* <div className="lg:flex-1 bg-gradient-to-r from-gray-800 to-gray-600 p-10"> */}
         <div className="mx-auto flex flex-col h-[100%] max-w-[500px] justify-center mt-4">
           {errStatus == false ? (
-            <h2>
-              You have successfully been added to team:{teamName}. Please sign
-              in to access team.
-            </h2>
+            <div className="flex flex-col justify-center space-y-4">
+              <h2>
+                You have successfully been added to team:{teamName}. Please sign
+                in to access team.
+              </h2>
+              <Link href="/registration">
+                <Button className=" py-2 px-4">Sign in</Button>
+              </Link>
+            </div>
           ) : (
-            <h2>
-              There was an error adding you to the team. Please contact the team
-              owner for assistance.
-            </h2>
+            <div className="flex flex-col justify-center space-y-4">
+              <h2>
+                There was an error adding you to the team. Please contact the
+                team owner for assistance.
+              </h2>
+              <Link href="/registration">
+                <Button className=" py-2 px-4">Back to Registration</Button>
+              </Link>
+            </div>
           )}
         </div>
         {/* Conditional rendering based on authentication status */}
