@@ -40,7 +40,7 @@ const SignInForm = () => {
 
   const [message, setMessage] = useState<string>("");
   const [messageType, setMessageType] = useState<ErrorType>("Error");
-
+  const [disableButtons, setDisableButtons] = useState<boolean>(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -50,12 +50,13 @@ const SignInForm = () => {
   });
 
   const onSignInSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log("values", values);
+    setDisableButtons(true);
     const loginResponse = await signIn("credentials", {
       email: values.email,
       password: values.password,
       redirect: false, // Do not redirect automatically
     });
+    setDisableButtons(false);
 
     if (loginResponse?.error && loginResponse.error == "CredentialsSignin") {
       setMessage("Incorrect Credentials.");
@@ -67,7 +68,6 @@ const SignInForm = () => {
 
       // toast.error(loginResponse?.error);
     } else {
-      console.log("loginResponse", loginResponse);
       setMessage("Success!");
       setMessageType("Success");
 
@@ -78,8 +78,9 @@ const SignInForm = () => {
   };
   const handleGoogleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-
+    setDisableButtons(true);
     const loginResponse = await signIn("google", { redirect: false });
+    setDisableButtons(false);
     // Check for login error
     if (loginResponse && loginResponse.error) {
       setMessage(loginResponse?.error);
@@ -96,10 +97,12 @@ const SignInForm = () => {
 
   const handleGithubSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    setDisableButtons(true);
 
     // Attempt to sign in with GitHub
     const loginResponse = await signIn("github");
     // Check for login error
+    setDisableButtons(false);
 
     if (loginResponse && loginResponse.error) {
       setMessage(loginResponse?.error);
@@ -188,6 +191,7 @@ const SignInForm = () => {
             type="submit"
             value="Create User"
             className="mt-4 w-full py-2 rounded-md"
+            disabled={disableButtons}
           >
             Sign In
           </Button>
@@ -199,6 +203,7 @@ const SignInForm = () => {
             type="submit"
             value="Google SignIn"
             className="w-full   py-2 rounded-md"
+            disabled={disableButtons}
           >
             <FontAwesomeIcon icon={faGoogle} />
           </Button>
@@ -208,6 +213,7 @@ const SignInForm = () => {
             type="submit"
             value="Github SignIn"
             className="w-full   py-2 rounded-md"
+            disabled={disableButtons}
           >
             <FontAwesomeIcon icon={faGithub} />
           </Button>

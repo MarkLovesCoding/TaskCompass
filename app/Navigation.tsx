@@ -4,7 +4,6 @@ import Image from "next/image";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuPortal,
@@ -32,12 +31,10 @@ import LogoPng from "../public/compass_small.png";
 
 import type { ProjectDto } from "@/use-cases/project/types";
 import type { TeamDto } from "@/use-cases/team/types";
-import type { UserDto } from "@/use-cases/user/types";
 
 const Navigation: React.FC = async () => {
   const session = await sessionAuth();
   const sessionUserId = session?.user.id;
-  console.log("session", session);
   //move into usecase?
   // let userObject: UserDto,
   let userProjectsAndTeams: { projects: ProjectDto[]; teams: TeamDto[] };
@@ -45,10 +42,7 @@ const Navigation: React.FC = async () => {
     userProjectsAndTeams = await getUserProjectsAndTeams(sessionUserId!);
     console.log("session", session);
   } else return <div></div>;
-  console.log("UserProjectsAndTeams", userProjectsAndTeams);
   const { teams, projects } = userProjectsAndTeams;
-  console.log("Teams", teams);
-  console.log("Projects", projects);
   // console.log("UserObject", userObject);
 
   return (
