@@ -44,15 +44,16 @@ export async function sendInviteEmailUseCase(
   let newUser = true;
   //get user by email
   try {
+    console.log("inviteData.email: ", inviteData.email);
     const retrievedUser = await context.getUserByEmail(inviteData.email);
-
-    newUser: false;
+    console.log("))))retrievedUser: ", retrievedUser);
+    newUser = false;
   } catch (error) {
-    newUser: true;
+    newUser = true;
     // throw new Error("Error getting user by email");
   }
   // if (!invitee) toggle newUser boolean
-
+  console.log("____________ newUser: ", newUser);
   //get Team
   const getTeam = await context.getTeam(inviteData.teamId);
   if (!getTeam) throw new Error("Team not found");
@@ -71,7 +72,6 @@ export async function sendInviteEmailUseCase(
     .update(resetToken)
     .digest("hex");
   console.log("Invite User Token: ", inviteUserToken);
-
   const inviteUserExpires = Date.now() + 3600000; // 1 hour from now
   const inviteUserObject = {
     email: inviteData.email,
@@ -89,15 +89,16 @@ export async function sendInviteEmailUseCase(
     console.log("Error updating team object: ", error);
     throw new Error("Error updating team with inviteUserToken");
   }
-  const resetURL = newUser
-    ? "http://localhost:3000/registration/inviteNewToTeam/" +
-      teamId +
-      "/" +
-      resetToken
-    : "http://localhost:3000/registration/inviteToTeam/" +
-      teamId +
-      "/" +
-      resetToken;
+  const resetURL =
+    newUser === true
+      ? "http://localhost:3000/registration/invitedNewToTeam/" +
+        teamId +
+        "/" +
+        resetToken
+      : "http://localhost:3000/registration/invitedToTeam/" +
+        teamId +
+        "/" +
+        resetToken;
   const body = `${inviterName} has invited you to join their TaskCompass team: ${teamName}. Join by clicking on following link:  + ${resetURL}`;
   const msg = {
     to: inviteData.email, // Change to your recipient
