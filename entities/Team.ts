@@ -4,7 +4,6 @@ export type TInvitedUser = {
   teamId: string;
   email: string;
   role: string;
-  // newUser: boolean;
   inviteUserToken: string;
   inviteUserTokenExpires: number;
 };
@@ -118,6 +117,12 @@ export class TeamEntity {
       this.invitedUsers?.push(invitedUser);
     }
   }
+  removeInvitedUser(invitedUser: TInvitedUser) {
+    this.invitedUsers = this.invitedUsers?.filter(
+      (invitedUser) => invitedUser.email !== invitedUser.email
+    );
+  }
+
   addUser(user: string) {
     this.users.push(user);
   }
