@@ -1,19 +1,18 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 
-import { DashboardSkeleton } from "@/app/dashboard/[id]/DashboardSkeleton";
 import LogoPng from "@/public/compass.png";
+import InviteNewUserSignUpForm from "./InviteNewUserSignUpForm";
+import InvalidTokenComponent from "./InvalidTokenComponent";
 
+import type { TInvitedUser } from "@/entities/Team";
 const InvitedNewUserToTeamComponent = ({
-  teamId,
-  inviteToken,
+  invitedUser,
+  errState,
 }: {
-  teamId: string;
-  inviteToken: string;
+  invitedUser: TInvitedUser | null;
+  errState: boolean;
 }) => {
   //  const { data: session } = useSession();
   //const router = useRouter();
@@ -37,9 +36,15 @@ const InvitedNewUserToTeamComponent = ({
       <div className="lg:flex-1  p-10">
         {/* <div className="lg:flex-1 bg-gradient-to-r from-gray-800 to-gray-600 p-10"> */}
         <div className="mx-auto flex flex-col h-[100%] max-w-[500px] justify-center mt-4">
-          {/* <h2 className="text-3xl font-extrabold text-white mb-6">Sign In</h2> */}
-
-          {/* Conditional rendering based on authentication status */}
+          {invitedUser !== null && !errState ? (
+            // <></>
+            // <h2 className="text-3xl font-extrabold text-white mb-6">Sign In</h2>
+            <InviteNewUserSignUpForm
+              invitedUser={invitedUser as TInvitedUser}
+            />
+          ) : (
+            <InvalidTokenComponent />
+          )}
         </div>
       </div>
     </div>

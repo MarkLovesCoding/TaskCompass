@@ -15,6 +15,14 @@ export type UserTeamsAsAdmin = string[];
 export type UserTeamsAsMember = string[];
 
 export type UpdateUser = (user: UserDto) => Promise<void>;
+export type CreateNewEmailUser = (values: {
+  name: string;
+  email: string;
+  password: string;
+  role: string;
+  firstLogIn: boolean;
+}) => Promise<UserDto>;
+
 export type GetUser = (userId: string) => Promise<UserDto>;
 export type GetUserByEmail = (email: string) => Promise<UserDto>;
 export type GetProjectUsers = (userIds: string[]) => Promise<UserDto[]>;

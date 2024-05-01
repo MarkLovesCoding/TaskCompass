@@ -1,32 +1,17 @@
-import { NextResponse } from "next/server";
-
 import crypto from "crypto";
-import { Resend } from "resend";
 
 import { teamToDto } from "./utils";
-import { UserEntity, UserEntityValidationError } from "@/entities/User";
-import {
-  TInvitedUser,
-  TeamEntity,
-  TeamEntityValidationError,
-} from "@/entities/Team";
-import { AuthenticationError, ValidationError } from "../utils";
-import type {
-  GetUserByEmail,
-  GetUserSession,
-  UpdateUser,
-  UserDto,
-} from "@/use-cases/user/types";
-import type {
-  GetTeam,
-  TeamDto,
-  UpdateTeam,
-  UpdateTeamInvitedUsers,
-} from "./types";
-import Team from "@/db/(models)/Team";
-import { updateTeamInvitedUsers } from "@/data-access/teams/update-team-invited-users.persistence";
+import { UserEntity } from "@/entities/User";
+import { TInvitedUser, TeamEntity } from "@/entities/Team";
+import { ValidationError } from "../utils";
+import type { GetUserByEmail, UpdateUser } from "@/use-cases/user/types";
+import type { GetTeam, UpdateTeam } from "./types";
 import { userToDto } from "../user/utils";
 
+//******************************************
+//This function validates the invite token and sets up the user
+//It also updates the team and user entities
+//******************************************
 export async function validateTokenSetUpUserUseCase(
   context: {
     getTeam: GetTeam;
@@ -40,7 +25,9 @@ export async function validateTokenSetUpUserUseCase(
   }
 ) {
   //****************************************
+  // Check if team exists
   // Retrieve Team Entity & Gather Team and Invite Data
+  //
   const getTeam = await context.getTeam(inviteData.teamId);
   if (!getTeam) throw new Error("Team not found");
 
@@ -66,8 +53,6 @@ export async function validateTokenSetUpUserUseCase(
     throw new ValidationError({ error: "Invalid or expired invite token" });
   }
 
-  // filter out the invited user from the invitedUsers array
-
   //****************************************
   // Handle User Entity
   const retrievedUser = await context.getUserByEmail(invitedUser.email);
@@ -80,7 +65,8 @@ export async function validateTokenSetUpUserUseCase(
     userEntity.addTeamAsMember(teamId);
   }
 
-  // invitedUser && (await updateTeamInvitedUsers(teamId, invitedUser, "remove"));
+  //****************************************
+  // Handle Update User Entity
   try {
     await context.updateUser(userToDto(userEntity));
   } catch (error) {
@@ -88,7 +74,7 @@ export async function validateTokenSetUpUserUseCase(
   }
 
   //****************************************
-  // Handle Team Entity
+  // Handle Update Team Entity
   const teamEntity = new TeamEntity(getTeam);
   teamEntity.addUser(retrievedUser.id);
   teamEntity.removeInvitedUser(invitedUser);

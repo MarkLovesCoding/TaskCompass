@@ -1,4 +1,5 @@
 import React from "react";
+
 import InvitedUserToTeamComponent from "./InvitedUserToTeamComponent";
 import { Toaster } from "sonner";
 import { validateTokenSetUpUserAction } from "./_actions/validate-token-set-up-user.action";
