@@ -1,6 +1,8 @@
 import React from "react";
-import RegistrationPageComponent from "./RegistrationPageComponent";
+
 import { Toaster } from "sonner";
+import RegistrationPageComponent from "./RegistrationPageComponent";
+
 const page = () => {
   return (
     <div>

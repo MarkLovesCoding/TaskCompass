@@ -44,7 +44,6 @@ const SignUpForm = () => {
     },
   });
   const onSignUpSubmit = async (values: z.infer<typeof formSchema>) => {
-    // e.preventDefault();
     const res = await fetch("/api/Users", {
       method: "POST",
       body: JSON.stringify(values),
@@ -67,9 +66,6 @@ const SignUpForm = () => {
         setMessageType("Error");
         toast.error("Error Signing In User");
       }
-      // console.log("RESPONSE AND FORM SUBMITTION:", await res.json());
-      // router.refresh();
-      // toast.success("User Signed Up Successfully!");
       router.push("/");
     } else {
       const response = await res.json();
@@ -200,46 +196,6 @@ const SignUpForm = () => {
               );
             }}
           />
-          {/* <div className="mb-4">
-            <label className="block text-sm font-medium">Full Name</label>
-            <input
-              id="name"
-              name="name"
-              type="text"
-              onChange={handleChange}
-              required={true}
-              value={formData.name}
-              className="mt-1 p-2 w-full border rounded-md"
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="email" className="block text-sm font-medium">
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              onChange={handleChange}
-              required={true}
-              value={formData.email}
-              className="mt-1 p-2 w-full border rounded-md"
-            />
-          </div> */}
-          {/* <div className="mb-4">
-            <label htmlFor="password" className="block text-sm font-medium">
-              Password
-            </label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              onChange={handleChange}
-              required={true}
-              value={formData.password}
-              className="mt-1 p-2 w-full border rounded-md"
-            />
-          </div> */}
           <Button
             type="submit"
             value="Create User"
