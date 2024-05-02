@@ -19,7 +19,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle, faGithub } from "@fortawesome/free-brands-svg-icons";
-
+import { createNewEmailUserAction } from "./_actions/create-new-email-user.action";
 const formSchema = z.object({
   name: z.string().min(5).max(30),
   email: z.string().email().min(5),
@@ -44,35 +44,50 @@ const SignUpForm = () => {
     },
   });
   const onSignUpSubmit = async (values: z.infer<typeof formSchema>) => {
-    const res = await fetch("/api/Users", {
-      method: "POST",
-      body: JSON.stringify(values),
-      headers: {
-        "content-type": "application/json",
-      },
-    });
-    if (res.ok) {
-      try {
-        await signIn("credentials", {
-          email: values.email,
-          password: values.password,
-        });
-        setMessage("SIgning in...");
-        setMessageType("Success");
-        toast.success("User Created Successfully!");
-      } catch (error: any) {
-        console.error(error);
-        setMessage(error);
-        setMessageType("Error");
-        toast.error("Error Signing In User");
-      }
-      router.push("/");
-    } else {
-      const response = await res.json();
-      toast.error(response.message);
-      setMessage(response.message);
+    "here";
+    try {
+      await createNewEmailUserAction(values);
+      toast.success("User Created Successfully!");
+      setTimeout(() => {
+        toast.success("Signing In...");
+      }, 200);
+    } catch (error: any) {
+      toast.error(error.message);
+      setMessage(error.message);
       setMessageType("Error");
     }
+    // try
+    // await createNewUser(values);
+    // catch
+    // const res = await fetch("/api/Users", {
+    //   method: "POST",
+    //   body: JSON.stringify(values),
+    //   headers: {
+    //     "content-type": "application/json",
+    //   },
+    // });
+    // if (res.ok) {
+    try {
+      await signIn("credentials", {
+        email: values.email,
+        password: values.password,
+      });
+      setMessage("Signing in...");
+      setMessageType("Success");
+      toast.success("User Created Successfully!");
+    } catch (error: any) {
+      console.error(error);
+      setMessage(error);
+      setMessageType("Error");
+      toast.error("Error Signing In User");
+    }
+    router.push("/");
+    // } else {
+    //   const response = await res.json();
+    //   toast.error(response.message);
+    //   setMessage(response.message);
+    //   setMessageType("Error");
+    // }
   };
 
   const handleGoogleSubmit = async (e: FormEvent) => {

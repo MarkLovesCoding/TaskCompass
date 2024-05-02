@@ -63,7 +63,7 @@ const InviteNewUserSignUpForm = ({
         password: values.password,
         redirect: false,
       });
-      router.push("/");
+      //router.push("/");
     } catch (error: any) {
       console.error(error);
       setMessage(error);

@@ -4,6 +4,7 @@ import { userModelToUserDto } from "./utils";
 import User from "@/db/(models)/User";
 
 import type { UserDto } from "@/use-cases/user/types";
+import Team from "@/db/(models)/Team";
 
 async function createNewEmailUser(values: {
   name: string;

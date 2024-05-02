@@ -56,6 +56,9 @@ export type CreateNewProject = (
   project: CreateProjectDto,
   userId: string
 ) => Promise<void>;
+export type CreateDefaultProject = (
+  project: CreateProjectDto
+) => Promise<ProjectDto>;
 export type UpdateProject = (project: ProjectDto) => Promise<void>;
 export type DeleteProject = (projectId: string) => Promise<void>;
 export type GetProject = (projectId: string) => Promise<ProjectDto>;

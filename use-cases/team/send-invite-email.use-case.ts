@@ -38,22 +38,18 @@ export async function sendInviteEmailUseCase(
     inviterName: string;
   }
 ) {
-  console.log("Email: ", inviteData.email);
   const user = context.getUser()!;
   if (!user) throw new AuthenticationError();
   let newUser = true;
   //get user by email
   try {
-    console.log("inviteData.email: ", inviteData.email);
     const retrievedUser = await context.getUserByEmail(inviteData.email);
-    console.log("))))retrievedUser: ", retrievedUser);
     newUser = false;
   } catch (error) {
     newUser = true;
     // throw new Error("Error getting user by email");
   }
   // if (!invitee) toggle newUser boolean
-  console.log("____________ newUser: ", newUser);
   //get Team
   const getTeam = await context.getTeam(inviteData.teamId);
   if (!getTeam) throw new Error("Team not found");
@@ -72,6 +68,8 @@ export async function sendInviteEmailUseCase(
     .update(resetToken)
     .digest("hex");
   console.log("Invite User Token: ", inviteUserToken);
+  console.log("inviteuserData", inviteData);
+  console.log("invite role", inviteData.role);
   const inviteUserExpires = Date.now() + 3600000; // 1 hour from now
   const inviteUserObject = {
     email: inviteData.email,
@@ -80,6 +78,7 @@ export async function sendInviteEmailUseCase(
     inviteUserToken: inviteUserToken,
     inviteUserTokenExpires: Date.now() + 3600000 * 24, // 24 hours from now
   };
+  console.log("inviteUserobject", inviteUserObject);
   // try{
   //   // updateTeamInvite()
   // }
@@ -99,7 +98,7 @@ export async function sendInviteEmailUseCase(
         teamId +
         "/" +
         resetToken;
-  const body = `${inviterName} has invited you to join their TaskCompass team: ${teamName}. Join by clicking on following link:  + ${resetURL}`;
+  const body = `${inviterName} has invited you to join their TaskCompass team: ${teamName}. Join by clicking on following link: ${resetURL}`;
   const msg = {
     to: inviteData.email, // Change to your recipient
     from: "no_reply@taskcompass.ca", // Change to your verified sender

@@ -42,7 +42,6 @@ import { TInvitedUser } from "@/entities/Team";
 interface FormData {
   email: string;
   role: string;
-  // teamName: string;
   teamId: string;
   inviterName: string;
 }
@@ -107,12 +106,13 @@ const InviteUser = ({
     teamId: z.string(),
     inviterName: z.string(),
   });
+  const [inviteRole, setInviteRole] = useState<TRole>("member");
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
-      role: "member",
+      role: inviteRole,
       teamId: team.id,
       inviterName: inviter.name,
     },
@@ -123,7 +123,6 @@ const InviteUser = ({
   const [messageType, setMessageType] = useState<ErrorType>("Error");
 
   const [isEmailEditing, setIsEmailEditing] = useState(false);
-  const [inviteRole, setInviteRole] = useState<TRole>("member");
   const [showSubmitButton, setShowSubmitButton] = useState(false);
   const [isEmailValid, setIsEmailValid] = useState(true);
   const [disableButtons, setDisableButtons] = useState(false);
@@ -141,6 +140,7 @@ const InviteUser = ({
 
   const handleRoleChange = (value: TRole) => {
     setInviteRole((prev) => value);
+    form.setValue("role", value);
   };
 
   const handleinviteEmailSubmit = async (
@@ -277,14 +277,11 @@ const InviteUser = ({
                 value="Invite User"
                 className="  py-2 rounded-md "
               >
-                Send Invite {/* <FontAwesomeIcon icon={faPlus} /> */}
+                Send Invite
               </Button>
               <DialogFooter className="">
                 <DialogClose asChild>
                   <Button disabled={disableButtons}>Cancel</Button>
-                  {/* <Button type="button" value="Cancel" className="  py-2 rounded-md ">
-              Cancel 
-            </Button> */}
                 </DialogClose>
               </DialogFooter>
             </div>

@@ -1,4 +1,7 @@
 import type { TInvitedUser } from "@/entities/Team";
+import { Project } from "next/dist/build/swc";
+import { ProjectDto } from "../project/types";
+import { UserDto } from "../user/types";
 export type TeamDto = {
   id: string;
   name: string;
@@ -33,4 +36,6 @@ export type CreateNewTeam = (
   team: CreateTeamDto,
   userId: string
 ) => Promise<void>;
+export type CreateDefaultTeam = (team: CreateTeamDto) => Promise<TeamDto>;
+
 export type UpdateTeam = (team: TeamDto) => Promise<void>;

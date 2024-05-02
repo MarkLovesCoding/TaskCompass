@@ -36,7 +36,7 @@ export class ProjectEntity {
   private description: string;
   private users: string[];
   private tasks: string[];
-  private team: string;
+  private team?: string;
   private createdBy: string;
   private archived: boolean;
   private columnOrder: ColumnOrder;
@@ -130,6 +130,13 @@ export class ProjectEntity {
   getBackgroundImageThumbnail() {
     return this.backgroundImageThumbnail;
   }
+
+  setTeam(team: string) {
+    this.team = team;
+  }
+  setCreatedBy(createdBy: string) {
+    this.createdBy = createdBy;
+  }
   addUser(user: string) {
     this.users.push(user);
   }
@@ -141,9 +148,13 @@ export class ProjectEntity {
   }
 
   addUsers(users: string[]) {
+    //make sure no duplicates
+
     users.forEach((user) => {
       this.users.push(user);
     });
+    const usersSet = new Set(this.users);
+    this.users = Array.from(usersSet);
   }
 
   removeUsers(users: string[]) {
@@ -210,8 +221,8 @@ export class ProjectEntity {
 
   private validate() {
     const projectSchema = z.object({
-      name: z.string().min(3).max(30),
-      description: z.string().min(3).max(50),
+      name: z.string().min(1).max(50),
+      description: z.string().min(0).max(500),
       users: z.array(z.string()).optional(),
       tasks: z.array(z.string()).optional(),
       createdBy: z.string(),
