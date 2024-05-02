@@ -1,7 +1,7 @@
 import { NextResponse, NextRequest } from "next/server";
 import connectDB from "@/db/connectDB";
 
-import { forgotPasswordAction } from "@/app/forgot-password/_actions/forgot-password-action";
+import { forgotPasswordAction } from "@/app/forgot-password/_actions/forgot-password.action";
 import User from "@/db/(models)/User";
 import crypto from "crypto";
 import { Resend } from "resend";
