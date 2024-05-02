@@ -20,6 +20,7 @@ import { Button } from "@/components/ui/button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle, faGithub } from "@fortawesome/free-brands-svg-icons";
 import { createNewEmailUserAction } from "./_actions/create-new-email-user.action";
+import { NextResponse } from "next/server";
 const formSchema = z.object({
   name: z.string().min(5).max(30),
   email: z.string().email().min(5),
@@ -33,6 +34,7 @@ const SignUpForm = () => {
 
   const [message, setMessage] = useState<string>("");
   const [messageType, setMessageType] = useState<ErrorType>("Error");
+  const [disableButtons, setDisableButtons] = useState<boolean>(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -44,44 +46,47 @@ const SignUpForm = () => {
     },
   });
   const onSignUpSubmit = async (values: z.infer<typeof formSchema>) => {
-    "here";
-    try {
-      await createNewEmailUserAction(values);
+    // try {
+    setDisableButtons(true);
+    const res = await fetch("/api/sign-up", {
+      method: "POST",
+      body: JSON.stringify(values),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (res.ok) {
+      // await createNewEmailUserAction(values);
       toast.success("User Created Successfully!");
-      setTimeout(() => {
-        toast.success("Signing In...");
-      }, 200);
-    } catch (error: any) {
-      toast.error(error.message);
-      setMessage(error.message);
+
+      try {
+        await signIn("credentials", {
+          email: values.email,
+          password: values.password,
+        });
+        setTimeout(() => {
+          toast.success("Signing In...");
+        }, 800);
+        setMessage("Signing in...");
+        setMessageType("Success");
+        // toast.success("User Created Successfully!");
+        setDisableButtons(false);
+
+        router.push("/");
+      } catch (error: any) {
+        console.error(error);
+        setMessage(error);
+        setMessageType("Error");
+        toast.error("Error Signing In User");
+      }
+    } else {
+      const response = await res.json();
       setMessageType("Error");
+      setMessage(response.message);
+      toast.error(response.message);
+      setDisableButtons(false);
     }
-    // try
-    // await createNewUser(values);
-    // catch
-    // const res = await fetch("/api/Users", {
-    //   method: "POST",
-    //   body: JSON.stringify(values),
-    //   headers: {
-    //     "content-type": "application/json",
-    //   },
-    // });
-    // if (res.ok) {
-    try {
-      await signIn("credentials", {
-        email: values.email,
-        password: values.password,
-      });
-      setMessage("Signing in...");
-      setMessageType("Success");
-      toast.success("User Created Successfully!");
-    } catch (error: any) {
-      console.error(error);
-      setMessage(error);
-      setMessageType("Error");
-      toast.error("Error Signing In User");
-    }
-    router.push("/");
     // } else {
     //   const response = await res.json();
     //   toast.error(response.message);
@@ -92,7 +97,7 @@ const SignUpForm = () => {
 
   const handleGoogleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-
+    setDisableButtons(true);
     const loginResponse = await signIn("google", { redirect: false });
     // Check for login error
     if (loginResponse && loginResponse.error) {
@@ -100,16 +105,20 @@ const SignUpForm = () => {
       setMessageType("Error");
 
       toast.error(loginResponse.error);
+      setDisableButtons(false);
     } else {
       // Successful login
       toast.success("Logging in through Google...");
       setMessageType("Success");
+      setDisableButtons(false);
+
       router.push("/");
     }
   };
 
   const handleGithubSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    setDisableButtons(true);
     toast("Signing In through GitHub...");
 
     const loginResponse = await signIn("github");
@@ -119,10 +128,13 @@ const SignUpForm = () => {
       setMessage(loginResponse?.error);
       setMessageType("Error");
       toast.error(loginResponse.error);
+      setDisableButtons(false);
     } else {
       // Successful login
 
       toast.success("Logging in through GitHub...");
+      setDisableButtons(false);
+
       router.push("/");
     }
   };
