@@ -82,6 +82,6 @@ export async function signUpNewUserAddToTeamUseCase(
   } catch (error) {
     throw new Error("Error updating team");
   }
-
+  return;
   //If no errors thrown, next stage in UI to sign in performed.
 }

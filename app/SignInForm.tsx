@@ -48,7 +48,6 @@ const SignInForm = () => {
   });
 
   const onSignInSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log("values", values);
     const loginResponse = await signIn("credentials", {
       email: values.email,
       password: values.password,
@@ -122,7 +121,7 @@ const SignInForm = () => {
                 </FormItem>
               );
             }}
-          />{" "}
+          />
           <FormField
             control={form.control}
             name="password"

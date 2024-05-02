@@ -35,7 +35,6 @@ export async function signUpNewUserAddToTeamAction(
         values,
       }
     );
-    console.log("invitedUserData", invitedUserData);
   } catch (err) {
     const error = err as Error;
     console.log("error", error);
