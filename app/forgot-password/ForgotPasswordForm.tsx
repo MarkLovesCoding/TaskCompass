@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 
 import * as z from "zod";
@@ -32,13 +32,47 @@ const ForgotPasswordForm = () => {
   const [message, setMessage] = useState<string>("");
   const [messageType, setMessageType] = useState<ErrorType>("Error");
   const [disableButtons, setDisableButtons] = useState<boolean>(false);
+  const [countdown, setCountdown] = useState<number>(10); // Countdown in seconds
+
+  //
+  useEffect(() => {
+    let countdownTimer: NodeJS.Timeout;
+
+    if (disableButtons && countdown > 0) {
+      // Start countdown timer
+      countdownTimer = setInterval(() => {
+        setCountdown((prevCountdown) => prevCountdown - 1);
+      }, 1000);
+    }
+
+    // Cleanup function
+    return () => clearInterval(countdownTimer);
+  }, [disableButtons, countdown]);
+
+  useEffect(() => {
+    if (countdown === 0) {
+      // Enable buttons after countdown reaches 0
+      setDisableButtons(false);
+      setCountdown(30);
+    }
+  }, [countdown]);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
     },
   });
-
+  const waitThirtySecondsToEnableButtons = () => {
+    setTimeout(() => {
+      setDisableButtons(false);
+    }, 30000);
+  };
+  const waitToResetMessage = (seconds: number) => {
+    setTimeout(() => {
+      setMessage("");
+    }, seconds * 1000);
+  };
   const handleForgotEmailSubmit = async (values: FormData) => {
     setDisableButtons(true);
     try {
@@ -54,12 +88,15 @@ const ForgotPasswordForm = () => {
         setMessageType("Success");
         setMessage("Password reset link sent to your email.");
         toast.success("Password reset link sent to your email.");
+        waitToResetMessage(5);
+
         // setDisableButtons(false);
       } else if (res.status == 500) {
         res.json().then((data) => {
           setMessageType("Error");
           setMessage(data.message);
           toast.error(data.message);
+          waitToResetMessage(5);
         });
         // setDisableButtons(false);
       }
@@ -68,8 +105,9 @@ const ForgotPasswordForm = () => {
       setMessageType("Error");
       setMessage("Error sending forgot password email, please try again.");
       toast.error("Error sending forgot password email, please try again.");
+      waitToResetMessage(5);
     }
-    setDisableButtons(false);
+    waitThirtySecondsToEnableButtons();
   };
 
   return (
@@ -123,7 +161,9 @@ const ForgotPasswordForm = () => {
             className="mt-4 w-full py-2 rounded-md"
             disabled={disableButtons}
           >
-            Send Reset Email
+            {disableButtons
+              ? `Send Reset Email (${countdown})`
+              : "Send Reset Email"}
           </Button>
         </form>
       </Form>
