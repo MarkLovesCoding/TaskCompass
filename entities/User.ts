@@ -8,7 +8,9 @@ type ValidatedFields =
   | "teams"
   | "tasks"
   | "avatar"
-  | "backgroundImage";
+  | "backgroundImage"
+  | "resetToken"
+  | "resetTokenExpiry";
 
 export class UserEntityValidationError extends Error {
   private errors: Record<ValidatedFields, string | undefined>;
@@ -34,6 +36,8 @@ export class UserEntity {
   private teamsAsMember: string[];
   private tasks: string[];
   private backgroundImage: string;
+  private resetToken?: string;
+  private resetTokenExpiry?: number;
 
   constructor({
     id,
@@ -46,6 +50,8 @@ export class UserEntity {
     teamsAsMember,
     tasks,
     backgroundImage,
+    resetToken,
+    resetTokenExpiry,
   }: {
     id: string;
     name: string;
@@ -57,6 +63,8 @@ export class UserEntity {
     teamsAsMember: string[];
     tasks: string[];
     backgroundImage: string;
+    resetToken?: string;
+    resetTokenExpiry?: number;
   }) {
     this.id = id;
     this.name = name;
@@ -109,7 +117,24 @@ export class UserEntity {
   getBackgroundImage() {
     return this.backgroundImage;
   }
-
+  getResetToken() {
+    return this.resetToken;
+  }
+  getResetTokenExpiry() {
+    return this.resetTokenExpiry;
+  }
+  setResetToken(resetToken: string) {
+    this.resetToken = resetToken;
+  }
+  setResetTokenExpiry(resetTokenExpiry: number) {
+    this.resetTokenExpiry = resetTokenExpiry;
+  }
+  removeResetToken() {
+    this.resetToken = undefined;
+  }
+  removeResetTokenExpiry() {
+    this.resetTokenExpiry = undefined;
+  }
   addProjectAsAdmin(project: string) {
     this.projectsAsAdmin.push(project);
   }
@@ -216,6 +241,8 @@ export class UserEntity {
         tasks: errors.tasks?.[0],
         avatar: errors.avatar?.[0],
         backgroundImage: errors.backgroundImage?.[0],
+        resetToken: errors.resetToken?.[0],
+        resetTokenExpiry: errors.resetTokenExpiry?.[0],
       });
     }
   }

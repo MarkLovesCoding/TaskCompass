@@ -9,6 +9,8 @@ export type UserDto = {
   tasks: string[];
   avatar: string;
   backgroundImage: string;
+  resetToken?: string;
+  resetTokenExpiry?: number;
 };
 export type User = { userId: string };
 export type UserTeamsAsAdmin = string[];

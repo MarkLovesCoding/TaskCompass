@@ -16,5 +16,7 @@ export function userToDto(user: UserEntity): UserDto {
     tasks: user.getTasks(),
     avatar: user.getAvatar(),
     backgroundImage: user.getBackgroundImage(),
+    resetToken: user.getResetToken(),
+    resetTokenExpiry: user.getResetTokenExpiry(),
   };
 }

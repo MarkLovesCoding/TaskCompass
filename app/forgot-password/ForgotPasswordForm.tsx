@@ -16,6 +16,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { toast } from "sonner";
+import { NextResponse } from "next/server";
 
 interface FormData {
   email: string;
@@ -29,7 +31,7 @@ const formSchema = z.object({
 const ForgotPasswordForm = () => {
   const [message, setMessage] = useState<string>("");
   const [messageType, setMessageType] = useState<ErrorType>("Error");
-
+  const [disableButtons, setDisableButtons] = useState<boolean>(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -38,6 +40,7 @@ const ForgotPasswordForm = () => {
   });
 
   const handleForgotEmailSubmit = async (values: FormData) => {
+    setDisableButtons(true);
     try {
       const res = await fetch("/api/auth/forgot-password", {
         method: "POST",
@@ -46,20 +49,27 @@ const ForgotPasswordForm = () => {
         },
         body: JSON.stringify(values),
       });
-      if (res.status == 400) {
-        setMessageType("Error");
-        setMessage("User with this email is not registered.");
-      }
-      if (res.status === 200) {
+
+      if (res.status == 200) {
         setMessageType("Success");
         setMessage("Password reset link sent to your email.");
-      } else {
-        setMessageType("Error");
-        setMessage("Something went wrong. Please try again in a minute.");
+        toast.success("Password reset link sent to your email.");
+        // setDisableButtons(false);
+      } else if (res.status == 500) {
+        res.json().then((data) => {
+          setMessageType("Error");
+          setMessage(data.message);
+          toast.error(data.message);
+        });
+        // setDisableButtons(false);
       }
     } catch (error) {
       console.log(error);
+      setMessageType("Error");
+      setMessage("Error sending forgot password email, please try again.");
+      toast.error("Error sending forgot password email, please try again.");
     }
+    setDisableButtons(false);
   };
 
   return (
@@ -111,6 +121,7 @@ const ForgotPasswordForm = () => {
             type="submit"
             value="Send Reset Email"
             className="mt-4 w-full py-2 rounded-md"
+            disabled={disableButtons}
           >
             Send Reset Email
           </Button>
@@ -118,7 +129,10 @@ const ForgotPasswordForm = () => {
       </Form>
 
       <div>
-        <Link href="/registration">
+        <Link
+          // className={`${disableButtons == true ? "" : "block"}`}
+          href={`${disableButtons == true ? "/registration" : "#"}`}
+        >
           <p className="text-center text-sm font-medium text-primary hover:text-primary-dark">
             Back to Sign In
           </p>
