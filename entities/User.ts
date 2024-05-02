@@ -4,6 +4,7 @@ type ValidatedFields =
   | "id"
   | "name"
   | "email"
+  | "password"
   | "projects"
   | "teams"
   | "tasks"
@@ -29,6 +30,7 @@ export class UserEntity {
   private id: string;
   private name: string;
   private email?: string;
+  private password?: string;
   private avatar: string;
   private projectsAsAdmin: string[];
   private projectsAsMember: string[];
@@ -43,6 +45,7 @@ export class UserEntity {
     id,
     name,
     email,
+    password,
     avatar,
     projectsAsAdmin,
     projectsAsMember,
@@ -56,6 +59,7 @@ export class UserEntity {
     id: string;
     name: string;
     email?: string;
+    password?: string;
     avatar: string;
     projectsAsAdmin: string[];
     projectsAsMember: string[];
@@ -69,6 +73,7 @@ export class UserEntity {
     this.id = id;
     this.name = name;
     this.email = email;
+    this.password = password;
     this.avatar = avatar;
     this.projectsAsAdmin = projectsAsAdmin;
     this.projectsAsMember = projectsAsMember;
@@ -128,6 +133,9 @@ export class UserEntity {
   }
   setResetTokenExpiry(resetTokenExpiry: number) {
     this.resetTokenExpiry = resetTokenExpiry;
+  }
+  setPassword(password: string) {
+    password && (this.password = password);
   }
   removeResetToken() {
     this.resetToken = undefined;
@@ -236,6 +244,7 @@ export class UserEntity {
         id: errors.id?.[0],
         name: errors.name?.[0],
         email: errors.email?.[0],
+        password: errors.password?.[0],
         projects: errors.projects?.[0],
         teams: errors.teams?.[0],
         tasks: errors.tasks?.[0],

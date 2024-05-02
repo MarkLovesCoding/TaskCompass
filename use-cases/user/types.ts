@@ -27,6 +27,7 @@ export type CreateNewEmailUser = (values: {
 
 export type GetUser = (userId: string) => Promise<UserDto>;
 export type GetUserByEmail = (email: string) => Promise<UserDto>;
+export type GetUserByResetToken = (token: string) => Promise<UserDto>;
 export type GetProjectUsers = (userIds: string[]) => Promise<UserDto[]>;
 export type GetUserSession = () => User | undefined;
 export type GetUserTeamsAsAdmin = (

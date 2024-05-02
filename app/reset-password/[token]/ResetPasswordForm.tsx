@@ -16,6 +16,9 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { toast } from "sonner";
+import { verifyResetTokenAction } from "./_actions/verify-reset-token.action";
+import { UserDto } from "@/use-cases/user/types";
 
 const passwordSchema = z
   .string()
@@ -51,10 +54,14 @@ const ResetPasswordForm = ({ token }: { token: string }) => {
   const router = useRouter();
   const [message, setMessage] = useState<string>("");
   const [messageType, setMessageType] = useState<ErrorType>("Error");
+  const [disableButtons, setDisabledButtons] = useState(true);
 
+  //This useEffect is used to verify the token on load.
   useEffect(() => {
+    setDisabledButtons(true);
     const verifyToken = async () => {
       try {
+        // const res = await verifyResetTokenAction(token);
         const res = await fetch("/api/auth/verify-token", {
           method: "POST",
           headers: {
@@ -63,25 +70,46 @@ const ResetPasswordForm = ({ token }: { token: string }) => {
           body: JSON.stringify({ token: token }),
         });
         // const temp = await res.json();
-        if (res.status === 400) {
+        if (res.status === 500) {
           setMessageType("Error");
-          setMessage("Token is invalid or has expired.");
-
-          router.push("/forgot-password");
+          setMessage("Token is invalid or has expired. Redirecting...");
+          toast.error("Token is invalid or has expired. Redirecting...");
+          setTimeout(() => {
+            router.push("/forgot-password");
+          }, 1200);
+          // router.push("/forgot-password");
         }
         if (res.status === 200) {
-          const user = await res.json();
+          // const user = res;
+          // const json = res.json();
+          const userRes = await res.json();
+          if (!userRes)
+            throw new Error("Error with user repsonse. Please try again.");
+          const user = JSON.parse(userRes) as UserDto;
           setMessageType("Success");
+          setUserId(user.id);
           setMessage(`Hi ${user.name}. Please reset your password.`);
-          setUserId(user._id);
-          // router.push("/registration");
+          setDisabledButtons(false);
+
+          // toast.success(`Reset Token Validated.`);
         }
+        // console.log("_____________________-user", user);
+        // setMessageType("Success");
+        // setUserId(user.id);
+
+        // setMessage(`Hi ${user.name}. Please reset your password.`);
+        // toast.success(`Reset Token Validated.`);
+        // router.push("/registration");
       } catch (error) {
+        toast.error("Error validating Token. Redirecting...");
         setMessageType("Error");
-        setMessage("Token is invalid or has expired.");
-        console.log(error);
+        setMessage("Error validating Token. Redirecting...");
+        setTimeout(() => {
+          router.push("/forgot-password");
+        }, 1200);
       }
     };
+
     verifyToken();
   }, []);
 
@@ -98,6 +126,8 @@ const ResetPasswordForm = ({ token }: { token: string }) => {
   }, [userId]);
 
   const handleResetPasswordSubmit = async (values: FormData) => {
+    setDisabledButtons(true);
+
     try {
       const res = await fetch("/api/auth/reset-password", {
         method: "POST",
@@ -106,18 +136,25 @@ const ResetPasswordForm = ({ token }: { token: string }) => {
         },
         body: JSON.stringify(values),
       });
-      if (res.status == 400) {
+      if (res.status == 500) {
         setMessageType("Error");
         setMessage("Error resetting password.");
+        toast.error("Error resetting password.");
       }
       if (res.status === 200) {
         setMessageType("Success");
 
         setMessage("Password reset successfully.");
+        toast.success("Password reset successfully. Redirecting...");
+
         router.push("/registration");
       }
     } catch (error) {
+      setMessageType("Error");
+      setMessage("Error resetting Password. Please try again.");
+
       console.log(error);
+      toast.error("Error resetting password.");
     }
   };
 
@@ -189,6 +226,7 @@ const ResetPasswordForm = ({ token }: { token: string }) => {
             type="submit"
             value="Send Reset Email"
             className="mt-4 w-full py-2 rounded-md"
+            disabled={disableButtons}
           >
             Reset Password
           </Button>
@@ -196,12 +234,12 @@ const ResetPasswordForm = ({ token }: { token: string }) => {
       </Form>
 
       <div>
-        <Link href="/forgot-password">
+        <Link href={`${disableButtons ? "#" : "/forgot-password"}`}>
           <p className="text-center text-sm font-medium text-primary hover:text-primary-dark">
             Back to Forgot Password
           </p>
         </Link>
-        <Link href="/registration">
+        <Link href={`${disableButtons ? "#" : "/registration"}`}>
           <p className="text-center text-sm font-medium text-primary hover:text-primary-dark">
             Back to Sign In
           </p>

@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/form";
 import { faGoogle, faGithub } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Link from "next/link";
 
 const formSchema = z.object({
   email: z.string().email().min(5),
@@ -187,6 +188,11 @@ const SignInForm = () => {
               );
             }}
           />
+          <div className="w-full flex justify-end">
+            <Link href="/forgot-password">
+              <p className=" mr-4 mt-2 text-xs underline">Forgot Password?</p>
+            </Link>
+          </div>
           <Button
             type="submit"
             value="Create User"

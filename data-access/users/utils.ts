@@ -31,5 +31,7 @@ export function userModelToUserDto(user: UserModelType): UserDto {
     tasks: convertedTasks,
     avatar: user.avatar,
     backgroundImage: user.backgroundImage,
+    resetToken: user.resetToken,
+    resetTokenExpiry: user.resetTokenExpiry,
   };
 }

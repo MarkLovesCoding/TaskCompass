@@ -9,4 +9,6 @@ export type UserModelType = {
   tasks: string[];
   avatar: string;
   backgroundImage: string;
+  resetToken?: string;
+  resetTokenExpiry?: number;
 };

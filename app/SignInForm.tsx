@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import type { FormEvent } from "react";
 import { useRouter } from "next/navigation";
 
@@ -33,12 +33,15 @@ interface FormData {
   role: string;
   firstLogIn: boolean;
 }
-
 const SignInForm = () => {
   const router = useRouter();
 
   const [errorMessage, setErrorMessage] = useState<string>("");
-
+  const resetErrorMessage = () => {
+    setTimeout(() => {
+      setErrorMessage("");
+    }, 3000);
+  };
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -56,8 +59,10 @@ const SignInForm = () => {
 
     if (loginResponse?.error && loginResponse.error == "CredentialsSignin") {
       setErrorMessage("Incorrect Credentials. ");
+      resetErrorMessage();
     } else if (loginResponse?.error) {
       setErrorMessage(loginResponse?.error);
+      resetErrorMessage();
     } else {
       // Successful login
       router.push("/");
@@ -68,9 +73,10 @@ const SignInForm = () => {
 
     const loginResponse = await signIn("google", { redirect: false });
     // Successful login
-    if (loginResponse && loginResponse.error)
+    if (loginResponse && loginResponse.error) {
       setErrorMessage(loginResponse.error);
-    else {
+      resetErrorMessage();
+    } else {
       // Successful login
       router.push("/");
     }
@@ -83,9 +89,10 @@ const SignInForm = () => {
     const loginResponse = await signIn("github");
     // Successful login
 
-    if (loginResponse && loginResponse.error)
+    if (loginResponse && loginResponse.error) {
       setErrorMessage(loginResponse.error);
-    else {
+      resetErrorMessage();
+    } else {
       // Successful login
       router.push("/");
     }
