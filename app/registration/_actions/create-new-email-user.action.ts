@@ -19,6 +19,7 @@ export async function createNewEmailUserAction(values: {
   name: string;
   email: string;
   password: string;
+  passwordConfirm: string;
   role: string;
   firstLogIn: boolean;
 }) {

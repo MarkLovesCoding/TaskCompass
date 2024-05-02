@@ -2,6 +2,7 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 import * as z from "zod";
 import { useForm } from "react-hook-form";
@@ -20,7 +21,6 @@ import {
 } from "@/components/ui/form";
 import { faGoogle, faGithub } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Link from "next/link";
 
 const formSchema = z.object({
   email: z.string().email().min(5),

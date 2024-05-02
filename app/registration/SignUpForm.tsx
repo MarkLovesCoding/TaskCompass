@@ -20,13 +20,40 @@ import { Button } from "@/components/ui/button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle, faGithub } from "@fortawesome/free-brands-svg-icons";
 import { createNewEmailUserAction } from "./_actions/create-new-email-user.action";
-const formSchema = z.object({
-  name: z.string().min(5).max(30),
-  email: z.string().email().min(5),
-  password: z.string().min(6),
-  role: z.string().min(1),
-  firstLogIn: z.boolean(),
-});
+const passwordSchema = z
+  .string()
+  .min(8, "Password must be at least 8 characters long")
+  .regex(/[A-Z]/, {
+    message: "Password must contain at least one uppercase letter",
+  })
+  .regex(/[a-z]/, {
+    message: "Password must contain at least one lowercase letter",
+  })
+  .regex(/[0-9]/, { message: "Password must contain at least one number" });
+
+// const formSchema = z
+//   .object({
+//     userId: z.string(),
+//     password: passwordSchema,
+//     passwordConfirm: z.string().min(8),
+//   })
+//   .refine((data) => data.password === data.passwordConfirm, {
+//     message: "Passwords don't match",
+//     path: ["passwordConfirm"],
+//   });
+const formSchema = z
+  .object({
+    name: z.string().min(5).max(30),
+    email: z.string().email().min(5),
+    password: passwordSchema,
+    passwordConfirm: passwordSchema,
+    role: z.string().min(1),
+    firstLogIn: z.boolean(),
+  })
+  .refine((data) => data.password === data.passwordConfirm, {
+    message: "Passwords don't match",
+    path: ["passwordConfirm"],
+  });
 type ErrorType = "Error" | "Success";
 const SignUpForm = () => {
   const router = useRouter();
@@ -207,6 +234,25 @@ const SignUpForm = () => {
                       {...field}
                     />
                   </FormControl>
+                </FormItem>
+              );
+            }}
+          />
+          <FormField
+            control={form.control}
+            name="passwordConfirm"
+            render={({ field }) => {
+              return (
+                <FormItem className="mt-2">
+                  <FormLabel>Confirm Password</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Type in password"
+                      type="password"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
                 </FormItem>
               );
             }}
