@@ -36,7 +36,7 @@ export class ProjectEntity {
   private description: string;
   private users: string[];
   private tasks: string[];
-  private team?: string;
+  private team: string;
   private createdBy: string;
   private archived: boolean;
   private columnOrder: ColumnOrder;
