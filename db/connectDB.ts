@@ -3,8 +3,6 @@ import mongoose from "mongoose";
 
 const connectDB = async () => {
   if (process.env.ENVIRONMENT == "production") {
-    console.log("start connectDB in prod");
-
     try {
       await mongoose.connect(process.env.MONGODB_PROD_URI as string);
       console.log("Connected to MongoDB in Production");
@@ -12,7 +10,6 @@ const connectDB = async () => {
       console.error("Error connecting to MongoDB:", error.message);
     }
   } else if (process.env.ENVIRONMENT == "development") {
-    console.log("start connectDB in dev");
     try {
       //
       await mongoose.connect(process.env.MONGODB_DEV_URI as string);

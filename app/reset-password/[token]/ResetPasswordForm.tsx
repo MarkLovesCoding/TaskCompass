@@ -17,7 +17,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { toast } from "sonner";
-import { verifyResetTokenAction } from "./_actions/verify-reset-token.action";
 import { UserDto } from "@/use-cases/user/types";
 
 const passwordSchema = z
@@ -54,7 +53,7 @@ const ResetPasswordForm = ({ token }: { token: string }) => {
   const router = useRouter();
   const [message, setMessage] = useState<string>("");
   const [messageType, setMessageType] = useState<ErrorType>("Error");
-  const [disableButtons, setDisabledButtons] = useState(true);
+  const [disableButtons, setDisabledButtons] = useState(false);
 
   //This useEffect is used to verify the token on load.
   useEffect(() => {
@@ -86,20 +85,11 @@ const ResetPasswordForm = ({ token }: { token: string }) => {
           if (!userRes)
             throw new Error("Error with user repsonse. Please try again.");
           const user = JSON.parse(userRes) as UserDto;
+          setDisabledButtons(false);
           setMessageType("Success");
           setUserId(user.id);
           setMessage(`Hi ${user.name}. Please reset your password.`);
-          setDisabledButtons(false);
-
-          // toast.success(`Reset Token Validated.`);
         }
-        // console.log("_____________________-user", user);
-        // setMessageType("Success");
-        // setUserId(user.id);
-
-        // setMessage(`Hi ${user.name}. Please reset your password.`);
-        // toast.success(`Reset Token Validated.`);
-        // router.push("/registration");
       } catch (error) {
         toast.error("Error validating Token. Redirecting...");
         setMessageType("Error");

@@ -1,4 +1,3 @@
-// import "use server";
 "use server";
 import connectDB from "@/db/connectDB";
 import { projectModelToProjectDto } from "./utils";
@@ -6,7 +5,6 @@ import Project from "@/db/(models)/Project";
 
 import type { ProjectDto } from "@/use-cases/project/types";
 
-// May require refactpr to get by ID
 async function getProject(projectId: string): Promise<ProjectDto> {
   try {
     await connectDB();
@@ -17,7 +15,6 @@ async function getProject(projectId: string): Promise<ProjectDto> {
 
   try {
     // Find the user by ID
-    console.log(">>>>>>projectId", projectId);
     const project = await Project.findById(projectId);
     return projectModelToProjectDto(project);
   } catch (error) {

@@ -9,6 +9,7 @@ export function userToDto(user: UserEntity): UserDto {
     id: userId,
     name: user.getName(),
     email: user.getEmail(),
+    password: user.getPassword(),
     projectsAsAdmin: user.getProjectsAsAdmin(),
     teamsAsAdmin: user.getTeamsAsAdmin(),
     projectsAsMember: user.getProjectsAsMember(),

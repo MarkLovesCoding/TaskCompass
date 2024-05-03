@@ -1,10 +1,8 @@
 "use server";
 import connectDB from "@/db/connectDB";
 import Team from "@/db/(models)/Team";
-import User from "@/db/(models)/User";
 
 import type { CreateTeamDto, TeamDto } from "@/use-cases/team/types";
-import { TeamModelType } from "./types";
 import { teamModelToTeamDto } from "./utils";
 
 export async function createDefaultTeam(team: CreateTeamDto): Promise<TeamDto> {

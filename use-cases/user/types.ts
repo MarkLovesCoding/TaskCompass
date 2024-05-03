@@ -2,6 +2,7 @@ export type UserDto = {
   id: string;
   name: string;
   email?: string;
+  password?: string;
   projectsAsAdmin: string[];
   projectsAsMember: string[];
   teamsAsAdmin: string[];

@@ -89,20 +89,25 @@ export class TeamEntity {
   getCreatedBy() {
     return this.createdBy;
   }
+
   getBackgroundImage() {
     return this.backgroundImage;
   }
+
   getBackgroundImageThumbnail() {
     return this.backgroundImageThumbnail;
   }
+
   getInvitedUsers() {
     return this.invitedUsers;
   }
+
   removeExpiredInvitedUsers() {
     this.invitedUsers = this.invitedUsers?.filter(
       (invitedUser) => invitedUser.inviteUserTokenExpires > Date.now()
     );
   }
+
   addInvitedUser(invitedUser: TInvitedUser) {
     //check if user is already invited
     const existingInvitedUser = this.invitedUsers?.find(
@@ -117,6 +122,7 @@ export class TeamEntity {
       this.invitedUsers?.push(invitedUser);
     }
   }
+
   removeInvitedUser(invitedUser: TInvitedUser) {
     this.invitedUsers = this.invitedUsers?.filter(
       (invitedUser) => invitedUser.email !== invitedUser.email
@@ -162,6 +168,7 @@ export class TeamEntity {
   updateBackgroundImage(backgroundImage: string) {
     this.backgroundImage = backgroundImage;
   }
+
   updateBackgroundImageThumbnail(backgroundImageThumbnail: string) {
     this.backgroundImageThumbnail = backgroundImageThumbnail;
   }

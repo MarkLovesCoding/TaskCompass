@@ -24,10 +24,6 @@ const UserPage = async ({ params }: { params: ParamsType }) => {
 
   const session = await sessionAuth(`/dashboard/${id}`);
 
-  // if (!session) {
-  //   redirect(`/api/auth/signin?callbackUrl=/USERPAGE-CLEAN/${id}`);
-  // }
-  // console.log("session", session);
   const sessionUser = session?.user.id;
   let user: UserDto;
   if (sessionUser == id) {
@@ -38,15 +34,10 @@ const UserPage = async ({ params }: { params: ParamsType }) => {
   }
   // const userIdString = user._id;
   const usersTeamsAsMember = await getUserTeamsAsMember(user);
-  console.log("usersTeamsAsMember", usersTeamsAsMember);
   const usersProjectsAsMember = await getUserProjectsAsMember(user);
-  console.log("usersProjectsAsMember", usersProjectsAsMember);
   const usersTeamsAsAdmin = await getUserTeamsAsAdmin(user);
-  console.log("usersTeamsAsAdmin", usersTeamsAsAdmin);
   const usersProjectsAsAdmin = await getUserProjectsAsAdmin(user);
-  console.log("usersProjectsAsAdmin", usersProjectsAsAdmin);
   const userTasks = await getUserTasks(user);
-  console.log("userTasks", userTasks);
   // add params
   // const userId = params.userData.id;
   return (

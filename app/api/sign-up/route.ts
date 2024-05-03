@@ -1,15 +1,12 @@
 import { NextResponse, NextRequest } from "next/server";
 import connectDB from "@/db/connectDB";
-import User from "@/db/(models)/User";
-import Project from "@/db/(models)/Project";
-import { UserType } from "@/lib/types/types";
-import bcrypt from "bcrypt";
-import Team from "@/db/(models)/Team";
+
 import { createNewEmailUserAction } from "@/app/registration/_actions/create-new-email-user.action";
 type UserInfo = {
   name: string;
   email: string;
   password: string;
+  passwordConfirm: string;
   role: string;
   firstLogIn: boolean;
 };

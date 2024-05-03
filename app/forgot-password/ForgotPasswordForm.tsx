@@ -161,7 +161,7 @@ const ForgotPasswordForm = () => {
             disabled={disableButtons}
           >
             {disableButtons
-              ? `Send Reset Email (${countdown})`
+              ? `Send Reset Email (${countdown}s)`
               : "Send Reset Email"}
           </Button>
         </form>

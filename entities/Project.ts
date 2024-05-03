@@ -124,9 +124,11 @@ export class ProjectEntity {
   getTasksOrder() {
     return this.tasksOrder;
   }
+
   getBackgroundImage() {
     return this.backgroundImage;
   }
+
   getBackgroundImageThumbnail() {
     return this.backgroundImageThumbnail;
   }
@@ -134,9 +136,11 @@ export class ProjectEntity {
   setTeam(team: string) {
     this.team = team;
   }
+
   setCreatedBy(createdBy: string) {
     this.createdBy = createdBy;
   }
+
   addUser(user: string) {
     this.users.push(user);
   }
@@ -149,7 +153,6 @@ export class ProjectEntity {
 
   addUsers(users: string[]) {
     //make sure no duplicates
-
     users.forEach((user) => {
       this.users.push(user);
     });
@@ -172,9 +175,11 @@ export class ProjectEntity {
   updateArchived(archived: boolean) {
     this.archived = archived;
   }
+
   updateBackgroundImage(backgroundImage: string) {
     this.backgroundImage = backgroundImage;
   }
+
   updateBackgroundImageThumbnail(backgroundImageThumbnail: string) {
     this.backgroundImageThumbnail = backgroundImageThumbnail;
   }
@@ -197,7 +202,6 @@ export class ProjectEntity {
 
   updateTasksOrder(
     taskId: string,
-
     type: string,
     newSubType: string,
     existingSubType: string
@@ -222,7 +226,7 @@ export class ProjectEntity {
   private validate() {
     const projectSchema = z.object({
       name: z.string().min(1).max(50),
-      description: z.string().min(0).max(500),
+      description: z.string().min(0).max(250),
       users: z.array(z.string()).optional(),
       tasks: z.array(z.string()).optional(),
       createdBy: z.string(),

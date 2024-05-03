@@ -19,7 +19,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle, faGithub } from "@fortawesome/free-brands-svg-icons";
-import { createNewEmailUserAction } from "./_actions/create-new-email-user.action";
 const passwordSchema = z
   .string()
   .min(8, "Password must be at least 8 characters long")
@@ -31,16 +30,6 @@ const passwordSchema = z
   })
   .regex(/[0-9]/, { message: "Password must contain at least one number" });
 
-// const formSchema = z
-//   .object({
-//     userId: z.string(),
-//     password: passwordSchema,
-//     passwordConfirm: z.string().min(8),
-//   })
-//   .refine((data) => data.password === data.passwordConfirm, {
-//     message: "Passwords don't match",
-//     path: ["passwordConfirm"],
-//   });
 const formSchema = z
   .object({
     name: z.string().min(5).max(30),
@@ -113,12 +102,6 @@ const SignUpForm = () => {
       toast.error(response.message);
       setDisableButtons(false);
     }
-    // } else {
-    //   const response = await res.json();
-    //   toast.error(response.message);
-    //   setMessage(response.message);
-    //   setMessageType("Error");
-    // }
   };
 
   const handleGoogleSubmit = async (e: FormEvent) => {

@@ -119,30 +119,43 @@ export class UserEntity {
   getAvatar() {
     return this.avatar;
   }
+
   getBackgroundImage() {
     return this.backgroundImage;
   }
+
+  getPassword() {
+    return this.password;
+  }
+
   getResetToken() {
     return this.resetToken;
   }
+
   getResetTokenExpiry() {
     return this.resetTokenExpiry;
   }
+
   setResetToken(resetToken: string) {
     this.resetToken = resetToken;
   }
+
   setResetTokenExpiry(resetTokenExpiry: number) {
     this.resetTokenExpiry = resetTokenExpiry;
   }
+
   setPassword(password: string) {
     password && (this.password = password);
   }
+
   removeResetToken() {
     this.resetToken = undefined;
   }
+
   removeResetTokenExpiry() {
     this.resetTokenExpiry = undefined;
   }
+
   addProjectAsAdmin(project: string) {
     this.projectsAsAdmin.push(project);
   }
@@ -227,7 +240,7 @@ export class UserEntity {
 
   private validate() {
     const projectSchema = z.object({
-      name: z.string().min(3).max(30),
+      name: z.string().min(3).max(50),
       email: z.string().email(),
       projects: z.array(z.string()).optional(),
       teams: z.array(z.string()).optional(),

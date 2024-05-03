@@ -23,18 +23,12 @@ export const options = {
     GitHubProvider({
       async profile(profile) {
         await connectDB();
-        console.log("Profile GitHub: ", profile);
         let userRole = "GitHub User";
         const existingUser = await User.findOne({
           email: profile.email,
         }).exec();
 
         if (existingUser && existingUser.role !== "GitHub User") {
-          console.log(
-            existingUser.role,
-            " with the same email already exists:"
-          );
-          // return null; // Return null to prevent the registration
           return {
             ...profile,
             id: existingUser._id,
@@ -111,14 +105,11 @@ export const options = {
           }
 
           if (foundUser) {
-            console.log("User Exists");
             const match = await bcrypt.compare(
               credentials.password,
               foundUser.password
             );
             if (match) {
-              console.log("Passwords match");
-              //@ts-expect-error // user pass deleted temporary variable so OK
               delete foundUser.password;
               foundUser["role"] = "Email User";
               return foundUser;
@@ -144,10 +135,6 @@ export const options = {
       }).lean();
 
       if (existingUser && existingUser.role == user.user.role) {
-        console.log(
-          "User found in MongoDB. Loading existing data:",
-          existingUser
-        );
         user.user.id = existingUser._id;
         return true; // Continue the sign-in process
       } else if (existingUser) {

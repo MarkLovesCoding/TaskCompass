@@ -181,7 +181,7 @@ export class TaskEntity {
   private validate() {
     const taskSchema = z.object({
       name: z.string().min(1).max(50),
-      description: z.string().min(0).max(500),
+      description: z.string(),
       project: z.string(),
       assignees: z.array(z.string()).min(0),
       dueDate: z.date().optional(),

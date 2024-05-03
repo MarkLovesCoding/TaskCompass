@@ -48,15 +48,6 @@ export function UserPageComponent({
   usersProjectsAsAdmin: ProjectDto[];
   userTasks: TaskDto[];
 }) {
-  console.log(
-    "load OK",
-    user,
-    usersTeamsAsMember,
-    usersTeamsAsAdmin,
-    usersProjectsAsMember,
-    usersProjectsAsAdmin,
-    userTasks
-  );
   const userTasksCompleted = userTasks.filter(
     (task) => task.status === "completed"
   );

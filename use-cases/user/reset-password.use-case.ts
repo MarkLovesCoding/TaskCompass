@@ -44,14 +44,15 @@ export async function resetPasswordUseCase(
   if (!existingUser) {
     throw new Error("User not found");
   }
-
   const hashPassword = await bcrypt.hash(password, 12);
   if (!hashPassword) {
     throw new Error("Password could not be hashed");
   }
+
   try {
     const validatedUser = new UserEntity(existingUser);
     validatedUser.setPassword(hashPassword);
+
     try {
       await context.updateUser(userToDto(validatedUser));
     } catch (err) {
@@ -62,6 +63,4 @@ export async function resetPasswordUseCase(
     const error = err as UserEntityValidationError;
     throw new ValidationError(error.getErrors());
   }
-
-  //check if user exists
 }

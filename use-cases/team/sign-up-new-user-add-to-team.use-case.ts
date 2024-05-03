@@ -33,7 +33,6 @@ export async function signUpNewUserAddToTeamUseCase(
   // Check if team exists
   // Retrieve Team Entity & Gather Team and Invite Data
   //
-  console.log(",,,,,,,,,,,,invitedData", data.invitedUserData);
 
   const getTeam = await context.getTeam(data.invitedUserData.teamId);
   if (!getTeam) throw new Error("Team not found");

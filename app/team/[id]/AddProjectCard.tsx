@@ -42,23 +42,20 @@ const AddProjectCard = ({ teamId }: { teamId: string }) => {
     useState(false);
 
   const handleProjectNameBlur = () => {
-    // ProjectNameField.onBlur();
     setIsProjectNameEditing(false);
   };
 
   const handleProjectNameClick = () => {
-    setIsProjectNameEditing(true); // Trigger the onClick event for the field
+    setIsProjectNameEditing(true);
   };
 
   const handleProjectDescriptionBlur = () => {
-    // descriptionField.onBlur(); // Trigger the onBlur event for the field
     setIsProjectDescriptionEditing(false);
   };
   const handleProjectDescriptionClick = () => {
     setIsProjectDescriptionEditing(true);
   };
   const onNewProjectFormSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log("values", values, "teamId", teamId);
     try {
       await createNewProjectAction(values, teamId);
       toast.success(`Project: ${values.name} Created Successfully!`);

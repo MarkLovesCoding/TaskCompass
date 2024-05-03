@@ -70,9 +70,6 @@ const InviteNewUserSignUpForm = ({
       setMessageType("Error");
       toast.error("Error Signing In User");
     }
-    // console.log("RESPONSE AND FORM SUBMITTION:", await res.json());
-    // router.refresh();
-    // toast.success("User Signed Up Successfully!");
   };
 
   return (

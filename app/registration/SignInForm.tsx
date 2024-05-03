@@ -57,14 +57,15 @@ const SignInForm = () => {
       password: values.password,
       redirect: false, // Do not redirect automatically
     });
-    setDisableButtons(false);
 
     if (loginResponse?.error && loginResponse.error == "CredentialsSignin") {
       setMessage("Incorrect Credentials.");
       setMessageType("Error");
       // toast.error("Incorrect Credentials.");
     } else if (loginResponse?.error) {
-      setMessage(loginResponse?.error);
+      // setMessage(loginResponse?.error);
+      setMessage("Incorrect Credentials.");
+
       setMessageType("Error");
 
       // toast.error(loginResponse?.error);
@@ -74,6 +75,8 @@ const SignInForm = () => {
 
       toast.success("Successfully Logged In. Loading profile...");
       // Successful login
+      setDisableButtons(false);
+
       router.push("/");
     }
   };

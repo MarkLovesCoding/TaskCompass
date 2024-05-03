@@ -20,11 +20,6 @@ const page = async ({ params }: ParamsType) => {
   } catch (error) {
     err = true;
   }
-  console.log("params", params);
-  console.log("teamId", teamId);
-  console.log("inviteToken", inviteToken);
-  console.log("teamName", teamName);
-  console.log("err", err);
   return (
     <div>
       <InvitedUserToTeamComponent teamName={teamName} errStatus={err} />

@@ -1,22 +1,27 @@
-import crypto from "crypto";
+import bcrypt from "bcrypt";
 
-import { TInvitedUser, TeamEntity } from "@/entities/Team";
-import { ValidationError } from "../utils";
-import type { CreateNewEmailUser, UpdateUser } from "./types";
-import Project from "@/db/(models)/Project";
-import Team from "@/db/(models)/Team";
-import { ProjectEntity } from "@/entities/Project";
-import { UpdateProject, CreateDefaultProject } from "../project/types";
-import { projectToCreateProjectDto, projectToDto } from "../project/utils";
-import { UpdateTeam, CreateDefaultTeam } from "../team/types";
-import { UserEntity } from "@/entities/User";
 import { userToDto } from "./utils";
 import { teamToCreateTeamDto, teamToDto } from "../team/utils";
-import bcrypt from "bcrypt";
+import { UserEntity, UserEntityValidationError } from "@/entities/User";
+import { TeamEntity, TeamEntityValidationError } from "@/entities/Team";
+import {
+  ProjectEntity,
+  ProjectEntityValidationError,
+} from "@/entities/Project";
+import { projectToCreateProjectDto, projectToDto } from "../project/utils";
+
+import type { CreateNewEmailUser, UpdateUser } from "./types";
+import type {
+  UpdateProject,
+  CreateDefaultProject,
+  ProjectDto,
+} from "../project/types";
+import type { UpdateTeam, CreateDefaultTeam } from "../team/types";
+import { ValidationError } from "../utils";
+
 //******************************************
 //This function creates new user from email,
 //then sets up default teams and projects for the user
-
 //******************************************
 export async function createNewEmailUserUseCase(
   context: {
@@ -42,7 +47,6 @@ export async function createNewEmailUserUseCase(
   // Check if team exists
   // Retrieve Team Entity & Gather Team and Invite Data
   //
-
   const hashPassword: string = await bcrypt.hash(data.values.password, 12);
 
   let newUser = await context.createNewEmailUser({
@@ -55,7 +59,7 @@ export async function createNewEmailUserUseCase(
 
   if (!newUser) throw new Error("Error creating user");
 
-  // CHECKS IF MANUALLY ADDED USER IS FIRST TIME LOGGING IN>
+  // If user is created, create default team and project
   if (newUser) {
     const newUserId: string = newUser.id;
     const newTeamData = {
@@ -77,6 +81,7 @@ export async function createNewEmailUserUseCase(
 
     if (!initialTeamAssigned) throw new Error("Error creating default team");
 
+    // Create default project object
     const newProjectData = {
       name: `${newUser.name}'s First Project`,
       description: "",
@@ -110,38 +115,71 @@ export async function createNewEmailUserUseCase(
       backgroundImageThumbnail: "",
     };
 
-    const newProject = new ProjectEntity({ ...newProjectData });
+    //create project entity
+    let newProject,
+      newUserEntity,
+      initialProjectEntity,
+      initialTeamEntity,
+      initialProjectAssigned;
 
     try {
+      newProject = new ProjectEntity({ ...newProjectData });
+    } catch (err) {
+      const error = err as ProjectEntityValidationError;
+      throw new ValidationError(error.getErrors());
+    }
+    try {
       //CREATE NEW PROJECT WITH FILLER NAMES
-      let initialProjectAssigned = await context.createDefaultProject(
+      initialProjectAssigned = await context.createDefaultProject(
         projectToCreateProjectDto(newProject)
       );
-      if (!initialProjectAssigned)
-        throw new Error("Error creating default project");
-      //CREATE NEW USER
+    } catch (error) {
+      throw new Error("Error creating default project");
+    }
 
-      //CREATE NEW TEAM WITH FILLER NAME
+    //establish entities
+    try {
+      newUserEntity = new UserEntity(newUser);
+    } catch (err) {
+      const error = err as UserEntityValidationError;
+      throw new ValidationError(error.getErrors());
+    }
+    try {
+      initialProjectEntity = new ProjectEntity(initialProjectAssigned);
+    } catch (err) {
+      const error = err as ProjectEntityValidationError;
+      throw new ValidationError(error.getErrors());
+    }
+    try {
+      initialTeamEntity = new TeamEntity(initialTeamAssigned);
+    } catch (err) {
+      const error = err as TeamEntityValidationError;
+      throw new ValidationError(error.getErrors());
+    }
 
-      //establish entities
-      const newUserEntity = new UserEntity(newUser);
-      const initialProjectEntity = new ProjectEntity(initialProjectAssigned);
-      const initialTeamEntity = new TeamEntity(initialTeamAssigned);
+    try {
       newUserEntity.addProjectAsAdmin(initialProjectAssigned.id);
       newUserEntity.addTeamAsAdmin(initialTeamAssigned.id);
-      await context.updateUser(userToDto(newUserEntity));
 
+      await context.updateUser(userToDto(newUserEntity));
+    } catch (error) {
+      throw new Error("Error updating user");
+    }
+
+    try {
       initialProjectEntity.setTeam(initialTeamAssigned.id);
       await context.updateProject(projectToDto(initialProjectEntity));
+    } catch (error) {
+      throw new Error("Error updating project");
+    }
 
+    try {
       initialTeamEntity.addProject(initialProjectAssigned.id);
       await context.updateTeam(teamToDto(initialTeamEntity));
     } catch (error) {
-      console.error("Error saving User or default teams/projects:", error);
-      // return false;
-
-      // Handle the error or return from the function as needed
+      throw new Error("Error updating team");
     }
+
     return;
   }
 }
