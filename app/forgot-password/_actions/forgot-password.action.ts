@@ -1,7 +1,6 @@
 "use server";
 
 import { updateUser } from "@/data-access/users/update-user.persistence";
-// import { createNewEmailUserUseCase } from "@/use-cases/team/sign-up-new-user-add-to-team.use-case";
 import { ValidationError } from "@/use-cases/utils";
 import { forgotPasswordUseCase } from "@/use-cases/user/forgot-password.use-case";
 import { getUserByEmail } from "@/data-access/users/get-user-by-email.persistence";
