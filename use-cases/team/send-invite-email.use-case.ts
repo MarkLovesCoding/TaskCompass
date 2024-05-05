@@ -63,16 +63,16 @@ export async function sendInviteEmailUseCase(
     console.log("Error updating team object: ", error);
     throw new Error("Error updating team with inviteUserToken");
   }
+  const environment = process.env.ENVIRONMENT;
+  const uri =
+    environment === "development"
+      ? process.env.DEVELOPMENT_URI
+      : process.env.PRODUCTION_URI;
+
   const resetURL =
     newUser === true
-      ? "http://localhost:3000/registration/invitedNewToTeam/" +
-        teamId +
-        "/" +
-        resetToken
-      : "http://localhost:3000/registration/invitedToTeam/" +
-        teamId +
-        "/" +
-        resetToken;
+      ? `${uri}/registration/invitedNewToTeam/` + teamId + "/" + resetToken
+      : `${uri}/registration/invitedToTeam/` + teamId + "/" + resetToken;
   const body = `${inviterName} has invited you to join their TaskCompass team: ${teamName}. Join by clicking on following link: ${resetURL}`;
   const msg = {
     to: inviteData.email, // Change to your recipient

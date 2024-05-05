@@ -1,20 +1,10 @@
 import crypto from "crypto";
 
-import { TInvitedUser, TeamEntity } from "@/entities/Team";
 import { ValidationError } from "../utils";
-import type { CreateNewEmailUser, GetUserByEmail, UpdateUser } from "./types";
-import Project from "@/db/(models)/Project";
-import Team from "@/db/(models)/Team";
-import { ProjectEntity } from "@/entities/Project";
-import { UpdateProject, CreateDefaultProject } from "../project/types";
-import { projectToCreateProjectDto, projectToDto } from "../project/utils";
-import { UpdateTeam, CreateDefaultTeam } from "../team/types";
+import type { GetUserByEmail, UpdateUser } from "./types";
 import { UserEntity, UserEntityValidationError } from "@/entities/User";
 import { userToDto } from "./utils";
-import { teamToCreateTeamDto, teamToDto } from "../team/utils";
-import bcrypt from "bcrypt";
 import { getUserByEmail } from "@/data-access/users/get-user-by-email.persistence";
-import { User } from "lucide-react";
 import { Resend } from "resend";
 
 //******************************************
@@ -62,7 +52,13 @@ export async function forgotPasswordUseCase(
   }
 
   //create email link and body.
-  const resetURL = "http://localhost:3000/reset-password/" + resetToken;
+  const environment = process.env.ENVIRONMENT;
+  const uri =
+    environment === "development"
+      ? "http://localhost:3000"
+      : "https://taskcompass.ca";
+  const resetURL = `${uri}/reset-password/${resetToken}`;
+
   const body = "Reset Password by clicking on following link: " + resetURL;
   const msg = {
     to: forgotPasswordData.values.email, // Change to your recipient
