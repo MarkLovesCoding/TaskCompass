@@ -36,7 +36,7 @@ import { sendInviteEmailAction } from "../_actions/send-invite-email.action";
 import { ValidationError } from "@/use-cases/utils";
 import { UserDto } from "@/use-cases/user/types";
 import { TeamDto } from "@/use-cases/team/types";
-import { UserPlus, UserPlus2 } from "lucide-react";
+import { MailsIcon, SendIcon, UserPlus, UserPlus2 } from "lucide-react";
 import { TInvitedUser } from "@/entities/Team";
 
 interface FormData {
@@ -175,45 +175,50 @@ const InviteUser = ({
       <DialogContent>
         <Form {...form}>
           <form
-            className="mt-4 mr-2 "
+            className="m-2 "
             onSubmit={form.handleSubmit(handleinviteEmailSubmit)}
           >
             <div className="mb-8">
-              <h2 className=" text-lg font-bold mb-4 ">Send Invite Email</h2>
+              <div className="flex flex-row space-x-4">
+                <h2 className=" text-lg font-bold mb-4 ">Send Invite Email</h2>
+                <MailsIcon className="w-5 h-5" />
+              </div>
               <p> Invite User to join the team</p>
             </div>
-            <div className="mb-8 flex flex-row ">
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => {
-                  return (
-                    <FormItem className="mt-2">
-                      <FormLabel className="">Email:</FormLabel>
-                      <FormControl>
-                        <Input
-                          className={`header-input text-md max-w-[75%] ${
-                            isEmailEditing ? "editing" : ""
-                          }`}
-                          placeholder=""
-                          type="email"
-                          spellCheck="false"
-                          {...field}
-                          onClick={handleEmailClick}
-                          onChange={field.onChange}
-                          onBlur={handleEmailBlur}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  );
-                }}
-              />
-              <FormField
-                control={form.control}
-                name="role"
-                render={({ field }) => {
-                  return (
+            <div className="mb-8 flex flex-row space-x-4 ">
+              <div className="w-[75%]">
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => {
+                    return (
+                      <FormItem className="mt-2">
+                        <FormLabel className="">Email:</FormLabel>
+                        <FormControl>
+                          <Input
+                            className={`header-input text-md w-full mr-8 ${
+                              isEmailEditing ? "editing" : ""
+                            }`}
+                            placeholder="email@example.com"
+                            type="email"
+                            spellCheck="false"
+                            {...field}
+                            onClick={handleEmailClick}
+                            onChange={field.onChange}
+                            onBlur={handleEmailBlur}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    );
+                  }}
+                />
+              </div>
+              <div className="w-[25%]">
+                <FormField
+                  control={form.control}
+                  name="role"
+                  render={({ field }) => (
                     <FormItem className="mt-2">
                       <FormLabel className="">User Role</FormLabel>
                       <FormControl>
@@ -231,7 +236,7 @@ const InviteUser = ({
                           defaultValue={inviteRole}
                         >
                           <SelectTrigger
-                            // className="pointer-events-none"
+                            className="h-[40px] w-full"
                             onClick={(event) => {
                               event.stopPropagation();
                               // event.preventDefault();
@@ -246,7 +251,6 @@ const InviteUser = ({
                                 // event.preventDefault();
                               }}
                               value="admin"
-                              // className="pointer-events-none"
                             >
                               Admin
                             </SelectItem>
@@ -256,7 +260,6 @@ const InviteUser = ({
                                 // event.preventDefault();
                               }}
                               value="member"
-                              // className="pointer-events-none"
                             >
                               Member
                             </SelectItem>
@@ -265,25 +268,32 @@ const InviteUser = ({
                       </FormControl>
                       <FormMessage />
                     </FormItem>
-                  );
-                }}
-              />
+                  )}
+                />
+              </div>
             </div>
 
-            <div className="flex flex-row justify-between items-center mt-8">
-              <Button
-                disabled={!isEmailValid || disableButtons}
-                type="submit"
-                value="Invite User"
-                className="  py-2 rounded-md "
-              >
-                Send Invite
-              </Button>
-              <DialogFooter className="">
-                <DialogClose asChild>
-                  <Button disabled={disableButtons}>Cancel</Button>
-                </DialogClose>
-              </DialogFooter>
+            <div className=" w-full items-center mt-8">
+              <div className="w-full">
+                <Button
+                  disabled={!isEmailValid || disableButtons}
+                  type="submit"
+                  value="Invite User"
+                  className="  relative py-2 rounded-md w-full  flex"
+                >
+                  Send Invite
+                  <SendIcon className="absolute left-[60%] w-4 h-4 ml-4" />
+                </Button>
+              </div>
+              {/* <div className="w-[20%] flex justify-center">
+                <DialogFooter className="mx-2 w-full">
+                  <DialogClose className="w-full " asChild>
+                    <Button className="w-full" disabled={disableButtons}>
+                      Close
+                    </Button>
+                  </DialogClose>
+                </DialogFooter>
+              </div> */}
             </div>
           </form>
         </Form>
