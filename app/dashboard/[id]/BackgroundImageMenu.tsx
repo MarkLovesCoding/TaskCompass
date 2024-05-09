@@ -72,7 +72,7 @@ const BackgroundImageMenu = ({
   const PER_PAGE = 12;
   const [selectedImages, setSelectedImages] = useState<any[]>([]);
   const [imagesLoadPage, setImagesLoadPage] = useState<number>(1);
-
+  console.log("selectedImages[0]", selectedImages);
   const [photoCategory, setPhotoCategory] = useState<TImageCategories>(
     IMAGE_CATEGORIES[0]
   );
@@ -129,7 +129,26 @@ const BackgroundImageMenu = ({
     small: string;
     thumb: string;
   };
-  const setNewBackground = async (urls: TUrls) => {
+  type TLinks = {
+    download: string;
+    download_location: string;
+    html: string;
+    self: string;
+  };
+  const setNewBackground = async (urls: TUrls, links: TLinks) => {
+    // trigger download action for unsplash API requirements
+    try {
+      await fetch(links.download_location, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        cache: "no-cache",
+      });
+    } catch (err) {
+      toast.error("Error downloading image from unsplash.com");
+    }
+
     // setBackgroundImage(urls.full);
     if (type === "User") {
       try {
@@ -225,7 +244,9 @@ const BackgroundImageMenu = ({
                       className="relative max-w-[120px] max-h-[80px] m-1 overflow-y-clip cursor-pointer hover:border-white border-2 truncate text-ellipsis group"
                     >
                       <Image
-                        onClick={() => setNewBackground(image.urls)}
+                        onClick={() =>
+                          setNewBackground(image.urls, image.links)
+                        }
                         src={image.urls.thumb}
                         alt={image.alt_description}
                         width={120}
@@ -236,9 +257,11 @@ const BackgroundImageMenu = ({
                             : "w-[120px] h-auto"
                         }  overflow-clip rounded cursor-pointer z-40 `}
                       />
-                      {/* <div className="w-full h-full absolute top-0 left-0 z-30 bg-black/10 group-hover:bg-black/0"></div> */}
                       <Link
-                        href={image.user.links.html}
+                        href={
+                          image.user.links.html +
+                          "?utm_source=taskcompass&utm_medium=referral"
+                        }
                         className=" w-full absolute h-[25px] group/user bg-black/30 z-40 hover:bg-black/60 top-[55px] left-[0px]  truncate text-ellipsis "
                         title={`${image.user.name} on unsplash.com`}
                       >
@@ -246,12 +269,8 @@ const BackgroundImageMenu = ({
                           <p className="  px-2 text-[11px] truncate group-hover/user:underline text-ellipsis">
                             {image.user.name}
                           </p>
-                          {/* <p className="underline text-gray-300 text-[9px] text-end">
-                            unsplash.com
-                          </p> */}
                         </div>
                       </Link>
-                      {/* <p>{image.url.full}</p> */}
                     </div>
                   );
                 })
