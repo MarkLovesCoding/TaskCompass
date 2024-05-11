@@ -137,18 +137,28 @@ const BackgroundImageMenu = ({
   };
   const setNewBackground = async (urls: TUrls, links: TLinks) => {
     // trigger download action for unsplash API requirements
-    try {
-      await fetch(links.download_location, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        cache: "no-cache",
+    await fetch("/api/unsplash/download", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        download_location: links.download_location,
+      }),
+      cache: "no-cache",
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Success:", data);
+      })
+      .catch((error) => {
+        toast.error(
+          "Error triggering download of image via API for unsplash.com"
+        );
+        console.error("Error:", error);
       });
-    } catch (err) {
-      toast.error("Error downloading image from unsplash.com");
-    }
-
     // setBackgroundImage(urls.full);
     if (type === "User") {
       try {

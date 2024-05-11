@@ -9,11 +9,11 @@ type TBodyRequest = {
 export async function POST(req: Request): Promise<any> {
   const body: TBodyRequest = await req.json();
   const { category = "nature", page = 1, perPage = 12 } = body;
-  const api = createApi({
+  const unsplash = createApi({
     accessKey: process.env.UNSPLASH_ACCESS_KEY as string,
   });
 
-  const data = await api.search
+  const data = await unsplash.search
     .getPhotos({
       query: category,
       page: page,
