@@ -9,10 +9,10 @@
     --nav-background: rgb(174, 175, 182);
     --drawer-background: rgba(255, 255, 255, 0.7);
     --alert-background: rgba(204, 203, 208, 0.9);
-    --accordion-background: rgba(204, 203, 208, 0.7);
+    --accordion-background: rgba(198, 199, 200, 0.8);
     --card: rgb(228, 228, 228);
     --card-foreground: rgb(22, 22, 22);
-    --cardcolumn-background: rgb(166, 202, 222);
+    --cardcolumn-background: rgba(204, 203, 208, 0.8);
     --taskcard-foreground: rgb(22, 22, 22);
     --taskcard-background: rgba(225, 225, 225, 0.9);
     --usersearch-foreground: rgb(14, 14, 14);
@@ -68,7 +68,7 @@
     --usersearch-background: rgba(56, 69, 75, 0.9);
     --usersearch-foreground: rgb(222, 219, 219);
 
-    --cardcolumn-background: rgb(56, 69, 75);
+    --cardcolumn-background: rgba(56, 69, 75, 0.8);
     --taskcardsmall-background: rgb(37, 40, 44);
     --imageThumbText: rgba(250, 250, 250, 1);
 

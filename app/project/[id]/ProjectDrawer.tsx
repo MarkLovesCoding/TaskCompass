@@ -100,7 +100,7 @@ const ProjectDrawer = ({
             </div>
             <div
               className={`   order-2 mb-2
-               border-secondary border-solid border-[1px]  rounded-lg p-2
+               border-primary-foreground border-solid border-[1px]  rounded-lg p-2
            `}
             >
               <div className=" flex flex-col ml-2">
@@ -196,7 +196,7 @@ const ProjectDrawer = ({
             </div>
             {/* </div> */}
             <div
-              className={` border-secondary border-solid border-[1px] mb-2  order-3  rounded-lg p-2 flex  flex-col   py-2`}
+              className={` border-primary-foreground border-solid border-[1px] mb-2  order-3  rounded-lg p-2 flex  flex-col   py-2`}
             >
               <div className="flex flex-row  justify-start align-middle ml-2">
                 <h3 className="   mr-auto text-md font-bold">Users</h3>

@@ -36,9 +36,9 @@ const CardColumn = ({
           {...provided.dragHandleProps}
           className={cn(
             snapshot.isDragging
-              ? "bg-cardcolumn-background opacity-70 "
+              ? "bg-cardcolumn-background opacity-70"
               : "bg-cardcolumn-background  ",
-            "w-[250px] m-2 md:m-4  rounded-lg  flex flex-col items-center align-top p-4 shadow-md"
+            "w-[250px] m-2 md:m-4  rounded-lg backdrop-blur flex flex-col items-center align-top p-4 shadow-md"
           )}
         >
           <label className="text-lg pt-2 md:text-xl lg:text-2xl font-bold">{`${sorted_type}`}</label>

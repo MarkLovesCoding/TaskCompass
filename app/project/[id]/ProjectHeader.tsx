@@ -165,7 +165,7 @@ export function ProjectHeader({ project }: { project: ProjectDto }) {
                   <FormItem className="mt-2   mr-2  w-[270px]  ">
                     <FormControl>
                       <Textarea
-                        className={`description-input min-h-[80px]  overflow-hidden resize-none mobileLandscape:text-xs ${
+                        className={`description-input min-h-[80px] overflow-auto resize-none border-primary-foreground mobileLandscape:text-xs ${
                           isDescriptionEditing ? "editing" : ""
                         }`}
                         spellCheck="false"

@@ -189,7 +189,7 @@ export function ProjectPage({
       >
         <ScrollArea
           type="always"
-          className=" w-full flex h-[calc(100vh-2rem)] md:h-[calc(100vh-3rem)] "
+          className=" w-[calc(100vw-2rem)] flex h-[calc(100vh-2rem)] md:h-[calc(100vh-3rem)] "
         >
           <div className="flex justify-start  pt-16 align-top">
             <CardView
