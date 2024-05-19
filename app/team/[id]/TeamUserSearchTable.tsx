@@ -18,7 +18,6 @@ export function TeamUserSearchTable({
   userData,
   team,
   teamUsers,
-  globalUsers,
   projects,
   isCurrentUserAdmin,
 }: {
@@ -26,7 +25,6 @@ export function TeamUserSearchTable({
   userData: UserDto;
   team: TeamDto;
   teamUsers: UserDto[];
-  globalUsers: UserDto[];
   projects: ProjectDto[];
   isCurrentUserAdmin: boolean;
 }) {
@@ -37,7 +35,7 @@ export function TeamUserSearchTable({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <div>
+        <div title="Show/Edit Users" className="m-2">
           <UserSearchIcon className="w-10 h-10 cursor-pointer hover:bg-primary p-2 rounded-full" />
           <span className="sr-only">Show/Edit Team Users</span>
         </div>
@@ -48,7 +46,6 @@ export function TeamUserSearchTable({
           userData={userData}
           team={team}
           teamUsers={teamUsers}
-          globalUsers={globalUsers}
           projects={projects}
           isCurrentUserAdmin={isCurrentUserAdmin}
         />

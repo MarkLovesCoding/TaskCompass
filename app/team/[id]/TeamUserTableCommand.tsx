@@ -33,7 +33,6 @@ export function TeamUserTableCommand({
   userData,
   team,
   teamUsers,
-  globalUsers,
   projects,
   isCurrentUserAdmin,
 }: {
@@ -41,7 +40,6 @@ export function TeamUserTableCommand({
   userData: UserDto;
   team: TeamDto;
   teamUsers: UserDto[];
-  globalUsers: UserDto[];
   projects: ProjectDto[];
   isCurrentUserAdmin: boolean;
 }) {
@@ -49,16 +47,11 @@ export function TeamUserTableCommand({
   //check on mongodb if permissions updates right away on save.
   // might be better to filter global users in api ...
 
-  const [filteredGlobalUsers, setFilteredGlobalUsers] = useState<UserDto[]>(
-    globalUsers.filter(
-      (user) => !teamUsers.some((tUser) => tUser.id === user.id)
-    )
-  );
   const [projectTasksInTeam, setProjectTasksInTeam] = useState<string[]>(
     projects.map((project) => project.tasks).flat()
   );
   const [selectedUser, setSelectedUser] = useState<UserDto | null>(
-    globalUsers[0]
+    teamUsers[0]
   );
   const [isOpen, setIsOpen] = useState(false);
 
@@ -66,12 +59,6 @@ export function TeamUserTableCommand({
   const [teamUsersIdLists, setTeamUsersIdLists] = useState<string[]>(
     teamUsersList.map((user) => user.id)
   );
-
-  useEffect(() => {
-    setFilteredGlobalUsers((prev) =>
-      prev.filter((user) => !teamUsers.some((tUser) => tUser.id === user.id))
-    );
-  }, [userId, teamUsers, globalUsers]);
 
   useEffect(() => {
     setTeamUsersList(teamUsers);
@@ -188,7 +175,7 @@ export function TeamUserTableCommand({
             </div>
           </div>
         </CommandItem>
-        {teamUsersList.length > 0 && <Separator />}
+        {teamUsersList.length > 0 && <Separator className="my-2" />}
 
         {teamUsersList?.map(
           (user, index) =>
@@ -250,12 +237,7 @@ export function TeamUserTableCommand({
                                   setTeamUsersList((prev) =>
                                     prev.filter((u) => u.id !== user.id)
                                   );
-                                  setFilteredGlobalUsers((prev) => {
-                                    if (!prev.some((u) => u.id === user.id)) {
-                                      return [...prev, user];
-                                    }
-                                    return prev;
-                                  });
+
                                   toast.success(
                                     user.name + " removed from Team"
                                   );
@@ -273,58 +255,6 @@ export function TeamUserTableCommand({
             )
         )}
       </CommandGroup>
-      {filteredGlobalUsers.length > 0 && isCurrentUserAdmin && (
-        <>
-          <Separator />
-          <CommandGroup>
-            <Label className="m-4">
-              <div className="font-semibold">Global Users</div>
-            </Label>
-            {filteredGlobalUsers?.map(
-              (user, index) =>
-                user.id !== userId && (
-                  <CommandItem className=" group" value={user.name} key={index}>
-                    {/* <div className="flex items-center gap-2"> */}
-                    <div className="flex items-center w-full h-14 gap-2">
-                      <div className="flex w-full overflow-x-auto items-center justify-between gap-2">
-                        <div className="flex flex-row space-x-2">
-                          <UserInformationComponent
-                            user={user}
-                            userStatus={getUserStatus(user, team)}
-                          />
-                        </div>
-                        <div className="flex flex-row space-x-2 ml-auto">
-                          <div className="flex flex-row mr-auto ">
-                            <Button
-                              variant={"ghost"}
-                              className="mx-2 hover:bg-green-200"
-                              onClick={() => {
-                                onAddTeamUserSubmit(user);
-                                setTeamUsersList((prev) => {
-                                  if (!prev.some((u) => u.id === user.id)) {
-                                    return [...prev, user];
-                                  }
-                                  return prev;
-                                });
-                                setFilteredGlobalUsers((prev) =>
-                                  prev.filter((u) => u.id !== user.id)
-                                );
-                                toast.success(user.name + " added to Team");
-                              }}
-                            >
-                              <PlusIcon className=" opacity-0 group-hover:opacity-100 text-green-600"></PlusIcon>
-                            </Button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    {/* </div> */}
-                  </CommandItem>
-                )
-            )}
-          </CommandGroup>
-        </>
-      )}
     </Command>
   );
 }
