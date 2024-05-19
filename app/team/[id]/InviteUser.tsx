@@ -168,7 +168,7 @@ const InviteUser = ({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <div title="Invite User">
+        <div title="Invite User" className="m-2">
           <UserPlus2
             aria-label="Invite User"
             className="w-10 h-10 cursor-pointer hover:bg-primary p-2 rounded-full"
