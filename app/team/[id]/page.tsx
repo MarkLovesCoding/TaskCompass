@@ -26,7 +26,7 @@ const Projects = async ({ params }: { params: ParamsType }) => {
   const team: TeamDto = await getTeam(teamId);
   const user: UserDto = await getUserObject(session!.user.id);
   const projects = await getTeamProjects(team);
-  const usersList = await getAllUsers();
+  // const usersList = await getAllUsers();
   const teamUsers = await getTeamUsers(team.users);
 
   if (!team) {
@@ -47,7 +47,7 @@ const Projects = async ({ params }: { params: ParamsType }) => {
           user={user}
           userId={session?.user.id}
           projects={projects}
-          usersList={usersList}
+          // usersList={usersList}
           teamUsers={teamUsers}
         />
       </Suspense>

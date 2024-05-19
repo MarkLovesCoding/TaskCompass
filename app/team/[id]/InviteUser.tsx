@@ -168,9 +168,13 @@ const InviteUser = ({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="  rounded-full">
-          <UserPlus2 aria-label="Invite User" className="w-6 h-6" />
-        </Button>
+        <div title="Invite User">
+          <UserPlus2
+            aria-label="Invite User"
+            className="w-10 h-10 cursor-pointer hover:bg-primary p-2 rounded-full"
+          />
+          <span className="sr-only">Invite New Team Users</span>
+        </div>
       </DialogTrigger>
       <DialogContent>
         <Form {...form}>

@@ -53,14 +53,12 @@ export function TeamPageComponent({
   user,
   userId,
   projects,
-  usersList,
   teamUsers,
 }: {
   team: TeamDto;
   userId: string;
   user: UserDto;
   projects: ProjectDto[];
-  usersList: UserDto[];
   teamUsers: UserDto[];
 }) {
   unstable_noStore();
@@ -181,7 +179,6 @@ export function TeamPageComponent({
                         userData={user}
                         team={team}
                         teamUsers={teamUsers}
-                        globalUsers={usersList}
                         projects={projects}
                         isCurrentUserAdmin={isCurrentUserAdmin}
                       />
