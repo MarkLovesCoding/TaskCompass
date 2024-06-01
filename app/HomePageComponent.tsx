@@ -214,7 +214,7 @@ const FeatureSection = forwardRef<HTMLDivElement, FeatureSectionProps>(
     >
       <div className="flex-col self-center items-center flex w-full sm:w-[50%] lg:w-[65%] m-12 md:mr-0  md:m-12">
         <div className="  lg:w-[40vw] mt-12 sm:mt-0 sm:[70vw] w-full px-[10%] sm:px-[0%]">
-          <h2 className="text-2xl"> {title} </h2>
+          <h2 className="text-2xl text-white"> {title} </h2>
           <h3 className="text-base text-muted-foreground sm:text-xl p-8 pb-0 pt-4">
             {description}
           </h3>
