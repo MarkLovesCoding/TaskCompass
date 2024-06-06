@@ -10,6 +10,12 @@ import {
   CommandGroup,
   Command,
 } from "@/components/ui/command-user-search";
+import { Dialog } from "@/components/ui/dialog";
+import {
+  DialogContent,
+  DialogPortal,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { AvatarFallback, Avatar } from "@/components/ui/avatar";
@@ -54,6 +60,7 @@ export function TeamUserTableCommand({
     teamUsers[0]
   );
   const [isOpen, setIsOpen] = useState(false);
+  const [isRemoveUserOpen, setIsRemoveUserOpen] = useState(false);
 
   const [teamUsersList, setTeamUsersList] = useState<UserDto[]>(teamUsers);
   const [teamUsersIdLists, setTeamUsersIdLists] = useState<string[]>(
@@ -210,42 +217,106 @@ export function TeamUserTableCommand({
                       </div>
 
                       <div className=" opacity-0 group-hover:opacity-100">
+                        {/* Removal only valid if
+                          - user is not the creator
+                          - user is not the current user
+                          - current user is an admin
+                        */}
                         {user.id !== team.createdBy &&
                           user.id !== userId &&
                           isCurrentUserAdmin && (
-                            <Button
-                              className="mx-2 hover:bg-red-200"
-                              variant="ghost"
-                              onClick={() => {
-                                if (user.id !== userId) {
-                                  setSelectedUser(user);
-                                  if (userHasTasksInTeamProjects(user)) {
-                                    toast.error(
-                                      `User cannot be removed from Team.\n User still has  ${usersTasksInProjectCount(
-                                        user
-                                      )}  task${
-                                        usersTasksInProjectCount(user) > 1
-                                          ? "s"
-                                          : ""
-                                      } assigned to them.`
-                                      // @ts-ignore
-                                    );
+                            //dialog for removal of user.
+                            //has all funcitnoaliy of button
+                            //take userHAsTasksinTeamProjects and UsersTasksInProjectCount into other component.
+                            //bring user into component.
+                            //bring onRemoveTeamUserSubmit into component.
 
-                                    return;
-                                  }
-                                  onRemoveTeamUserSubmit(user);
-                                  setTeamUsersList((prev) =>
-                                    prev.filter((u) => u.id !== user.id)
-                                  );
-
-                                  toast.success(
-                                    user.name + " removed from Team"
-                                  );
-                                }
-                              }}
+                            <Dialog
+                              open={isRemoveUserOpen}
+                              onOpenChange={setIsRemoveUserOpen}
                             >
-                              <XIcon className="mr-auto  text-red-400"></XIcon>
-                            </Button>
+                              <DialogTrigger>
+                                <Button
+                                  className="mx-2 hover:bg-red-200"
+                                  variant="ghost"
+                                >
+                                  <XIcon className="mr-auto  text-red-400"></XIcon>
+                                </Button>
+                              </DialogTrigger>
+                              {/* <DialogPortal forceMount={true}> */}
+                              {!userHasTasksInTeamProjects(user) ? (
+                                <DialogContent className="p-4 w-[90%] h-fit rounded-lg border-2 border-primary bg-alert-background backdrop-filter">
+                                  <Label className="text-center text-lg md:text-xl p-4">
+                                    Are you sure you want to remove {user.name}{" "}
+                                    from the team?
+                                  </Label>
+                                  <div className="p-4 mb-2 ">
+                                    This will permantently remove {user.name}{" "}
+                                    from team. They can be manually re-invited
+                                    later.
+                                  </div>
+                                  <div className="w-full flex flex-row justify-evenly">
+                                    <Button
+                                      className="text-sm hover:bg-red-600"
+                                      variant="destructive"
+                                      onClick={() => {
+                                        onRemoveTeamUserSubmit(user);
+
+                                        // use state manager in future, separate out above component into own file.
+                                        setTeamUsersList((prev) =>
+                                          prev.filter((u) => u.id !== user.id)
+                                        );
+
+                                        setIsRemoveUserOpen(false);
+                                        // updateProjectArchivedAction(archiveProjectFormObject);
+                                        // toast.success("Project Activated Successfully!");
+                                        // setIsOpen(false);
+                                        // handleArchivedSubmit();
+                                      }}
+                                    >
+                                      Remove {user.name}
+                                    </Button>
+                                    <Button
+                                      className="text-sm "
+                                      variant="outline"
+                                      onClick={() => {
+                                        // handleArchivedCancel();
+                                        setIsRemoveUserOpen(false);
+                                      }}
+                                    >
+                                      Cancel
+                                    </Button>
+                                  </div>
+                                </DialogContent>
+                              ) : (
+                                <DialogContent className="p-4 rounded-lg border-2 border-primary bg-alert-background backdrop-filter">
+                                  <Label className="text-center text-xl md:text-2xl">
+                                    Cannot remove {user.name} from team.
+                                  </Label>
+                                  <div className="p-4 mb-2 ">
+                                    {user.name} still has{" "}
+                                    {usersTasksInProjectCount(user)} task
+                                    {usersTasksInProjectCount(user) > 1
+                                      ? "s"
+                                      : ""}{" "}
+                                    assigned to them.
+                                  </div>
+                                  <div className="w-full flex flex-row justify-evenly">
+                                    <Button
+                                      className="text-sm "
+                                      variant="outline"
+                                      onClick={() => {
+                                        // handleArchivedCancel();
+                                        setIsRemoveUserOpen(false);
+                                      }}
+                                    >
+                                      Close
+                                    </Button>
+                                  </div>
+                                </DialogContent>
+                              )}
+                              {/* </DialogPortal> */}
+                            </Dialog>
                           )}
                       </div>
                     </div>
