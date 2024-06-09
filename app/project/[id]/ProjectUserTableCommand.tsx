@@ -24,6 +24,7 @@ import { capitalizeEachWord } from "./utils";
 
 import type { ProjectDto } from "@/use-cases/project/types";
 import type { UserDto } from "@/use-cases/user/types";
+import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
 
 export function ProjectUserTableCommand({
   userId,
@@ -46,6 +47,8 @@ export function ProjectUserTableCommand({
   const [selectedUser, setSelectedUser] = useState<UserDto | null>(
     teamUsers[0]
   );
+  const [isRemoveUserOpen, setIsRemoveUserOpen] = useState(false);
+
   const [teamUsersList, setTeamUsersList] =
     useState<UserDto[]>(filteredTeamUsers);
   const [projectUsersList, setProjectUsersList] =
@@ -139,7 +142,6 @@ export function ProjectUserTableCommand({
                 </div>
                 <div className="flex flex-row space-x-2 ml-auto">
                   <div className="flex flex-row mr-auto ">
-                    {" "}
                     <Badge
                       className="shrink-0 mx-2 bg-primary"
                       variant="secondary"
@@ -182,7 +184,6 @@ export function ProjectUserTableCommand({
                         </div>
                         <div className="flex flex-row space-x-2 ml-auto">
                           <div className="flex flex-row mr-auto ">
-                            {" "}
                             {project.createdBy !== user.id &&
                             isCurrentUserAdmin ? (
                               <ProjectUserPermissionsSelect
@@ -208,56 +209,167 @@ export function ProjectUserTableCommand({
                               {user.id !== project.createdBy &&
                                 user.id !== userId &&
                                 isCurrentUserAdmin && (
-                                  <Button
-                                    className="mx-2 hover:bg-red-200"
-                                    variant="ghost"
-                                    onClick={() => {
-                                      if (user.id !== userId) {
-                                        setSelectedUser(user);
-                                        if (
-                                          userHasTasksInProject(
-                                            user,
-                                            project.id
-                                          )
-                                        ) {
-                                          // if (user.tasks.length > 0) {
-                                          toast.error(
-                                            `User cannot be removed from Project.\n User still has  ${usersTasksInProjectCount(
+                                  <>
+                                    <Dialog
+                                      open={isRemoveUserOpen}
+                                      onOpenChange={setIsRemoveUserOpen}
+                                    >
+                                      <DialogTrigger>
+                                        <Button
+                                          className="mx-2 hover:bg-red-200"
+                                          variant="ghost"
+                                          onClick={() => setSelectedUser(user)}
+                                        >
+                                          <XIcon className="mr-auto  text-red-400"></XIcon>
+                                        </Button>
+                                      </DialogTrigger>
+                                      {!userHasTasksInProject(
+                                        user,
+                                        project.id
+                                      ) ? (
+                                        <DialogContent className="p-4 w-[90%] h-fit rounded-lg border-2 border-primary bg-alert-background backdrop-filter">
+                                          <Label className="text-center text-lg md:text-xl p-4">
+                                            Are you sure you want to remove
+                                            {user.name} from project:
+                                            {project.name} ?
+                                          </Label>
+                                          <div className="p-4 mb-2 ">
+                                            This will permanently remove
+                                            {user.name} from project:
+                                            {project.name}. They can be manually
+                                            re-invited later.
+                                          </div>
+                                          <div className="w-full flex flex-row justify-evenly">
+                                            <Button
+                                              className="text-sm hover:bg-red-600"
+                                              variant="destructive"
+                                              onClick={() => {
+                                                onRemoveProjectUserSubmit(user);
+
+                                                // use state manager in future, separate out above component into own file.
+                                                // setTeamUsersList((prev) =>
+                                                //   prev.filter(
+                                                //     (u) => u.id !== user.id
+                                                //   )
+                                                // );
+                                                setProjectUsersList((prev) =>
+                                                  prev.filter(
+                                                    (u) => u.id !== user.id
+                                                  )
+                                                );
+                                                setTeamUsersList((prev) => {
+                                                  if (
+                                                    !prev.some(
+                                                      (u) => u.id === user.id
+                                                    )
+                                                  ) {
+                                                    return [...prev, user];
+                                                  }
+                                                  return prev;
+                                                });
+                                                setIsRemoveUserOpen(false);
+                                              }}
+                                            >
+                                              Remove {user.name}
+                                            </Button>
+                                            <Button
+                                              className="text-sm "
+                                              variant="outline"
+                                              onClick={() => {
+                                                // handleArchivedCancel();
+                                                setIsRemoveUserOpen(false);
+                                              }}
+                                            >
+                                              Cancel
+                                            </Button>
+                                          </div>
+                                        </DialogContent>
+                                      ) : (
+                                        <DialogContent className="p-4 rounded-lg border-2 border-primary bg-alert-background backdrop-filter">
+                                          <Label className="text-center text-xl md:text-2xl">
+                                            Cannot remove {user.name} from
+                                            project: {project.name}.
+                                          </Label>
+                                          <div className="p-4 mb-2 ">
+                                            {user.name} still has
+                                            {usersTasksInProjectCount(
                                               user,
                                               project.id
-                                            )}  task${
-                                              usersTasksInProjectCount(
+                                            )}
+                                            task
+                                            {usersTasksInProjectCount(
+                                              user,
+                                              project.id
+                                            ) > 1
+                                              ? "s"
+                                              : ""}
+                                            assigned to them.
+                                          </div>
+                                          <div className="w-full flex flex-row justify-evenly">
+                                            <Button
+                                              className="text-sm "
+                                              variant="outline"
+                                              onClick={() => {
+                                                setIsRemoveUserOpen(false);
+                                              }}
+                                            >
+                                              Close
+                                            </Button>
+                                          </div>
+                                        </DialogContent>
+                                      )}
+                                    </Dialog>
+                                    {/* 
+                                    <Button
+                                      className="mx-2 hover:bg-red-200"
+                                      variant="ghost"
+                                      onClick={() => {
+                                        if (user.id !== userId) {
+                                          setSelectedUser(user);
+                                          if (
+                                            userHasTasksInProject(
+                                              user,
+                                              project.id
+                                            )
+                                          ) {
+                                            toast.error(
+                                              `User cannot be removed from Project.\n User still has  ${usersTasksInProjectCount(
                                                 user,
                                                 project.id
-                                              ) > 1
-                                                ? "s"
-                                                : ""
-                                            } assigned to them.`
-                                            // @ts-ignore
-                                          );
-                                          // handleUserHasTasks(user);
-                                          return;
-                                        }
-                                        onRemoveProjectUserSubmit(user);
-                                        setProjectUsersList((prev) =>
-                                          prev.filter((u) => u.id !== user.id)
-                                        );
-                                        setTeamUsersList((prev) => {
-                                          if (
-                                            !prev.some((u) => u.id === user.id)
-                                          ) {
-                                            return [...prev, user];
+                                              )}  task${
+                                                usersTasksInProjectCount(
+                                                  user,
+                                                  project.id
+                                                ) > 1
+                                                  ? "s"
+                                                  : ""
+                                              } assigned to them.`
+                                            );
+                                            return;
                                           }
-                                          return prev;
-                                        });
-                                        toast.success(
-                                          "User removed from Project"
-                                        );
-                                      }
-                                    }}
-                                  >
-                                    <XIcon className="mr-auto text-red-400"></XIcon>
-                                  </Button>
+                                          onRemoveProjectUserSubmit(user);
+                                          setProjectUsersList((prev) =>
+                                            prev.filter((u) => u.id !== user.id)
+                                          );
+                                          setTeamUsersList((prev) => {
+                                            if (
+                                              !prev.some(
+                                                (u) => u.id === user.id
+                                              )
+                                            ) {
+                                              return [...prev, user];
+                                            }
+                                            return prev;
+                                          });
+                                          toast.success(
+                                            "User removed from Project"
+                                          );
+                                        }
+                                      }}
+                                    >
+                                      <XIcon className="mr-auto text-red-400"></XIcon>
+                                    </Button> */}
+                                  </>
                                 )}
                             </div>
                           </div>
