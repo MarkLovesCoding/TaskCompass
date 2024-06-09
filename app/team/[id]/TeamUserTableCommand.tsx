@@ -243,7 +243,6 @@ export function TeamUserTableCommand({
                                   <XIcon className="mr-auto  text-red-400"></XIcon>
                                 </Button>
                               </DialogTrigger>
-                              {/* <DialogPortal forceMount={true}> */}
                               {!userHasTasksInTeamProjects(user) ? (
                                 <DialogContent className="p-4 w-[90%] h-fit rounded-lg border-2 border-primary bg-alert-background backdrop-filter">
                                   <Label className="text-center text-lg md:text-xl p-4">
@@ -251,7 +250,7 @@ export function TeamUserTableCommand({
                                     from the team?
                                   </Label>
                                   <div className="p-4 mb-2 ">
-                                    This will permantently remove {user.name}{" "}
+                                    This will permanently remove {user.name}{" "}
                                     from team. They can be manually re-invited
                                     later.
                                   </div>
