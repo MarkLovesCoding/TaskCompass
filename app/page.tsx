@@ -1,6 +1,8 @@
-import HomePageComponent from "./HomePageComponent";
-import { sessionAuth } from "@/lib/sessionAuth";
+import React from "react";
 import { redirect } from "next/navigation";
+import { sessionAuth } from "@/lib/sessionAuth";
+
+import HomePageComponent from "./HomePageComponent";
 
 const Home = async () => {
   const session = await sessionAuth();

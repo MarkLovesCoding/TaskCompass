@@ -1,10 +1,9 @@
 import React from "react";
-
-import { Toaster } from "sonner";
-import RegistrationPageComponent from "./RegistrationPageComponent";
-
-import { sessionAuth } from "@/lib/sessionAuth";
 import { redirect } from "next/navigation";
+import { sessionAuth } from "@/lib/sessionAuth";
+
+import RegistrationPageComponent from "./RegistrationPageComponent";
+import { Toaster } from "sonner";
 
 const page = async () => {
   const session = await sessionAuth();
@@ -19,5 +18,4 @@ const page = async () => {
     );
   }
 };
-
 export default page;
