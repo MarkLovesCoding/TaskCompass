@@ -20,12 +20,13 @@ import {
   UserIcon,
   UserCog,
   CheckIcon,
-  ClockIcon,
+  ClockIcon
 } from "lucide-react";
 
 import { ProjectUserSearchTable } from "./ProjectUserSearchTable";
 import UnarchiveTaskPopover from "./UnarchiveTaskPopover";
 import ArchiveProjectPopover from "./ArchiveProjectPopover";
+import DeleteTaskConfirmAlert from "./DeleteTaskConfirmAlert";
 import { ProjectHeader } from "./ProjectHeader";
 import { ProjectUserCardWithPermissions } from "./ProjectUserCardWithPermissions";
 import { ProjectHeaderStatic } from "./ProjectHeaderStatic";
@@ -172,11 +173,14 @@ const ProjectDrawer = ({
                               {tasks.map(
                                 (task, task_idx) =>
                                   task.archived && (
-                                    <div key={task_idx}>
+                                    
+                                    <div className={"flex flex-row space-between"} key={task_idx}>
                                       <UnarchiveTaskPopover
                                         task={task}
                                         isCurrentUserAdmin={isCurrentUserAdmin}
                                       />
+                                      <DeleteTaskConfirmAlert task={task} project={project} />
+
                                       {(task_idx !== 0 ||
                                         task_idx !==
                                           archivedTasks.length - 1) && (

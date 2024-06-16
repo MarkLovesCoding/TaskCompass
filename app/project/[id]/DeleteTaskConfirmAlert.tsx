@@ -2,112 +2,94 @@ import React from "react";
 import { useRouter } from "next/navigation";
 
 import { toast } from "sonner";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button-alert";
 import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-} from "@/components/ui/dialog-user-search";
-import { ArchiveIcon } from "lucide-react";
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
-import { updateProjectArchivedAction } from "../../team/_actions/update-project-archived.action";
+import { Trash2Icon } from "lucide-react";
+import { ProjectDto } from "@/use-cases/project/types";
+import { TaskDto } from "@/use-cases/task/types";
+
+import { deleteTaskAction } from "@/app/project/_actions/delete-task.action";
 import { ValidationError } from "@/use-cases/utils";
 
-import type { ProjectDto } from "@/use-cases/project/types";
+const DeleteTaskConfirmAlert = ({
+  project,
+  task,
+}: {
+  project: ProjectDto;
+  task: TaskDto;
+}) => {
+  const doesTaskHaveAssignees = task.assignees.length > 0;
 
-const ArchiveProjectPopover = ({ project }: { project: ProjectDto }) => {
-  const archiveProjectFormObject = {
-    archived: true,
-    projectId: project.id,
-  };
   const router = useRouter();
-  const [isOpen, setIsOpen] = React.useState(false);
-  const handleArchivedSubmit = async () => {
+  const onDeleteTaskConfirm = async (taskId: string, projectId: string) => {
     try {
-      await updateProjectArchivedAction(archiveProjectFormObject);
-      toast.success(`Project: ${project.name} Archived Successfully!`);
-      setIsOpen(false);
-      router.push(`/team/${project.team}`);
+      await deleteTaskAction({ taskId, projectId });
+      toast.success(`Task: ${task.name} Deleted Successfully!`);
     } catch (err: any) {
       if (err instanceof ValidationError) {
         toast.error("Validation error: " + err.message);
       } else if (err instanceof Error) {
         toast.error(err.message);
+        // restore Task logic TBD//
       } else {
         toast.error(
-          "An unknown error occurred while archiving project. Please try again."
+          "An unknown error occurred while deleting task. Please try again."
         );
       }
     }
-    // handleArchivedSubmit();
   };
+
   return (
     <>
-      {/* <div className="flex justify-center my-auto"> */}
-      <Button
-        variant="outline"
-        className="h-fit w-fit py-1 px-2 group/archive hover:border-destructive hover:bg-destructive"
-      >
-        <Dialog open={isOpen} onOpenChange={setIsOpen}>
-          <DialogTrigger className="group/archive   ">
-            <div className="flex flex-row">
-              <ArchiveIcon className="w-4 h-4 mr-1   self-center   group-hover/archive:text-white" />
-              <div className="py-1 px-1 text-xs group-hover/archive:text-white">
-                {/* {project.name} */}
-                Archive Project
-                <span className="sr-only">Archive Project Trigger</span>
-              </div>
-            </div>
-          </DialogTrigger>{" "}
-          <DialogContent className="p-4 rounded-lg border-2 border-primary bg-alert-background backdrop-filter">
-            {/* <Card>
-            <CardHeader> */}
-            <Label className="text-center text-xl md:text-2xl">
-              Archive Project
-            </Label>
-            {/* </CardHeader> */}
-            <div className="p-4 mb-2 ">
-              <p> Are you sure you want to archive this project? </p>
-              <br />
-              <p className="text-xs text-center"> (Can be unarchived later) </p>
-            </div>
-
-            <div className="w-full flex flex-row justify-evenly">
-              <Button
-                className="text-sm "
-                variant="destructive"
+      <AlertDialog>
+        <AlertDialogTrigger className="p-2 rounded-full hover:bg-red-500">
+          <Trash2Icon />
+        </AlertDialogTrigger>
+        {!doesTaskHaveAssignees ? (
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>{`Are you absolutely sure you want to delete task:${task.name} ?`}</AlertDialogTitle>
+              <AlertDialogDescription>
+                {` This action cannot be undone. This will permanently delete the task. If you don't want to delete you can always archive the task instead.`}
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction
                 onClick={() => {
-                  handleArchivedSubmit();
-                  // updateProjectArchivedAction(archiveProjectFormObject);
-                  // toast.success(
-                  //   `Project: ${project.name} Archived Successfully!`
-                  // );
-                  // setIsOpen(false);
-                  // router.push(`/team/${project.team}`);
-                  // handleArchivedSubmit();
+                  onDeleteTaskConfirm(task.id, project.id);
                 }}
               >
-                Archive
-              </Button>
-              <Button
-                className="text-sm "
-                variant="outline"
-                onClick={() => {
-                  // handleArchivedCancel();
-                  setIsOpen(false);
-                }}
-              >
-                Cancel
-              </Button>
-            </div>
-            {/* </Card> */}
-          </DialogContent>
-        </Dialog>
-        <span className="sr-only">Archive Project Button</span>
-      </Button>
+                Delete Task
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        ) : (
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>{`Cannot Delete Task: ${task.name}.`}</AlertDialogTitle>
+              <AlertDialogDescription>
+                {`Task still has ${task.assignees.length} assignees. Please remove assignees first to delete the task.`}
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        )}
+      </AlertDialog>
     </>
   );
 };
 
-export default ArchiveProjectPopover;
+export default DeleteTaskConfirmAlert;
