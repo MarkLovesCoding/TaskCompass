@@ -1,32 +1,50 @@
 import { taskToDto } from "@/use-cases/task/utils";
 import { TaskEntity, TaskEntityValidationError } from "@/entities/Task";
+import { ProjectEntity, ProjectEntityValidationError } from "@/entities/Project";
 import { AuthenticationError, ValidationError } from "../utils";
 
-import type { UpdateTask, GetTask } from "@/use-cases/task/types";
+import type { DeleteTask } from "@/use-cases/task/types";
+import type { GetProject,UpdateProject } from "../project/types";
 import type { GetUserSession } from "@/use-cases/user/types";
+import { projectToDto } from "../project/utils";
 
 export async function deleteTaskUseCase(
   context: {
-    updateTask: UpdateTask;
-    getTask: GetTask;
+    deleteTask: DeleteTask;
+    getProject: GetProject;
+    updateProject: UpdateProject;
     getUser: GetUserSession;
   },
   data: {
-    id: string;
-    project: string;
-    archived: boolean;
+    taskId: string;
+    projectId: string;
   }
 ) {
   const user = context.getUser();
   if (!user) throw new AuthenticationError();
 
   try {
-    const retrievedTask = await context.getTask(data.id);
-    const taskAsEntity = new TaskEntity({ ...retrievedTask });
-    taskAsEntity.updateArchived(data.archived);
-    await context.updateTask(taskToDto(taskAsEntity));
+    const retrievedProject = await context.getProject(data.projectId);
+    const projectAsEntity = new ProjectEntity({ ...retrievedProject });
+
+    projectAsEntity.removeTask(data.taskId);
+    
+    await context.updateProject(projectToDto(projectAsEntity));
+
+
   } catch (err) {
-    const error = err as TaskEntityValidationError;
+
+    const error = err as ProjectEntityValidationError;
     throw new ValidationError(error.getErrors());
+  }
+  try {
+    await context.deleteTask(data.taskId);
+  } catch (err : any) {
+    if (typeof err.message === 'string') {
+      throw new Error("Error deleting task: " +data.taskId +". Error:"+ err.message);
+    }
+    else{
+      throw new Error("Error deleting task: " +data.taskId);
+    }
   }
 }

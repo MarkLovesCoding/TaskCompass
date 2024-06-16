@@ -12,7 +12,6 @@ type FormData = {
 };
 
 export async function createNewTaskAction(formData: FormData) {
-  console.log("formData", formData);
   const { getUser } = await getUserFromSession();
 
   try {

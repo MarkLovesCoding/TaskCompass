@@ -184,9 +184,13 @@ export class ProjectEntity {
     this.backgroundImageThumbnail = backgroundImageThumbnail;
   }
 
-  addTask(project: string) {
-    this.tasks.push(project);
+  addTask(taskId: string) {
+    this.tasks.push(taskId);
   }
+  
+  removeTask(taskId: string) {
+    this.tasks = this.tasks.filter((t) => t !== taskId);
+  } 
 
   updateName(name: string) {
     this.name = name;
