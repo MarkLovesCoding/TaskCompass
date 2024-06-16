@@ -27,6 +27,7 @@ export type CreateTaskDto = {
   status: string;
 };
 export type CreateTask = (task: CreateTaskDto) => Promise<void>;
+export type DeleteTask = (id: string) => Promise<void>;
 export type GetTask = (id: string) => Promise<TaskDto>;
 export type GetUser = () => Promise<string>;
 export type UpdateTask = (task: TaskDto) => Promise<void>;
