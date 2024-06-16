@@ -58,12 +58,12 @@ const DeleteTaskConfirmAlert = ({
         {!doesTaskHaveAssignees ? (
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>{`Are you absolutely sure you want to delete task:${task.name} ?`}</AlertDialogTitle>
+              <AlertDialogTitle>{`Are you absolutely sure you want to delete task: ${task.name} ?`}</AlertDialogTitle>
               <AlertDialogDescription>
                 {` This action cannot be undone. This will permanently delete the task. If you don't want to delete you can always archive the task instead.`}
               </AlertDialogDescription>
             </AlertDialogHeader>
-            <AlertDialogFooter>
+            <AlertDialogFooter className="w-full flex flex-row space-between">
               <AlertDialogCancel>Cancel</AlertDialogCancel>
               <AlertDialogAction
                 onClick={() => {
