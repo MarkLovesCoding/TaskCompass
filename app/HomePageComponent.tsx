@@ -37,16 +37,6 @@ const HomePageComponent = () => {
   const [scrollY, setScrollY] = useState(0);
   const controls = useAnimation();
 
-  // Cleanup
-
-  useEffect(() => {
-    // Redirect to home if the user is already signed in
-    if (session) {
-      //@ts-expect-error
-      router.push(`/dashboard/${session!.user.id}`);
-    }
-  }, [session, router]);
-
   useEffect(() => {
     const handleScroll = () => {
       setScrollY(window.scrollY);
