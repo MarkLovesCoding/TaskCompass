@@ -20,7 +20,7 @@ import {
   UserIcon,
   UserCog,
   CheckIcon,
-  ClockIcon
+  ClockIcon,
 } from "lucide-react";
 
 import { ProjectUserSearchTable } from "./ProjectUserSearchTable";
@@ -77,13 +77,13 @@ const ProjectDrawer = ({
 
       <DrawerContent>
         <div
-          className={`group hidden bg-drawer-background  backdrop-blur  p-6 fixed top-12 left-0 h-[calc(100vh-3rem)]  tooSmall:grid   max-w-[450px]  rounded-tr-lg rounded-br-lg  border-r-2 border-t-2 border-b-2 border-r-primary hover:border-r-primary  border-t-primary hover:border-t-primary border-b-primary hover:border-b-primary cursor-grab active:cursor-grabbing`}
+          className={`group hidden bg-drawer-background  backdrop-blur  p-6 fixed top-[2rem] md:top-[3rem] left-0 h-[calc(100vh-2rem)] md:h-[calc(100vh-3rem)] tooSmall:grid   max-w-[450px]  rounded-tr-lg rounded-br-lg  border-r-2 border-t-2 border-b-2 border-r-primary hover:border-r-primary  border-t-primary hover:border-t-primary border-b-primary hover:border-b-primary cursor-grab active:cursor-grabbing`}
         >
           <Label>Window too too small, please expand or rotate to view</Label>
         </div>
 
         <div
-          className={`group  tooSmall:hidden flex flex-col bg-drawer-background  backdrop-blur-lg   fixed top-12 left-0 h-[calc(100vh-3rem)] w-[425px] max-w-[95vw] rounded-tr-lg rounded-br-lg border-r-2 border-t-2 border-b-2 z-40 border-r-card hover:border-r-primary border-t-card hover:border-t-primary border-b-card hover:border-b-primary cursor-grab active:cursor-grabbing p-2 pt-3 `}
+          className={`group  tooSmall:hidden flex flex-col bg-drawer-background  backdrop-blur-lg   fixed top-[2rem] md:top-[3rem]  left-0 h-[calc(100vh-2rem)] md:h-[calc(100vh-3rem)]  w-[425px] max-w-[95vw] rounded-tr-lg rounded-br-lg border-r-2 border-t-2 border-b-2 z-40 border-r-card hover:border-r-primary border-t-card hover:border-t-primary border-b-card hover:border-b-primary cursor-grab active:cursor-grabbing p-2 pt-3 `}
         >
           <DrawerClose className="">
             <ArrowLeftCircleIcon className="absolute right-[-1em] z-50 top-[calc(50%-3rem)]  rounded-full w-8 h-8 self-center bg-background text-card group-hover:text-primary" />
@@ -173,13 +173,18 @@ const ProjectDrawer = ({
                               {tasks.map(
                                 (task, task_idx) =>
                                   task.archived && (
-                                    
-                                    <div className={"flex flex-row space-between"} key={task_idx}>
+                                    <div
+                                      className={"flex flex-row space-between"}
+                                      key={task_idx}
+                                    >
                                       <UnarchiveTaskPopover
                                         task={task}
                                         isCurrentUserAdmin={isCurrentUserAdmin}
                                       />
-                                      <DeleteTaskConfirmAlert task={task} project={project} />
+                                      <DeleteTaskConfirmAlert
+                                        task={task}
+                                        project={project}
+                                      />
 
                                       {(task_idx !== 0 ||
                                         task_idx !==
