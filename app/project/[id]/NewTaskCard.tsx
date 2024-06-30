@@ -93,7 +93,7 @@ export const NewTaskCard: React.FC<TaskFormProps> = ({ project }) => {
                       isHeaderEditing ? "editing" : ""
                     }`}
                     placeholder="Task Name"
-                    maxLength={25}
+                    maxLength={50}
                     spellCheck="false"
                     type="text"
                     {...field}
