@@ -65,8 +65,8 @@ import type { UserDto } from "@/use-cases/user/types";
 
 const taskFormSchema = z.object({
   id: z.string(),
-  name: z.string().min(3).max(25),
-  description: z.string().min(3).max(50),
+  name: z.string().min(1).max(50),
+  description: z.string(),
   priority: z.string().min(3),
   status: z.string().min(3),
   category: z.string().min(3),
@@ -315,7 +315,7 @@ export const TaskCard = ({
           ref={formRef}
           onSubmit={form.handleSubmit(onSubmit)}
           method="post"
-          className="grid gap-4 w-full max-w-md mr-auto  "
+          className="grid gap-4 p-2 w-full max-w-md mr-auto  "
         >
           <FormField
             control={form.control}
@@ -329,8 +329,8 @@ export const TaskCard = ({
                     }`}
                     placeholder="Task Name"
                     type="text"
-                    maxLength={25}
-                    minLength={3}
+                    maxLength={50}
+                    minLength={1}
                     spellCheck="false"
                     {...field}
                     onClick={handleNameClick}
@@ -349,14 +349,12 @@ export const TaskCard = ({
               <FormItem className="grid gap-2 mb-0">
                 <FormControl>
                   <Textarea
-                    className={`description-input max-w-[95%] resize-none ${
+                    className={`description-input max-w-[95%] resize-y ${
                       isDescriptionEditing ? "editing" : ""
                     }`}
                     placeholder="Description"
                     spellCheck="false"
                     {...field}
-                    maxLength={50}
-                    minLength={3}
                     onClick={handleDescriptionClick}
                     onChange={field.onChange}
                     onBlur={handleDescriptionBlur}

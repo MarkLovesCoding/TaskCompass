@@ -38,15 +38,17 @@ const HomePageComponent = () => {
   const controls = useAnimation();
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrollY(window.scrollY);
-    };
+    if (typeof window !== "undefined") {
+      const handleScroll = () => {
+        setScrollY(window.scrollY);
+      };
 
-    window.addEventListener("scroll", handleScroll);
+      window.addEventListener("scroll", handleScroll);
 
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
+      return () => {
+        window.removeEventListener("scroll", handleScroll);
+      };
+    }
   }, []);
 
   if (session) {
@@ -234,29 +236,32 @@ FeatureSection.displayName = "FeatureSection";
 export default HomePageComponent;
 
 function calculateColor(scrollY: number) {
-  const triggerPoints = [0, 100, 180, 260, 340]; // Adjust trigger points in viewport height (vh)
-  const colors = [
-    "rgba(14,37,46,1)",
-    "rgba(0,0,0,1)",
-    "rgba(14,37,46,1)",
-    "rgba(0,0,0,1)",
+  if (typeof window !== "undefined") {
+    const triggerPoints = [0, 100, 180, 260, 340]; // Adjust trigger points in viewport height (vh)
+    const colors = [
+      "rgba(14,37,46,1)",
+      "rgba(0,0,0,1)",
+      "rgba(14,37,46,1)",
+      "rgba(0,0,0,1)",
+      "rgba(14,37,46,1)",
+    ];
 
-    "rgba(14,37,46,1)",
-    // "rgba(0,0,0,1)",
-  ];
-  for (let i = 0; i < triggerPoints.length - 1; i++) {
-    if (
-      scrollY >= (triggerPoints[i] * window.innerHeight) / 100 &&
-      scrollY < (triggerPoints[i + 1] * window.innerHeight) / 100
-    ) {
-      const progress =
-        (scrollY - (triggerPoints[i] * window.innerHeight) / 100) /
-        (((triggerPoints[i + 1] - triggerPoints[i]) * window.innerHeight) /
-          100);
-      const currentColor = colors[i];
-      const nextColor = colors[i + 1];
-      return interpolateColors(currentColor, nextColor, progress);
+    for (let i = 0; i < triggerPoints.length - 1; i++) {
+      if (
+        scrollY >= (triggerPoints[i] * window.innerHeight) / 100 &&
+        scrollY < (triggerPoints[i + 1] * window.innerHeight) / 100
+      ) {
+        const progress =
+          (scrollY - (triggerPoints[i] * window.innerHeight) / 100) /
+          (((triggerPoints[i + 1] - triggerPoints[i]) * window.innerHeight) /
+            100);
+        const currentColor = colors[i];
+        const nextColor = colors[i + 1];
+        return interpolateColors(currentColor, nextColor, progress);
+      }
     }
+    return colors[0]; // Default color
   }
-  return colors[0]; // Default color
+
+  return "rgba(14,37,46,1)"; // Fallback color for SSR or non-browser environments
 }
